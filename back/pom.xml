@@ -36,22 +36,6 @@
 		    <artifactId>ojdbc11</artifactId>
 		    <version>21.1.0.0</version>
 		</dependency>
-		<!-- [JW] 전자지갑용 -->
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>oraclepki</artifactId>
-		    <version>21.1.0.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>osdt_cert</artifactId>
-		    <version>21.1.0.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.oracle.database.security</groupId>
-		    <artifactId>osdt_core</artifactId>
-		    <version>21.1.0.0</version>
-		</dependency>
 		<!-- SQL구문이 log로 출력 : DriverSpy클래스  -->
 		  <dependency>
 		   <groupId>org.bgee.log4jdbc-log4j2</groupId>
@@ -91,6 +75,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+<<<<<<< HEAD
 		<!-- model mapper -->
 		<dependency>
 		    <groupId>org.modelmapper</groupId>
@@ -98,6 +83,15 @@
 		    <version>3.0.0</version>
 		</dependency>
 
+=======
+		<!-- DevTools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+>>>>>>> c56608ac171a18b85ea11d11715391a2fce53a1e
 	</dependencies>
 
 	<build>
