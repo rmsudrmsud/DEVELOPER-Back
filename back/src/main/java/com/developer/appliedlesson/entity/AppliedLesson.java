@@ -1,4 +1,4 @@
-package com.developer.appliedLesson.entity;
+package com.developer.appliedlesson.entity;
 
 import java.util.Date;
 import java.util.List;
