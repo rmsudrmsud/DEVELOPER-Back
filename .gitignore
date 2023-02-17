@@ -5,7 +5,7 @@
 MyApplicationContext.java
 MyServletContext.java
 config.xml
-developerBack/log/
+back/log/*
 .metadata
 bin/
 tmp/
