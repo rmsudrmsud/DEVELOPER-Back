@@ -19,7 +19,6 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 
 public class BoardRep {
 	@Id

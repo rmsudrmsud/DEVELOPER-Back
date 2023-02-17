@@ -17,7 +17,6 @@ import lombok.ToString;
 
 @Setter @Getter	@NoArgsConstructor
 @AllArgsConstructor
-@ToString
 
 @Entity
 @Table(name="Board")
