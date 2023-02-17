@@ -1,4 +1,4 @@
-package com.developer.repository;
+package com.developer.appliedlesson.repository;
 
 import org.springframework.data.repository.CrudRepository;
 

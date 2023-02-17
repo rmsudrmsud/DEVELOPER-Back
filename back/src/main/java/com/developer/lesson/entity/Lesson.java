@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import com.developer.appliedLesson.entity.AppliedLesson;
+import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
