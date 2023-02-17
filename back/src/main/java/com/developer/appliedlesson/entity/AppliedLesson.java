@@ -1,4 +1,4 @@
-package com.developer.appliedlesson.entity;
+package com.developer.appliedLesson.entity;
 
 import java.util.Date;
 import java.util.List;
@@ -11,59 +11,55 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.users.entity.Users;
+import com.developer.lesson.entity.Lesson;
+import com.developer.lessonreview.entity.LessonReview;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Getter @Setter @DynamicInsert
-@DynamicUpdate
-@NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "applied_lesson")
+@Table(name="APPLIED_LESSON")
+@DynamicInsert
+
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+@SequenceGenerator(
+		name ="applySeq", 
+		sequenceName ="apply_seq", 
+		initialValue = 1, allocationSize = 1 
+		)
 public class AppliedLesson {
-	
 	@Id
-	@Column(name = "apply_seq")
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator =	"apply_seq"
-			)
+	@Column(name="apply_seq")
+	@GeneratedValue( 
+			strategy = GenerationType.SEQUENCE, 
+			generator ="applySeq"  
+		)
 	private Long applySeq;
-	
-	@ManyToOne
-	@JoinColumn(name = "lesson_seq", nullable = false)
-	private Long lessonSeq;
-	
-	@JoinColumn(name = "user_id")
+	@Column(name="cdate")
+	private Date cdate;
+	@Column(name="apply_ok")
+	private int applyOk;
+	@Column(name="user_id")
 	private String userId;
 	
-	@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
-	@Column(name = "c_date")
-	private Date cdate;
+	@ManyToOne
+	@JoinColumn(name="al_lessonSeq")
+	private Lesson lesson;
 	
-	@Column(name = "apply_ok")
-	private Long applyOk;
+	@OneToMany(mappedBy = "alLesson")
+	private List<LessonReview> lrList;
 	
-	@OneToMany
-	private List<Users> usersVO;
-
-//	@ManyToOne
-//	private LessonVO lessonVO;
-	
-//	@OneToMany
-//	private List<UserReviewVO> userReviewVO;
-	
-//	@OneToOne
-//	private LessonReviewVO lessonReviewVO;
+	//private List<UsersVO> usersVO;
+	//private List<UserReviewVO> userReviewVO;
 	
 }
