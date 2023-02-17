@@ -1,4 +1,4 @@
-package com.entity;
+package com.developer.reservation.entity;
 
 import java.sql.Date;
 import java.util.List;
