@@ -1,4 +1,4 @@
-package com.my.container;
+package com.developer.container;
 //스프링용 설정클래스를 대신할 자바클래스
 
 import org.springframework.context.annotation.Bean;
@@ -17,8 +17,8 @@ public class MyApplicationContext2 {
 		HikariConfig config = new HikariConfig();
 		config.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 		config.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:xe");
-		config.setUsername("system");
-		config.setPassword("chlrmsgud123");
+		config.setUsername("dev");
+		config.setPassword("dev");
 		config.setMinimumIdle(3);
 
 		return config;
