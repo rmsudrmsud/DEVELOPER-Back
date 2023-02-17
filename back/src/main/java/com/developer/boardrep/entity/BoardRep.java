@@ -1,4 +1,4 @@
-package com.developer.boardrep;
+package com.developer.boardrep.entity;
 
 import java.sql.Date;
 

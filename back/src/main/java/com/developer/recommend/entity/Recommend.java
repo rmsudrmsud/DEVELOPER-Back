@@ -1,4 +1,4 @@
-package com.developer.recommend;
+package com.developer.recommend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
