@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.developer.appliedLesson.repository.AppliedLessonRepository;
 import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.appliedlesson.repository.AppliedLessonRepository;
 import com.developer.lesson.entity.Lesson;
 
 @SpringBootTest
