@@ -1,12 +1,14 @@
 package com.developer.board.entity;
 
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,11 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.CreatedDate;
 
 import com.developer.boardrep.entity.BoardRep;
 
@@ -62,17 +62,16 @@ public class Board {
 	@Column(name="img_path")
 	private String imgPath;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
 	@Column(name="c_date")
+	//private Date cDate;
 	private Date cDate;
 	
 	@Column(name="recommend")
-	@ColumnDefault("0")
-	private Integer recommend;
+	private Integer recommend=0;
 	
 	@Column(name="cnt")
-	@ColumnDefault("0")
-	private Integer cnt;
+	private Integer cnt=0;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="post_seq")

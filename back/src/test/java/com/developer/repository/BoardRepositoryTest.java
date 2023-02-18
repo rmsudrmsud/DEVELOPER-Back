@@ -3,6 +3,7 @@ package com.developer.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +34,7 @@ class BoardRepositoryTest {
 			b.setTitle("JPA테스트제목"+i);
 			b.setContent("JPA테스트내용"+i);
 			b.setImgPath("이미지"+i);
-			b.setCDate(null);
+		//	b.setCDate(null);
 //			b.setRecommend(i);
 //			b.setCnt(i);
 			br.save(b);
@@ -69,5 +70,21 @@ class BoardRepositoryTest {
 		Long a = 2L;
 		br.deleteById(a);
 	}
-
+	
+	@Test
+	void testFindTest1() {
+		List<Board> list = br.findTest1();
+		logger.error("게시글:" + list);
+	}
+	
+	@Test
+	@DisplayName("Board list 테스트")
+	void findBoardList() {
+	List<Object[]> list = br.findTest2();
+	logger.error("첫번째글번호:" + list.get(0)[0]);
+	logger.error("첫번째내용:" + list.get(0)[1]);
+	
+	logger.error("두번째글번호:" + list.get(1)[0]);
+	logger.error("두번쨰내용:" + list.get(1)[1]);
+	}
 }

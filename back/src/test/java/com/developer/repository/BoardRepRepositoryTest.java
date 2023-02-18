@@ -46,6 +46,7 @@ class BoardRepRepositoryTest {
 		String expectedId = "아이디1";
 		assertEquals(expectedId, optB.get().getUserId());
 	}
+	
 //	
 	@Test
 	@DisplayName("BoardRep update 테스트")
