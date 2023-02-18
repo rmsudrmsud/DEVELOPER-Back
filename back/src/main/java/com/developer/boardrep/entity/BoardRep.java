@@ -28,8 +28,8 @@ public class BoardRep {
 	@Column(name = "content")
 	private String content;
 
-	@Column(name = "date")
-	private Date date;
+	@Column(name = "cdate")
+	private Date cDate;
 
 	@Column(name = "post_seq")
 	private Integer postSeq;
