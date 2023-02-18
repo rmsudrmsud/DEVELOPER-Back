@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 ### Eclipse ###
+application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml
@@ -17,6 +18,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.gitignore
 
 # External tool builders
 .externalToolBuilders/
