@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,10 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.boardrep.entity.BoardRep;
+import com.developer.recommend.entity.Recommend;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,12 +34,14 @@ import lombok.Setter;
 
 @Entity
 @DynamicInsert
+@DynamicUpdate
 @Table(name="Board")
 @SequenceGenerator(
 name = "POST_SEQ_GENERATOR", // 사용할 sequence 이름
 sequenceName =
 "post_seq", // 실제 데이터베이스 sequence 이름
 initialValue = 1, allocationSize = 1)
+
 
 public class Board {
 	@Id
@@ -47,36 +50,41 @@ public class Board {
 			)
 	private Long postSeq;
 	
-	@Column(name="user_id")
+	@Column(name="user_id" ,nullable=false)
 	private String userId;
 	
 	@Column(name="category")
+	@ColumnDefault(value="0")
 	private Integer category; //0:Q/A,  1:스터디모집,  2:자유 게시판
 	
-	@Column(name="title")
+	@Column(name="title",nullable=false)
 	private String title;
 	
-	@Column(name="content")
+	@Column(name="content",nullable=false)
 	private String content;
 	
 	@Column(name="img_path")
 	private String imgPath;
 	
-	@CreatedDate
 	@Column(name="c_date")
-	//private Date cDate;
+	@ColumnDefault(value="SYSDATE")
 	private Date cDate;
 	
 	@Column(name="recommend")
-	private Integer recommend=0;
+	@ColumnDefault(value="0")
+	private Integer recommend;
 	
 	@Column(name="cnt")
-	private Integer cnt=0;
+	@ColumnDefault(value="0")
+	private Integer cnt;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name="post_seq")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy="board")
+	//@JoinColumn(name="post_seq")
 	private List<BoardRep> boardRep;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="post_seq")
+	private List<Recommend> Recommend;
+	
 	//	private UsersVO usersVO;
-	//	private List<RecommendVO> recommendVO;
 }

@@ -9,22 +9,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.developer.board.entity.Board;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Setter @Getter	@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 @Table(name = "board_rep")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 
+@DynamicInsert
+@DynamicUpdate
 @SequenceGenerator(
 name = "POST_REP_SEQ_GENERATOR", // 사용할 sequence 이름
 sequenceName =
@@ -32,21 +40,33 @@ sequenceName =
 initialValue = 1, allocationSize = 1)
 
 public class BoardRep {
+//	@EmbeddedId
+//	private LineEmbedded id = new LineEmbedded();
+	
+//	@MapsId
+//	@ManyToOne
 	@Id
 	@Column(name = "post_req_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_REP_SEQ_GENERATOR" // 위의 sequence 이름
 			)
 	private Long postRepSeq;
 
-	@Column(name = "content")
+	@Column(name = "content",nullable=false)
 	private String content;
 
 	@Column(name = "cdate")
+	@ColumnDefault(value="SYSDATE")
 	private Date cDate;
+	
+	
+//	@Column(name = "post_seq", nullable = false)
+//	private Integer postSeq;
 
-	@Column(name = "post_seq")
-	private Integer postSeq;
-
-	@Column(name = "user_id")
+	@Column(name = "user_id",nullable=false)
 	private String userId;
+	
+	@ManyToOne
+	@JoinColumn(name = "post_seq")
+	private Board board;
+	
 }

@@ -56,19 +56,20 @@ class BoardRepositoryTest {
 	void testBoardUpdate() {
 		
 			Board b = new Board();
-			b.setPostSeq(1L);
-			b.setUserId("아이디4");
-			b.setRecommend(0);
-			b.setCnt(0);
-			br.save(b);
-		
+			b.setPostSeq(7L);
+			b.setUserId("아이디1");
+			b.setTitle("JPA테스트제목수정");
+			b.setContent("JPA테스트내용수정");
+			b.setRecommend(1);
+			b.setCnt(1);
+			br.save(b);	
 	}
 	
 	@Test
 	@DisplayName("Board delete 테스트")
 	void testBoardDelete() {
-		Long a = 2L;
-		br.deleteById(a);
+		Long postSeq = 7L;
+		br.deleteById(postSeq);
 	}
 	
 	@Test
