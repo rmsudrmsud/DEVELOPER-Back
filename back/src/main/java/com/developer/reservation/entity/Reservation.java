@@ -1,7 +1,6 @@
 package com.developer.reservation.entity;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -21,6 +23,8 @@ import lombok.Setter;
 @Setter @Getter @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "RESERVATION")
+@DynamicInsert
+
 @SequenceGenerator(
 name =
 "RES_SEQ_GENERATOR", // 사용할 sequence 이름
@@ -48,6 +52,7 @@ public class Reservation {
 	@Column(name = "end_time")
 	private String endTime;
 	
+	@ColumnDefault(value="sysdate")
 	@Column(name = "using_date")
 	@JsonFormat(pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	private Date usingDate;
