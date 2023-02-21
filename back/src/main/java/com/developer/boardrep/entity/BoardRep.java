@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.board.entity.Board;
+import com.developer.users.entity.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,11 +42,7 @@ sequenceName =
 initialValue = 1, allocationSize = 1)
 
 public class BoardRep {
-//	@EmbeddedId
-//	private LineEmbedded id = new LineEmbedded();
-	
-//	@MapsId
-//	@ManyToOne
+
 	@Id
 	@Column(name = "post_req_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_REP_SEQ_GENERATOR" // 위의 sequence 이름
@@ -58,15 +56,20 @@ public class BoardRep {
 	@ColumnDefault(value="SYSDATE")
 	private Date cDate;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_seq")
+	private Board board;
 	
 //	@Column(name = "post_seq", nullable = false)
 //	private Integer postSeq;
 
-	@Column(name = "user_id",nullable=false)
-	private String userId;
-	
 	@ManyToOne
-	@JoinColumn(name = "post_seq")
-	private Board board;
+	@JoinColumn(name = "user_id", nullable=false)
+	private Users users;
+	
+//	@Column(name = "user_id",nullable=false)
+//	private String userId;
+	
+	
 	
 }

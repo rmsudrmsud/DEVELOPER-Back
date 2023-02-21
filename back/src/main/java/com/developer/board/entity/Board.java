@@ -13,9 +13,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,6 +25,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
+import com.developer.users.entity.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,8 +53,8 @@ public class Board {
 			)
 	private Long postSeq;
 	
-	@Column(name="user_id" ,nullable=false)
-	private String userId;
+//	@Column(name="user_id" ,nullable=false)
+//	private String userId;
 	
 	@Column(name="category")
 	@ColumnDefault(value="0")
@@ -74,6 +77,9 @@ public class Board {
 	@ColumnDefault(value="0")
 	private Integer recommend;
 	
+	@Transient
+	private Integer boardType;
+	
 	@Column(name="cnt")
 	@ColumnDefault(value="0")
 	private Integer cnt;
@@ -82,9 +88,13 @@ public class Board {
 	//@JoinColumn(name="post_seq")
 	private List<BoardRep> boardRep;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="post_seq")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="board")
+	//@JoinColumn(name="post_seq")
 	private List<Recommend> Recommend;
 	
-	//	private UsersVO usersVO;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable=false)
+	private Users users;
+	
+
 }

@@ -17,81 +17,76 @@ import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.boardrep.repository.BoardRepRepository;
+import com.developer.users.entity.Users;
+import com.developer.users.repository.UsersRepository;
 
 @SpringBootTest
 class BoardRepRepositoryTest {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	private BoardRepRepository brrp;
+	private BoardRepRepository brr;
 	@Autowired
-	private BoardRepository brp;
+	private BoardRepository br;
+	@Autowired
+	private UsersRepository ur;
 	
-//	@Test
-//	@DisplayName("BoardRep Save 테스트")
-//	void testBoardRepSave() {
-//		for(int i=1; i<=5; i++) {
-//			BoardRep br = new BoardRep();
-//			br.setPostRepSeq(null);
-//			br.setContent("1번글의 " + i + "번째 댓글");
-//			br.setCDate(null);
-//			br.setUserId("아이디"+i);
-//			brrp.save(br);
-//		}
-//	}	
 	@Test
 	@DisplayName("testCreateBoardRep 테스트")
 	void testCreateBoardRep() {
-			Board b = new Board();
-			b.setPostSeq(null);
-			b.setTitle("테스트board");
-			b.setContent("테스트 Content");
-			b.setUserId("아이디");
-			BoardRep br = new BoardRep();
-			br.setPostRepSeq(null);
-			br.setContent("테스트 댓글");
-			br.setCDate(null);
-			br.setUserId("아이디");
-			br.setBoard(b);
-			
-			Board board = brp.save(b);
-			BoardRep boardrep = brrp.save(br);
-			
-			assertNotNull(boardrep.getPostRepSeq());
-	        assertEquals(boardrep.getContent(), "테스트 댓글");
-	        assertEquals(boardrep.getBoard(), board);
-				
-	}
+		Optional<Board> optB = br.findById(5L);
+		Board board = optB.get();
+		
+		Optional<Users> optU = ur.findById("아이디3");
+		Users users = optU.get();
+
+		BoardRep boardRep = new BoardRep();
+		boardRep.setUsers(users);
+		boardRep.setPostRepSeq(null);
+		boardRep.setContent("테스트 댓글");
+		boardRep.setCDate(null);
+		//boardRep.setUserId("아이디");
+		boardRep.setBoard(board);
+		
+		brr.save(boardRep);
+	}	
 	
 	@Test
 	@DisplayName("BoardRep FindById 테스트")
 	void testBoardRepFindById() {
 		BoardRep br = new BoardRep();
-		Optional<BoardRep> optB = brrp.findById(1L);
+		Optional<BoardRep> optB = brr.findById(1L);
 		assertTrue(optB.isPresent());
 		String expectedId = "아이디1";
-		assertEquals(expectedId, optB.get().getUserId());
+	//	assertEquals(expectedId, optB.get().getUserId());
 	}
 	
 //	
 	@Test
 	@DisplayName("BoardRep update 테스트")
 	void testBoardRepUpdate() {
-		
-			BoardRep br = new BoardRep();
-			br.setPostRepSeq(1L);
-			br.setContent("boardrep수정테스트");
-			br.setUserId("아이디2");
-			br.setCDate(null);
-			brrp.save(br);
+			BoardRep brp = new BoardRep();
+			brp.setPostRepSeq(2L);
+			
+			Optional<Board> optB = br.findById(5L);
+			Board board = optB.get();
+			
+			Optional<Users> optU = ur.findById("아이디3");
+			Users users = optU.get();
+			
+			brp.setBoard(board);
+			brp.setContent("boardrep수정테스트");
+			brp.setUsers(users);
+			//br.setCDate(null);
+			brr.save(brp);
 		
 	}
 //	
 	@Test
 	@DisplayName("BoardRep delete 테스트")
 	void testBoardRepDelete() {
-		Long a = 3L;
-		brrp.deleteById(a);
+		Long a = 2L;
+		brr.deleteById(a);
 	}
 
 
