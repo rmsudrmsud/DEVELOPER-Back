@@ -2,12 +2,17 @@ package com.developer.recommend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.developer.board.entity.Board;
+import com.developer.users.entity.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,9 +36,17 @@ public class Recommend {
 			)
 	private Long recSeq;
 	
-	@Column(name="post_seq")
-	private Integer postSeq;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_seq", nullable=false)
+	private Board board;
 	
-	@Column(name="user_Id")
-	private String userId;
+//	@Column(name="post_seq")
+//	private Integer postSeq;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable=false)
+	private Users users;
+	
+//	@Column(name="user_Id")
+//	private String userId;
 }
