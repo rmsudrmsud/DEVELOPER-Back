@@ -84,11 +84,11 @@ public class Board {
 	@ColumnDefault(value="0")
 	private Integer cnt;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy="board")
+	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
 	//@JoinColumn(name="post_seq")
 	private List<BoardRep> boardRep;
 	
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="board")
+	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
 	//@JoinColumn(name="post_seq")
 	private List<Recommend> Recommend;
 	
