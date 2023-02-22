@@ -18,7 +18,11 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+<<<<<<< HEAD
 application.properties
+=======
+.gitignore
+>>>>>>> 72d53c2c979cd20b287e0886da91927ac2d762af
 
 # External tool builders
 .externalToolBuilders/
@@ -29,4 +33,50 @@ application.properties
 # PyDev specific (Python IDE for Eclipse)
 *.pydevproject
 
-# CDT-sp…
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# CDT- autotools
+.autotools
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# Tern plugin
+.tern-project
+
+# TeXlipse plugin
+.texlipse
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+# Annotation Processing
+.apt_generated/
+.apt_generated_test/
+
+# Scala IDE specific (Scala & Java development for Eclipse)
+.cache-main
+.scala_dependencies
+.worksheet
+
+# Uncomment this line if you wish to ignore the project description file.
+# Typically, this file would be tracked if it contains build/dependency configurations:
+#.project
+
+### Eclipse Patch ###
+# Spring Boot Tooling
+.sts4-cache/
+
+# End of https://www.toptal.com/developers/gitignore/api/eclipse
+back/src/main/java/com/developer/hostuser/repository/HostUserRepository.java
+back/src/main/java/com/developer/users/repository/UsersRepository.java
