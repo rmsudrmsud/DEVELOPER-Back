@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -35,14 +36,14 @@ class BoardRepositoryTest {
 			Optional<Users> optB = ur.findById("아이디1");
 			Users u = optB.get();
 			b.setUsers(u);
-			b.setPostSeq(null);
+		//	b.setPostSeq(null);
 			b.setCategory(i);
 			b.setTitle("JPA테스트제목"+i);
 			b.setContent("JPA테스트내용"+i);
 			b.setImgPath("이미지"+i);
 		//	b.setCDate(null);
-//			b.setRecommend(i);
-//			b.setCnt(i);
+			b.setRecommend(i);
+			b.setCnt(i);
 			br.save(b);
 		}
 	}
@@ -63,15 +64,15 @@ class BoardRepositoryTest {
 	void testBoardUpdate() {
 		
 			Board b = new Board();
-			b.setPostSeq(5L);
+			b.setPostSeq(13L);
 	//		b.setUserId("아이디1");
 			Optional<Users> optB = ur.findById("아이디3");
 			Users u = optB.get();
 			b.setUsers(u);
 			b.setTitle("JPA테스트제목수정");
 			b.setContent("JPA테스트내용수정");
-			b.setRecommend(1);
-			b.setCnt(1);
+			b.setRecommend(6);
+			b.setCnt(3);
 			br.save(b);	
 	}
 	
@@ -111,9 +112,88 @@ class BoardRepositoryTest {
 	}
 	
 	@Test
-	@DisplayName("Board 셀렉트 PostSeq 테스트")
+	@DisplayName("닉네임+글상세+댓글 PostSeq로 검색 테스트")
 	void findPostSeq() {
-		Object board = br.findPostSeq(1L);
-		logger.info(board.getClass().toString());
+		Map<String, Object> map = br.findPostSeq(5L);
+		logger.info("-----------------------");
+		logger.info("글번호 : "+map.get("post_seq"));
+		logger.info("닉네임 : "+map.get("nickname"));
+		logger.info("카테고리: " + map.get("category"));
+		logger.info("제목: " + map.get("title"));
+		logger.info("내용: " + map.get("content"));
+		logger.info("이미지: " + map.get("imt_path"));
+		logger.info("작성일: " + map.get("c_date"));
+		logger.info("추천수: " + map.get("recommend"));
+		logger.info("조회수: " + map.get("cnt"));
+		logger.info("-----------------------");
+		logger.info("댓글내용: " + map.get("rContent"));
+		logger.info("댓글작성일: " + map.get("cdate"));
+		logger.info("-----------------------");
+	}
+	
+	@Test
+	@DisplayName("전체 리스트(작성일순) 테스트")
+	void findAllBoardc_dateTest() {
+		List<Map<String,Object>> list = br.findAllBoardc_date();
+		for(int i=0; i<list.size(); i++) {
+			logger.info("-----------------------");
+			logger.info("글번호: " + list.get(i).get("post_seq"));
+			logger.info("닉네임: " + list.get(i).get("nickname"));
+			logger.info("카테고리: " + list.get(i).get("category"));
+			logger.info("제목: " + list.get(i).get("title"));
+			logger.info("내용: " + list.get(i).get("content"));
+			logger.info("이미지: " + list.get(i).get("imt_path"));
+			logger.info("작성일: " + list.get(i).get("c_date"));
+			logger.info("추천수: " + list.get(i).get("recommend"));
+			logger.info("조회수: " + list.get(i).get("cnt"));
+			logger.info("-----------------------");
+		};
+	}
+	
+	@Test
+	@DisplayName("전체 리스트(좋아요순) 테스트")
+	void findAllBoardCntTest() {
+		List<Map<String,Object>> list = br.findAllBoardCnt();
+		for(int i=0; i<list.size(); i++) {
+			logger.info("-----------------------");
+			logger.info("글번호: " + list.get(i).get("post_seq"));
+			logger.info("닉네임: " + list.get(i).get("nickname"));
+			logger.info("카테고리: " + list.get(i).get("category"));
+			logger.info("제목: " + list.get(i).get("title"));
+			logger.info("내용: " + list.get(i).get("content"));
+			logger.info("이미지: " + list.get(i).get("imt_path"));
+			logger.info("작성일: " + list.get(i).get("c_date"));
+			logger.info("추천수: " + list.get(i).get("recommend"));
+			logger.info("조회수: " + list.get(i).get("cnt"));
+			logger.info("-----------------------");
+		};
+	}
+	
+	@Test
+	@DisplayName("전체 리스트(추천많은순) 테스트")
+	void findAllBoardRecommendTest() {
+		
+		List<Map<String,Object>> list = br.findAllBoardRecommend();
+		for(int i=0; i<list.size(); i++) {
+			logger.info("-----------------------");
+			logger.info("글번호: " + list.get(i).get("post_seq"));
+			logger.info("닉네임: " + list.get(i).get("nickname"));
+			logger.info("카테고리: " + list.get(i).get("category"));
+			logger.info("제목: " + list.get(i).get("title"));
+			logger.info("내용: " + list.get(i).get("content"));
+			logger.info("이미지: " + list.get(i).get("imt_path"));
+			logger.info("작성일: " + list.get(i).get("c_date"));
+			logger.info("추천수: " + list.get(i).get("recommend"));
+			logger.info("조회수: " + list.get(i).get("cnt"));
+			logger.info("-----------------------");
+		};
+	}
+	
+	//이거 안되뮤.
+	@Test
+	@DisplayName("게시글 조회수 증가 테스트")
+	void updateCnt() {
+		Optional<Board> b = br.findById(1L);
+		br.updateCnt(1L);
 	}
 }
