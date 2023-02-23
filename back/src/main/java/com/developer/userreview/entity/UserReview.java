@@ -30,6 +30,8 @@ public class UserReview {
 	@Id
 	@Column(name = "apply_seq_rv")
 	private Long applySeqRv;
+	@Column(name = "apply_seq")
+	private int applySeq;
 	
 	@Column(nullable = false)
 	private Integer star;

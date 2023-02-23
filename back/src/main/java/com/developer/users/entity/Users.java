@@ -2,6 +2,7 @@ package com.developer.users.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,14 +22,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{
-	
+
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+public class Users{	
 	@Id
 	@Column(name = "user_id", nullable = false)
 	private String userId;
@@ -49,9 +50,20 @@ public class Users{
 	private String email;
 	
 	@Column(nullable = false)
+	@Column(name="role", columnDefinition = "NUMBER DEFAULT 2")
+	private Integer role;
+	@Column(name="pwd", nullable = false)
+	private String pwd;
+	@Column(name="nickname", nullable = false)
+	private String nickname;
+	@Column(name="name", nullable = false)
+	private String name;
+	@Column(name="email", nullable = false)
+	private String email;
+	@Column(name="tel", nullable = false)
+>>>>>>> b6d5ba25232e35028a380fd6d19c05e081868f4c
 	private String tel;
-	
-	@Column
+	@Column(name="addr", nullable = false)
 	private String addr;
 	
 	@OneToMany(mappedBy = "users")
@@ -60,6 +72,13 @@ public class Users{
 	@OneToOne(mappedBy = "users")
 	private Tutor tutor;
 	
+	
+	@OneToOne(mappedBy = "users",
+			cascade = CascadeType.REMOVE)
+	private Tutor tutor;
+	
+	@OneToMany(mappedBy = "user")
+	private List<AppliedLesson> appliedLesson;
 	}
 
 
