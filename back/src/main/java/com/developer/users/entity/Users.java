@@ -15,6 +15,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.board.entity.Board;
+import com.developer.boardrep.entity.BoardRep;
+import com.developer.recommend.entity.Recommend;
 import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
@@ -22,13 +25,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 public class Users{	
 	@Id
 	@Column(name = "user_id", nullable = false)
@@ -60,6 +62,14 @@ public class Users{
 	
 	@OneToMany(mappedBy = "user")
 	private List<AppliedLesson> appliedLesson;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<Board> board;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<BoardRep> boardRep;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<Recommend> recommend;
 	}
-
 

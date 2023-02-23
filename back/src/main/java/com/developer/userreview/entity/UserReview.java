@@ -42,5 +42,4 @@ public class UserReview {
 	@OneToOne(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
 	@JoinColumn(name = "apply_seq_rv")
 	private AppliedLesson alLesson;
-	
 }

@@ -1,7 +1,6 @@
 package com.developer.reservation.entity;
 
 import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

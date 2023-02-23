@@ -26,7 +26,7 @@ import lombok.Setter;
 @Entity
 @Table(name="TUTOR")
 @DynamicInsert
-@DynamicUpdate
+
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Tutor {

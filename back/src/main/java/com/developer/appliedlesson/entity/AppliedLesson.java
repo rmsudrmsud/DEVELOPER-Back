@@ -18,7 +18,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
@@ -34,15 +33,15 @@ import lombok.Setter;
 @Entity
 @Table(name="APPLIED_LESSON")
 @DynamicInsert
-@DynamicUpdate
+
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
 @SequenceGenerator(
-		name ="applySeq", 
-		sequenceName ="apply_seq", 
-		initialValue = 1, allocationSize = 1 
-		)
+      name ="applySeq", 
+      sequenceName ="apply_seq", 
+      initialValue = 1, allocationSize = 1 
+      )
 public class AppliedLesson {
 	@Id
 	@Column(name="apply_seq")
@@ -75,8 +74,5 @@ public class AppliedLesson {
 	
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
-	
-	
-	
+   
 }
-
