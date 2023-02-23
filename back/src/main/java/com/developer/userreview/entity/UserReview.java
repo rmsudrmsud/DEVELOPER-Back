@@ -18,7 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+@DynamicInsert
+@DynamicUpdate
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
@@ -26,14 +27,19 @@ import lombok.Setter;
 public class UserReview {
 	
 	@Id
+	@Column(name = "apply_seq_rv")
+	private Long applySeqRv;
 	@Column(name = "apply_seq")
-	
 	private int applySeq;
 	
-	@Column
-	private int star;
+	@Column(nullable = false)
+	private Integer star;
 	
-	@Column
+	@Column(nullable = false)
 	private String review;
 	
+	@MapsId(value="applySeqRv")
+	@OneToOne(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+	@JoinColumn(name = "apply_seq_rv")
+	private AppliedLesson alLesson;
 }

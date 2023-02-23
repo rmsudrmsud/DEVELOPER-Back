@@ -31,16 +31,23 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class Tutor {
 	@Id
-	@Column(name="user_id")
-	private String userId;
+	@Column(name="tutor_id")
+	private String tutorId;
 	@Column(name="info")
 	private String info;
 	@Column(name="img_path")
 	private String imgPath;
-	@Column(name="star_avg")
-	private Integer starAvg;
-	@Column(name="apply_ok")
+	@Column(name="star_avg", columnDefinition = "NUMBER DEFAULT 0")
+	private Double starAvg;
+	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
-	//private UsersVO usersVO;
+	@OneToMany(mappedBy = "tutor")
+	private List<Lesson> lesson;
+	
+	@MapsId("tutorId")
+	@OneToOne(optional = true, 
+						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+	@JoinColumn(name="tutor_id", nullable = true)
+	private Users users;
 }

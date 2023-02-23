@@ -18,7 +18,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
@@ -44,28 +43,36 @@ import lombok.Setter;
       initialValue = 1, allocationSize = 1 
       )
 public class AppliedLesson {
-   @Id
-   @Column(name="apply_seq")
-   @GeneratedValue( 
-         strategy = GenerationType.SEQUENCE, 
-         generator ="applySeq"  
-      )
-   private Long applySeq;
-   @Column(name="cdate")
-   private Date cdate;
-   @Column(name="apply_ok")
-   private int applyOk;
-   @Column(name="user_id")
-   private String userId;
-   
-   @ManyToOne
-   @JoinColumn(name="al_lessonSeq")
-   private Lesson lesson;
-   
-   @OneToMany(mappedBy = "alLesson")
-   private List<LessonReview> lrList;
-   
-   //private List<UsersVO> usersVO;
-   //private List<UserReviewVO> userReviewVO;
+	@Id
+	@Column(name="apply_seq")
+	@GeneratedValue( 
+			strategy = GenerationType.SEQUENCE, 
+			generator ="applySeq"  
+		)
+	private Long applySeq;
+	@ColumnDefault(value="SYSDATE")
+	@Column(name = "cdate")
+	private Date cdate;
+	@ColumnDefault(value="0")
+	@Column(name="apply_ok")
+	private Integer applyOk;
+	
+
+	@Column(name="tutee_id", nullable = false)
+	private String tuteeId;
+
+	@ManyToOne
+	@JoinColumn(name="al_lesson_seq")
+	private Lesson lesson;
+	
+	@OneToMany(mappedBy = "alLesson")
+	private List<LessonReview> lrList;
+	
+	@JoinColumn(name = "al_tutee_id")
+	@ManyToOne
+	private Users users;
+	
+	@OneToOne(mappedBy = "alLesson")
+	private UserReview userReview;
    
 }

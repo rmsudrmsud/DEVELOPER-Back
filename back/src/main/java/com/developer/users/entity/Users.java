@@ -31,33 +31,37 @@ import lombok.Setter;
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{
-	
+public class Users{	
 	@Id
-	@Column(name = "user_id")
+	@Column(name = "user_id", nullable = false)
 	private String userId;
 	
-	@Column(name = "role")
-	@ColumnDefault(value="0")
-	private int role;
+	@ColumnDefault(value="2")
+	private Integer role;
 	
-	@Column(name = "pwd")
+	@Column(nullable = false)
 	private String pwd;
 	
-	@Column(name = "nickname")
+	@Column(nullable = false)
 	private String nickname;
 	
-	@Column(name = "name")
+	@Column(nullable = false)
 	private String name;
 	
-	@Column(name = "email")
+	@Column(nullable = false)
 	private String email;
-	
-	@Column(name = "tel")
+
+	@Column(name="tel", nullable = false)
 	private String tel;
+	@Column(name="addr", nullable = false)
+	private String addr;	
 	
-	@Column(name = "addr")
-	private String addr;
+	@OneToOne(mappedBy = "users",
+			cascade = CascadeType.REMOVE)
+	private Tutor tutor;
+	
+	@OneToMany(mappedBy = "user")
+	private List<AppliedLesson> appliedLesson;
 	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
 	private List<Board> board;
