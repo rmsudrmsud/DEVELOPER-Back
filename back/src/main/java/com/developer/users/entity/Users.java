@@ -14,7 +14,15 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
+
 import com.developer.favoriteslesson.entity.FavoritesLesson;
+
+import com.developer.board.entity.Board;
+import com.developer.boardrep.entity.BoardRep;
+import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
+import com.developer.recommend.entity.Recommend;
+import com.developer.reservation.entity.Reservation;
+
 import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
@@ -22,14 +30,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-public class Users{	
+public class Users{   
 	@Id
 	@Column(name = "user_id")
 	private String userId;
@@ -58,4 +65,23 @@ public class Users{
 	
 	@OneToMany(mappedBy = "users")
 	private List<FavoritesLesson> favoritesLesson;
-	}
+   
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+   private List<Board> board;
+   
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+   private List<BoardRep> boardRep;
+   
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+   private List<Recommend> recommend;
+   
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
+   private List<Reservation> reservation;
+   
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
+   private List<FavoritesStudyroom> favoritesStudyroom;
+   
+
+   
+   }
+
