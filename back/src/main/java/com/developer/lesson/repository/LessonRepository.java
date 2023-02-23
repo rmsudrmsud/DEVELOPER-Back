@@ -12,7 +12,7 @@ import com.developer.lesson.entity.Lesson;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	
     @Query("select DISTINCT l from Lesson l join fetch l.alList ")
-    List<Lesson> findAll();
+    public List<Lesson> findAll();
     
 	@Query(value = "SELECT lr.cdate, lr.review, lr.star, al.user_id, l.lesson_name, u.name\n"
 			+ "FROM users u\n"
