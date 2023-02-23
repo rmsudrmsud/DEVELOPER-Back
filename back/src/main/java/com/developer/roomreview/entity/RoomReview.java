@@ -35,7 +35,7 @@ import lombok.Setter;
 @Table(name = "ROOM_REVIEW")
 @DynamicInsert
 @DynamicUpdate
-@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+
 
 public class RoomReview {
 	@Id
@@ -45,7 +45,7 @@ public class RoomReview {
 	@Column(name="content", nullable = false)
 	private String content;
 	
-	@Column(name="star")
+	@Column(name="star", nullable = false)
 	private Integer star;
 	
 	@JsonFormat(pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
@@ -53,19 +53,16 @@ public class RoomReview {
 	@Column(name="cdate")
 	private Date cDate;
 	
-	@MapsId
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinColumn(name = "res_seq", nullable = false) //inner
+	@MapsId("resSeq")
+	@OneToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "res_seq") //inner
 	private Reservation reservation;
 	
 //	@Column(name="res_seq")
 //	private Long resSeq;
 	
-//	@ManyToOne
-//	@JoinColumn(name="res_seq")
-//	private Reservation reservationRoomReview;
-//	
-	//private String nickName;
-	//private String srName;
-	//private String riName;
+
+//	private String nickName;
+//	private String srName;
+//	private String riName;
 }

@@ -2,6 +2,7 @@ package com.developer.reservation;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +42,7 @@ class ReservationRepositoryTest {
 	@Test//됨
 	@DisplayName("예약add 기능 테스트")
 	
-	void testReservationAdd() {
+	void testReservationAdd() throws ParseException {
 		Reservation r = new Reservation();
 		Optional<Users> optU = ur.findById("aaa");
 		Users u = optU.get();
@@ -51,7 +52,8 @@ class ReservationRepositoryTest {
 		r.setHostUser(hu);
 		Optional<RoomInfo> optR= rir.findById(1L);
 		RoomInfo ri = optR.get();
-		Date date = new Date("2023/03/12");
+		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		Date date=format.parse("2023/03/12");
 		r.setUsingDate(date);
 		r.setRoomInfo(ri);
 		r.setStartTime("15:00");
@@ -77,23 +79,22 @@ class ReservationRepositoryTest {
 		 
 	        // 문자열 -> Date
 	        Date usingdate = formatter.parse("23/03/12");
-		List<Object> reservation = res.findAllByUsingDate(1L, usingdate);
+		List<Object[]> reservation = res.findAllByUsingDate(1L, usingdate);
 		
 
-			logger.info(reservation.getClass().toString()+"test");
+		for(int i=0; i<reservation.size(); i++) {
+			logger.info(reservation.get(i).toString());
+		}
 	
 	
 	}
 	
-	@Test //(안됨 값이 안나옴)
+	@Test //(
 	@DisplayName("유저아이디로 예약내역 찾기 기능 테스트")
 	void testSelectByUserId() {
 		
-	Iterable<Reservation> ir=res.findByUserId("suho522");
-	ir.forEach(r ->{
-		logger.info("아이디: "+r.getUserId()+"예약일: "+r.getUsingDate()+"예약한 방: "+r.getRoomInfo().getName()+
-				"스터디카페명"+r.getStudyroom().getName()+"시작시간"+r.getStartTime()+"종료시간"+r.getEndTime());
-	});
+	List<Object[]> ir=res.findByUserId("aaa");
+	logger.info(ir.getClass().toString());
 	}
 	
 	
@@ -122,7 +123,7 @@ class ReservationRepositoryTest {
 	@Test //
 	@DisplayName("예약시퀀스Delete 기능 테스트")
 	void testReservationDelete() {
-	res.deleteByResSeq(5L);;
+	res.deleteById(6L);;
 		
 	}
 	@Test
@@ -133,18 +134,16 @@ class ReservationRepositoryTest {
 		r.getResSeq();
 		
 	}
-
+	@DisplayName("호스트 아이디로 예약내역 전체출력 기능 테스트")
 	@Test
 	void testFindByHostId() {
 	Optional<HostUser> optH	=hos.findById("suho522");
 	HostUser hu=optH.get();
-	Reservation r = res.findByhostUser("suho522");
+	Reservation[] r = res.findByhostUser(hu.getHostId());
 		
-		logger.info("예약번호:"+r.getResSeq()+"유저아이디"+r.getUserId()+"룸시퀀스:"//+r.getRoomInfo().getRoomSeq()
-				+"시작시간:"+r.getStartTime()+"종료시간:"+r.getEndTime()+"예약일"+r.getUsingDate()
-		+"호스트ID"+r.getHostUser().getHostId());
-		
-	
+	for(int i=0; i<r.length; i++) {
+		logger.info(r[i].getClass().toString());
+	}
 		
 	}
 }

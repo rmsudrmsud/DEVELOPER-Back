@@ -2,6 +2,7 @@ package com.developer.RoomReview;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,32 +14,30 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.reservation.entity.Reservation;
 import com.developer.reservation.repository.ReservationRepository;
-import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
 import com.developer.roomreview.repository.RoomReviewRepository;
+import com.developer.users.repository.UsersRepository;
 @SpringBootTest
 class RoomReviewRepositoryTest {
 	private Logger logger = LoggerFactory.getLogger(getClass()); 
 	@Autowired
 	private RoomReviewRepository rrr;
-	
+
 	@Autowired
 	private ReservationRepository resr;
 	
-	@Test
-	void test1() {
-		rrr.findAll();
-	}
+	
 	@DisplayName("리뷰add 기능 테스트")
 	@Test
 	void SaveRoomReviewAdd() {
 		RoomReview rr = new RoomReview();
 	
-		Optional<Reservation> optR =resr.findById(1L);
+		Optional<Reservation> optR =resr.findById(13L);
 		Reservation r=optR.get();
 		rr.setResSeq(r.getResSeq());
 		rr.setContent("스터디룸 좋아요");
-		rr.setStar(1);
+		rr.setStar(3);
+		rr.setReservation(r);
 		rrr.save(rr);
 	}
 	
@@ -72,7 +71,31 @@ class RoomReviewRepositoryTest {
 	@Test
 	@DisplayName("srSeq로 특정 스터디룸 후기 리스트 전체출력 테스트")
 	void testfindRoomReviewAll() {
-		//rrr.findRoomReviewAll(1L);
+		List<Object[]> obj= rrr.findBySrSeq(1L);
+		logger.info(obj.getClass().toString());
 	}
+	
+	@Test
+	@DisplayName(" userId로 작성한 이용후기 목록을 출력 테스트")
+	void testfinadAllByUsingdate() {
+		List<Object[]> obj=rrr.findByUserId("aaa");
+		logger.info(obj.getClass().toString());
+	}
+	
+	@Test
+	@DisplayName(" resSeq로 해당 예약의 후기를 전체출력 테스트")
+	void testfindByResSeq() {
+		Object obj=rrr.findByResSeq(13L);
+		logger.info(obj.getClass().toString());
+	}
+	
+
+	@Test
+	@DisplayName(" userId로 후기를 작성하지 않은 예약리스트를 출력 테스트")
+	void testfindReqResList() {
+		List<Object[]> obj= rrr.fUserId("aaa");
+		logger.info(obj.getClass().toString());
+	}
+	
 
 }

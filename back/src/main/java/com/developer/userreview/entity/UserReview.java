@@ -21,11 +21,6 @@ public class UserReview {
 	
 	@Id
 	@Column(name = "apply_seq")
-	@GeneratedValue(
-	strategy = GenerationType.SEQUENCE,
-	generator =
-	"apply_seq" // 위의 sequence 이름
-	)
 	private int applySeq;
 	
 	@Column

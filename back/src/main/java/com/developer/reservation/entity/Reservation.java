@@ -39,7 +39,7 @@ import lombok.Setter;
 @Table(name = "RESERVATION")
 @DynamicInsert
 @DynamicUpdate
-@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+
 @SequenceGenerator(
 name =
 "RES_SEQ_GENERATOR", // 사용할 sequence 이름
@@ -48,7 +48,7 @@ sequenceName =
 initialValue = 1, allocationSize = 1)
 public class Reservation {
 	@Id
-	@Column(name = "res_seq", nullable = false)
+	@Column(name = "res_seq")
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE,
 			generator =
@@ -65,8 +65,7 @@ public class Reservation {
 	@Column(name = "end_time", nullable = false)
 	private String endTime;
 	
-	@JsonFormat(pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
-	@ColumnDefault(value="sysdate")
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	@Column(name = "using_date")
 	private Date usingDate;
 	
@@ -78,9 +77,7 @@ public class Reservation {
 //	@OneToMany( mappedBy = "reservation")
 //	private List<Studyroom> studyroom;
 	
-	@ManyToOne
-	@JoinColumn(name="sr_seq")
-	private Studyroom studyroom;
+
 	
 	
 	//단방향, sr추가: 해당 스터디카페 예약자명단 전체목록

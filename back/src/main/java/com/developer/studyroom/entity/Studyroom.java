@@ -84,8 +84,7 @@ public class Studyroom {
 //		private Reservation reservation;
 		
 		
-		@OneToMany
-		private List<Reservation> reservation;
+		
 		
 //		//sr: 카페등록때 필요한 생성자  DTO로 나중에 만들기
 //		public StudyroomVO(int srSeq, String name, String addr, String info, String openTime, String endTime,

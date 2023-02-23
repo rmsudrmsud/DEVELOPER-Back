@@ -21,26 +21,25 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			+ "AND sr.sr_seq = ro.sr_seq\r\n"
 			+ "AND to_date(r.start_time,'HH24:MI') >= to_date(sr.open_time,'HH24:MI')\r\n"
 			+ "AND to_date(r.end_time,'HH24:MI') <= to_date(sr.end_time,'HH24:MI')", nativeQuery = true)
-	public List<Object> findAllByUsingDate(@Param("roomSeq") Long roomSeq, @Param("usingDate") Date usingDate);
+	public List<Object[]> findAllByUsingDate(@Param("roomSeq") Long roomSeq, @Param("usingDate") Date usingDate);
 	
-	//유저 아이디로 예약내역 찾기
-	@Query(value="select * from Reservation where user_id = :userId ", nativeQuery = true)
-	public List<Reservation> findByUserId(@Param("userId")String userId);
+	//유저 아이디로 예약내역 찾기O
+	@Query(value="SELECT r. res_seq, s.name AS sName, rif.name AS rifName, r.using_date, r.start_time, r.end_time\r\n"
+			+ "FROM studyroom s, room_info rif, reservation r\r\n"
+			+ "WHERE s.sr_seq = rif.sr_seq\r\n"
+			+ "AND rif.room_seq = r.room_seq\r\n"
+			+ "AND r.user_id = :userId\r\n"
+			+ "ORDER BY res_seq DESC", nativeQuery = true)
+	public List<Object[]> findByUserId(@Param("userId")String userId);
 	
 	//예약시퀀스로 찾기 예약상세O
 	//public Reservation findById(String resSeq);
 	public Reservation findByResSeq(Long resSeq);
 	
-	//예약시퀀스로 삭제
-	@Query(value="delete from Reservation where res_seq = :resSeq ", nativeQuery = true)
-	public void deleteByResSeq(@Param("resSeq") Long resSeq);
-	//public void deleteById(Long resSeq);
-	//예약insert하기 insertRV, 기본메서드인데 해줘야하나?
-	//public void InsertRV();
-	
-	//호스트 아이디로 전부찾기
+
+	//호스트 아이디로 예약내역 전체출력O
 	@Query(value="select*from RESERVATION where host_id=:hostId", nativeQuery = true)
-	public Reservation findByhostUser(@Param("hostId") String hostId);
+	public Reservation[] findByhostUser(@Param("hostId") String hostId);
 	
 	//n
 }

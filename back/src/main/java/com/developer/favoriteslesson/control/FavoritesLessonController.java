@@ -25,7 +25,7 @@ public class FavoritesLessonController {
 	//[JW] 수업 즐겨찾기 추가 
 	@PostMapping
 	public ResponseEntity<?> add(@RequestBody FavoritesLesson favoritesLesson) throws AddException, FindException{
-		service.addFavLesson(favoritesLesson);
+//		service.addFavLesson(favoritesLesson);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

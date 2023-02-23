@@ -1,6 +1,8 @@
 package com.developer.lesson;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,38 +13,68 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lesson.repository.LessonRepository;
+import com.developer.tutor.entity.Tutor;
+import com.developer.tutor.repository.TutorRepository;
 
 @SpringBootTest
 public class LessonRepositoryTest {
 	private Logger logger = LoggerFactory.getLogger(getClass()); 
 	@Autowired
 	private LessonRepository lRepository;
-
+	@Autowired
+	private TutorRepository tRepository;
 	
 	@Test
-	@DisplayName("SelectDetail() 테스트")
-	void testSelectDetail() {
+	@DisplayName("수업 SELECT 테스트 : 전체출력")
+	void testSelectAll() {		
 		Iterable<Lesson> all = lRepository.findAll();
 		all.forEach((l)->{
 			logger.info("즐겨찾기값: " + l.getFlList().get(0).getFavLesSeq()
 					+ ", 즐겨찾기한 수업번호: " + l.getFlList().get(0).getLesson().getLessonSeq()
-					+ "즐겨찾기값: " + l.getFlList().get(1).getFavLesSeq()
-					+ ", 즐겨찾기한 수업번호: " + l.getFlList().get(1).getLesson().getLessonSeq());
-		});
+					+ "튜터아이디: " + l.getTutor().getUserId()
+					+ "수업등록목록: " + l.getAlList().get(0).getUserId());
+		});	
+	}
+	
+	@Test
+	@DisplayName("수업 SELECT 테스트 : 번호별 출력")
+	void testSelectSeq() {		
+		Optional<Lesson> lesson = lRepository.findById(1L);
+		logger.info("수업정보: " + lesson.get().getLessonName());
+	}
+	
+	@Test
+	@DisplayName("수업 SELECT 테스트 : 클래스를 개설한 튜터의 후기 목록")
+	void testSelectAllReview() {		
+		List<Object[]> list = lRepository.selectAllReview(2L);
+		for(int i=0; i<list.size(); i++) {
+			Object review = list.get(i);
+			logger.info(review.toString());
+		}
+	}
+	
+	@Test
+	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
+	void testSelectTutorDetail() {		
+		List<Object[]> list = lRepository.selectTutorDetail("test3");
+		for(int i=0; i<list.size(); i++) {
+			Object classList = list.get(i);
+			logger.info(classList.toString());
+		}
 	}
 
 
 	@Test
-	@DisplayName("lessonAdd() 테스트")
-	void testLessonAdd() {
+	@DisplayName("수업 INSERT 테스트")
+	void testAdd() {
 		Lesson lesson = new Lesson();
 		lesson.setCategory(1);
 		lesson.setContent("sdfsdsdf");
-		Date date = new Date("2023/03/12");
+		Date date = new Date(2023, 3, 5);
 		lesson.setEndCdate(date);
 		lesson.setEndDate(date);
 		lesson.setImgPath("...");
-		lesson.setLessonName("테스트입니다.");
+		lesson.setLessonName("2번수업.");
 		lesson.setLessonSeq(124L);
 		lesson.setLocation("..."); 
 		lesson.setPayLesson(0);
@@ -50,7 +82,28 @@ public class LessonRepositoryTest {
 		lesson.setPrice(1000);
 		lesson.setStartCdate(date);
 		lesson.setStartDate(date);
+		
+		Optional<Tutor> t = tRepository.findById("test4");
+		Tutor tutor = t.get();
+		lesson.setTutor(tutor);
 		lRepository.save(lesson);
+	}
+	
+	@Test
+	@DisplayName("수업 UPDATE 테스트")
+	void testUpdate() {
+		Optional<Lesson> l = lRepository.findById(4L);
+		Lesson lesson = l.get();
+		lesson.setLessonName("수정중");
+		lRepository.save(lesson);		
+	}
+	
+	@Test
+	@DisplayName("수업 DELETE 테스트")
+	void testDelete() {
+		Optional<Lesson> l = lRepository.findById(3L);
+		Lesson lesson = l.get();
+		lRepository.delete(lesson);	
 	}
 
 }
