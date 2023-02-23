@@ -1,3 +1,4 @@
+
 package com.developer.boardrep.entity;
 
 import java.util.Date;

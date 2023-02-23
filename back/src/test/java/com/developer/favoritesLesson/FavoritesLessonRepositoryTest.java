@@ -26,6 +26,7 @@ public class FavoritesLessonRepositoryTest {
 	@Autowired
 	private LessonRepository lRepository;
 	
+	
 	@Test
 	@DisplayName("수업즐겨찾기 SELECT 테스트")
 	void testSelectDetail() {

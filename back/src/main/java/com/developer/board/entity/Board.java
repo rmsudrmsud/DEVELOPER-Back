@@ -24,6 +24,7 @@ import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
