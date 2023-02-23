@@ -16,29 +16,29 @@ import com.developer.lesson.repository.LessonRepository;
 
 @Service
 public class FavoritesLessonService {
-	@Autowired
-	FavoritesLessonRepository flRepository;
-	@Autowired
-	private LessonRepository lRepository;
-	
-	//[JW] 나의 수업 즐겨찾기 목록 확인 
-	public List<Object[]> listFavLesson(String userId) throws FindException{
-		List<Object[]> list = flRepository.listFavLesson(userId);
-		return list;
-	}
-	
-	//[JW] 수업 즐겨찾기 추가 
-	public void addFavLesson(FavoritesLesson favoritesLesson, Long lessonSeq) throws AddException{
-		Optional<Lesson> l = lRepository.findById(lessonSeq);
-		Lesson lesson = l.get();
-		favoritesLesson.setLesson(lesson);
-		flRepository.save(favoritesLesson);
-	}
-	
-	//[JW] 수업 즐겨찾기 삭제 
-	public void delFavLesson(Long favLesSeq) throws RemoveException{
-		flRepository.deleteById(favLesSeq);
-	}
+//	@Autowired
+//	FavoritesLessonRepository flRepository;
+//	@Autowired
+//	private LessonRepository lRepository;
+//	
+//	//[JW] 나의 수업 즐겨찾기 목록 확인 
+//	public List<Object[]> listFavLesson(String userId) throws FindException{
+//		List<Object[]> list = flRepository.listFavLesson(userId);
+//		return list;
+//	}
+//	
+//	//[JW] 수업 즐겨찾기 추가 
+//	public void addFavLesson(FavoritesLesson favoritesLesson, Long lessonSeq) throws AddException{
+//		Optional<Lesson> l = lRepository.findById(lessonSeq);
+//		Lesson lesson = l.get();
+//		favoritesLesson.setLesson(lesson);
+//		flRepository.save(favoritesLesson);
+//	}
+//	
+//	//[JW] 수업 즐겨찾기 삭제 
+//	public void delFavLesson(Long favLesSeq) throws RemoveException{
+//		flRepository.deleteById(favLesSeq);
+//	}
 	
 }
 
