@@ -1,18 +1,25 @@
 package com.developer.users.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -23,27 +30,36 @@ import lombok.ToString;
 public class Users{
 	
 	@Id
-	@Column(name = "user_id")
+	@Column(name = "user_id", nullable = false)
 	private String userId;
 	
-	@Column
-	private int role;
+	@ColumnDefault(value="2")
+	private Integer role;
 	
-	@Column
+	@Column(nullable = false)
 	private String pwd;
 	
-	@Column
+	@Column(nullable = false)
 	private String nickname;
 	
-	@Column
+	@Column(nullable = false)
 	private String name;
 	
-	@Column
+	@Column(nullable = false)
 	private String email;
 	
-	@Column
+	@Column(nullable = false)
 	private String tel;
 	
 	@Column
 	private String addr;
+	
+	@OneToMany(mappedBy = "users")
+	private List<AppliedLesson> alLesson;
+	
+	@OneToOne(mappedBy = "users")
+	private Tutor tutor;
+	
 	}
+
+
