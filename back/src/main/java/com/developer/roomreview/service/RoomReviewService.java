@@ -30,7 +30,7 @@ public class RoomReviewService {
 		rr.setResSeq(r.getResSeq());
 		rr.setContent(content);
 		rr.setStar(star);
-		rr.setReservation(r);
+		
 		rrr.save(rr);
 	}
 	

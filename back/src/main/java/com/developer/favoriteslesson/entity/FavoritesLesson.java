@@ -1,3 +1,4 @@
+
 package com.developer.favoriteslesson.entity;
 
 import javax.persistence.Column;
@@ -27,8 +28,8 @@ import lombok.ToString;
 @Setter@Getter @ToString
 @NoArgsConstructor @AllArgsConstructor
 @SequenceGenerator(
-		name ="favLesSeq", 
-		sequenceName ="fav_les_seq", 
+		name ="favLesSeq", // 사용할 sequence 이름
+		sequenceName ="fav_les_seq", // 실제 데이터베이스 sequence 이름
 		initialValue = 1, allocationSize = 1 
 		)
 public class FavoritesLesson {
@@ -36,14 +37,13 @@ public class FavoritesLesson {
 	@Column(name="fav_les_seq")
 	@GeneratedValue( 
 			strategy = GenerationType.SEQUENCE, 
-			generator ="favLesSeq"  
+			generator ="favLesSeq" // 위의 sequence 이름 
 		)
 	private Long favLesSeq;
 	
-	@Column(name="user_id")
-	private String userId;
-	
-	@ManyToOne()
-	@JoinColumn(name="lessonSeq")
+	@ManyToOne
+	@JoinColumn(name="fl_lessonSeq")
 	private Lesson lesson;
 }
+
+

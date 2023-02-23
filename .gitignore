@@ -6,7 +6,7 @@ Back/src/main/resources/application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml
-developerBack/log/
+back/log/*
 .metadata
 bin/
 tmp/
@@ -23,6 +23,7 @@ application.properties
 =======
 .gitignore
 >>>>>>> 72d53c2c979cd20b287e0886da91927ac2d762af
+application.properties
 
 # External tool builders
 .externalToolBuilders/

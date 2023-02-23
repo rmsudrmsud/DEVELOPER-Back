@@ -36,18 +36,10 @@ public class Tutor {
 	private String info;
 	@Column(name="img_path")
 	private String imgPath;
-	@Column(name="star_avg", columnDefinition = "NUMBER DEFAULT 0")
-	private Double starAvg;
-	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
+	@Column(name="star_avg")
+	private Integer starAvg;
+	@Column(name="apply_ok")
 	private Integer applyOk;
 	
-	
-	@OneToMany(mappedBy = "tutor")
-	private List<Lesson> lesson;
-	
-	@MapsId("userId")
-	@OneToOne(optional = true, 
-						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="user_id", nullable = true)
-	private Users users;
+	//private UsersVO usersVO;
 }

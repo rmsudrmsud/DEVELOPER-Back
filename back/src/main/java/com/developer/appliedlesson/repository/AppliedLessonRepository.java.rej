@@ -1,0 +1,11 @@
+diff a/back/src/main/java/com/developer/appliedLesson/repository/AppliedLessonRepository.java b/back/src/main/java/com/developer/appliedLesson/repository/AppliedLessonRepository.java	(rejected hunks)
+@@ -1,9 +0,0 @@
+-package com.developer.appliedlesson.repository;
+-
+-import org.springframework.data.repository.CrudRepository;
+-
+-import com.developer.appliedlesson.entity.AppliedLesson;
+-
+-public interface AppliedLessonRepository extends CrudRepository<AppliedLesson, Long> {
+-
+-}

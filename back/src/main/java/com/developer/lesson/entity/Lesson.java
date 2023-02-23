@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,8 +36,8 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 @JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
 @SequenceGenerator(
-		name ="lessonSeq", 
-		sequenceName ="lesson_seq", 
+		name ="lessonSeq", // 사용할 sequence 이름
+		sequenceName ="lesson_seq", // 실제 데이터베이스 sequence 이름
 		initialValue = 1, allocationSize = 1 
 		)
 public class Lesson {
@@ -44,44 +45,43 @@ public class Lesson {
 	@Column(name="lesson_seq")
 	@GeneratedValue( 
 			strategy = GenerationType.SEQUENCE, 
-			generator ="lessonSeq"  
+			generator ="lessonSeq" // 위의 sequence 이름 
 		)
 	private Long lessonSeq;
 
-	@Column(name="lesson_name", nullable = false)
+	@Column(name="lesson_name")
 	private String lessonName;
-	@Column(name="category", nullable = false)
+	@Column(name="category")
 	private Integer category;
-	@Column(name="content", nullable = false)
+	@Column(name="content")
 	private String content;
-	@Column(name="people", nullable = false)
+	@Column(name="people")
 	private Integer people;
 	@Column(name="img_path")
 	private String imgPath;
-	@Column(name="start_cdate", nullable = false)
+	@Column(name="start_cdate")
 	private Date startCdate;
-	@Column(name="end_cdate", nullable = false)
+	@Column(name="end_cdate")
 	private Date endCdate;
-	@Column(name="price", nullable = false)
+	@Column(name="price")
 	private Integer price;
-	@Column(name="start_date", nullable = false)
+	@Column(name="start_date")
 	private Date startDate;
-	@Column(name="end_date", nullable = false)
+	@Column(name="end_date")
 	private Date endDate;
-	@Column(name="pay_lesson", columnDefinition = "NUMBER DEFAULT 0")
+	@Column(name="pay_lesson")
 	private Integer payLesson;
-	@Column(name="location" , nullable = false)
+	@Column(name="location")
 	private String location;
 	
-	
-	@ManyToOne
-	@JoinColumn(name="tutor_id")
-	private Tutor tutor;
 
 	@OneToMany(mappedBy = "lesson", 
-							cascade = CascadeType.REMOVE)
+							fetch = FetchType.EAGER)
 	private List<FavoritesLesson> flList;
 	
 	@OneToMany(mappedBy = "lesson")	
-	private List<AppliedLesson> alList;	
+	private List<AppliedLesson> alList;
+	
+	//private TutorVO tutorVO;
+	
 }

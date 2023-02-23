@@ -1,6 +1,7 @@
 package com.developer.appliedlesson.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -31,7 +33,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
-@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
 @SequenceGenerator(
       name ="applySeq", 
       sequenceName ="apply_seq", 
@@ -45,26 +47,21 @@ public class AppliedLesson {
          generator ="applySeq"  
       )
    private Long applySeq;
-   @Column(name="cdate", columnDefinition = "DATE DEFAULT SYSDATE")
+   @Column(name="cdate")
    private Date cdate;
-   @Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
-   private Integer applyOk;
-   //TODO: 튜티아이디로 바꾸는 건 어떠신지 ...
-   @Column(name="user_id", nullable = false)
+   @Column(name="apply_ok")
+   private int applyOk;
+   @Column(name="user_id")
    private String userId;
-   
    
    @ManyToOne
    @JoinColumn(name="al_lessonSeq")
    private Lesson lesson;
    
-   @OneToOne(mappedBy = "appliedLesson")	
-   private LessonReview lessonReview;
+   @OneToMany(mappedBy = "alLesson")
+   private List<LessonReview> lrList;
    
-   @ManyToOne
-   @JoinColumn(name="tutor_id")
-   private Users user;
-   
+   //private List<UsersVO> usersVO;
    //private List<UserReviewVO> userReviewVO;
    
 }
