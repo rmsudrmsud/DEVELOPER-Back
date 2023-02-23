@@ -33,7 +33,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class Users{	
 	@Id
-	@Column(name = "user_id")
+	@Column(name = "user_id", nullable = false)
 	private String userId;
 	
 	@Column(name="role", columnDefinition = "NUMBER DEFAULT 2")
@@ -48,9 +48,11 @@ public class Users{
 	private String email;
 	@Column(name="tel", nullable = false)
 	private String tel;
+	
 	@Column(name="addr", nullable = false)
 	private String addr;
 	
+
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
 	private List<Board> board;
 	
@@ -64,8 +66,10 @@ public class Users{
 			cascade = CascadeType.REMOVE)
 	private Tutor tutor;
 	
-	@OneToMany(mappedBy = "user")
-	private List<AppliedLesson> appliedLesson;
+	@OneToMany(mappedBy = "users")
+	private List<AppliedLesson> alLesson;
+	
 	
 	}
+
 

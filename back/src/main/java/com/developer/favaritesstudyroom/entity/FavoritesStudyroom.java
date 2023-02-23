@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:back/src/main/java/com/developer/favaritesstudyroom/entity/FavoritesStudyroom.java
 package com.developer.favaritesstudyroom.entity;
+========
+package com.developer.favoritestudyroom.entity;
+>>>>>>>> 66a38bee89c745bed6d4f523e8d9f08473494b51:back/src/main/java/com/developer/favoritestudyroom/entity/FavoritesStudyroom.java
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
