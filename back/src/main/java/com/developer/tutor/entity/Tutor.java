@@ -44,10 +44,10 @@ public class Tutor {
 	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
-	@MapsId(value="tutorId")
-	@OneToOne(cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "tutor_id")
-	private Users users;
+//	@MapsId(value="tutorId")
+//	@OneToOne(cascade = CascadeType.REMOVE)
+//	@JoinColumn(name = "tutor_id")
+//	private Users users;
 	
 	
 //	@OneToMany(mappedBy = "tutor")

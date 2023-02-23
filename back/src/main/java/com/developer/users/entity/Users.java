@@ -61,17 +61,9 @@ public class Users{
 	@Column(name="email", nullable = false)
 	private String email;
 	@Column(name="tel", nullable = false)
->>>>>>> b6d5ba25232e35028a380fd6d19c05e081868f4c
 	private String tel;
 	@Column(name="addr", nullable = false)
-	private String addr;
-	
-	@OneToMany(mappedBy = "users")
-	private List<AppliedLesson> alLesson;
-	
-	@OneToOne(mappedBy = "users")
-	private Tutor tutor;
-	
+	private String addr;	
 	
 	@OneToOne(mappedBy = "users",
 			cascade = CascadeType.REMOVE)

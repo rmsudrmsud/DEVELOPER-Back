@@ -90,5 +90,5 @@ public class Lesson {
 //	private Tutor tutor;
 	
 =======
-	private List<AppliedLesson> alList;	
+
 }

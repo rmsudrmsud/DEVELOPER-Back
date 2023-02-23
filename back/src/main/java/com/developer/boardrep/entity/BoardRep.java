@@ -27,8 +27,6 @@ public class BoardRep {
    @Column(name = "content")
    private String content;
 
-	@Column(name = "cdate")
-	private Date cDate;
    @Column(name = "cdate")
    private Date cDate;
 
