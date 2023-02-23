@@ -60,7 +60,7 @@ public class Users{
 			cascade = CascadeType.REMOVE)
 	private Tutor tutor;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "users")
 	private List<AppliedLesson> appliedLesson;
 	
 	@OneToMany(mappedBy = "users")

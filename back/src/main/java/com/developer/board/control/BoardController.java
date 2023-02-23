@@ -43,11 +43,11 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	private Logger logger = LoggerFactory.getLogger(getClass());
-		@GetMapping(value="findPostSeq" //, produces = MediaType.APPLICATION_JSON_VALUE
-				)
-		public ResponseEntity<?> findPostSeq(@RequestParam Long postSeq) throws FindException{
-			boardservice.findPostSeq(postSeq);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
+//	private Logger logger = LoggerFactory.getLogger(getClass());
+//		@GetMapping(value="findPostSeq" //, produces = MediaType.APPLICATION_JSON_VALUE
+//				)
+//		public ResponseEntity<?> findPostSeq(@RequestParam Long postSeq) throws FindException{
+//			boardservice.findPostSeq(postSeq);
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		}
 }

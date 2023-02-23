@@ -4,7 +4,6 @@ package com.developer.appliedlesson.entity;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,36 +43,6 @@ import lombok.Setter;
       initialValue = 1, allocationSize = 1 
       )
 public class AppliedLesson {
-   @Id
-   @Column(name="apply_seq")
-   @GeneratedValue( 
-         strategy = GenerationType.SEQUENCE, 
-         generator ="applySeq"  
-      )
-   private Long applySeq;
-   @Column(name="cdate")
-   @ColumnDefault(value = "SYSDATE")
-   private Date cdate;
-   @Column(name="apply_ok")
-   @ColumnDefault(value = "0")
-   private Integer applyOk;
-   @Column(name="tutee_id", nullable = false)
-   private String tuteeId;
-   
-   
-   @ManyToOne
-   @JoinColumn(name="al_lesson_seq")
-   private Lesson lesson;
-   
-   @OneToOne(mappedBy = "appliedLesson",
-		   				cascade = CascadeType.MERGE)	
-   private LessonReview lessonReview;
-   
-   @ManyToOne
-   @JoinColumn(name="al_tutee_id")
-   private Users user;
-   
-   //private List<UserReviewVO> userReviewVO;
 	@Id
 	@Column(name="apply_seq")
 	@GeneratedValue( 
@@ -87,11 +56,10 @@ public class AppliedLesson {
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
 	private Integer applyOk;
-	
-
 	@Column(name="tutee_id", nullable = false)
 	private String tuteeId;
 
+	
 	@ManyToOne
 	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;
@@ -105,4 +73,5 @@ public class AppliedLesson {
 	
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
-   }
+   
+}
