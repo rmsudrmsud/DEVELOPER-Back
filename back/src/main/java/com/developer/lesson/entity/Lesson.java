@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,7 +74,6 @@ public class Lesson {
 	@Column(name="location" , nullable = false)
 	private String location;
 	
-	
 	@ManyToOne
 	@JoinColumn(name="tutor_id")
 	private Tutor tutor;
@@ -83,5 +83,6 @@ public class Lesson {
 	private List<FavoritesLesson> flList;
 	
 	@OneToMany(mappedBy = "lesson")	
-	private List<AppliedLesson> alList;	
+	private List<AppliedLesson> alList;
+	
 }

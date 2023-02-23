@@ -31,8 +31,8 @@ public class LessonRepositoryTest {
 		all.forEach((l)->{
 			logger.info("즐겨찾기값: " + l.getFlList().get(0).getFavLesSeq()
 					+ ", 즐겨찾기한 수업번호: " + l.getFlList().get(0).getLesson().getLessonSeq()
-					+ "튜터아이디: " + l.getTutor().getUserId()
-					+ "수업등록목록: " + l.getAlList().get(0).getUserId());
+					+ "튜터아이디: " + l.getTutor().getTutorId()
+					+ "수업등록목록: " + l.getAlList().get(0).getTuteeId());
 		});	
 	}
 	
