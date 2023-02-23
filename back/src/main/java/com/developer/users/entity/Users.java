@@ -16,20 +16,22 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.board.entity.Board;
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
+import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{
-	
+
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+public class Users{	
 	@Id
 	@Column(name = "user_id")
 	private String userId;
@@ -64,5 +66,27 @@ public class Users{
 	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
 	private List<Recommend> recommend;
+	@Column(name="role", columnDefinition = "NUMBER DEFAULT 2")
+	private Integer role;
+	@Column(name="pwd", nullable = false)
+	private String pwd;
+	@Column(name="nickname", nullable = false)
+	private String nickname;
+	@Column(name="name", nullable = false)
+	private String name;
+	@Column(name="email", nullable = false)
+	private String email;
+	@Column(name="tel", nullable = false)
+	private String tel;
+	@Column(name="addr", nullable = false)
+	private String addr;
+	
+	
+	@OneToOne(mappedBy = "users",
+			cascade = CascadeType.REMOVE)
+	private Tutor tutor;
+	
+	@OneToMany(mappedBy = "user")
+	private List<AppliedLesson> appliedLesson;
 	}
 
