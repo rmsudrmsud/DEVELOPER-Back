@@ -1,20 +1,11 @@
 package com.developer.board.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
-import com.developer.board.entity.Board;
-
-public interface BoardRepository extends CrudRepository<Board, Long> {
-	
-}
-package com.developer.board.repository;
-
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.developer.board.entity.Board;

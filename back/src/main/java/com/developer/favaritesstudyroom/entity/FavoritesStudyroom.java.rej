@@ -1,6 +1,0 @@
-diff a/back/src/main/java/com/developer/favaritesstudyroom/entity/FavoritesStudyroom.java b/back/src/main/java/com/developer/favaritesstudyroom/entity/FavoritesStudyroom.java	(rejected hunks)
-@@ -0,3 +0,4 @@
- 	
- 	//private StudyroomVO studyroomVO; 
- }
-+>>>>>>>> 27530127c719d1d04269250f27e3d6eb6704271f:back/src/main/java/com/developer/favaritesstudyroom/entity/FavoritesStudyroom.java

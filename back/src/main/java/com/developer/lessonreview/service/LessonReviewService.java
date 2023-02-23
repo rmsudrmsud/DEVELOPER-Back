@@ -23,7 +23,7 @@ public class LessonReviewService {
 	public void addReview(LessonReview lessonReview) throws FindException {
 		Optional<AppliedLesson> al = alRepository.findById(1L);
 		AppliedLesson appliedLesson = al.get();
-		lessonReview.setAppliedLesson(appliedLesson);
+		lessonReview.setAlLesson(appliedLesson);
 		lrRepository.save(lessonReview);
 	}
 	

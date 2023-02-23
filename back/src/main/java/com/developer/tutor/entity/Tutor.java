@@ -26,49 +26,6 @@ import lombok.Setter;
 @Entity
 @Table(name="TUTOR")
 @DynamicInsert
-@DynamicUpdate
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-public class Tutor {
-	@Id
-	@Column(name="tutor_id")
-	private String tutorId;
-	@Column(name="info")
-	private String info;
-	@Column(name="img_path")
-	private String imgPath;
-	@Column(name="star_avg", columnDefinition = "NUMBER DEFAULT 0")
-	private Double starAvg;
-	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
-	private Integer applyOk;
-	
-	@OneToMany(mappedBy = "tutor")
-	private List<Lesson> lesson;
-	
-	@MapsId("tutorId")
-	@OneToOne(optional = true, 
-						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="tutor_id", nullable = true)
-	private Users users;
-}
-package com.developer.tutor.entity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicInsert;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-@Entity
-@Table(name="TUTOR")
-@DynamicInsert
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
