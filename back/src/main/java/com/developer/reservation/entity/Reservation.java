@@ -1,15 +1,28 @@
 package com.developer.reservation.entity;
 
 import java.sql.Date;
+import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.developer.hostuser.entity.HostUser;
+import com.developer.roominfo.entity.RoomInfo;
+import com.developer.roomreview.entity.RoomReview;
+import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +33,9 @@ import lombok.Setter;
 @Setter @Getter @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "RESERVATION")
+@DynamicInsert
+@DynamicUpdate
+
 @SequenceGenerator(
 name =
 "RES_SEQ_GENERATOR", // 사용할 sequence 이름
@@ -34,28 +50,31 @@ public class Reservation {
 			generator =
 			"RES_SEQ_GENERATOR") 
 	private Long resSeq;
+
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private Users userId;
 	
-	@Column(name = "user_id")
-	private String userId;
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="host_id", nullable = false)
+	private HostUser hostUser; 
 	
-	@Column(name = "room_seq")
-	private Long roomSeq;
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="room_seq", nullable = false)
+	private RoomInfo roominfo;
 	
-	@Column(name = "start_time")
+	@Column(name = "start_time", nullable = false)
 	private String startTime;
 	
-	@Column(name = "end_time")
+	@Column(name = "end_time", nullable = false)
 	private String endTime;
 	
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	@Column(name = "using_date")
-	@JsonFormat(pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	private Date usingDate;
 	
-	@Column(name = "host_id")
-	private String hostId;
+	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+	private RoomReview RoomReviewResSeq;
 
-	//private StudyroomVO studyroomVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
-	//private UsersVO usersVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
-	//private HostUserVO hostUserVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
-	//private List<RoomReviewVO> roomReviewVO; //ds 추가
+
 }

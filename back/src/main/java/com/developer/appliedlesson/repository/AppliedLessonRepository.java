@@ -30,4 +30,5 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
    +"order by u.name desc, nativeQuery = true")
    public Object findLessonApplyUsers1(@Param("userId") String userId);
    
+
 }
