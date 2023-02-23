@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
-import com.developer.dto.BoardDto;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.users.entity.Users;
@@ -49,19 +48,7 @@ public class BoardService {
 		return list;
 	}
 	
-	/**
-	 * 글 번호로 게시글 상세 검색(닉네임+글상세+댓글)
-	 * @author choigeunhyeong
-	 * @param postSeq
-	 * @return
-	 * @throws FindException
-	 */
-	public List<BoardDto> findPostSeqDto(Long postSeq) throws FindException{
-		Optional<Users> optU =  UsersRepository.findById("아이디2");
-		Users users = optU.get();
-		List<BoardDto> list = boardRepository.findPostSeqDto(postSeq);
-		return list;
-	}
+	
 	
 	/**
 	 * 글 수정

@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
-import com.developer.dto.BoardDto;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
