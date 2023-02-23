@@ -43,13 +43,13 @@ sequenceName =
 "res_seq", // 실제 데이터베이스 sequence 이름
 initialValue = 1, allocationSize = 1)
 public class Reservation {
-	@Id
-	@Column(name = "res_seq")
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator =
-			"RES_SEQ_GENERATOR") 
-	private Long resSeq;
+   @Id
+   @Column(name = "res_seq")
+   @GeneratedValue(
+         strategy = GenerationType.SEQUENCE,
+         generator =
+         "RES_SEQ_GENERATOR") 
+   private Long resSeq;
 
 	@ManyToOne
 	@JoinColumn(name="user_id")
@@ -75,6 +75,30 @@ public class Reservation {
 	
 	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
 	private RoomReview RoomReviewResSeq;
+   @ManyToOne
+   @JoinColumn(name="user_id")
+   private Users userId;
+   
+   @ManyToOne//(cascade= {CascadeType.MERGE})
+   @JoinColumn(name ="host_id", nullable = false)
+   private HostUser hostUser; 
+   
+   @ManyToOne//(cascade= {CascadeType.MERGE})
+   @JoinColumn(name ="room_seq", nullable = false)
+   private RoomInfo roominfo;
+   
+   @Column(name = "start_time", nullable = false)
+   private String startTime;
+   
+   @Column(name = "end_time", nullable = false)
+   private String endTime;
+   
+   @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
+   @Column(name = "using_date")
+   private Date usingDate;
+   
+   @OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+   private RoomReview RoomReviewResSeq;
 
 
 }

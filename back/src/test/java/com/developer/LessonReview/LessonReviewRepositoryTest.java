@@ -40,7 +40,7 @@ public class LessonReviewRepositoryTest {
 		Long applySeq = appliedLesson.getApplySeq();
 		
 		LessonReview lr = new LessonReview();
-		lr.setApplySeq(applySeq);
+		lr.setsetApplySeq(applySeq);
 		lr.setReview("후기작성테스트중입니다.");
 		lr.setStar(3);
 		lr.setAppliedLesson(appliedLesson);

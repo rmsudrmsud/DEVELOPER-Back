@@ -87,6 +87,8 @@ public class Studyroom {
 		
 		@OneToMany(cascade= {CascadeType.REMOVE}
 		          , mappedBy = "studyroom")
+
+		@OneToMany(mappedBy = "studyroom", cascade = CascadeType.REMOVE)
 		private List<FavoritesStudyroom> favoritesStudyroom;
 		
 //		//sr: 카페등록때 필요한 생성자  DTO로 나중에 만들기

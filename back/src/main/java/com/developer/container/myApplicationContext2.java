@@ -14,8 +14,8 @@ public class myApplicationContext2 {
 		HikariConfig config = new HikariConfig();
 		config.setDriverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
 		config.setJdbcUrl("jdbc:log4jdbc:oracle:thin:@localhost:1521:xe");
-		config.setUsername("dev");
-		config.setPassword("dev");
+		config.setUsername("spring");
+		config.setPassword("spring");
 		config.setMinimumIdle(3);
 		return config;
 	}

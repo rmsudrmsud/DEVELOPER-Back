@@ -42,8 +42,27 @@ public class RoomReviewService {
 
 	//특정 스터디룸 후기 리스트 전체출력
 	public List<Object[]> selectAll(Long srSeq) throws FindException{
-		return null;
+		List<Object[]> obj= rrr.findBySrSeq(srSeq);
+		return obj;
 	}
-
+	
+	//유저의 작성된 이용후기 목록 출력
+	public List<Object[]> selectMyRmRv(String userId) throws FindException{
+		List<Object[]> obj=rrr.findByUserId(userId);
+		return obj;
+	}
+	
+	//유저의 작성하지 않은 후기 리스트들을 전체출력
+	public List<Object[]> selectMyReqRmRv(String userId) throws FindException{
+		List<Object[]> obj= rrr.fUserId(userId);
+		return obj;
+	}
+	
+	//예약시퀀스로 예약상세 출력
+	public  Object selectRmRvDetail(Long ResSeq)throws FindException{
+		Object rr = rrr.findByResSeq(ResSeq);
+		return rr;
+	}
+	
 	
 }

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 3fcf18e95e459b0f530829a74e75cf2f6b28538b
 package com.developer.boardrep.entity;
 
 import java.util.Date;
