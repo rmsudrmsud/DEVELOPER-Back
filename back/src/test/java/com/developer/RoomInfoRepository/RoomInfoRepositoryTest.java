@@ -33,7 +33,6 @@ class RoomInfoRepositoryTest {
 		ri.setPrice(5000);
 		Optional<Studyroom> optS = sr.findById(1L);
 		Studyroom s = optS.get();
-		ri.setSrSeq(s.getSrSeq());
 		rre.save(ri);
 		
 		

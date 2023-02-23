@@ -1,7 +1,6 @@
 package com.developer.reservation.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,20 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.apache.ibatis.annotations.One;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
-import com.developer.studyroom.entity.Studyroom;
 import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -59,6 +54,7 @@ public class Reservation {
 //	@Column(name = "room_seq")
 //	private Integer roomSeq;
 	
+
 	@Column(name = "start_time", nullable = false)
 	private String startTime;
 	
@@ -90,12 +86,13 @@ public class Reservation {
 	
 	//단방향, sr추가: 해당 스터디카페 예약자명단 전체목록
 	@ManyToOne
-	@JoinColumn(name="host_Id")
-	private HostUser hostUser;
+	@JoinColumn(name ="host_id", nullable = false)
+	private HostUser hostUser; 
 	
-	@ManyToOne
-	@JoinColumn(name="room_seq")
-	private RoomInfo roomInfo;
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="room_seq", nullable = false)
+	private RoomInfo roominfo;
+	
 	
 	
 	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
@@ -108,4 +105,18 @@ public class Reservation {
 	
 	
 
+
+
+
+	
+	//private UsersVO usersVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
+	
+	//sr: 해당 스터디카페 예약자명단 전체목록
+	
+	
+	//sr: 해당 스터디카페 예약자명단 전체목록
+	
+	
+	//private List<RoomReview> roomReview;  //ds 추가
 }
+

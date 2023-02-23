@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.developer.board.entity.Board;
+
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 	
@@ -106,4 +108,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	public Board updateCnt(@Param("postSeq") Long postSeq);
 	
 	
+
+
 }

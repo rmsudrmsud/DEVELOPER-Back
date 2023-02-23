@@ -47,7 +47,7 @@ public class ReservationService {
 		try {
 			date = format.parse(usingDate);
 			r.setUsingDate(date);
-			r.setRoomInfo(ri);
+			r.setRoominfo(ri);
 			r.setStartTime(startTime);
 			r.setEndTime(endTime);
 			rRepository.save(r);

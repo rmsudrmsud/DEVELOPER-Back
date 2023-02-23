@@ -1,13 +1,18 @@
 
 package com.developer.favaritesstudyroom.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.developer.studyroom.entity.Studyroom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,14 +37,18 @@ public class FavoritesStudyroom {
 			"FAV_SEQ_GENERATOR") 
 	private Long favSeq;
 	
-	@Column(name="sr_seq")
-	private Long srSeq;
-	
 	@Column(name="user_Id")
 	private String userId;
 
 	@Column(name="cnt")
 	private Integer cnt;
 	
+
 	//private StudyroomVO studyroomVO; 
+
+	//sr_seq 지워야함(동수님꺼랑 합치면서 확인해보기)
+	@ManyToOne(cascade = {CascadeType.MERGE})
+	@JoinColumn(name="sr_seq")
+	private Studyroom studyroom; 
 }
+

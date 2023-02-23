@@ -55,7 +55,7 @@ class ReservationRepositoryTest {
 		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		Date date=format.parse("2023/03/12");
 		r.setUsingDate(date);
-		r.setRoomInfo(ri);
+		r.setRoominfo(ri);
 		r.setStartTime("15:00");
 		r.setEndTime("16:00");
 		res.save(r);

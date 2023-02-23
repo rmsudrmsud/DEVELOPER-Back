@@ -24,6 +24,7 @@ public class LessonReviewService {
 		Optional<AppliedLesson> al = alRepository.findById(1L);
 		AppliedLesson appliedLesson = al.get();
 		lessonReview.setAppliedLesson(appliedLesson);
+		
 		lrRepository.save(lessonReview);
 	}
 	
