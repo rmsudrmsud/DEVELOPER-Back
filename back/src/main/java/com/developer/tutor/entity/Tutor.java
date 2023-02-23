@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.users.entity.Users;
-
 import com.developer.lesson.entity.Lesson;
 import com.developer.users.entity.Users;
 
@@ -44,25 +42,12 @@ public class Tutor {
 	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
-//	@MapsId(value="tutorId")
-//	@OneToOne(cascade = CascadeType.REMOVE)
-//	@JoinColumn(name = "tutor_id")
-//	private Users users;
-	
-	
-//	@OneToMany(mappedBy = "tutor")
-//	private List<Lesson> lesson;
-//	@OneToMany(mappedBy = "tutor")
-//	private List<AppliedLesson> alLesson;
-	
-	//private UsersVO usersVO;
-	
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
-	@MapsId("userId")
+	@MapsId("tutorId")
 	@OneToOne(optional = true, 
 						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="user_id", nullable = true)
+	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 }

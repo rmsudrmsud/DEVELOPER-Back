@@ -48,18 +48,7 @@ public class Users{
 	
 	@Column(nullable = false)
 	private String email;
-	
-	@Column(nullable = false)
-	@Column(name="role", columnDefinition = "NUMBER DEFAULT 2")
-	private Integer role;
-	@Column(name="pwd", nullable = false)
-	private String pwd;
-	@Column(name="nickname", nullable = false)
-	private String nickname;
-	@Column(name="name", nullable = false)
-	private String name;
-	@Column(name="email", nullable = false)
-	private String email;
+
 	@Column(name="tel", nullable = false)
 	private String tel;
 	@Column(name="addr", nullable = false)

@@ -2,6 +2,7 @@ package com.developer.appliedlesson.entity;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
@@ -50,24 +52,24 @@ public class AppliedLesson {
 		)
 	private Long applySeq;
 	@ColumnDefault(value="SYSDATE")
-	@Column
+	@Column(name = "cdate")
 	private Date cdate;
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
 	private Integer applyOk;
 	
 
-	@Column(name="user_id", nullable = false)
-	private String userId;
+	@Column(name="tutee_id", nullable = false)
+	private String tuteeId;
 
 	@ManyToOne
-	@JoinColumn(name="al_lessonSeq")
+	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;
 	
 	@OneToMany(mappedBy = "alLesson")
 	private List<LessonReview> lrList;
 	
-	@JoinColumn(name = "al_user_id")
+	@JoinColumn(name = "al_tutee_id")
 	@ManyToOne
 	private Users users;
 	
@@ -78,42 +80,3 @@ public class AppliedLesson {
 	
 }
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
-@SequenceGenerator(
-      name ="applySeq", 
-      sequenceName ="apply_seq", 
-      initialValue = 1, allocationSize = 1 
-      )
-public class AppliedLesson {
-   @Id
-   @Column(name="apply_seq")
-   @GeneratedValue( 
-         strategy = GenerationType.SEQUENCE, 
-         generator ="applySeq"  
-      )
-   private Long applySeq;
-   @Column(name="cdate", columnDefinition = "DATE DEFAULT SYSDATE")
-   private Date cdate;
-   @Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
-   private Integer applyOk;
-   //TODO: 튜티아이디로 바꾸는 건 어떠신지 ...
-   @Column(name="user_id", nullable = false)
-   private String userId;
-   
-   
-   @ManyToOne
-   @JoinColumn(name="al_lessonSeq")
-   private Lesson lesson;
-   
-   @OneToOne(mappedBy = "appliedLesson")	
-   private LessonReview lessonReview;
-   
-   @ManyToOne
-   @JoinColumn(name="tutor_id")
-   private Users user;
-   
-   //private List<UserReviewVO> userReviewVO;
-   
-}

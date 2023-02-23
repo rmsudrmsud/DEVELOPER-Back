@@ -1,4 +1,4 @@
-package com.developer.AppliedLesson;
+package com.developer.appliedlesson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,8 +8,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -36,16 +34,16 @@ public class AppliedLessonRepositoryTest {
 		Date date = new Date(2023, 02, 19);
 		al.setCdate(date);
 		al.setApplyOk(0);
-		al.setUserId("test2");
+		al.setTuteeId("test2");
 		
 		Optional<Lesson> l = lRepository.findById(2L);
 		Lesson lesson = l.get();
 		al.setLesson(lesson);
 		
-		String tutorId = lesson.getTutor().getUserId();
+		String tutorId = lesson.getTutor().getTutorId();
 		Optional<Users> u = uRepository.findById(tutorId);
 		Users users = u.get();
-		al.setUser(users);
+		al.setUsers(users);
 		
 		alRepository.save(al);
 	}

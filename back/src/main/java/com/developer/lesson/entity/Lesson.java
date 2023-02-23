@@ -73,7 +73,6 @@ public class Lesson {
 	@Column(name="location" , nullable = false)
 	private String location;
 	
-	
 	@ManyToOne
 	@JoinColumn(name="tutor_id")
 	private Tutor tutor;
@@ -84,11 +83,5 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
-	
-//	@ManyToOne
-//	@JoinColumn(name = "user_id")
-//	private Tutor tutor;
-	
-=======
 
 }
