@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -21,7 +20,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.entity.HostUser;
-import com.developer.reservation.entity.Reservation;
 import com.developer.roominfo.entity.RoomInfo;
 
 import lombok.AllArgsConstructor;
@@ -76,35 +74,17 @@ public class Studyroom {
 		@ColumnDefault(value = "0")
 		private Integer oc;
 		
-		//sr
 		@OneToMany(cascade= {CascadeType.REMOVE}, 
 				   mappedBy = "studyroom")
 		private List<RoomInfo> roomInfo;
 		
-		//sr
 		@OneToOne(cascade= {CascadeType.MERGE})
 		@JoinColumn(name="host_id", nullable = false)
 		private HostUser hostUser;
 		
 		
-		//sr
 		@OneToMany(cascade= {CascadeType.REMOVE}
 		          , mappedBy = "studyroom")
 		private List<FavoritesStudyroom> favoritesStudyroom;
-		
-//		//sr: 카페등록때 필요한 생성자  DTO로 나중에 만들기
-//		public StudyroomVO(int srSeq, String name, String addr, String info, String openTime, String endTime,
-//				String imgPath, int oc, String hostId) {
-//			super();
-//			this.srSeq = srSeq;
-//			this.name = name;
-//			this.addr = addr;
-//			this.info = info;
-//			this.openTime = openTime;
-//			this.endTime = endTime;
-//			this.imgPath = imgPath;
-//			this.oc = oc;
-//			this.hostId = hostId;
-//		}
 		
 }

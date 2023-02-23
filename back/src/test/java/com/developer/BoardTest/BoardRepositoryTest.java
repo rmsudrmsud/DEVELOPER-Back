@@ -29,6 +29,38 @@ class BoardRepositoryTest {
 	private UsersRepository ur;
 	
 	@Test
+	void testSave() {
+			Board b = new Board();
+			b.setPostSeq(32L);
+			//b.setUserId("kosta111");
+			b.setTitle("JPA테스트제목");
+			b.setContent("JPA테스트내용");
+			b.setImgPath("테스트이미지");
+			b.setCDate(null);
+			b.setCategory(2);
+			b.setRecommend(15);
+			b.setCnt(15);
+		
+			br.save(b);
+	}
+	
+	@Test
+	void testFind() {
+			Board b = new Board();
+			b.setPostSeq(32L);
+		//	b.setUserId("kosta111");
+			b.setTitle("JPA테스트제목");
+			b.setContent("JPA테스트내용");
+			b.setImgPath("테스트이미지");
+			b.setCDate(null);
+			b.setCategory(2);
+			b.setRecommend(15);
+			b.setCnt(15);
+		
+			br.save(b);
+	}
+
+	@Test
 	@DisplayName("Board Save 테스트")
 	void testBoardSave() {
 		for(int i=1; i<=5; i++) {

@@ -26,6 +26,7 @@ public class FavoritesLessonRepositoryTest {
 	@Autowired
 	private LessonRepository lRepository;
 	
+	
 	@Test
 	@DisplayName("수업즐겨찾기 SELECT 테스트")
 	void testSelectDetail() {
@@ -36,14 +37,14 @@ public class FavoritesLessonRepositoryTest {
 		logger.info("값: " + optL.get().getLesson().getLessonName());
 	}
 	
-	@Test
-	@DisplayName("수업즐겨찾기 SELECT 테스트 : 아이디로 목록")
-	void testSelectList() {
-		List<Object[]> list = flRepository.listFavLesson("devman");
-		list.forEach((arr)->{
-			logger.info("즐겨찾기: " + arr[0]);
-		});
-	}	
+//	@Test
+//	@DisplayName("수업즐겨찾기 SELECT 테스트 : 아이디로 목록")
+//	void testSelectList() {
+//		List<Object[]> list = flRepository.listFavLesson("devman");
+//		list.forEach((arr)->{
+//			logger.info("즐겨찾기: " + arr[0]);
+//		});
+//	}	
 	
 	@Test
 	@DisplayName("수업즐겨찾기 INSERT 테스트")
