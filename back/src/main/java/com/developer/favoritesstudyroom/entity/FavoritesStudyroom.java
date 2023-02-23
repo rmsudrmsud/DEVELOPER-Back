@@ -1,6 +1,7 @@
 
 package com.developer.favoritesstudyroom.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,41 +20,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Favorites_Studyroom")
-@SequenceGenerator(
-name =
-"FAV_SEQ_GENERATOR", // 사용할 sequence 이름
-sequenceName =
-"fav_seq", // 실제 데이터베이스 sequence 이름
-initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "FAV_SEQ_GENERATOR", // 사용할 sequence 이름
+      sequenceName = "fav_seq", // 실제 데이터베이스 sequence 이름
+      initialValue = 1, allocationSize = 1)
 public class FavoritesStudyroom {
-	@Id
-	@Column(name="fav_seq",nullable = false)
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator =
-			"FAV_SEQ_GENERATOR") 
-	private Long favSeq;
-	
-//	@Column(name="sr_seq")
-//	private Long srSeq;
-//	
-	
-//	@Column(name="user_Id")
-//	private String userId;
+   @Id
+   @Column(name = "fav_seq")
+   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAV_SEQ_GENERATOR")
+   private Long favSeq;
 
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	private Users userId;
-	
+   @ManyToOne
+   @JoinColumn(name = "user_id")
+   private Users userId;
 
-	//양방향
-	@ManyToOne
-	@JoinColumn(name = "sr_seq")
-	private Studyroom studyroomFav;	
-	
-	//private Integer cnt;
-	
+   @ManyToOne(cascade = {CascadeType.MERGE })
+   @JoinColumn(name = "sr_seq")
+   private Studyroom studyroom;
 }

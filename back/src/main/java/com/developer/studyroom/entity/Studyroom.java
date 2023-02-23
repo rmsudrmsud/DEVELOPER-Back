@@ -95,7 +95,7 @@ public class Studyroom {
 		
 		
 
-		@OneToMany(mappedBy = "studyroomFav", cascade = CascadeType.REMOVE)
+		@OneToMany(mappedBy = "studyroom", cascade = CascadeType.REMOVE)
 		private List<FavoritesStudyroom> favoritesStudyroom;
 		
 //		@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
