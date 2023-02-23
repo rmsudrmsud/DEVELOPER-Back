@@ -3,6 +3,9 @@ package com.developer.hostuser.dto;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.studyroom.dto.StudyroomDTO;
 
+import lombok.Data;
+
+@Data
 public class HostUserDTO {
 
 	private String hostId;
