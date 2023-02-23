@@ -17,9 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.entity.Board;
 import com.developer.boardrep.entity.BoardRep;
-import com.developer.favaritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.recommend.entity.Recommend;
-import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
@@ -27,60 +25,51 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-public class Users {
-
+public class Users{	
 	@Id
 	@Column(name = "user_id", nullable = false)
 	private String userId;
-
-	@Column(name = "role", columnDefinition = "NUMBER DEFAULT 2")
-	@ColumnDefault(value = "0")
+	
+	@ColumnDefault(value="2")
 	private Integer role;
-
-	@Column(name = "pwd", nullable = false)
+	
+	@Column(nullable = false)
 	private String pwd;
-
-	@Column(name = "nickname")
+	
+	@Column(nullable = false)
 	private String nickname;
-
-	@Column(name = "name")
+	
+	@Column(nullable = false)
 	private String name;
-
-	@Column(name = "email")
+	
+	@Column(nullable = false)
 	private String email;
 
-	@Column(name = "tel")
+	@Column(name="tel", nullable = false)
 	private String tel;
-
-	@Column(name = "addr", nullable = false)
-	private String addr;
-
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
-	private List<Board> board;
-
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
-	private List<BoardRep> boardRep;
-
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
-	private List<Recommend> recommend;
-
-	@OneToOne(mappedBy = "users", cascade = CascadeType.REMOVE)
+	@Column(name="addr", nullable = false)
+	private String addr;	
+	
+	@OneToOne(mappedBy = "users",
+			cascade = CascadeType.REMOVE)
 	private Tutor tutor;
+	
+	@OneToMany(mappedBy = "user")
+	private List<AppliedLesson> appliedLesson;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<Board> board;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<BoardRep> boardRep;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	private List<Recommend> recommend;
+	}
 
-	@OneToMany(mappedBy = "users")
-	private List<AppliedLesson> alLesson;
-
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
-	private List<Reservation> reservation;
-
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
-	private List<FavoritesStudyroom> favStudyroom;
-}

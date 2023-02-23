@@ -50,7 +50,7 @@ public class FavoritesLessonRepositoryTest {
 	@DisplayName("수업즐겨찾기 INSERT 테스트")
 	void testSave() {
 		FavoritesLesson fl = new FavoritesLesson();		
-		fl.setUserId("test1");
+		fl.setTuteeId("test1");
 
 		Optional<Lesson> l = lRepository.findById(1L);
 		Lesson lesson = l.get();

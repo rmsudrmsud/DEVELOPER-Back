@@ -41,7 +41,7 @@ class AppliedLessonRepositoryTest {
 		
 		AppliedLesson al = new AppliedLesson();
 		al.setApplySeq(1L);
-		al.setUserId("테스트");
+		al.setTuteeId("테스트");
 		al.setLesson(l);
 		al.setUsers(u);
 
