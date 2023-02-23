@@ -22,6 +22,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
+
 import com.developer.userreview.entity.UserReview;
 import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,6 +45,7 @@ import lombok.Setter;
 		initialValue = 1, allocationSize = 1 
 		)
 public class AppliedLesson {
+
 	@Id
 	@Column(name="apply_seq")
 	@GeneratedValue( 
@@ -76,6 +78,5 @@ public class AppliedLesson {
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
 	
-	
-	
+
 }

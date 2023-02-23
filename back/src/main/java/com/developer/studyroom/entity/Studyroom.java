@@ -76,18 +76,15 @@ public class Studyroom {
 		@ColumnDefault(value = "0")
 		private Integer oc;
 		
-		//sr
 		@OneToMany(cascade= {CascadeType.REMOVE}, 
 				   mappedBy = "studyroom")
 		private List<RoomInfo> roomInfo;
 		
-		//sr
 		@OneToOne(cascade= {CascadeType.MERGE})
 		@JoinColumn(name="host_id", nullable = false)
 		private HostUser hostUser;
 		
 		
-		//sr
 		@OneToMany(cascade= {CascadeType.REMOVE}
 		          , mappedBy = "studyroom")
 		private List<FavoritesStudyroom> favoritesStudyroom;

@@ -33,6 +33,9 @@ public class UserReview {
 	
 	@Column(nullable = false)
 	private Integer star;
+	@Column(name = "apply_seq")
+	
+	private int applySeq;
 	
 	@Column(nullable = false)
 	private String review;
