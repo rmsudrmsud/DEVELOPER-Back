@@ -19,7 +19,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.favaritesstudyroom.entity.FavoritesStudyroom;
+import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.reservation.entity.Reservation;
 import com.developer.roominfo.entity.RoomInfo;

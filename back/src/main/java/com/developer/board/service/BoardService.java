@@ -1,14 +1,17 @@
 package com.developer.board.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.board.dto.BoardDTO;
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
+import com.developer.boardrep.dto.BoardRepDTO;
+import com.developer.boardrep.entity.BoardRep;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.users.entity.Users;
@@ -17,10 +20,11 @@ import com.developer.users.repository.UsersRepository;
 @Service
 public class BoardService {
 	@Autowired
-	private BoardRepository boardRepository;
+	private BoardRepository BoardRepository;
 	@Autowired
 	private UsersRepository UsersRepository;
 	
+	ModelMapper modelMapper = new ModelMapper();
 	/**
 	 * 게시글 작성
 	 * @author choigeunhyeong
@@ -31,7 +35,7 @@ public class BoardService {
 		Optional<Users> optU =  UsersRepository.findById("아이디2");
 		Users users = optU.get();
 		board.setUsers(users);
-		boardRepository.save(board);
+		BoardRepository.save(board);
 	}
 	
 	/**
@@ -41,11 +45,18 @@ public class BoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public Map<String, Object> findPostSeq(Long postSeq) throws FindException{
-		Optional<Users> optU =  UsersRepository.findById("아이디2");
-		Users users = optU.get();
-		Map<String, Object> list = boardRepository.findPostSeq(postSeq);
-		return list;
+	public BoardDTO findPostSeq(Long postSeq) throws FindException{
+		Optional<Board> optB =  BoardRepository.findById(1L);
+		Board b = optB.get();
+		
+		BoardDTO bDTO = modelMapper.map(b,BoardDTO.class);
+		List<BoardRep> br = b.getBoardRep();
+		BoardRepDTO brDTO = modelMapper.map(br, BoardRepDTO.class);
+		bDTO.setBrDTO(brDTO);
+		
+		return bDTO;
+		//Map<String, Object> list = boardRepository.findPostSeq(postSeq);
+		//return list;
 	}
 	
 	
@@ -59,6 +70,6 @@ public class BoardService {
 		Optional<Users> optU =  UsersRepository.findById("아이디1");
 		Users users = optU.get();
 		board.setUsers(users);
-		boardRepository.save(board);
+		BoardRepository.save(board);
 	}
 }

@@ -26,6 +26,7 @@ public class BoardController {
 	@Autowired
 	private BoardService boardservice;
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	/**
 	 * 게시글 작성
 	 * 
@@ -47,7 +48,6 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GetMapping(value = "findPostSeq" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
@@ -55,4 +55,11 @@ public class BoardController {
 		boardservice.findPostSeq(postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@PutMapping(value = "add", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> editBoard(@RequestBody Board board) throws AddException {
+		boardservice.addBoard(board);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }
