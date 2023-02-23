@@ -47,3 +47,4 @@ public class FavoritesStudyroom {
 	@JoinColumn(name="sr_seq")
 	private Studyroom studyroom; 
 }
+

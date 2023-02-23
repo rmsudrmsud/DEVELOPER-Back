@@ -3,6 +3,7 @@
 
 ### Eclipse ###
 application.properties
+Back/src/main/resources/application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml
@@ -19,6 +20,7 @@ local.properties
 .loadpath
 .recommenders
 .gitignore
+application.properties
 
 # External tool builders
 .externalToolBuilders/
