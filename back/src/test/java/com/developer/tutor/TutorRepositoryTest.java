@@ -28,7 +28,7 @@ public class TutorRepositoryTest {
 	@DisplayName("튜터 INSERT 테스트")
 	void testTutorAdd() {
 		Tutor t = new Tutor();
-		t.setUserId("test4");
+		t.setTutorId("test4");
 		t.setInfo("테스트내용");
 		t.setImgPath("테스트이미지");
 		t.setStarAvg(4.4);
@@ -46,7 +46,7 @@ public class TutorRepositoryTest {
 		Optional<Tutor> optT = tRepository.findById("test");
 		assertTrue(optT.isPresent());
 		String expected = "test";
-		assertEquals(expected, optT.get().getUserId());
+		assertEquals(expected, optT.get().getTutorId());
 	}
 
 }

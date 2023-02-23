@@ -40,10 +40,10 @@ public class FavoritesLesson {
 		)
 	private Long favLesSeq;
 	
-	@Column(name="user_id")
-	private String userId;
+	@Column(name="tutee_id")
+	private String tuteeId;
 	
 	@ManyToOne()
-	@JoinColumn(name="lessonSeq")
+	@JoinColumn(name="lesson_seq")
 	private Lesson lesson;
 }

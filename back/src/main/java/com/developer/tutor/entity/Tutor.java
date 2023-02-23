@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.users.entity.Users;
@@ -25,13 +26,13 @@ import lombok.Setter;
 @Entity
 @Table(name="TUTOR")
 @DynamicInsert
-
+@DynamicUpdate
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Tutor {
 	@Id
-	@Column(name="user_id")
-	private String userId;
+	@Column(name="tutor_id")
+	private String tutorId;
 	@Column(name="info")
 	private String info;
 	@Column(name="img_path")
@@ -41,13 +42,12 @@ public class Tutor {
 	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
-	
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
-	@MapsId("userId")
+	@MapsId("tutorId")
 	@OneToOne(optional = true, 
 						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="user_id", nullable = true)
+	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 }

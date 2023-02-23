@@ -18,8 +18,8 @@ class BoardRepositoryTest {
 //	void testFind() {
 //		for(int i=1; i<=5; i++) {
 //			Board b = new Board();
-//			p.setPNo("C"+i);
-//			p.setPName("상품명" + i);
+//			b.setPNo("C"+i);
+//			b.setPName("상품명" + i);
 //			pr.save(p);
 //		}
 //	}
