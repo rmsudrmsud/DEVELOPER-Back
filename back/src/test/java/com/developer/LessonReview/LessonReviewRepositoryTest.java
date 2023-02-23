@@ -1,4 +1,4 @@
-package com.developer.lessonreview;
+package com.developer.LessonReview;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.appliedlesson.repository.AppliedLessonRepository;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.lessonreview.repository.LessonReviewRepository;
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.appliedlesson.repository.AppliedLessonRepository;
 import com.developer.exception.FindException;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.lessonreview.repository.LessonReviewRepository;

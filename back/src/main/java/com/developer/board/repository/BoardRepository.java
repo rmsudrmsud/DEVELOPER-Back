@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.developer.board.entity.Board;
-import com.developer.dto.BoardDto;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 	
@@ -57,18 +56,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	public Map<String, Object> findPostSeq(@Param("postSeq") Long postSeq);
 	
 	
-	@Query(value= "select u.user_id,"
-			+ "		u.nickname, b.post_seq, b.category, b.title, b.content , b.img_path,"
-			+ "		b.c_date,"
-			+ "		b.recommend, b.cnt, r.content AS rContent, r.cdate"
-			+ "		from users u"
-			+ "		full join board b"
-			+ "		on u.user_id = b.user_id"
-			+ "		full join board_rep r"
-			+ "		on b.post_seq = r.post_seq"
-			+ "		where b.post_seq= :postSeq", nativeQuery = true)
-	public List<BoardDto> findPostSeqDto(@Param("postSeq") Long postSeq);
-	
+
 	
 	/**
 	 * 게시글목록 작성일 순으로 정렬해서 출력
