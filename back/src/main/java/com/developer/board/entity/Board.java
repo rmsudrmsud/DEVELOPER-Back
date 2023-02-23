@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +27,7 @@ import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -96,5 +96,15 @@ public class Board {
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
 	
+	@Builder
+    public Board(Long postSeq, String title, String content, String imgPath, Date cDate, Integer recommend, Integer cnt) {
+		this.postSeq=postSeq;
+		this.title = title;
+        this.content = content;
+        this.imgPath  = imgPath;
+        this.cDate = cDate;
+        this.recommend = recommend;
+        this.cnt = cnt;
+    }
 
 }

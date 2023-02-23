@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
+import com.developer.dto.BoardDto;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
@@ -114,7 +115,7 @@ class BoardRepositoryTest {
 	@Test
 	@DisplayName("닉네임+글상세+댓글 PostSeq로 검색 테스트")
 	void findPostSeq() {
-		Map<String, Object> map = br.findPostSeq(5L);
+		Map<String, Object> map = br.findPostSeq(22L);
 		logger.info("-----------------------");
 		logger.info("글번호 : "+map.get("post_seq"));
 		logger.info("닉네임 : "+map.get("nickname"));
