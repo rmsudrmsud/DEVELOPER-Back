@@ -19,21 +19,21 @@ import com.developer.favoriteslesson.service.FavoritesLessonService;
 @RestController
 @RequestMapping("favoriteslesson/*")
 public class FavoritesLessonController {
-	@Autowired
-	FavoritesLessonService service;
-	
-	//[JW] 수업 즐겨찾기 추가 
-	@PostMapping
-	public ResponseEntity<?> add(@RequestBody FavoritesLesson favoritesLesson) throws AddException, FindException{
-//		service.addFavLesson(favoritesLesson);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	//[JW] 수업 즐겨찾기 삭제
-	@DeleteMapping(value = "{favLesSeq}")
-	public ResponseEntity<?> del(@PathVariable Long favLesSeq) throws RemoveException, FindException{
-		service.delFavLesson(favLesSeq);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	@Autowired
+//	FavoritesLessonService service;
+//	
+//	//[JW] 수업 즐겨찾기 추가 
+//	@PostMapping
+//	public ResponseEntity<?> add(@RequestBody FavoritesLesson favoritesLesson) throws AddException, FindException{
+////		service.addFavLesson(favoritesLesson);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
+//	
+//	//[JW] 수업 즐겨찾기 삭제
+//	@DeleteMapping(value = "{favLesSeq}")
+//	public ResponseEntity<?> del(@PathVariable Long favLesSeq) throws RemoveException, FindException{
+//		service.delFavLesson(favLesSeq);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 
 }
