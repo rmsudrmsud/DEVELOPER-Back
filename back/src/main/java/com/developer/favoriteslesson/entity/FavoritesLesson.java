@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 
-=======
 package com.developer.favoriteslesson.entity;
 
 import javax.persistence.Column;
@@ -47,5 +45,5 @@ public class FavoritesLesson {
 	@JoinColumn(name="fl_lessonSeq")
 	private Lesson lesson;
 }
->>>>>>> 27530127c719d1d04269250f27e3d6eb6704271f
+
 
