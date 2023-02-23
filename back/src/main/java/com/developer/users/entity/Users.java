@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
@@ -54,4 +55,7 @@ public class Users{
 	
 	@OneToMany(mappedBy = "user")
 	private List<AppliedLesson> appliedLesson;
+	
+	@OneToMany(mappedBy = "users")
+	private List<FavoritesLesson> favoritesLesson;
 	}

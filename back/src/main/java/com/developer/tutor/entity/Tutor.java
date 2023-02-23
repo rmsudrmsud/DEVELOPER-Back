@@ -30,7 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class Tutor {
 	@Id
-	@Column(name="user_id")
+	@Column(name="tutor_id")
 	private String userId;
 	@Column(name="info")
 	private String info;
@@ -45,9 +45,9 @@ public class Tutor {
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
-	@MapsId("userId")
+	@MapsId("tutorId")
 	@OneToOne(optional = true, 
 						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="user_id", nullable = true)
+	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 }

@@ -2,6 +2,7 @@ package com.developer.appliedlesson.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.developer.lesson.entity.Lesson;
@@ -45,24 +47,26 @@ public class AppliedLesson {
          generator ="applySeq"  
       )
    private Long applySeq;
-   @Column(name="cdate", columnDefinition = "DATE DEFAULT SYSDATE")
+   @Column(name="cdate")
+   @ColumnDefault(value = "SYSDATE")
    private Date cdate;
-   @Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
+   @Column(name="apply_ok")
+   @ColumnDefault(value = "0")
    private Integer applyOk;
-   //TODO: 튜티아이디로 바꾸는 건 어떠신지 ...
-   @Column(name="user_id", nullable = false)
-   private String userId;
+   @Column(name="tutee_id", nullable = false)
+   private String tuteeId;
    
    
    @ManyToOne
-   @JoinColumn(name="al_lessonSeq")
+   @JoinColumn(name="al_lesson_seq")
    private Lesson lesson;
    
-   @OneToOne(mappedBy = "appliedLesson")	
+   @OneToOne(mappedBy = "appliedLesson",
+		   				cascade = CascadeType.MERGE)	
    private LessonReview lessonReview;
    
    @ManyToOne
-   @JoinColumn(name="tutor_id")
+   @JoinColumn(name="al_tutee_id")
    private Users user;
    
    //private List<UserReviewVO> userReviewVO;
