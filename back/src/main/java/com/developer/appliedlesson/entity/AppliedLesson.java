@@ -52,24 +52,24 @@ public class AppliedLesson {
 		)
 	private Long applySeq;
 	@ColumnDefault(value="SYSDATE")
-	@Column
+	@Column(name = "cdate")
 	private Date cdate;
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
 	private Integer applyOk;
 	
 
-	@Column(name="user_id", nullable = false)
-	private String userId;
+	@Column(name="tutee_id", nullable = false)
+	private String tuteeId;
 
 	@ManyToOne
-	@JoinColumn(name="al_lessonSeq")
+	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;
 	
 	@OneToMany(mappedBy = "alLesson")
 	private List<LessonReview> lrList;
 	
-	@JoinColumn(name = "al_user_id")
+	@JoinColumn(name = "al_tutee_id")
 	@ManyToOne
 	private Users users;
 	
@@ -79,3 +79,4 @@ public class AppliedLesson {
 	
 	
 }
+

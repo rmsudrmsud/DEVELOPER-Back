@@ -2,6 +2,7 @@ package com.developer.users.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,14 +22,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{
-	
+
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+public class Users{	
 	@Id
 	@Column(name = "user_id", nullable = false)
 	private String userId;
@@ -47,19 +48,18 @@ public class Users{
 	
 	@Column(nullable = false)
 	private String email;
-	
-	@Column(nullable = false)
+
+	@Column(name="tel", nullable = false)
 	private String tel;
+	@Column(name="addr", nullable = false)
+	private String addr;	
 	
-	@Column
-	private String addr;
-	
-	@OneToMany(mappedBy = "users")
-	private List<AppliedLesson> alLesson;
-	
-	@OneToOne(mappedBy = "users")
+	@OneToOne(mappedBy = "users",
+			cascade = CascadeType.REMOVE)
 	private Tutor tutor;
 	
+	@OneToMany(mappedBy = "user")
+	private List<AppliedLesson> appliedLesson;
 	}
 
 

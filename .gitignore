@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 ### Eclipse ###
+Back/src/main/resources/application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml

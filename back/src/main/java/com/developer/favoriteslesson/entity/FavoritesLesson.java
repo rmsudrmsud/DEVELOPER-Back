@@ -27,8 +27,8 @@ import lombok.ToString;
 @Setter@Getter @ToString
 @NoArgsConstructor @AllArgsConstructor
 @SequenceGenerator(
-		name ="favLesSeq", // 사용할 sequence 이름
-		sequenceName ="fav_les_seq", // 실제 데이터베이스 sequence 이름
+		name ="favLesSeq", 
+		sequenceName ="fav_les_seq", 
 		initialValue = 1, allocationSize = 1 
 		)
 public class FavoritesLesson {
@@ -36,11 +36,14 @@ public class FavoritesLesson {
 	@Column(name="fav_les_seq")
 	@GeneratedValue( 
 			strategy = GenerationType.SEQUENCE, 
-			generator ="favLesSeq" // 위의 sequence 이름 
+			generator ="favLesSeq"  
 		)
 	private Long favLesSeq;
 	
-	@ManyToOne
-	@JoinColumn(name="fl_lessonSeq")
+	@Column(name="tutee_id")
+	private String tuteeId;
+	
+	@ManyToOne()
+	@JoinColumn(name="lesson_seq")
 	private Lesson lesson;
 }

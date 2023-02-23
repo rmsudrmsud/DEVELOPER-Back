@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -30,6 +29,8 @@ public class UserReview {
 	@Id
 	@Column(name = "apply_seq_rv")
 	private Long applySeqRv;
+	@Column(name = "apply_seq")
+	private int applySeq;
 	
 	@Column(nullable = false)
 	private Integer star;
