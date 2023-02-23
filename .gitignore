@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 ### Eclipse ###
+Back/src/main/resources/application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml
@@ -17,6 +18,11 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+<<<<<<< HEAD
+application.properties
+=======
+.gitignore
+>>>>>>> 72d53c2c979cd20b287e0886da91927ac2d762af
 
 # External tool builders
 .externalToolBuilders/
@@ -72,3 +78,5 @@ local.properties
 .sts4-cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
+back/src/main/java/com/developer/hostuser/repository/HostUserRepository.java
+back/src/main/java/com/developer/users/repository/UsersRepository.java
