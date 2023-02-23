@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
+import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -78,6 +81,8 @@ public class Lesson {
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
 	
-	//private TutorVO tutorVO;
+//	@ManyToOne
+//	@JoinColumn(name = "user_id")
+//	private Tutor tutor;
 	
 }

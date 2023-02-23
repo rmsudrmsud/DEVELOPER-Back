@@ -12,13 +12,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
+import com.developer.userreview.entity.UserReview;
+import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +34,7 @@ import lombok.Setter;
 @Entity
 @Table(name="APPLIED_LESSON")
 @DynamicInsert
-
+@DynamicUpdate
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
@@ -46,13 +51,17 @@ public class AppliedLesson {
 			generator ="applySeq"  
 		)
 	private Long applySeq;
-	@Column(name="cdate")
+	@ColumnDefault(value="SYSDATE")
+	@Column
 	private Date cdate;
+	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
-	private int applyOk;
-	@Column(name="user_id")
-	private String userId;
+	private Integer applyOk;
 	
+
+	@Column(name="user_id", nullable = false)
+	private String userId;
+
 	@ManyToOne
 	@JoinColumn(name="al_lessonSeq")
 	private Lesson lesson;
@@ -60,7 +69,13 @@ public class AppliedLesson {
 	@OneToMany(mappedBy = "alLesson")
 	private List<LessonReview> lrList;
 	
-	//private List<UsersVO> usersVO;
-	//private List<UserReviewVO> userReviewVO;
+	@JoinColumn(name = "al_user_id")
+	@ManyToOne
+	private Users users;
+	
+	@OneToOne(mappedBy = "alLesson")
+	private UserReview userReview;
+	
+	
 	
 }
