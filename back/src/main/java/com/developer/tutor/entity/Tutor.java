@@ -45,16 +45,17 @@ public class Tutor {
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
-	@MapsId(value="tutorId")
+	@MapsId("tutorId")
 	@OneToOne(optional = true, 
 						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	@JoinColumn(name="tutor_id", nullable = true)
-	private Users users;	
-	
+	private Users users;
+
 //	@OneToMany(mappedBy = "tutor")
 //	private List<Lesson> lesson;
 //	@OneToMany(mappedBy = "tutor")
 //	private List<AppliedLesson> alLesson;
 	
 	//private UsersVO usersVO;
+
 }

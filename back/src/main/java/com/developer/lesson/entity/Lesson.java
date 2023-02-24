@@ -23,7 +23,9 @@ import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +34,8 @@ import lombok.Setter;
 @Table(name="LESSON")
 @DynamicInsert
 
-@Setter@Getter
-@NoArgsConstructor @AllArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 @JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
 @SequenceGenerator(
 		name ="lessonSeq", 
@@ -84,5 +86,7 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
-	
+
 }
+
+

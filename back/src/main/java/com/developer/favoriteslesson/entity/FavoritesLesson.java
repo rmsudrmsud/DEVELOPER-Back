@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.developer.lesson.entity.Lesson;
+import com.developer.users.entity.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,10 +41,11 @@ public class FavoritesLesson {
 		)
 	private Long favLesSeq;
 	
-	@Column(name="tutee_id")
-	private String tuteeId;
+	@ManyToOne
+	@JoinColumn(name="tutee_id")
+	private Users users;
 	
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name="lesson_seq")
 	private Lesson lesson;
 }

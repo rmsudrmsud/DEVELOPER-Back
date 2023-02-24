@@ -1,7 +1,8 @@
 package com.developer.users.dto;
+import lombok.Data;
 
+@Data
 public class UsersDTO {
-
 	private String userId;
 	private Integer role;
 	private String pwd;
@@ -9,6 +10,7 @@ public class UsersDTO {
 	private String name;
 	private String email;
 	private String tel;
+
 	private String addr;	
 
 //	private TutorDTO tDTO;
@@ -18,5 +20,4 @@ public class UsersDTO {
 //	private RecommendDTO rcDTO;
 //	private ReservationDTO reDTO;
 //	private FavoritesStudyroomDTO favSrDTO;
-	
 }
