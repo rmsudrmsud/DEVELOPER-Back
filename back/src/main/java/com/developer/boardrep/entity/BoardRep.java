@@ -42,7 +42,7 @@ initialValue = 1, allocationSize = 1)
 public class BoardRep {
 
 	@Id
-	@Column(name = "post_req_seq")
+	@Column(name = "post_rep_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_REP_SEQ_GENERATOR" // 위의 sequence 이름
 			)
 	private Long postRepSeq;

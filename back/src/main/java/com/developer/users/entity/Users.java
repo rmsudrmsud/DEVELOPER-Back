@@ -80,7 +80,4 @@ public class Users{
    @OneToMany(cascade=CascadeType.REMOVE, mappedBy = "userId")
    private List<FavoritesStudyroom> favStudyroom;
    
-
-	
-	}
-
+   }
