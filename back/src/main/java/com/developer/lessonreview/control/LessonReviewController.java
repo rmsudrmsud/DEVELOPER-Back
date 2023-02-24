@@ -16,15 +16,15 @@ import com.developer.lessonreview.service.LessonReviewService;
 @RestController
 @RequestMapping("lessonreview/*")
 public class LessonReviewController {
-	@Autowired
-	private LessonReviewService service;
-	
-	//[JW] 튜터의 수업에 대한 후기 작성 
-	@PostMapping(value = "add")
-	public ResponseEntity<?> addReview(@RequestBody LessonReview lessonReview) throws AddException, FindException{
-		service.addReview(lessonReview);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	@Autowired
+//	private LessonReviewService service;
+//	
+//	//[JW] 튜터의 수업에 대한 후기 작성 
+//	@PostMapping(value = "add")
+//	public ResponseEntity<?> addReview(@RequestBody LessonReview lessonReview) throws AddException, FindException{
+//		service.addReview(lessonReview);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 	
 	
 

@@ -23,7 +23,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

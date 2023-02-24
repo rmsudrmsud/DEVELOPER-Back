@@ -56,11 +56,10 @@ public class AppliedLesson {
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
 	private Integer applyOk;
-	
-
 	@Column(name="tutee_id", nullable = false)
 	private String tuteeId;
 
+	
 	@ManyToOne
 	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;

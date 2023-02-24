@@ -1,5 +1,4 @@
 package com.developer.tutor.entity;
-
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Table(name="TUTOR")
 @DynamicInsert
-
+@DynamicUpdate
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Tutor {
@@ -42,6 +41,7 @@ public class Tutor {
 	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
+
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
@@ -50,4 +50,12 @@ public class Tutor {
 						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
+
+//	@OneToMany(mappedBy = "tutor")
+//	private List<Lesson> lesson;
+//	@OneToMany(mappedBy = "tutor")
+//	private List<AppliedLesson> alLesson;
+	
+	//private UsersVO usersVO;
+
 }

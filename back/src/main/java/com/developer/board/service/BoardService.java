@@ -40,8 +40,8 @@ public class BoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public Map<String, Object> findPostSeq(Long postSeq) throws FindException{
-		Map<String, Object> list = boardRepository.findPostSeq(postSeq);
-		return list;
-	}
+//	public Map<String, Object> findPostSeq(Long postSeq) throws FindException{
+//		Map<String, Object> list = boardRepository.findPostSeq(postSeq);
+//		return list;
+//	}
 }

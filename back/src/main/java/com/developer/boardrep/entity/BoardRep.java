@@ -1,6 +1,6 @@
 package com.developer.boardrep.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +42,7 @@ initialValue = 1, allocationSize = 1)
 public class BoardRep {
 
 	@Id
-	@Column(name = "post_req_seq")
+	@Column(name = "post_rep_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_REP_SEQ_GENERATOR" // 위의 sequence 이름
 			)
 	private Long postRepSeq;
