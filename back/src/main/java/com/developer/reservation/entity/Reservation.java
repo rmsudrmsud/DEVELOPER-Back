@@ -1,7 +1,6 @@
 package com.developer.reservation.entity;
 
 import java.sql.Date;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -79,5 +78,5 @@ public class Reservation {
 
 
 }
-}
+
 
