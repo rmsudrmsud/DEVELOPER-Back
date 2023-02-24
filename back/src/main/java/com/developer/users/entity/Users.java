@@ -17,7 +17,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.entity.Board;
 import com.developer.boardrep.entity.BoardRep;
+import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.recommend.entity.Recommend;
+import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 
 import lombok.AllArgsConstructor;
@@ -60,7 +62,7 @@ public class Users{
 			cascade = CascadeType.REMOVE)
 	private Tutor tutor;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "users")
 	private List<AppliedLesson> appliedLesson;
 	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
@@ -71,5 +73,14 @@ public class Users{
 	
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
 	private List<Recommend> recommend;
+	
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
+   private List<Reservation> reservation;
+   
+   @OneToMany(cascade=CascadeType.REMOVE, mappedBy = "userId")
+   private List<FavoritesStudyroom> favStudyroom;
+   
+
+	
 	}
 

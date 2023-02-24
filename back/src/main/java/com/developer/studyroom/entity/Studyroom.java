@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -19,9 +18,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.favaritesstudyroom.entity.FavoritesStudyroom;
+import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.entity.HostUser;
-import com.developer.reservation.entity.Reservation;
 import com.developer.roominfo.entity.RoomInfo;
 
 import lombok.AllArgsConstructor;
@@ -84,9 +82,6 @@ public class Studyroom {
 		@JoinColumn(name="host_id", nullable = false)
 		private HostUser hostUser;
 		
-		
-		@OneToMany(cascade= {CascadeType.REMOVE}
-		          , mappedBy = "studyroom")
 
 		@OneToMany(mappedBy = "studyroom", cascade = CascadeType.REMOVE)
 		private List<FavoritesStudyroom> favoritesStudyroom;

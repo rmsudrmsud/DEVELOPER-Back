@@ -1,7 +1,6 @@
 package com.developer.reservation.entity;
 
 import java.sql.Date;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,30 +74,7 @@ public class Reservation {
 	
 	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
 	private RoomReview RoomReviewResSeq;
-   @ManyToOne
-   @JoinColumn(name="user_id")
-   private Users userId;
-   
-   @ManyToOne//(cascade= {CascadeType.MERGE})
-   @JoinColumn(name ="host_id", nullable = false)
-   private HostUser hostUser; 
-   
-   @ManyToOne//(cascade= {CascadeType.MERGE})
-   @JoinColumn(name ="room_seq", nullable = false)
-   private RoomInfo roominfo;
-   
-   @Column(name = "start_time", nullable = false)
-   private String startTime;
-   
-   @Column(name = "end_time", nullable = false)
-   private String endTime;
-   
-   @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
-   @Column(name = "using_date")
-   private Date usingDate;
-   
-   @OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-   private RoomReview RoomReviewResSeq;
+
 
 
 }

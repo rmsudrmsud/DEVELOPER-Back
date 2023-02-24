@@ -46,7 +46,7 @@ public class ReservationService {
 		Date date;
 		try {
 			date = format.parse(usingDate);
-			r.setUsingDate(date);
+//			r.setUsingDate(date);
 			r.setRoominfo(ri);
 			r.setStartTime(startTime);
 			r.setEndTime(endTime);
