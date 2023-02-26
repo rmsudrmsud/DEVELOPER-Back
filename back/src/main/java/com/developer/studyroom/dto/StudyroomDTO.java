@@ -1,13 +1,18 @@
 package com.developer.studyroom.dto;
 
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
-import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
+import com.developer.studyroom.entity.Studyroom;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudyroomDTO {
 	private long srSeq;
 	private String name;
@@ -34,7 +39,4 @@ public class StudyroomDTO {
 		this.imgPath = imgPath;
 		this.oc = oc;
 	}
-	
-
-	
 }

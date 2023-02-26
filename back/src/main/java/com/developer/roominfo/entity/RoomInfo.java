@@ -1,8 +1,6 @@
 package com.developer.roominfo.entity;
 
 import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.reservation.entity.Reservation;
@@ -31,7 +31,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "room_info")
-@DynamicUpdate()
+@DynamicInsert
+@DynamicUpdate
 
 @SequenceGenerator(
 name =
@@ -64,6 +65,10 @@ public class RoomInfo {
 	
 	@Column(name="price", nullable = false)
 	private Integer price;
+	
+	@Column(name="status")
+	@ColumnDefault(value = "0")
+	private Integer status;
 
 	
 	@ManyToOne//(cascade= {CascadeType.MERGE})

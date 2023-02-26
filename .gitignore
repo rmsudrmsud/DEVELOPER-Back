@@ -78,5 +78,3 @@ application.properties
 .sts4-cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
-back/src/main/java/com/developer/hostuser/repository/HostUserRepository.java
-back/src/main/java/com/developer/users/repository/UsersRepository.java

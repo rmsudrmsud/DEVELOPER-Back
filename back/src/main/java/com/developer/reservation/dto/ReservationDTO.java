@@ -1,21 +1,23 @@
 package com.developer.reservation.dto;
 
 import java.util.Date;
-import com.developer.hostuser.entity.HostUser;
-import com.developer.roominfo.entity.RoomInfo;
-import com.developer.roomreview.entity.RoomReview;
-import com.developer.users.entity.Users;
+
+import com.developer.hostuser.dto.HostUserDTO;
+import com.developer.roominfo.dto.RoomInfoDTO;
+import com.developer.roomreview.dto.RoomReviewDTO;
+import com.developer.users.dto.UsersDTO;
+
 import lombok.Data;
 
 @Data
 public class ReservationDTO {
 	private Long resSeq;
-	private Users userId;
-	private HostUser hostUser; 
-	private RoomInfo roominfo;
 	private String startTime;
 	private String endTime;
 	private Date usingDate;
 	
-	private RoomReview roomReview;
+	private RoomInfoDTO roomInfoDTO;
+	private HostUserDTO hostUserDTO; 
+	private UsersDTO usersDTO;
+	private RoomReviewDTO roomReviewDTO;
 }
