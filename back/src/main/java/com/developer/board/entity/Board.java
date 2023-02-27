@@ -1,6 +1,6 @@
 package com.developer.board.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,7 +21,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,30 +68,50 @@ public class Board {
 	
 	@Column(name="c_date")
 	@ColumnDefault(value="SYSDATE")
-	private Date cDate;
+	private LocalDateTime cDate;
 	
 	@Column(name="recommend")
 	@ColumnDefault(value="0")
 	private Integer recommend;
-	
-	@Transient
-	private Integer boardType;
-	
+
 	@Column(name="cnt")
 	@ColumnDefault(value="0")
 	private Integer cnt;
 	
+	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
 	//@JoinColumn(name="post_seq")
 	private List<BoardRep> boardRep;
-	
+	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
 	//@JoinColumn(name="post_seq")
 	private List<Recommend> Recommend;
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
 	
-
+	
+    public Board(Long postSeq, Integer category, String title, String content, String imgPath, LocalDateTime cDate, Integer recommend, Integer cnt) {
+		this.postSeq=postSeq;
+		this.category=category;
+		this.title = title;
+        this.content = content;
+        this.imgPath  = imgPath;
+        this.cDate = cDate;
+        this.recommend = recommend;
+        this.cnt = cnt;
+    }
+	
+    @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+    public void update(String title, String content, String imgPath, LocalDateTime cDate) {
+        this.title = title;
+        this.content = content;
+        this.imgPath = imgPath;
+        this.cDate = cDate;
+    }
+    
+    public void updateCnt(Integer cnt) {
+    	this.cnt=cnt;
+    }
 }

@@ -36,7 +36,7 @@ public class ReservationService {
 		Reservation r = new Reservation();
 		Optional<Users> optU = uRepository.findById(userId);
 		Users u = optU.get();
-		r.setUserId(u);
+		//r.setUserId(u);
 		Optional<HostUser> optH = hRepository.findById(hostId);
 		HostUser hu= optH.get();
 		r.setHostUser(hu);
@@ -46,7 +46,7 @@ public class ReservationService {
 		Date date;
 		try {
 			date = format.parse(usingDate);
-			r.setUsingDate(date);
+		//	r.setUsingDate(date);
 			r.setRoominfo(ri);
 			r.setStartTime(startTime);
 			r.setEndTime(endTime);

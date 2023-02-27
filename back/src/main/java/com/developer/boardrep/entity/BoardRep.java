@@ -1,7 +1,7 @@
 
 package com.developer.boardrep.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,9 +24,8 @@ import com.developer.users.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter @Getter	@NoArgsConstructor
+@Getter	@NoArgsConstructor
 @AllArgsConstructor
 
 @Entity
@@ -37,7 +36,7 @@ import lombok.Setter;
 @SequenceGenerator(
 name = "POST_REP_SEQ_GENERATOR", // 사용할 sequence 이름
 sequenceName =
-"post_rep_seq", // 실제 데이터베이스 sequence 이름
+"post_rep_seq", // 실제 데이터s베이스 sequence 이름
 initialValue = 1, allocationSize = 1)
 
 public class BoardRep {
@@ -53,7 +52,7 @@ public class BoardRep {
 
 	@Column(name = "cdate")
 	@ColumnDefault(value="SYSDATE")
-	private Date cDate;
+	private LocalDateTime cDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_seq")

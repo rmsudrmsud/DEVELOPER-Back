@@ -36,7 +36,7 @@ class FavoritesStudyroomRepositoryTest {
 		FavoritesStudyroom fs = new FavoritesStudyroom();
 		Optional<Studyroom> optS = sr.findById(1L);
 		Studyroom s=optS.get();
-		fs.setStudyroomFav(s);
+		//fs.setStudyroomFav(s);
 		Optional<Users> optU = user.findById("abc");
 		Users u=optU.get();
 		fs.setUserId(u);

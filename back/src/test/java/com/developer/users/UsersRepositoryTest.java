@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,6 +21,8 @@ public class UsersRepositoryTest {
 	@Autowired
 	private UsersRepository uRepository;
 	
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Test
 	void test() {
 		
@@ -28,7 +32,11 @@ public class UsersRepositoryTest {
 	@DisplayName("유저 INSERT 테스트")
 	void testUsersAdd() {
 		Users u = new Users();
+<<<<<<< HEAD
 		u.setUserId("tutee2");
+=======
+		u.setUserId("test1");
+>>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
 		u.setRole(1);
 		u.setPwd("4테스트비밀번호");
 		u.setNickname("4테스트닉네임");
@@ -66,6 +74,21 @@ public class UsersRepositoryTest {
 //		u.setTutor(null);
 		uRepository.delete(u);
 	}
-
+	
+	@Test
+	@DisplayName("유저 로그인 테스트")
+	void userLogin() {
+		Optional<Users> u = uRepository.findById("test1");
+		Users user = u.get();
+	//	Users user = uRepository.usersLogin("test1", 1);
+		logger.info("닉네임: "+ user.getNickname());
+		logger.info("비밀번호: " + user.getPwd());
+		logger.info("타입: "+ user.getRole());
+		logger.info("주소: "+ user.getAddr());
+		logger.info("email: "+ user.getEmail());
+		logger.info("전화: "+ user.getTel());
+		logger.info("아이디: "+ user.getUserId());
+		
+	}
 
 }

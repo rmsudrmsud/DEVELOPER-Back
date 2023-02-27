@@ -25,21 +25,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "user_review")
 public class UserReview {
-	
-	@Id
-	@Column(name = "apply_seq_rv")
-	private Long applySeqRv;
-	@Column(name = "apply_seq")
-	private int applySeq;
-	
-	@Column(nullable = false)
-	private Integer star;
-	
-	@Column(nullable = false)
-	private String review;
-	
-	@MapsId(value="applySeqRv")
-	@OneToOne(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
-	@JoinColumn(name = "apply_seq_rv")
-	private AppliedLesson alLesson;
+   
+   @Id
+   @Column(name = "apply_seq_rv")
+   private Long applySeqRv;
+   
+   @Column(nullable = false)
+   private Integer star;
+   
+   @Column(nullable = false)
+   private String review;
+   
+   @MapsId(value="applySeqRv")
+   @OneToOne(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+   @JoinColumn(name = "apply_seq_rv")
+   private AppliedLesson alLesson;
 }

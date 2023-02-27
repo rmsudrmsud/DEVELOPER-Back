@@ -38,6 +38,7 @@ import lombok.NoArgsConstructor;
       initialValue = 1, allocationSize = 1 
       )
 public class AppliedLesson {
+
 	@Id
 	@Column(name="apply_seq")
 	@GeneratedValue( 
@@ -66,5 +67,4 @@ public class AppliedLesson {
 	
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
-   
 }

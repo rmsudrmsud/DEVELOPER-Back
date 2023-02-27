@@ -46,12 +46,17 @@ public class LessonRepositoryTest {
 //	@Test
 //	@DisplayName("수업 SELECT 테스트 : 클래스를 개설한 튜터의 후기 목록")
 //	void testSelectAllReview() {		
+<<<<<<< HEAD
 //		List<Object[]> list = lRepository.selectAllReview(1L);
+=======
+//		List<Object[]> list = lRepository.selectAllReview(2L);
+>>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
 //		for(int i=0; i<list.size(); i++) {
 //			Object review = list.get(i);
 //			logger.info(review.toString());
 //		}
 //	}
+<<<<<<< HEAD
 	
 	@Test
 	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
@@ -62,6 +67,18 @@ public class LessonRepositoryTest {
 			logger.info(classList.toString());
 		}
 	}
+=======
+//	
+//	@Test
+//	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
+//	void testSelectTutorDetail() {		
+//		List<Object[]> list = lRepository.selectTutorDetail("test3");
+//		for(int i=0; i<list.size(); i++) {
+//			Object classList = list.get(i);
+//			logger.info(classList.toString());
+//		}
+//	}
+>>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
 
 
 	@Test
