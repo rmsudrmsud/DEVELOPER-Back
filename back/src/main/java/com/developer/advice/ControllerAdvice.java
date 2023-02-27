@@ -18,6 +18,11 @@ public class ControllerAdvice {
 		e.printStackTrace();
 		Map<String, String> map = new HashMap<>();
 		map.put("msg", e.getMessage());
+		System.out.println("---------------findControllerAdvice----------------");
 		return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
+
+
+
+

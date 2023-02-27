@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class RecommendDTO {
 	private Long recSeq;
-	private BoardDTO bDTO;
-	private UsersDTO uDTO;
+	private BoardDTO boardDTO;
+	private UsersDTO usersDTO;
 }

@@ -21,8 +21,10 @@ import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,11 +60,13 @@ public class Users{
    @Column(name="addr", nullable = false)
    private String addr;   
    
+   
    @OneToOne(mappedBy = "users",
          cascade = CascadeType.REMOVE)
    private Tutor tutor;
    
-   @OneToMany(mappedBy = "user")
+  
+   @OneToMany(mappedBy = "users")
    private List<AppliedLesson> appliedLesson;
    
    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
@@ -70,7 +74,7 @@ public class Users{
    
    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
    private List<BoardRep> boardRep;
-   
+  
    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
    private List<Recommend> recommend;
    
@@ -80,9 +84,20 @@ public class Users{
    @OneToMany(cascade=CascadeType.REMOVE, mappedBy = "userId")
    private List<FavoritesStudyroom> favStudyroom;
    
-
-   
+   @Builder
+   public Users(String userId, String email, String pwd, String nickname, Integer role, String name, String tel, String addr) {
+	   this.userId = userId;
+	   this.pwd = pwd;
+	   this.nickname = nickname;
+       this.email = email;
+       this.role = role;
+       this.name = name;
+       this.tel=tel;
+       this.addr = addr;
    }
+   
+  
+ }
 
 
 

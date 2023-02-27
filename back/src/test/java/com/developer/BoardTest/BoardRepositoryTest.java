@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.developer.board.dto.BoardDTO;
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
 import com.developer.users.entity.Users;
@@ -27,45 +28,13 @@ class BoardRepositoryTest {
 	private BoardRepository br;
 	@Autowired
 	private UsersRepository ur;
-	
-	@Test
-	void testSave() {
-			Board b = new Board();
-			b.setPostSeq(32L);
-			//b.setUserId("kosta111");
-			b.setTitle("JPA테스트제목");
-			b.setContent("JPA테스트내용");
-			b.setImgPath("테스트이미지");
-			b.setCDate(null);
-			b.setCategory(2);
-			b.setRecommend(15);
-			b.setCnt(15);
-		
-			br.save(b);
-	}
-	
-	@Test
-	void testFind() {
-			Board b = new Board();
-			b.setPostSeq(32L);
-		//	b.setUserId("kosta111");
-			b.setTitle("JPA테스트제목");
-			b.setContent("JPA테스트내용");
-			b.setImgPath("테스트이미지");
-			b.setCDate(null);
-			b.setCategory(2);
-			b.setRecommend(15);
-			b.setCnt(15);
-		
-			br.save(b);
-	}
 
 	@Test
 	@DisplayName("Board Save 테스트")
 	void testBoardSave() {
 		for(int i=1; i<=5; i++) {
 			Board b = new Board();
-			Optional<Users> optB = ur.findById("아이디1");
+			Optional<Users> optB = ur.findById("test1");
 			Users u = optB.get();
 			b.setUsers(u);
 		//	b.setPostSeq(null);
@@ -115,111 +84,112 @@ class BoardRepositoryTest {
 		br.deleteById(postSeq);
 	}
 	
-	@Test
-	void testFindTest1() {
-		List<Board> list = br.findTest1();
-		for(int i=0; i<list.size(); i++) {
-			logger.error("게시글: " + list);
-		};
-	}
-	
-	@Test
-	@DisplayName("Board list 테스트")
-	void findFindTest2() {
-	List<Object[]> list = br.findTest2();
-	logger.error("첫번째글번호: " + list.get(0)[0]);
-	logger.error("첫번째내용: " + list.get(0)[1]);
-	
-	logger.error("두번째글번호: " + list.get(1)[0]);
-	logger.error("두번쨰내용: " + list.get(1)[1]);
-	}
+//	@Test
+//	void testFindTest1() {
+//		List<Board> list = br.findTest1();
+//		for(int i=0; i<list.size(); i++) {
+//			logger.error("게시글: " + list);
+//		};
+//	}
+//	
+//	@Test
+//	@DisplayName("Board list 테스트")
+//	void findFindTest2() {
+//	List<Object[]> list = br.findTest2();
+//	logger.error("첫번째글번호: " + list.get(0)[0]);
+//	logger.error("첫번째내용: " + list.get(0)[1]);
+//	
+//	logger.error("두번째글번호: " + list.get(1)[0]);
+//	logger.error("두번쨰내용: " + list.get(1)[1]);
+//	}
 	
 	@Test
 	@DisplayName("Board 제목검색 테스트")
 	void findByTitle() {
 		List<Board> list = br.findByTitleLike("%수정%");
 		for(int i=0; i<list.size(); i++) {
-			logger.info("검색내용: "+list.get(i).getTitle());
+			logger.info("검색내용: "+list.get(i).toString());
+			
 		};
 	}
 	
 	@Test
 	@DisplayName("닉네임+글상세+댓글 PostSeq로 검색 테스트")
 	void findPostSeq() {
-		Map<String, Object> map = br.findPostSeq(22L);
+		List<Object[]> list = br.findPostSeq(1L);
 		logger.info("-----------------------");
-		logger.info("글번호 : "+map.get("post_seq"));
-		logger.info("닉네임 : "+map.get("nickname"));
-		logger.info("카테고리: " + map.get("category"));
-		logger.info("제목: " + map.get("title"));
-		logger.info("내용: " + map.get("content"));
-		logger.info("이미지: " + map.get("imt_path"));
-		logger.info("작성일: " + map.get("c_date"));
-		logger.info("추천수: " + map.get("recommend"));
-		logger.info("조회수: " + map.get("cnt"));
+		logger.info("글번호 : "+list.get(0).toString());
+//		logger.info("닉네임 : "+map.get("nickname"));
+//		logger.info("카테고리: " + map.get("category"));
+//		logger.info("제목: " + map.get("title"));
+//		logger.info("내용: " + map.get("content"));
+//		logger.info("이미지: " + map.get("imt_path"));
+//		logger.info("작성일: " + map.get("c_date"));
+//		logger.info("추천수: " + map.get("recommend"));
+//		logger.info("조회수: " + map.get("cnt"));
 		logger.info("-----------------------");
-		logger.info("댓글내용: " + map.get("rContent"));
-		logger.info("댓글작성일: " + map.get("cdate"));
+	//	logger.info("댓글내용: " + list.get(0).getBoardRepDTO().getContent());
+//		logger.info("댓글작성일: " + map.get("cdate"));
 		logger.info("-----------------------");
 	}
 	
-	@Test
-	@DisplayName("전체 리스트(작성일순) 테스트")
-	void findAllBoardc_dateTest() {
-		List<Map<String,Object>> list = br.findAllBoardc_date();
-		for(int i=0; i<list.size(); i++) {
-			logger.info("-----------------------");
-			logger.info("글번호: " + list.get(i).get("post_seq"));
-			logger.info("닉네임: " + list.get(i).get("nickname"));
-			logger.info("카테고리: " + list.get(i).get("category"));
-			logger.info("제목: " + list.get(i).get("title"));
-			logger.info("내용: " + list.get(i).get("content"));
-			logger.info("이미지: " + list.get(i).get("imt_path"));
-			logger.info("작성일: " + list.get(i).get("c_date"));
-			logger.info("추천수: " + list.get(i).get("recommend"));
-			logger.info("조회수: " + list.get(i).get("cnt"));
-			logger.info("-----------------------");
-		};
-	}
-	
-	@Test
-	@DisplayName("전체 리스트(좋아요순) 테스트")
-	void findAllBoardCntTest() {
-		List<Map<String,Object>> list = br.findAllBoardCnt();
-		for(int i=0; i<list.size(); i++) {
-			logger.info("-----------------------");
-			logger.info("글번호: " + list.get(i).get("post_seq"));
-			logger.info("닉네임: " + list.get(i).get("nickname"));
-			logger.info("카테고리: " + list.get(i).get("category"));
-			logger.info("제목: " + list.get(i).get("title"));
-			logger.info("내용: " + list.get(i).get("content"));
-			logger.info("이미지: " + list.get(i).get("imt_path"));
-			logger.info("작성일: " + list.get(i).get("c_date"));
-			logger.info("추천수: " + list.get(i).get("recommend"));
-			logger.info("조회수: " + list.get(i).get("cnt"));
-			logger.info("-----------------------");
-		};
-	}
-	
-	@Test
-	@DisplayName("전체 리스트(추천많은순) 테스트")
-	void findAllBoardRecommendTest() {
-		
-		List<Map<String,Object>> list = br.findAllBoardRecommend();
-		for(int i=0; i<list.size(); i++) {
-			logger.info("-----------------------");
-			logger.info("글번호: " + list.get(i).get("post_seq"));
-			logger.info("닉네임: " + list.get(i).get("nickname"));
-			logger.info("카테고리: " + list.get(i).get("category"));
-			logger.info("제목: " + list.get(i).get("title"));
-			logger.info("내용: " + list.get(i).get("content"));
-			logger.info("이미지: " + list.get(i).get("imt_path"));
-			logger.info("작성일: " + list.get(i).get("c_date"));
-			logger.info("추천수: " + list.get(i).get("recommend"));
-			logger.info("조회수: " + list.get(i).get("cnt"));
-			logger.info("-----------------------");
-		};
-	}
+//	@Test
+//	@DisplayName("전체 리스트(작성일순) 테스트")
+//	void findAllBoardc_dateTest() {
+//		List<Map<String,Object>> list = br.findAllBoardc_date();
+//		for(int i=0; i<list.size(); i++) {
+//			logger.info("-----------------------");
+//			logger.info("글번호: " + list.get(i).get("post_seq"));
+//			logger.info("닉네임: " + list.get(i).get("nickname"));
+//			logger.info("카테고리: " + list.get(i).get("category"));
+//			logger.info("제목: " + list.get(i).get("title"));
+//			logger.info("내용: " + list.get(i).get("content"));
+//			logger.info("이미지: " + list.get(i).get("imt_path"));
+//			logger.info("작성일: " + list.get(i).get("c_date"));
+//			logger.info("추천수: " + list.get(i).get("recommend"));
+//			logger.info("조회수: " + list.get(i).get("cnt"));
+//			logger.info("-----------------------");
+//		};
+//	}
+//	
+//	@Test
+//	@DisplayName("전체 리스트(좋아요순) 테스트")
+//	void findAllBoardCntTest() {
+//		List<Map<String,Object>> list = br.findAllBoardCnt();
+//		for(int i=0; i<list.size(); i++) {
+//			logger.info("-----------------------");
+//			logger.info("글번호: " + list.get(i).get("post_seq"));
+//			logger.info("닉네임: " + list.get(i).get("nickname"));
+//			logger.info("카테고리: " + list.get(i).get("category"));
+//			logger.info("제목: " + list.get(i).get("title"));
+//			logger.info("내용: " + list.get(i).get("content"));
+//			logger.info("이미지: " + list.get(i).get("imt_path"));
+//			logger.info("작성일: " + list.get(i).get("c_date"));
+//			logger.info("추천수: " + list.get(i).get("recommend"));
+//			logger.info("조회수: " + list.get(i).get("cnt"));
+//			logger.info("-----------------------");
+//		};
+//	}
+//	
+//	@Test
+//	@DisplayName("전체 리스트(추천많은순) 테스트")
+//	void findAllBoardRecommendTest() {
+//		
+//		List<Map<String,Object>> list = br.findAllBoardRecommend();
+//		for(int i=0; i<list.size(); i++) {
+//			logger.info("-----------------------");
+//			logger.info("글번호: " + list.get(i).get("post_seq"));
+//			logger.info("닉네임: " + list.get(i).get("nickname"));
+//			logger.info("카테고리: " + list.get(i).get("category"));
+//			logger.info("제목: " + list.get(i).get("title"));
+//			logger.info("내용: " + list.get(i).get("content"));
+//			logger.info("이미지: " + list.get(i).get("imt_path"));
+//			logger.info("작성일: " + list.get(i).get("c_date"));
+//			logger.info("추천수: " + list.get(i).get("recommend"));
+//			logger.info("조회수: " + list.get(i).get("cnt"));
+//			logger.info("-----------------------");
+//		};
+//	}
 	
 	//이거 안되뮤.
 	@Test

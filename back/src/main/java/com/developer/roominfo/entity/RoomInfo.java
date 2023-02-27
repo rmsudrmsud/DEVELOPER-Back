@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.reservation.entity.Reservation;
@@ -64,6 +65,10 @@ public class RoomInfo {
 	
 	@Column(name="price", nullable = false)
 	private Integer price;
+	
+	@Column(name="status", nullable = false)
+	@ColumnDefault(value="0")
+	private Integer status;
 
 	
 	@ManyToOne//(cascade= {CascadeType.MERGE})

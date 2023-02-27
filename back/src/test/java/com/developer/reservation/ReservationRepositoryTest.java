@@ -46,7 +46,7 @@ class ReservationRepositoryTest {
 		Reservation r = new Reservation();
 		Optional<Users> optU = ur.findById("aaa");
 		Users u = optU.get();
-		r.setUserId(u);
+		//r.setUserId(u);
 	   Optional<HostUser> optH = hos.findById("suho522");
 		HostUser hu= optH.get();
 		r.setHostUser(hu);
@@ -54,7 +54,7 @@ class ReservationRepositoryTest {
 		RoomInfo ri = optR.get();
 		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		Date date=format.parse("2023/03/12");
-		r.setUsingDate(date);
+		//r.setUsingDate(date);
 		r.setRoominfo(ri);
 		r.setStartTime("15:00");
 		r.setEndTime("16:00");
