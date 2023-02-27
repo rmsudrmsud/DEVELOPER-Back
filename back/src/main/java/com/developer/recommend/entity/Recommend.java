@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter	@NoArgsConstructor
+@Getter	@NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(
 name = "REC_SEQ_GENERATOR", // 사용할 sequence 이름

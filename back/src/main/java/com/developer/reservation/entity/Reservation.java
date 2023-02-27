@@ -3,14 +3,22 @@ package com.developer.reservation.entity;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.developer.hostuser.entity.HostUser;
+import com.developer.roominfo.entity.RoomInfo;
+import com.developer.roomreview.entity.RoomReview;
+import com.developer.studyroom.entity.Studyroom;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -39,9 +47,6 @@ public class Reservation {
 	@Column(name = "user_id")
 	private String userId;
 	
-	@Column(name = "room_seq")
-	private Long roomSeq;
-	
 	@Column(name = "start_time")
 	private String startTime;
 	
@@ -51,12 +56,19 @@ public class Reservation {
 	@Column(name = "using_date")
 	@JsonFormat(pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	private Date usingDate;
-	
-	@Column(name = "host_id")
-	private String hostId;
 
-	//private StudyroomVO studyroomVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
+	
 	//private UsersVO usersVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
-	//private HostUserVO hostUserVO; // sr추가: 해당 스터디카페 예약자명단 전체목록
-	//private List<RoomReviewVO> roomReviewVO; //ds 추가
+	
+	//sr: 해당 스터디카페 예약자명단 전체목록
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="host_id", nullable = false)
+	private HostUser hostUser; 
+	
+	//sr: 해당 스터디카페 예약자명단 전체목록
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="room_seq", nullable = false)
+	private RoomInfo roominfo;
+	
+	//private List<RoomReview> roomReview;  //ds 추가
 }
