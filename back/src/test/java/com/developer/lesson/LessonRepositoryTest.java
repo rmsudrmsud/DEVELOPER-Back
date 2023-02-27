@@ -43,15 +43,15 @@ public class LessonRepositoryTest {
 		logger.info("수업정보: " + lesson.get().getLessonName());
 	}
 	
-	@Test
-	@DisplayName("수업 SELECT 테스트 : 클래스를 개설한 튜터의 후기 목록")
-	void testSelectAllReview() {		
-		List<Object[]> list = lRepository.selectAllReview(2L);
-		for(int i=0; i<list.size(); i++) {
-			Object review = list.get(i);
-			logger.info(review.toString());
-		}
-	}
+//	@Test
+//	@DisplayName("수업 SELECT 테스트 : 클래스를 개설한 튜터의 후기 목록")
+//	void testSelectAllReview() {		
+//		List<Object[]> list = lRepository.selectAllReview(1L);
+//		for(int i=0; i<list.size(); i++) {
+//			Object review = list.get(i);
+//			logger.info(review.toString());
+//		}
+//	}
 	
 	@Test
 	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")

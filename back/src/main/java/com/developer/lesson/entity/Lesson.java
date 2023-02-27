@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,26 +16,21 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.tutor.entity.Tutor;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="LESSON")
-@DynamicInsert
-
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-@JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
+@DynamicInsert @DynamicUpdate
+@Setter
+@Getter @NoArgsConstructor
 @SequenceGenerator(
 		name ="lessonSeq", 
 		sequenceName ="lesson_seq", 
@@ -86,7 +80,6 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
-
 }
 
 

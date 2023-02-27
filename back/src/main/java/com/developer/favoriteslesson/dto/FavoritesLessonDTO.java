@@ -2,13 +2,28 @@ package com.developer.favoriteslesson.dto;
 
 import com.developer.lesson.dto.LessonDTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 public class FavoritesLessonDTO {
-		
-	private Long favLesSeq;
-	private String tuteeId;
 	
-	private LessonDTO ldto;
+	@Data
+	@AllArgsConstructor @NoArgsConstructor
+	public static class flListDTO{
+		private Long favLesSeq;
+		private String tuteeId;
+		
+		private String lessonName;
+	}
+	
+	@Data
+	@AllArgsConstructor @NoArgsConstructor
+	public static class favoritesLessonDTO{
+		private Long favLesSeq;
+		private String tuteeId;
+		
+		private LessonDTO.onlyLessonDTO ldto;
+	}
+
 }

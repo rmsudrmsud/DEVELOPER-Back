@@ -35,13 +35,13 @@ class AppliedLessonRepositoryTest {
 		assertTrue(optL.isPresent());
 		Lesson l = optL.get();
 		
-		Optional<Users>optU = uRepository.findById("테스트");
+		Optional<Users>optU = uRepository.findById("tutee2");
 		assertTrue(optU.isPresent());
 		Users u = optU.get();
 		
 		AppliedLesson al = new AppliedLesson();
 		al.setApplySeq(1L);
-		al.setTuteeId("테스트");
+		al.setTuteeId("tutee2");
 		al.setLesson(l);
 		al.setUsers(u);
 

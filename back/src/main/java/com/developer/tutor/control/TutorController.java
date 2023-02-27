@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.service.TutorService;
 
@@ -20,10 +21,9 @@ public class TutorController {
 	private TutorService service;
 	
 	//[JW] 튜터등록 
-	//TODO: Restful 방식대로라면 ... 여기에 value 값을 안 줄수는 없는 건가 ?
-	@PostMapping("") //주소에 /에 넣어줘야함
-	public ResponseEntity<?> add(@RequestBody Tutor tutor) throws AddException, FindException{
-		service.addTutor(tutor);
+	@PostMapping
+	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO) throws AddException, FindException{
+		service.saveTutor(tDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

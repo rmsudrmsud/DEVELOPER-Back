@@ -35,7 +35,7 @@ import lombok.ToString;
 public class FavoritesLesson {
 	@Id
 	@Column(name="fav_les_seq")
-	@GeneratedValue( 
+	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE, 
 			generator ="favLesSeq"  
 		)
