@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
@@ -42,5 +43,23 @@ public class ControllerAdvice {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json;charset=UTF-8");
 		return new ResponseEntity<>(e.getMessage(),headers, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	@ResponseBody
+	public ResponseEntity<?> exceptMaxUploadSize(MaxUploadSizeExceededException e){
+		System.out.println("---------------파일크기 초과 ControllerAdvice----------------");
+		
+		//전달하고자 하는 메시지가 한글깨짐! header 설정 추가
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json;charset=UTF-8"); //단순 text하려면 text/html;charset=UTF-*
+		
+		//xml의 cors설정은 컨트롤러관련된 설정!즉 컨트롤러만 적용! Advice는 적용이 안됨
+		//advice에서 설정은 추가해줘야 함.
+		headers.add("Access-Control-Allow-Origin", "http://192.168.0.20:5500"); //본인 IP적어줘야함
+		headers.add("Access-Control-Allow-Credentials", "true");
+		return new ResponseEntity<>("파일크기가 초과되었습니다", headers, HttpStatus.BAD_REQUEST);
+		
 	}
 }

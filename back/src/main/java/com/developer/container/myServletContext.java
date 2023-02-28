@@ -1,6 +1,8 @@
 package com.developer.container;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,12 +21,12 @@ public class myServletContext implements WebMvcConfigurer{
 			.allowedMethods("GET", "POST", "PUT", "DELETE");
 	}
 
-	//@Bean
-//	public CommonsMultipartResolver multipartResolver() {
-//		CommonsMultipartResolver cmr = new CommonsMultipartResolver();
-//		cmr.setDefaultEncoding("UTF-8");
-//		cmr.setMaxUploadSize(1000*1024);
-//		cmr.setMaxUploadSizePerFile(100*1024);
-//		return cmr;
-//	}
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver cmr = new CommonsMultipartResolver();
+		cmr.setDefaultEncoding("UTF-8");
+		cmr.setMaxUploadSize(1000*1024);
+		cmr.setMaxUploadSizePerFile(100*1024);
+		return cmr;
+	}
 }

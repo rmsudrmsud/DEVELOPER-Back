@@ -10,11 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 import com.developer.studyroom.entity.Studyroom;
 import com.developer.users.entity.Users;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +19,6 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "FAVORITES_STUDYROOM")
 @SequenceGenerator(name = "FAV_SEQ_GENERATOR", // 사용할 sequence 이름
@@ -34,6 +30,8 @@ public class FavoritesStudyroom {
    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAV_SEQ_GENERATOR")
    private Long favSeq;
 
+   
+   
    @ManyToOne
    @JoinColumn(name = "user_id")
    private Users users;

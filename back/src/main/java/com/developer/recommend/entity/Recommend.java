@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter	@NoArgsConstructor
-@AllArgsConstructor
 @SequenceGenerator(
 name = "REC_SEQ_GENERATOR", // 사용할 sequence 이름
 sequenceName =
@@ -36,17 +35,13 @@ public class Recommend {
 			)
 	private Long recSeq;
 	
+	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_seq", nullable=false)
 	private Board board;
 	
-//	@Column(name="post_seq")
-//	private Integer postSeq;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
-	
-//	@Column(name="user_Id")
-//	private String userId;
 }

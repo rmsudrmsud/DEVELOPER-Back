@@ -1,7 +1,5 @@
 package com.developer.board.entity;
 
-
-
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -26,13 +24,11 @@ import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter	@NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @DynamicInsert
@@ -52,17 +48,16 @@ public class Board {
 			)
 	private Long postSeq;
 	
-//	@Column(name="user_id" ,nullable=false)
-//	private String userId;
-	
 	@Column(name="category")
 	@ColumnDefault(value="0")
 	private Integer category; //0:Q/A,  1:스터디모집,  2:자유 게시판
 	
-	@Column(name="title",nullable=false)
+	@NotNull
+	@Column(name="title")
 	private String title;
 	
-	@Column(name="content",nullable=false)
+	@NotNull
+	@Column(name="content")
 	private String content;
 	
 	@Column(name="img_path")
@@ -76,24 +71,19 @@ public class Board {
 	@ColumnDefault(value="0")
 	private Integer recommend;
 	
-	@Transient
-	private Integer boardType;
-	
 	@Column(name="cnt")
 	@ColumnDefault(value="0")
 	private Integer cnt;
 	
+	
+	
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
-	//@JoinColumn(name="post_seq")
 	private List<BoardRep> boardRep;
 	
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
-	//@JoinColumn(name="post_seq")
 	private List<Recommend> Recommend;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
-	
-
 }
