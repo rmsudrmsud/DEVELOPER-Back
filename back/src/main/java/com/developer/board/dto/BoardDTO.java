@@ -1,43 +1,36 @@
 package com.developer.board.dto;
 
-
-
-
-
-
-
-import java.time.LocalDate;
 import java.util.Date;
-
-import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.recommend.dto.RecommendDTO;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@DynamicUpdate
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @JsonFormat( pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 public class BoardDTO {
-	private Long postSeq;
-	private Integer category;
-	private String title;
-	private String content;
-	private String imgPath;
-	private Date cDate;
-	private Integer recommend;
-	private Integer cnt;
-	private BoardRepDTO boardRepDTO;
-	private UsersDTO usersDTO;
-	private RecommendDTO recommendDTO;
-	
 	//근형
-	@Data
+   private Long postSeq;
+   private Integer category;
+   private String title;
+   private String content;
+   private String imgPath;
+   @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+   private Date cDate;
+   private Integer recommend;
+   private Integer cnt;
+
+   private BoardRepDTO boardRepDTO;
+   private UsersDTO usersDTO;
+   private RecommendDTO recommendDTO;
+
+   @Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	public static class BoardAllSelectDTO{
@@ -49,9 +42,28 @@ public class BoardDTO {
 		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
+		
+		//private BoardRepDTO boardRepDTO;
 		private BoardRepDTO.BoardRepSelectDTO boardRepSelectDTO;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
+   
+ //SR
+   @Data
+   @NoArgsConstructor
+   @AllArgsConstructor
+   public static class selectAllBydateBoardDTO {
+      private Long postSeq;
+      private Integer category;
+      private String title;
+      private String content;
+      private String imgPath;
+      @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+      private Date cDate;
+      private Integer recommend;
+      private Integer cnt;
+      private UsersDTO.selectAllBydateBoardDTO usersDTO;
+   }
 	
 	//근형
 	@Data
@@ -80,6 +92,11 @@ public class BoardDTO {
 		private String content;
 		private String imgPath;
 		private UsersDTO.UsersNameDTO usersNameDTO;
-	} 
-	
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+		private Date cDate;
+		private Integer recommend;
+		private Integer cnt;
+		private UsersDTO.selectAllBydateBoardDTO usersDTO;
+	}
+
 }

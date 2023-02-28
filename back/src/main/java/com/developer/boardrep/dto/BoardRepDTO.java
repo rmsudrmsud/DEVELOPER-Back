@@ -19,10 +19,10 @@ public class BoardRepDTO {
 	private Long postRepSeq;
 	private String content;
 	private Date cDate;
-	private BoardDTO boardDTO;
-	private UsersDTO usersDTO;
+	private BoardDTO bDTO;
+	private UsersDTO uDTO;
 	
-	//근
+	//근형
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
@@ -45,3 +45,4 @@ public class BoardRepDTO {
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 }
+

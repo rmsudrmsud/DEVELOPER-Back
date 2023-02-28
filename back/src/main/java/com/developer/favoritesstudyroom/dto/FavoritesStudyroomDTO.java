@@ -8,8 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor	
+@NoArgsConstructor @AllArgsConstructor
 public class FavoritesStudyroomDTO {
 	private Long favSeq;
 	private Users userId;

@@ -15,17 +15,14 @@ import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 public class UsersDTO {
-	
-	@Data
-	@NoArgsConstructor
-	public static class usersDTO{
 		private String userId;
 		private String pwd;
 		private Integer role;
@@ -44,8 +41,59 @@ public class UsersDTO {
 		private List<Recommend> recommend;
 		private List<Reservation> reservation;
 		private List<FavoritesStudyroom> favStudyroom;
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class uNameDTO{
+		private String name;
 	}
-	//근형 : 로그인
+	
+	@Data
+	@NoArgsConstructor
+	public static class applyLessonDTO{
+		private String userId;
+	}
+
+	// SR
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllBydateBoardDTO {
+		private String nickname;
+	}
+
+	// SR: 예약상세 & 목록용
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllReservationDTO {
+		private String name;
+		private String tel;
+	}
+
+	// SR
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class tutorApplyDTO {
+		private String name;
+	}
+	
+	//SR 튜터미승인목록
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class unapproveTutorDTO {
+		private String userId;
+		private String nickname;
+		private String name;
+		private String email;
+		private String tel;
+		
+	}
+	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class uDTO{
@@ -58,6 +106,7 @@ public class UsersDTO {
 		private String tel;
 		private String addr;
 	}
+	
 	//근형
 	@Data
 	@NoArgsConstructor
@@ -66,6 +115,7 @@ public class UsersDTO {
 		private Integer role;
 		private String nickname;
 	}
+	
 	//근형
 	@Data
 	@NoArgsConstructor
@@ -73,6 +123,7 @@ public class UsersDTO {
 		private String username;
 		private LessonDTO.getLessonNameDTO lessonName;
 	}
+	
 	//근형
 	@Data
 	@NoArgsConstructor

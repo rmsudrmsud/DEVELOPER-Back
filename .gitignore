@@ -3,26 +3,24 @@
 
 ### Eclipse ###
 application.properties
-Back/src/main/resources/application.properties
 MyApplicationContext.java
 MyServletContext.java
 config.xml
 back/log/*
 .metadata
 bin/
+back/mvnw
 tmp/
 *.tmp
 *.bak
 *.swp
+*.class
 *~.nib
 local.properties
 .settings/
 .loadpath
 .recommenders
 .gitignore
-application.properties
-.gitignore
-application.properties
 
 # External tool builders
 .externalToolBuilders/
@@ -78,5 +76,3 @@ application.properties
 .sts4-cache/
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
-back/src/main/java/com/developer/hostuser/repository/HostUserRepository.java
-back/src/main/java/com/developer/users/repository/UsersRepository.java

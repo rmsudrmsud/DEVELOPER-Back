@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,7 +17,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.reservation.entity.Reservation;
 import com.developer.studyroom.entity.Studyroom;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,43 +24,46 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "host_user")
 
-@DynamicInsert()  //ColumnDefault때문에
-@DynamicUpdate()
+@DynamicInsert
+@DynamicUpdate
 public class HostUser { 
 	
 	@Id
 	@Column(name="host_id")
 	private String hostId;
 	
-	@Column(name="pwd", nullable = false)
+	@NotNull
+	@Column(name="pwd")
 	private String pwd;
 	
-	@Column(name="num", nullable = false)
+	@NotNull
+	@Column(name="num")
 	private String num;
 	
 	@Column(name="ready")
-	@ColumnDefault(value = "0")
+	@ColumnDefault(value = "0") //0: 승인대기, 1: 승인, 2:탈퇴
 	private Integer ready;
 	
-	@Column(name="name" , nullable = false)
+	@NotNull
+	@Column(name="name")
 	private String name;
 	
-	@Column(name="tel", nullable = false)
+	@NotNull
+	@Column(name="tel")
 	private String tel;
 	
-	@Column(name="email", nullable = false)
+	@NotNull
+	@Column(name="email")
 	private String email;
+
 	
 	
-	
-	@OneToOne(mappedBy = "hostUser")
+	@OneToOne(mappedBy = "hostUser")//, cascade = CascadeType.ALL)//, cascade = CascadeType.REMOVE)
 	private Studyroom studyroom;
-	
 	
 	@OneToMany(mappedBy = "hostUser")
 	private List<Reservation> reservation;

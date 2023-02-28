@@ -14,8 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -25,23 +24,23 @@ import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.userreview.entity.UserReview;
 import com.developer.users.entity.Users;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="APPLIED_LESSON")
 @DynamicInsert @DynamicUpdate
 
-@Getter @NoArgsConstructor 
+@Getter @Setter
+@NoArgsConstructor 
 @SequenceGenerator(
       name ="applySeq", 
       sequenceName ="apply_seq", 
       initialValue = 1, allocationSize = 1 
       )
 public class AppliedLesson {
-
 	@Id
 	@Column(name="apply_seq")
 	@GeneratedValue( 
@@ -52,13 +51,17 @@ public class AppliedLesson {
 	
 	@ColumnDefault(value="SYSDATE")
 	@Column(name = "cdate")
-	@Temporal(TemporalType.DATE)
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	private Date cdate;
 	
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
-	private Integer applyOk;
+	private Integer applyOk; //0미승인 1승인 2승인거절
+	
+	@NotNull
+	@Column(name="tutee_id")
+	private String tuteeId;
+	
+	
 	
 	@ManyToOne
 	@JoinColumn(name="al_lesson_seq")
@@ -68,10 +71,10 @@ public class AppliedLesson {
   				cascade = CascadeType.MERGE)	
 	 private LessonReview lessonReview;
 	
-	 @JoinColumn(name = "al_tutee_id")
-	 @ManyToOne
-	 private Users users;
+	@ManyToOne
+	@JoinColumn(name = "al_user_id")
+	private Users users;
 	
-	 @OneToOne(mappedBy = "alLesson")
-	 private UserReview userReview;
+	@OneToOne(mappedBy = "alLesson")
+	private UserReview userReview;
 }

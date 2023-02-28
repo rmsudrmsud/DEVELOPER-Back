@@ -49,7 +49,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 			+ "		on b.post_seq = r.post_seq"
 			+ "		where b.post_seq= :postSeq", nativeQuery = true)
 	public List<Object[]> findPostSeq(@Param("postSeq") Long postSeq);
-	
+
 	/**
 	 * 게시글목록 작성일 순으로 정렬해서 출력
 	 * @author choigeunhyeong
@@ -76,7 +76,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 			+ "		on users.user_id = board.user_id"
 			+ "		order by cnt desc", nativeQuery = true)
 	public List<Object[]> getBoardByCnt();
-	
+
 	/**
 	 * 게시글목록 추천많은순 순으로 정렬해서 출력
 	 * @author choigeunhyeong
@@ -100,4 +100,14 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 			+ "		cnt+1 where post_seq= :postSeq", nativeQuery = true)
 	public Board updateCnt(@Param("postSeq") Long postSeq);
 
+
+
+	//[SR]메인페이지 - 글작성 최신순으로 list 출력
+	@Query(value="SELECT *"
+			+ "FROM (SELECT b.post_seq, u.nickname, b.category, b.title, b.content, b.img_path, b.c_date, b.recommend, b.cnt "
+			+ "      FROM users u INNER JOIN board b ON u.user_id = b.user_id "
+			+ "      ORDER BY c_date DESC)"
+			+ "WHERE rownum BETWEEN 1 AND 6", nativeQuery = true)
+	public List<Object[]> selectAllByDate();
+	
 }
