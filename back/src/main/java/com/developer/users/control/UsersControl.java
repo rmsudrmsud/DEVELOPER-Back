@@ -33,7 +33,8 @@ public class UsersControl {
 	private UsersRepository usersReporitory;
 	
 	/**
-	 * 로그인 체크
+	 * 로그인 체크 
+	 * @author choigeunhyeong
 	 * @param session
 	 * @return
 	 */

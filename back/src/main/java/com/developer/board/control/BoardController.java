@@ -103,7 +103,6 @@ public class BoardController {
 	 * @author choigeunhyeong
 	 * @return
 	 * @throws FindException
-	 * 필터로 여러가지 순서로보여주게 보완
 	 */
 	@GetMapping(value = "list/{boardType}" // , produces = MediaType.APPLICATION_JSON_VALUE
 			)

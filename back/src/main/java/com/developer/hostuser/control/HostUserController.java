@@ -38,7 +38,6 @@ public class HostUserController {
 	   public ResponseEntity<?> infoHost(String hostId, HttpSession session) throws FindException {
 	      
 	      hostId = "아이디1";
-	       //hostId = (String) session.getAttribute("logined");
 	      if (hostId == null) {
 	         return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
 	      } else {
@@ -48,7 +47,7 @@ public class HostUserController {
 	   }
 	   
 	   /**
-	    * 호스트유저 로그
+	    * 호스트유저 로그인
 	    * @author choigeunhyeong
 	    * @param hostId
 	    * @param pwd

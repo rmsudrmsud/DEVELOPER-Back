@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,6 +25,7 @@ import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.userreview.entity.UserReview;
 import com.developer.users.entity.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,9 +49,13 @@ public class AppliedLesson {
 			generator ="applySeq"  
 		)
 	private Long applySeq;
+	
 	@ColumnDefault(value="SYSDATE")
 	@Column(name = "cdate")
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
 	private Date cdate;
+	
 	@ColumnDefault(value="0")
 	@Column(name="apply_ok")
 	private Integer applyOk;
@@ -61,10 +68,10 @@ public class AppliedLesson {
   				cascade = CascadeType.MERGE)	
 	 private LessonReview lessonReview;
 	
-	@JoinColumn(name = "al_tutee_id")
-	@ManyToOne
-	private Users users;
+	 @JoinColumn(name = "al_tutee_id")
+	 @ManyToOne
+	 private Users users;
 	
-	@OneToOne(mappedBy = "alLesson")
-	private UserReview userReview;
+	 @OneToOne(mappedBy = "alLesson")
+	 private UserReview userReview;
 }

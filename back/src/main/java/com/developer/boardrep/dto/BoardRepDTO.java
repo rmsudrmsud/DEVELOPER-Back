@@ -3,6 +3,7 @@ package com.developer.boardrep.dto;
 
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.developer.board.dto.BoardDTO;
 import com.developer.users.dto.UsersDTO;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class BoardRepDTO {
 	private Long postRepSeq;
 	private String content;
-	private LocalDate cDate;
+	private Date cDate;
 	private BoardDTO boardDTO;
 	private UsersDTO usersDTO;
 	
@@ -27,7 +28,7 @@ public class BoardRepDTO {
 	public static class BoardRepSelectDTO{
 		private Long postRepSeq;
 		private String content;
-		private LocalDate cDate;
+		private Date cDate;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 	
@@ -37,7 +38,7 @@ public class BoardRepDTO {
 	public static class saveBoardRepDTO{
 		private Long postRepSeq;
 		private String content;
-		private LocalDate cDate;
+		private Date cDate;
 		private BoardDTO boardDTO;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}

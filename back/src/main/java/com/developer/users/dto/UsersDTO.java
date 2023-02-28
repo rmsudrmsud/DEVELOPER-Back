@@ -7,6 +7,8 @@ import com.developer.board.dto.BoardDTO;
 import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
+import com.developer.lesson.dto.LessonDTO;
+import com.developer.lessonreview.dto.LessonReviewDTO;
 import com.developer.recommend.dto.RecommendDTO;
 import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
@@ -65,4 +67,17 @@ public class UsersDTO {
 		private String nickname;
 	}
 	
+	@Data
+	@NoArgsConstructor
+	public static class getNameDTO{
+		private String username;
+		private LessonDTO.getLessonNameDTO lessonName;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	public static class getCompletedClassDTO{
+		private String username;
+		private LessonReviewDTO.getReviewList review;
+	}
 }

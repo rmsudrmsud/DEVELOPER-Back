@@ -38,7 +38,7 @@ public class UserReview {
    
    @MapsId(value="applySeqRv")
    @OneToOne(cascade = {CascadeType.REMOVE,CascadeType.MERGE})
-   @JoinColumn(name = "apply_seq_rv")
+   @JoinColumn(name = "apply_seq_rv", nullable=false)
    private AppliedLesson alLesson;
    
 }
