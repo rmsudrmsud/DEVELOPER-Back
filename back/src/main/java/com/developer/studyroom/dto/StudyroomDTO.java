@@ -6,6 +6,7 @@ import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class StudyroomDTO {
@@ -35,6 +36,13 @@ public class StudyroomDTO {
 		this.oc = oc;
 	}
 	
-
+	@Data
+	@NoArgsConstructor
+	public static class getAllStudyroomDTO{
+		private Long srSeq;
+		private String name;
+		private String addr;
+		private HostUserDTO.getAllHostUserDTO hostUser;
+	}
 	
 }

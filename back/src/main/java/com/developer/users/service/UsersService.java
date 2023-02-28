@@ -30,15 +30,13 @@ public class UsersService {
 	 * @return
 	 * @throws FindException
 	 */
-	public UsersDTO userLogin(String userId, String pwd)throws FindException {
+	public UsersDTO.uDTO userLogin(String userId, String pwd) throws FindException {
 		
 		Optional<Users> optU = usersRepository.findById(userId);
-		logger.error("optU : "+optU);
 		if(optU.isPresent()) {
-			Users users = optU.get();
-			logger.error("값"+users);			
-			UsersDTO usersDTO = modelMapper.map(users, UsersDTO.class);
-			if(usersDTO.getPwd().equals(pwd)) {
+			Users users = optU.get();		
+			UsersDTO.uDTO usersDTO = modelMapper.map(users, UsersDTO.uDTO.class);
+			if(usersDTO.getPwd().equals(pwd) && !usersDTO.getRole().equals(3)) {
 				usersDTO.setPwd("");
 				return usersDTO;
 			}else {

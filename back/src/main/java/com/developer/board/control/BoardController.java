@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +14,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.board.dto.BoardDTO;
 import com.developer.board.entity.Board;
+import com.developer.board.repository.BoardRepository;
 import com.developer.board.service.BoardService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
 
 @RestController
@@ -33,18 +34,21 @@ import com.developer.exception.RemoveException;
 public class BoardController {
 	@Autowired
 	private BoardService boardservice;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
 	/**
-	 * 게시판 글 작성 
+	 * 게시판 글 작성
 	 * 
 	 * @author choigeunhyeong
 	 * @param board
 	 * @throws AddException
 	 */
-	@PostMapping(value = "add/{userId}" , produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> addBoard(@RequestBody Board board, @PathVariable String userId, HttpSession session) throws AddException {
-		boardservice.addBoard(board, userId);
+	
+	@PostMapping(value = "add")
+	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session) throws AddException {
+		String logined = (String) session.getAttribute("logined");
+		if(logined == null) { //로그인 안한 경우
+			throw new AddException("로그인하세요");
+		}
+		boardservice.addBoard(saveBoardDTO, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -125,7 +129,7 @@ public class BoardController {
 	 */
 	@PutMapping(value = "updatecnt/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
 			)
-			public ResponseEntity<?> searchBoard(@PathVariable Long postSeq) throws FindException {
+			public ResponseEntity<?> searchBoard(@PathVariable Long postSeq) throws ModifyException {
 			boardservice.updateCnt(postSeq);
 			return new ResponseEntity<>(HttpStatus.OK);
 			}
@@ -138,13 +142,14 @@ public class BoardController {
 	 * @param session
 	 * @return
 	 * @throws FindException
-	 * 수정시 날짜 어떻게 ?
 	 */
-	@PatchMapping(value = "{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> editBoard(@RequestBody Board board, @PathVariable Long postSeq, HttpSession session) throws FindException {
-		boardservice.editBoard(board, postSeq);
+	@PutMapping(value = "{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq) throws ModifyException {
+		boardservice.editBoard(saveBoardDTO, postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	
 	/**
 	 * 게시판 글 삭제
 	 * @author choigeunhyeong

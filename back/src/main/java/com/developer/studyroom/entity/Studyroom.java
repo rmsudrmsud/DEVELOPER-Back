@@ -21,6 +21,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -74,15 +75,16 @@ public class Studyroom {
 		@ColumnDefault(value = "0")
 		private Integer oc;
 		
+		@JsonIgnore
 		@OneToMany(cascade= {CascadeType.REMOVE}, 
 				   mappedBy = "studyroom")
 		private List<RoomInfo> roomInfo;
-		
+		@JsonIgnore
 		@OneToOne(cascade= {CascadeType.MERGE})
 		@JoinColumn(name="host_id", nullable = false)
 		private HostUser hostUser;
 		
-		
+		@JsonIgnore
 		@OneToMany(cascade= {CascadeType.REMOVE}
 		          , mappedBy = "studyroom")
 		private List<FavoritesStudyroom> favoritesStudyroom;

@@ -34,12 +34,12 @@ public class UsersRepositoryTest {
 		Users u = new Users();
 		u.setUserId("test1");
 		u.setRole(1);
-		u.setPwd("4테스트비밀번호");
-		u.setNickname("4테스트닉네임");
-		u.setName("4테스트이름");
-		u.setEmail("4테스트이메일");
-		u.setTel("4테스트전화번호");
-		u.setAddr("4테스트주소");
+		u.setPwd("1234");
+		u.setNickname("테스트닉네임");
+		u.setName("테스트이름");
+		u.setEmail("테스트이메일");
+		u.setTel("테스트전화번호");
+		u.setAddr("테스트주소");
 		uRepository.save(u);
 	}
 	
