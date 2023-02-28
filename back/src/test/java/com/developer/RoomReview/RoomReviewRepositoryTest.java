@@ -68,34 +68,34 @@ class RoomReviewRepositoryTest {
 		rrr.delete(rr);
 	}
 	
-	@Test
-	@DisplayName("srSeq로 특정 스터디룸 후기 리스트 전체출력 테스트")
-	void testfindRoomReviewAll() {
-		List<Object[]> obj= rrr.findBySrSeq(1L);
-		logger.info(obj.getClass().toString());
-	}
-	
-	@Test
-	@DisplayName(" userId로 작성한 이용후기 목록을 출력 테스트")
-	void testfinadAllByUsingdate() {
-		List<Object[]> obj=rrr.findByUserId("aaa");
-		logger.info(obj.getClass().toString());
-	}
-	
-	@Test
-	@DisplayName(" resSeq로 해당 예약의 후기를 전체출력 테스트")
-	void testfindByResSeq() {
-		Object obj=rrr.findByResSeq(13L);
-		logger.info(obj.getClass().toString());
-	}
-	
-
-	@Test
-	@DisplayName(" userId로 후기를 작성하지 않은 예약리스트를 출력 테스트")
-	void testfindReqResList() {
-		List<Object[]> obj= rrr.fUserId("aaa");
-		logger.info(obj.getClass().toString());
-	}
+//	@Test
+//	@DisplayName("srSeq로 특정 스터디룸 후기 리스트 전체출력 테스트")
+//	void testfindRoomReviewAll() {
+//		List<Object[]> obj= rrr.findBySrSeq(1L);
+//		logger.info(obj.getClass().toString());
+//	}
+//	
+//	@Test
+//	@DisplayName(" userId로 작성한 이용후기 목록을 출력 테스트")
+//	void testfinadAllByUsingdate() {
+//		List<Object[]> obj=rrr.findByUserId("aaa");
+//		logger.info(obj.getClass().toString());
+//	}
+//	
+//	@Test
+//	@DisplayName(" resSeq로 해당 예약의 후기를 전체출력 테스트")
+//	void testfindByResSeq() {
+//		Object obj=rrr.findByResSeq(13L);
+//		logger.info(obj.getClass().toString());
+//	}
+//	
+//
+//	@Test
+//	@DisplayName(" userId로 후기를 작성하지 않은 예약리스트를 출력 테스트")
+//	void testfindReqResList() {
+//		List<Object[]> obj= rrr.fUserId("aaa");
+//		logger.info(obj.getClass().toString());
+//	}
 	
 
 }

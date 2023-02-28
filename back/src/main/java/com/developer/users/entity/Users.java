@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,13 +24,12 @@ import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 @DynamicInsert
@@ -40,7 +40,7 @@ public class Users{
 	private String userId;
 	
 	@ColumnDefault(value="2")
-	private Integer role;
+	private Integer role;//1튜터 2튜티 3탈퇴 9관리
 	
 	@Column(nullable = false)
 	private String pwd;
@@ -65,7 +65,6 @@ public class Users{
 	
 	@OneToMany(mappedBy = "users")
 	private List<AppliedLesson> appliedLesson;
-	
 
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
 	private List<Board> board;
@@ -85,5 +84,7 @@ public class Users{
    @OneToMany(cascade=CascadeType.REMOVE, mappedBy = "userId")
    private List<FavoritesStudyroom> favStudyroom;
    
-   }
-
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+   private List<FavoritesStudyroom> favoritesStudyroom;
+     
+ }

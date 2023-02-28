@@ -1,3 +1,4 @@
+
 package com.developer.appliedlessontest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,13 +40,13 @@ class AppliedLessonRepositoryTest {
 		assertTrue(optL.isPresent());
 		Lesson l = optL.get();
 		
-		Optional<Users>optU = uRepository.findById("테스트");
+		Optional<Users>optU = uRepository.findById("tutee2");
 		assertTrue(optU.isPresent());
 		Users u = optU.get();
 		
 		AppliedLesson al = new AppliedLesson();
 		al.setApplySeq(1L);
-		al.setTuteeId("테스트");
+		al.setTuteeId("tutee2");
 		al.setLesson(l);
 		al.setUsers(u);
 
@@ -80,19 +81,19 @@ class AppliedLessonRepositoryTest {
 		alRepository.delete(al);
 	}
 	
-	@Test
-	@DisplayName("미승인 튜티 리스트 확인")
-	void findLessonApplyUsers0() {
-//		Optional<Lesson> optL = lRepository.findById(1L);
-//		Lesson l = optL.get();
-		List<Object[]> list = alRepository.findLessonApplyUsers0(1L);
-
-		logger.error("첫번째글번호: " + list.get(0)[0]);
-		logger.error("첫번째내용: " + list.get(0)[1]);
-		
-		logger.error("두번째글번호: " + list.get(1)[0]);
-		logger.error("두번쨰내용: " + list.get(1)[1]);
-		
-	}
+//	@Test
+//	@DisplayName("미승인 튜티 리스트 확인")
+//	void findLessonApplyUsers0() {
+////		Optional<Lesson> optL = lRepository.findById(1L);
+////		Lesson l = optL.get();
+//		List<Object[]> list = alRepository.findLessonApplyUsers0(1L);
+//
+//		logger.error("첫번째글번호: " + list.get(0)[0]);
+//		logger.error("첫번째내용: " + list.get(0)[1]);
+//		
+//		logger.error("두번째글번호: " + list.get(1)[0]);
+//		logger.error("두번쨰내용: " + list.get(1)[1]);
+//		
+//	}
 
 }

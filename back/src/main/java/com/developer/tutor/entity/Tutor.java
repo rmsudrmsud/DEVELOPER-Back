@@ -1,6 +1,8 @@
 package com.developer.tutor.entity;
 import java.util.List;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,17 +19,16 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.lesson.entity.Lesson;
 import com.developer.users.entity.Users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="TUTOR")
-@DynamicInsert
-@DynamicUpdate
+@DynamicInsert @DynamicUpdate
+
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor 
 public class Tutor {
 	@Id
 	@Column(name="tutor_id")
@@ -41,7 +42,6 @@ public class Tutor {
 	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
 	private Integer applyOk;
 	
-
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
 	
@@ -51,11 +51,5 @@ public class Tutor {
 	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 
-//	@OneToMany(mappedBy = "tutor")
-//	private List<Lesson> lesson;
-//	@OneToMany(mappedBy = "tutor")
-//	private List<AppliedLesson> alLesson;
-	
-	//private UsersVO usersVO;
 
 }

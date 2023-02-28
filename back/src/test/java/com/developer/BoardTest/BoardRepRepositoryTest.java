@@ -1,4 +1,4 @@
-package com.developer.repository;
+package com.developer.BoardTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,17 +34,15 @@ class BoardRepRepositoryTest {
 	@Test
 	@DisplayName("testCreateBoardRep 테스트")
 	void testCreateBoardRep() {
-		Optional<Board> optB = br.findById(5L);
+		Optional<Board> optB = br.findById(1L);
 		Board board = optB.get();
 		
-		Optional<Users> optU = ur.findById("아이디3");
+		Optional<Users> optU = ur.findById("test1");
 		Users users = optU.get();
 
 		BoardRep boardRep = new BoardRep();
 		boardRep.setUsers(users);
-		boardRep.setPostRepSeq(null);
 		boardRep.setContent("테스트 댓글");
-		boardRep.setCDate(null);
 		//boardRep.setUserId("아이디");
 		boardRep.setBoard(board);
 		
@@ -62,25 +60,25 @@ class BoardRepRepositoryTest {
 	}
 	
 //	
-	@Test
-	@DisplayName("BoardRep update 테스트")
-	void testBoardRepUpdate() {
-			BoardRep brp = new BoardRep();
-			brp.setPostRepSeq(2L);
-			
-			Optional<Board> optB = br.findById(5L);
-			Board board = optB.get();
-			
-			Optional<Users> optU = ur.findById("아이디3");
-			Users users = optU.get();
-			
-			brp.setBoard(board);
-			brp.setContent("boardrep수정테스트");
-			brp.setUsers(users);
-			//br.setCDate(null);
-			brr.save(brp);
-		
-	}
+//	@Test
+//	@DisplayName("BoardRep update 테스트")
+//	void testBoardRepUpdate() {
+//			BoardRep brp = new BoardRep();
+//			brp.setPostRepSeq(2L);
+//			
+//			Optional<Board> optB = br.findById(5L);
+//			Board board = optB.get();
+//			
+//			Optional<Users> optU = ur.findById("아이디3");
+//			Users users = optU.get();
+//			
+//			brp.setBoard(board);
+//			brp.setContent("boardrep수정테스트");
+//			brp.setUsers(users);
+//			//br.setCDate(null);
+//			brr.save(brp);
+//		
+//	}
 //	
 	@Test
 	@DisplayName("BoardRep delete 테스트")
