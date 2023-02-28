@@ -22,6 +22,7 @@ public class BoardRepDTO {
 	private BoardDTO boardDTO;
 	private UsersDTO usersDTO;
 	
+	//근
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
@@ -32,6 +33,7 @@ public class BoardRepDTO {
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")

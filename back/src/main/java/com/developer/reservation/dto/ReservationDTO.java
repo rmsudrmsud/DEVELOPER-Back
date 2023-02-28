@@ -22,6 +22,7 @@ public class ReservationDTO {
 	
 	private RoomReview roomReview;
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getReservationDTO{

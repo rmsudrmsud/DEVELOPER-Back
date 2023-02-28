@@ -21,6 +21,7 @@ public class HostUserDTO {
 	private StudyroomDTO studyroom;
 	private ReservationDTO reservation; //원래는 List<>타입
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getAllHostUserDTO{
@@ -31,7 +32,7 @@ public class HostUserDTO {
 		private String name;
 		private String email;
 	}
-	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class HostLoginDTO{

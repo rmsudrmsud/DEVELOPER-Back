@@ -99,7 +99,7 @@ public class BoardController {
 	}
 	
 	/**
-	 * 커뮤니티 메인 글목록 (작성일순)
+	 * 커뮤니티 메인 글목록 (작성일순) boardType 1: 작성일, 2:조회수, 3:추천순
 	 * @author choigeunhyeong
 	 * @return
 	 * @throws FindException
@@ -160,10 +160,7 @@ public class BoardController {
 			)public ResponseEntity<?> deleteBoard(@PathVariable Long postSeq) throws RemoveException {
 				boardservice.deleteBoard(postSeq);
 				return new ResponseEntity<>(HttpStatus.OK);
-		}
-	
-	
-//	
+		}	
 	
 }
 

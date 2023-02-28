@@ -23,6 +23,7 @@ private long roomSeq;
 	private Studyroom studyroom;
 	private List<Reservation> reservation; //원래 List<>타입
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getReservationDTO{

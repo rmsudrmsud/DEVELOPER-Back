@@ -45,7 +45,7 @@ public class UsersDTO {
 		private List<Reservation> reservation;
 		private List<FavoritesStudyroom> favStudyroom;
 	}
-	
+	//근형 : 로그인
 	@Data
 	@NoArgsConstructor
 	public static class uDTO{
@@ -58,7 +58,7 @@ public class UsersDTO {
 		private String tel;
 		private String addr;
 	}
-	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class UsersNameDTO{
@@ -66,14 +66,14 @@ public class UsersDTO {
 		private Integer role;
 		private String nickname;
 	}
-	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getNameDTO{
 		private String username;
 		private LessonDTO.getLessonNameDTO lessonName;
 	}
-	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getCompletedClassDTO{
