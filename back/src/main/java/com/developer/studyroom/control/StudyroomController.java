@@ -138,38 +138,45 @@ public class StudyroomController {
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
+	        // 확장자 추출(ex : .png)
+	        //String extension = origName.substring(origName.lastIndexOf("."));
+
+	        //TODO: 구분자인 srSeq 값 꺼내기 (엔티티 값 찾아오기 ) LAST_INSERT_ID 
+//			Optional<Studyroom> studyroom = studyroomService.
+//	        long srSeq = studyroomDTO.getSrSeq();
+//	        logger.error("값:" +srSeq);
+//	        String convertSrSeq = String.valueOf(srSeq);
+	        
+	        // 결합
+//	        String fName = convertSrSeq + "_" + fOrigin;
+
 			// 파일저장
-			String fileName = fOrigin;
-			File file = new File(saveDirFile, fileName);
-
-			//File copy = new File(dir, UUID.randomUUID() + "_" + fileName);
-			
-			try {
-				Attach.upload(f.getBytes(), file);
-
-				// 섬네일파일 만들기 (비율맞춰서된다!)
-				int width = 300;
-				int height = 300;
-
-				// 원래 첨부파일과 구분짓기 위해
-				String thumbFileName = "thum_" + fileName; // 섬네일파일명
-				File thumbFile = new File(saveDirFile, thumbFileName);
-				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);// 출력스트림
-				InputStream thumbnailIS = f.getInputStream(); // 첨부파일 입력스트림
-
-				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
-				                                  // 읽기       쓰기
-			} catch (IOException e) {
-				e.printStackTrace();
-				logger.error("파일업로드에러");
-				throw new AddException(e.getMessage());
-			}
+//			String fileName = fName;
+//			File file = new File(saveDirFile, fileName);
+//			
+//			try {
+//				Attach.upload(f.getBytes(), file);
+//
+//				// 섬네일파일 만들기 (비율맞춰서된다!)
+//				int width = 300;
+//				int height = 300;
+//
+//				// 원래 첨부파일과 구분짓기 위해
+//				String thumbFileName = "thum_" + fileName; // 섬네일파일명
+//				File thumbFile = new File(saveDirFile, thumbFileName);
+//				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);// 출력스트림
+//				InputStream thumbnailIS = f.getInputStream(); // 첨부파일 입력스트림
+//
+//				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
+//				                                  // 읽기       쓰기
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				logger.error("파일업로드에러");
+//				throw new AddException(e.getMessage());
+//			}
 		}
 		
-			
 			return new ResponseEntity<>(HttpStatus.OK);
-		
-
 	}
 
 	/**
