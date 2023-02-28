@@ -36,6 +36,7 @@ public class StudyroomDTO {
 		this.oc = oc;
 	}
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class getAllStudyroomDTO{

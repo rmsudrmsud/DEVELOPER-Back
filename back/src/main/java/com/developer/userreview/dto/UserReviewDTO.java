@@ -18,6 +18,7 @@ public class UserReviewDTO {
 	private String review;
 	private AppliedLesson alLesson;
 	
+	//근형
 	@Data
 	@DynamicInsert
 	@DynamicUpdate

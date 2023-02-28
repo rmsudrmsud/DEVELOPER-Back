@@ -34,6 +34,13 @@ public class StudyroomController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
+	/**
+	 * 관리자페이지 방상세 페이지
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "detail/{srSeq}")
 	public ResponseEntity<?> detailStudyroom(@PathVariable Long srSeq) throws FindException{
 		Studyroom s = studyroomservice.detailStudyroom(srSeq);

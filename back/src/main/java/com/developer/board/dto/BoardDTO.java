@@ -32,12 +32,11 @@ public class BoardDTO {
 	private Date cDate;
 	private Integer recommend;
 	private Integer cnt;
-//	private Users users;
-	
 	private BoardRepDTO boardRepDTO;
 	private UsersDTO usersDTO;
 	private RecommendDTO recommendDTO;
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -50,12 +49,11 @@ public class BoardDTO {
 		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
-		
-		//private BoardRepDTO boardRepDTO;
 		private BoardRepDTO.BoardRepSelectDTO boardRepSelectDTO;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -71,6 +69,7 @@ public class BoardDTO {
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	} 
 	
+	//근형
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
