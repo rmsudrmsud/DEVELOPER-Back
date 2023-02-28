@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.studyroom.dto.StudyroomDTO;
+import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.service.StudyroomService;
 import com.developer.util.Attach;
 
@@ -121,28 +123,32 @@ public class StudyroomController {
 			                         MultipartFile f) throws AddException {
 		// TODO 시간 정규표현식 설정해보기..프론트단이든...뭐든..
 
-		hostId = "아이디4";
+		hostId = "zaksim1";
 		// String hostId = (String) session.getAttribute("logined");
 		if (hostId == null) {
 			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
 		} 
-		studyroomDTO.setImgPath(f.getOriginalFilename());
-		studyroomService.insertCafe(studyroomDTO, hostId);
 		
-		String saveDirectory = "D:\\dev\\upload";  //각자 주소로!
+		
+		String saveDirectory = "C:\\dev\\studyroom";  //각자 주소로!
 		File saveDirFile = new File(saveDirectory);
-		
+		String fileName;
 		if (f != null && f.getSize() > 0) { // 첨부파일 f1이 전달된 경우만 처리해라!, f1값이 없는경우
 			long fSize = f.getSize(); // 첨부된 파일크기 확인
 			String fOrigin = f.getOriginalFilename(); // 첨부된(업로드된)파일의 이름
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
+			
+			// 구분자 id 추출
+	        //String id = (String) session.getAttribute("logined"); 세션에서 꺼낼경우
+			logger.error("값:"+ hostId);
+	  
+	        //결합
+	        String fName = hostId + "_" + fOrigin;
 
-			// 파일저장
-			String fileName = fOrigin;
+			//파일저장
+			fileName = fName;
 			File file = new File(saveDirFile, fileName);
-
-			//File copy = new File(dir, UUID.randomUUID() + "_" + fileName);
 			
 			try {
 				Attach.upload(f.getBytes(), file);
@@ -152,24 +158,23 @@ public class StudyroomController {
 				int height = 300;
 
 				// 원래 첨부파일과 구분짓기 위해
-				String thumbFileName = "thum_" + fileName; // 섬네일파일명
+				String thumbFileName = "t_" + fileName; // 섬네일파일명
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);// 출력스트림
 				InputStream thumbnailIS = f.getInputStream(); // 첨부파일 입력스트림
 
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
-				                                  // 읽기       쓰기
+				
+				studyroomDTO.setImgPath(fileName);
+				studyroomService.insertCafe(studyroomDTO, hostId);
+				// 읽기       쓰기
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error("파일업로드에러");
 				throw new AddException(e.getMessage());
 			}
 		}
-		
-			
 			return new ResponseEntity<>(HttpStatus.OK);
-		
-
 	}
 
 	/**

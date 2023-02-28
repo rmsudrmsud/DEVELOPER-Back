@@ -33,6 +33,14 @@ public class TutorController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	/**
+	 * 튜터 승인거절
+	 * @author SR
+	 * @param userId
+	 * @param session
+	 * @return
+	 * @throws RemoveException
+	 */
 	@DeleteMapping(value= "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorReject(@PathVariable String userId, HttpSession session) throws RemoveException {
 		service.deleteTutor(userId);

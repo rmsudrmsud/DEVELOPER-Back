@@ -21,7 +21,12 @@ public class TutorService {
 		tRepository.save(tutor);
 	}
 	
-	
+	/**
+	 * 튜터승인거절
+	 * @author SR
+	 * @param userId
+	 * @throws RemoveException
+	 */
 	public void deleteTutor(String userId) throws RemoveException{
 		Optional<Tutor> optT = tRepository.findById(userId);
 		if (optT.isPresent()) {
