@@ -40,4 +40,14 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 //			+ "AND pay_lesson != 2",
 //			nativeQuery = true)
 //	public List<Object[]> selectTutorDetail(@Param("userId") String userId);
+	
+	  @Query(value="   SELECT l.lesson_name"
+		         + "   from LESSON l, TUTOR t, USERS u"
+		         + "   where l.tutor_id = t.tutor_id"
+		         + "   and t.tutor_id = u.user_id"
+		         + "   and u.user_id = :tutorId"
+		         + "   and TO_CHAR(SYSDATE,'yyyymmdd')>l.end_cdate"
+		         + "   order by l.lesson_seq desc",
+		         nativeQuery = true)
+		   public List<Object[]> getLessonByUser3(@Param("tutorId") String tutorId);
 }

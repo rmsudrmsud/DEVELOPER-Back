@@ -33,7 +33,8 @@ public class UsersControl {
 	private UsersRepository usersReporitory;
 	
 	/**
-	 * 로그인 체크
+	 * 로그인 체크 
+	 * @author choigeunhyeong
 	 * @param session
 	 * @return
 	 */
@@ -56,12 +57,11 @@ public class UsersControl {
 	 * @return
 	 * @throws FindException
 	 */
-	@PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "userlogin", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> login(@RequestParam String userId, String pwd, HttpSession session) throws FindException	{
-		UsersDTO usersDTO = service.userLogin(userId, pwd);
+		UsersDTO.uDTO usersDTO = service.userLogin(userId, pwd);
 		session.setAttribute("logined", usersDTO.getUserId());
-		session.setAttribute("logined", usersDTO.getRole());
-		//System.out.println("로그인성공시 sessionid : " + session.getId());
+		session.setAttribute("loginedRole", usersDTO.getRole());
 		logger.info("로그인성공시 sessionid : " + session.getId());
 		return new ResponseEntity<>(usersDTO, HttpStatus.OK);
 	}

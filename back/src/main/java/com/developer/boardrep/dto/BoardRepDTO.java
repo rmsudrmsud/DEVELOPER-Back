@@ -2,6 +2,7 @@ package com.developer.boardrep.dto;
 
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.developer.board.dto.BoardDTO;
@@ -28,6 +29,17 @@ public class BoardRepDTO {
 		private Long postRepSeq;
 		private String content;
 		private Date cDate;
+		private UsersDTO.UsersNameDTO usersNameDTO;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+	public static class saveBoardRepDTO{
+		private Long postRepSeq;
+		private String content;
+		private Date cDate;
+		private BoardDTO boardDTO;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 }

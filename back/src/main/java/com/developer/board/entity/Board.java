@@ -1,6 +1,6 @@
 package com.developer.board.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -68,7 +71,9 @@ public class Board {
 	
 	@Column(name="c_date")
 	@ColumnDefault(value="SYSDATE")
-	private LocalDateTime cDate;
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
+	private Date cDate;
 	
 	@Column(name="recommend")
 	@ColumnDefault(value="0")
@@ -92,7 +97,7 @@ public class Board {
 	private Users users;
 	
 	
-    public Board(Long postSeq, Integer category, String title, String content, String imgPath, LocalDateTime cDate, Integer recommend, Integer cnt) {
+    public Board(Long postSeq, Integer category, String title, String content, String imgPath, Date cDate, Integer recommend, Integer cnt) {
 		this.postSeq=postSeq;
 		this.category=category;
 		this.title = title;
@@ -104,7 +109,7 @@ public class Board {
     }
 	
     @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
-    public void update(String title, String content, String imgPath, LocalDateTime cDate) {
+    public void update(String title, String content, String imgPath, Date cDate) {
         this.title = title;
         this.content = content;
         this.imgPath = imgPath;

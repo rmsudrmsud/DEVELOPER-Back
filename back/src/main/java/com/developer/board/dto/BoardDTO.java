@@ -5,7 +5,8 @@ package com.developer.board.dto;
 
 
 
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -28,7 +29,7 @@ public class BoardDTO {
 	private String title;
 	private String content;
 	private String imgPath;
-	private LocalDateTime cDate;
+	private Date cDate;
 	private Integer recommend;
 	private Integer cnt;
 //	private Users users;
@@ -46,7 +47,7 @@ public class BoardDTO {
 		private String title;
 		private String content;
 		private String imgPath;
-		private LocalDateTime cDate;
+		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
 		
@@ -64,21 +65,22 @@ public class BoardDTO {
 		private String title;
 		private String content;
 		private String imgPath;
-		private LocalDateTime cDate;
+		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	} 
 	
-//	@Data
-//	@NoArgsConstructor
-//	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
-//	public static class BoardEditDTO{
-//		private Long postSeq;
-//		private String title;
-//		private String content;
-//		private String imgPath;
-//		private Date cDate;
-//	}
+	@Data
+	@NoArgsConstructor
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	public static class saveBoardDTO{
+		private Long postSeq;
+		private Integer category;
+		private String title;
+		private String content;
+		private String imgPath;
+		private UsersDTO.UsersNameDTO usersNameDTO;
+	} 
 	
 }

@@ -1,7 +1,7 @@
 
 package com.developer.boardrep.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,8 +24,9 @@ import com.developer.users.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter	@NoArgsConstructor
+@Setter @Getter	@NoArgsConstructor
 @AllArgsConstructor
 
 @Entity
@@ -52,22 +53,14 @@ public class BoardRep {
 
 	@Column(name = "cdate")
 	@ColumnDefault(value="SYSDATE")
-	private LocalDateTime cDate;
+	private Date cDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_seq")
 	private Board board;
-	
-//	@Column(name = "post_seq", nullable = false)
-//	private Integer postSeq;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
-	
-//	@Column(name = "user_id",nullable=false)
-//	private String userId;
-	
 	
 	
 }

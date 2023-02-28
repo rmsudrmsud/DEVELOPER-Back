@@ -15,6 +15,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 	public Optional<Users> findByUserId(String userId);
 	
 	
+	//근형 (사용안할수도)
 	@Query(value="SELECT *"
 			+ "	FROM users"
 			+ "	WHERE"
