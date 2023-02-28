@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 public class FavoritesLessonDTO {
 	
+	 //[JW]
 	@Data
 	@AllArgsConstructor @NoArgsConstructor
 	public static class flListDTO{
@@ -16,7 +17,8 @@ public class FavoritesLessonDTO {
 		
 		private String lessonName;
 	}
-	
+
+	 //[JW]
 	@Data
 	@AllArgsConstructor @NoArgsConstructor
 	public static class favoritesLessonDTO{

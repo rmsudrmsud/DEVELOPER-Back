@@ -1,9 +1,9 @@
 package com.developer.lesson;
 
-import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
+import org.hibernate.type.LocalDateType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -46,28 +46,22 @@ public class LessonRepositoryTest {
 //	@Test
 //	@DisplayName("수업 SELECT 테스트 : 클래스를 개설한 튜터의 후기 목록")
 //	void testSelectAllReview() {		
-<<<<<<< HEAD
-//		List<Object[]> list = lRepository.selectAllReview(1L);
-=======
-//		List<Object[]> list = lRepository.selectAllReview(2L);
->>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
 //		for(int i=0; i<list.size(); i++) {
 //			Object review = list.get(i);
 //			logger.info(review.toString());
 //		}
 //	}
-<<<<<<< HEAD
 	
-	@Test
-	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
-	void testSelectTutorDetail() {		
-		List<Object[]> list = lRepository.selectTutorDetail("test3");
-		for(int i=0; i<list.size(); i++) {
-			Object classList = list.get(i);
-			logger.info(classList.toString());
-		}
-	}
-=======
+//	@Test
+//	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
+//	void testSelectTutorDetail() {		
+//		List<Object[]> list = lRepository.selectTutorDetail("test3");
+//		for(int i=0; i<list.size(); i++) {
+//			Object classList = list.get(i);
+//			logger.info(classList.toString());
+//		}
+//	}
+
 //	
 //	@Test
 //	@DisplayName("수업 SELECT 테스트 : 튜터가 생성한 클래스목록 + 튜터 정보")
@@ -78,7 +72,7 @@ public class LessonRepositoryTest {
 //			logger.info(classList.toString());
 //		}
 //	}
->>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
+
 
 
 	@Test
@@ -87,11 +81,11 @@ public class LessonRepositoryTest {
 		Lesson lesson = new Lesson();
 		lesson.setCategory(1);
 		lesson.setContent("sdfsdsdf");
-		Date date = new Date(2023, 3, 5);
+		LocalDate date = LocalDate.of(2023, 02, 27);
 		lesson.setEndCdate(date);
 		lesson.setEndDate(date);
 		lesson.setImgPath("...");
-		lesson.setLessonName("2번수업.");
+		lesson.setLessonName("1번수업.");
 		lesson.setLessonSeq(124L);
 		lesson.setLocation("..."); 
 		lesson.setPayLesson(0);
@@ -100,7 +94,7 @@ public class LessonRepositoryTest {
 		lesson.setStartCdate(date);
 		lesson.setStartDate(date);
 		
-		Optional<Tutor> t = tRepository.findById("test4");
+		Optional<Tutor> t = tRepository.findById("tutor1");
 		Tutor tutor = t.get();
 		lesson.setTutor(tutor);
 		lRepository.save(lesson);

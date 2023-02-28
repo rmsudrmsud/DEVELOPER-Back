@@ -32,7 +32,13 @@ public class FavoritesLessonService {
 	private final ModelMapper modelMapper;
 	
 
-	//[JW] 나의 수업 즐겨찾기 목록 확인 
+	/**
+	 *  나의 수업 즐겨찾기 목록 확인 
+	 *  @author moonone
+	 * @param userId 사용자아이디 
+	 * @return 즐겨찾기목록
+	 * @throws FindException
+	 */
 	public List<FavoritesLessonDTO.flListDTO> listFavLesson(String userId) throws FindException{
 		List<Object[]> flList = flRepository.listFavLesson(userId);
 		List<FavoritesLessonDTO.flListDTO> flDTOList = new ArrayList<>();
@@ -52,7 +58,14 @@ public class FavoritesLessonService {
 		return flDTOList;
 	}
 	
-	//[JW] 수업 즐겨찾기 추가 
+
+	/**
+	 * 수업즐겨찾기 추가
+	 * @author moonone
+	 * @param flDTO 수업즐겨찾기
+	 * @param lessonSeq 수업번호
+	 * @throws AddException
+	 */
 	public void addFavLesson(FavoritesLessonDTO.favoritesLessonDTO flDTO, Long lessonSeq) throws AddException{
 		Optional<Lesson> l = lRepository.findById(lessonSeq);
 		Lesson lesson = l.get();
@@ -65,7 +78,12 @@ public class FavoritesLessonService {
 		flRepository.save(flEntity);
 	}
 	
-	//[JW] 수업 즐겨찾기 삭제 
+	/**
+	 * 수업 즐겨찾기 삭제 
+	 * @author moonone
+	 * @param favLesSeq 수업즐겨찾기SEQ
+	 * @throws RemoveException 
+	 */
 	public void delFavLesson(Long favLesSeq) throws RemoveException{
 		flRepository.deleteById(favLesSeq);
 	}

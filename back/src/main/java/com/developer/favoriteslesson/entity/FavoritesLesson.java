@@ -11,22 +11,21 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
 import com.developer.users.entity.Users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name="FAVORITES_LESSON")
-@DynamicInsert
+@DynamicInsert @DynamicUpdate
 
-@Setter@Getter @ToString
-@NoArgsConstructor @AllArgsConstructor
+@Setter@Getter 
+@NoArgsConstructor 
 @SequenceGenerator(
 		name ="favLesSeq", 
 		sequenceName ="fav_les_seq", 
@@ -40,6 +39,8 @@ public class FavoritesLesson {
 			generator ="favLesSeq"  
 		)
 	private Long favLesSeq;
+	
+	
 	
 	@ManyToOne
 	@JoinColumn(name="tutee_id")

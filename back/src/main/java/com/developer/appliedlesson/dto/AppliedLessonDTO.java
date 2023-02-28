@@ -2,8 +2,9 @@ package com.developer.appliedlesson.dto;
 
 import java.util.Date;
 
+import com.developer.lesson.dto.LessonDTO;
 import com.developer.lessonreview.dto.LessonReviewDTO;
-import com.developer.users.entity.Users;
+import com.developer.users.dto.UsersDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,6 @@ public class AppliedLessonDTO {
 		private Long applySeq;
 		private Date cdate;
 		private Integer applyOk;
-		private Users users;
 	}
 
 }

@@ -32,11 +32,16 @@ public class FavoritesLessonController {
 	@Autowired
 	FavoritesLessonService service;
 	
-	//[JW] 나의 수업 즐겨찾기 목록 확인 
+	/**
+	 *  나의 수업 즐겨찾기 목록 확인 
+	 *  @author moonone
+	 * @param userId 사용자아이디 
+	 * @return 즐겨찾기목록
+	 * @throws FindException
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(HttpSession session) throws FindException {
-		String logined = "tutee2";
-//		String logined = (String)session.getAttribute("logined");
+		String logined = (String)session.getAttribute("logined");
 		if(logined != null) {
 			List<FavoritesLessonDTO.flListDTO> flDTO = service.listFavLesson(logined);
 			return new ResponseEntity<>(flDTO, HttpStatus.OK);			
@@ -44,7 +49,14 @@ public class FavoritesLessonController {
 		return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);						 
 	}
 	
-	//[JW] 수업 즐겨찾기 추가 
+	
+	/**
+	 * 수업즐겨찾기 추가
+	 * @author moonone
+	 * @param flDTO 수업즐겨찾기
+	 * @param lessonSeq 수업번호
+	 * @throws AddException
+	 */
 	@PostMapping(value="{lessonSeq}")
 	public ResponseEntity<?> add(@RequestBody String requestBody, @PathVariable Long lessonSeq) throws AddException, FindException, JsonMappingException, JsonProcessingException{
 		ObjectMapper mapper = new ObjectMapper();
@@ -52,8 +64,13 @@ public class FavoritesLessonController {
 		service.addFavLesson(flDTO, lessonSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	//[JW] 수업 즐겨찾기 삭제
+
+	/**
+	 * 수업 즐겨찾기 삭제 
+	 * @author moonone
+	 * @param favLesSeq 수업즐겨찾기SEQ
+	 * @throws RemoveException 
+	 */
 	@DeleteMapping(value = "{favLesSeq}")
 	public ResponseEntity<?> del(@PathVariable Long favLesSeq) throws RemoveException, FindException{
 		service.delFavLesson(favLesSeq);

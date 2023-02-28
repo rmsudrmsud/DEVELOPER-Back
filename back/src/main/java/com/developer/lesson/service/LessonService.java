@@ -1,13 +1,13 @@
 package com.developer.lesson.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
@@ -22,19 +22,23 @@ import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.repository.UsersRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class LessonService {	
 	
-	@Autowired
-	private LessonRepository lRepository;
-	@Autowired
-	public TutorRepository tRepository;
-	@Autowired
-	public UsersRepository uRepository;
-    @Autowired
-	private ModelMapper modelMapper;
+	private final LessonRepository lRepository;
+	private final TutorRepository tRepository;
+	private final ModelMapper modelMapper;
 	
-	// [JW] 선택한 클래스에 대한 상세 정보
+	/**
+	 * 선택한 수업에 대한 상세 정보
+	 * @author moonone
+	 * @param lessonSeq 수업번호
+	 * @return 수업 상세정보 + 튜터 정
+	 * @throws FindException
+	 */
 	public LessonDTO.selectDetailDTO selectDetail(Long lessonSeq) throws FindException {
 		Optional<Lesson> optL = lRepository.findById(lessonSeq); //JPA메서드로 원하는 결과값 꺼내
 		Lesson lessonEntity = optL.get(); //결과값 Lesson Entity로 담아주기 
@@ -46,8 +50,15 @@ public class LessonService {
 		return lessonDto;
 	};
 	
-	// [JW] 수업 등록
-	public void addLessonDTO(LessonDTO dto, String userId) throws FindException {
+	/**
+	 * 수업 등록 및 수정
+	 * @author moonone
+	 * @param dto 사용자가 입력한 등록 및 수정 정보값 
+	 * @param userId 사용자 아이디
+	 * @throws FindException
+	 */
+	public void addLessonDTO(LessonDTO dto, String userId) throws FindException {		
+		Optional<Lesson> optl = lRepository.findById(dto.getLessonSeq());
 		Optional<Tutor> optT = tRepository.findById(userId);
 		Tutor tutor = optT.get();
 		Lesson lesson = new Lesson();
@@ -56,83 +67,95 @@ public class LessonService {
 		lesson = lRepository.save(lesson);
 	}
 	
-	// [JW] 튜터가 받은 후기 목록
+	/**
+	 * 튜터가 받은 후기 목록
+	 * @author moonone
+	 * @param lessonSeq 튜터의 수업번호
+	 * @return 후기 목록
+	 * @throws FindException
+	 */
 	public List<LessonDTO.selectAllReviewDTO> selectAllReview(Long lessonSeq) throws FindException{
 		
-		//내가 꺼내고자하는 결과값 = nativeQuery 
-		//이건 Object[] 입니다. 그래서 이걸 내가 만들어낸 DTO로 바꿔서 반환해야하는 거예요.
 		List<Object[]> lList = lRepository.selectAllReview(lessonSeq); 
-		
-		//프론트로 보내 값을 담을 빈 배열 생성. 
-		//타입은 해당 메서드의 반환타입과 동일합니다. 
 		List<LessonDTO.selectAllReviewDTO> dto = new ArrayList<>() ;
 		
-		for(int i=0; i<lList.size(); i++) { //List이기 때문에 for문 안에서 진행되어야 합니다. 
-			
-			/*
-				본인이 만든 DTO에 맞도록 값을 매핑해서 넣어주는 것이 포인트 ***
-				그래서 원하는 값을 매핑할 수 있는 DTO를 생성하고, 거기에 lRepository에서 꺼내온 값을 넣어주는 거예요. 
-				
-				제가 만든 selectAllReviewDTO에는
-				
-						private String lessonName;
-						private List<AppliedLessonDTO> alDTO;
-						private TutorDTO tDTO;
-						
-				다음과 같은 멤버변수가 있어요. 
-				그래서 이제 얘네에 해당하는 DTO를 생성하고, 꺼내온 값을 연결시켜줄겁니다. 
-			 */
-			
-			//반환해줄 DTO
+		for(int i=0; i<lList.size(); i++) { 
+
 			LessonDTO.selectAllReviewDTO lDto = new LessonDTO.selectAllReviewDTO();
-			lDto.setLessonName((String)lList.get(i)[4]); //이거는 바로 DTO에 넣어줄 수 있으니까 바로 set합니다. 
-		
-			//user의 이름을 매핑하기 위한 과정 
-			TutorDTO.tDTO tDto = new TutorDTO.tDTO(); 		//TutorDTO 생성 
-			UsersDTO uDto = new UsersDTO();	//UsersDTO 생성
-			uDto.setName((String)lList.get(i)[5]);  //Object 배열의 5번째 방에 있는 name값을 set 
-			tDto.setUDTO(uDto); // TutorDTO안에 UsersDTO가 있으니까 set으로 넣어주기
+			lDto.setLessonName((String)lList.get(i)[4]);  
+
+			TutorDTO.tDTO tDto = new TutorDTO.tDTO(); 	
+			UsersDTO.uNameDTO uDto = new UsersDTO.uNameDTO();
+			uDto.setName((String)lList.get(i)[5]);  
+			tDto.setUDTO(uDto); 
+			 
+			List<AppliedLessonDTO.alLessonDTO> alList = new ArrayList<>();  
+			AppliedLessonDTO.alLessonDTO alDto = new AppliedLessonDTO.alLessonDTO(); 
+			alDto.setTuteeId((String)lList.get(i)[3]); 
 			
-			//TuteeId를 매핑하기 위한 과정 
-			List<AppliedLessonDTO.alLessonDTO> alList = new ArrayList<>(); 	//List<AppliedLessonDTO> 생성 
-			AppliedLessonDTO.alLessonDTO alDto = new AppliedLessonDTO.alLessonDTO();  	//list 안의 AppliedLessonDTO에 접근
-			alDto.setTuteeId((String)lList.get(i)[3]); //아이디값 넣어주기
-			
-			//나머지 값들을 매핑하기 위한 과정
-			LessonReviewDTO.lrALDTO rDto = new LessonReviewDTO.lrALDTO();	//LessonReviewDTO 생성
-			//Object[]에서 꺼내줘서 Integer로 바로 반환이 안되더라고요. 
-			//BigDecimal로 반환하고 다시 Integer로 형변환 합니다. 
+			LessonReviewDTO.lrALDTO rDto = new LessonReviewDTO.lrALDTO();
 			BigDecimal star = (BigDecimal) lList.get(i)[2];
 			Integer result = star.intValue();
 			rDto.setStar(result);
 			rDto.setReview((String)lList.get(i)[1]);
 			rDto.setCDate((Date)lList.get(i)[0]);
 			
-			alDto.setLrdto(rDto); //값 다 넣었으니까 AppliedLessonDTO에 넣어주기. 
-			
-			//AppliedLessonDTO에 LessonReviewDTO이 들어있으니까 모든게 끝나고 add해줍니다. 
+			alDto.setLrdto(rDto); 
 			alList.add(alDto);
-			
-			//---------------------------------------------------------
-			//값을 다 얻었으면 결과적으로 우리가 반환하고 싶었던 DTO에 set 해줍니다. 
+
 			lDto.setName(tDto.getUDTO().getName());
 			lDto.setAlDTO(alList);
 			
-			//그리고 최종 반환타입이 List니까, 추가적으로 한 번 더 add합니다. 
 			dto.add(lDto);
 			}
-		
-			//왜 이런 짓을 해야하느냐 ?  has-a관계가 너무 ... 얽혀있기 때문.
-		
 		return dto;
 	}
 	
-	// [JW] 튜터가 생성한 클래스 목록 + 튜터 정보
-	public  List<Object[]> selectTutorDetail(String userId) throws FindException{
-		List<Object[]> list = lRepository.selectTutorDetail(userId);
-		return list;
+	/**
+	 * 모든 수업 목록
+	 * @author moonone
+	 * @return 수업 목록
+	 */
+	public List<LessonDTO.allLessonListDTO> allLessonList(){
+		List<Object[]> list = lRepository.selectAllLesson();
+		List<LessonDTO.allLessonListDTO> lesson = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			LessonDTO.allLessonListDTO dto = new LessonDTO.allLessonListDTO();
+			dto.setLessonName((String)list.get(i)[6]);
+			dto.setCategory(((BigDecimal)list.get(i)[1]).intValue());
+			dto.setPayLesson(((BigDecimal)list.get(i)[8]).intValue());
+			dto.setPrice(((BigDecimal)list.get(i)[10]).intValue());
+			dto.setTutorId((String)list.get(i)[13]);
+			lesson.add(dto);
+			}
+		return lesson;
+	}
+
+	/**
+	 * 수업 이름 검색
+	 * @author moonone
+	 * @param searchKeyword 검색할 단어
+	 * @return 해당하는 값 
+	 */
+	public List<LessonDTO.searchLessonDTO> findByLessonNameContaining(String searchKeyword){
+		List<Object[]> list = new ArrayList<>();
+		if(searchKeyword == null) { //전체검색
+			list = lRepository.selectAllLesson();
+		} else { //제목검색 
+			list = lRepository.findByLessonNameContaining(searchKeyword);
+		}
+		List<LessonDTO.searchLessonDTO> lesson = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			LessonDTO.searchLessonDTO dto = new LessonDTO.searchLessonDTO();
+			dto.setLessonName((String)list.get(i)[0]);
+			dto.setCategory(((BigDecimal)list.get(i)[1]).intValue());
+			dto.setImgPath((String)list.get(i)[2]);
+			dto.setStartCdate((LocalDate)list.get(i)[3]);
+			dto.setEndCdate((LocalDate)list.get(i)[4]);
+			dto.setCategory(((BigDecimal)list.get(i)[5]).intValue());
+			lesson.add(dto);
+		}
+		return lesson;
 	}
 	
-	// [JW] 현재 진행 중인 수업 목록 > 카테고리 검색까지는 가능, 필터는 아직
-	// [JW] 수업 이름, 카테고리명, 강사명 검색 > 제목 검색은 가능
 }

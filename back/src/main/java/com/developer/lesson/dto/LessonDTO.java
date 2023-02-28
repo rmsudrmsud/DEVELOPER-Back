@@ -1,6 +1,7 @@
 package com.developer.lesson.dto;
 
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
@@ -10,9 +11,28 @@ import com.developer.tutor.dto.TutorDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Data
+@NoArgsConstructor
 public class LessonDTO {
+	private Long lessonSeq;
+	private String lessonName;
+	private Integer category;
+	private String content;
+	private Integer people;
+	private String imgPath;
+	private LocalDate startCdate;
+	private LocalDate endCdate;
+	private Integer price;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private Integer payLesson;
+	private String location;
+
+	private TutorDTO tDTO;
+	private FavoritesLessonDTO flDTO;
+	private AppliedLessonDTO alDTO;
 	
+	//[JW]
 	@Data
 	@NoArgsConstructor
 	public static class selectDetailDTO{
@@ -22,11 +42,11 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private Date startCdate;
-		private Date endCdate;
+		private LocalDate startCdate;
+		private LocalDate endCdate;
 		private Integer price;
-		private Date startDate;
-		private Date endDate;
+		private LocalDate startDate;
+		private LocalDate endDate;
 		private Integer payLesson;
 		private String location;
 
@@ -44,11 +64,11 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private Date startCdate;
-		private Date endCdate;
+		private LocalDate startCdate;
+		private LocalDate endCdate;
 		private Integer price;
-		private Date startDate;
-		private Date endDate;
+		private LocalDate startDate;
+		private LocalDate endDate;
 		private Integer payLesson;
 		private String location;
 	}
@@ -62,18 +82,19 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private Date startCdate;
-		private Date endCdate;
+		private LocalDate startCdate;
+		private LocalDate endCdate;
 		private Integer price;
-		private Date startDate;
-		private Date endDate;
+		private LocalDate startDate;
+		private LocalDate endDate;
 		private Integer payLesson;
 		private String location;
 
 		private TutorDTO tDTO;
 	}
 
-
+	
+	//[JW]
 	@Data
 	@NoArgsConstructor
 	public static class selectAllReviewDTO{
@@ -87,6 +108,35 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class flListDTO{
 		private String lessonName;
+	}
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class allLessonListDTO{
+		private String lessonName;
+		private Integer category;
+		private Integer payLesson;
+		private Integer price;
+		private String tutorId;
+	}
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class searchLessonDTO{
+		private String lessonName;
+		private Integer category;
+		private String imgPath;
+		private LocalDate startCdate;
+		private LocalDate endCdate;
+		private Integer price;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	public static class applyLessonDTO{
+		private Long lessonSeq;
 	}
 	
 

@@ -15,21 +15,19 @@ import javax.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.lesson.entity.Lesson;
 import com.developer.users.entity.Users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="TUTOR")
-@DynamicInsert
-@DynamicUpdate
+@DynamicInsert @DynamicUpdate
+
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor 
 public class Tutor {
 	@Id
 	@Column(name="tutor_id")
@@ -42,6 +40,8 @@ public class Tutor {
 	private Double starAvg;
 	@Column(name="apply_ok")
 	private Integer applyOk;
+	
+	
 	
 	@MapsId("tutorId")
 	@OneToOne(optional = true, 

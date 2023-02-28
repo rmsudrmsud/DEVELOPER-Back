@@ -2,10 +2,7 @@ package com.developer.tutor.dto;
 
 import java.util.List;
 
-import com.developer.appliedlesson.dto.AppliedLessonDTO;
-import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.lesson.dto.LessonDTO;
-import com.developer.lesson.entity.Lesson;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
 
@@ -22,10 +19,11 @@ public class TutorDTO {
 		private Double starAvg;
 		private Integer applyOk;
 		
-		private UsersDTO uDTO;
+		private UsersDTO.uNameDTO uDTO;
 		private List<LessonDTO> lDTO;
 	}
 	
+	//[JW]
 	@Data
 	@NoArgsConstructor
 	public static class saveTutorDTO{
@@ -34,5 +32,21 @@ public class TutorDTO {
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
+		
+		private Users users;
 	}
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class selectTutorDetailDTO{
+		private String info;
+		private String imgPath;
+		private Double starAvg;
+		private String name;
+		
+		private List<LessonDTO.onlyLessonDTO> lesson;
+	}
+	
+	
 }

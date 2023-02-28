@@ -41,6 +41,8 @@ public class LessonReview {
 	@Column(name="star", nullable = false)
 	private Integer star;	
 	
+	
+	
 	@MapsId("applySeq")
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="apply_seq", nullable = true)

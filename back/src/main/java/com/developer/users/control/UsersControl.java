@@ -1,5 +1,8 @@
-package com.developer.users.control;
+ package com.developer.users.control;
 
+
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,9 +64,9 @@ public class UsersControl {
 	 */
 	@PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> login(@RequestParam String userId, String pwd, HttpSession session) throws FindException	{
-		UsersDTO usersDTO = service.userLogin(userId, pwd);
+		UsersDTO.uDTO usersDTO = service.userLogin(userId, pwd);
 		session.setAttribute("logined", usersDTO.getUserId());
-		session.setAttribute("logined", usersDTO.getRole());
+//		session.setAttribute("logined", usersDTO.getRole());
 		//System.out.println("로그인성공시 sessionid : " + session.getId());
 		logger.info("로그인성공시 sessionid : " + session.getId());
 		return new ResponseEntity<>(usersDTO, HttpStatus.OK);
@@ -77,5 +83,29 @@ public class UsersControl {
 		logger.info("로그아웃시 sessionid : " + session.getId());
 		session.invalidate();
 		return "";
+	}
+	
+	/**
+	 * [관리자] 수업을 예약한 튜티 목록
+	 * @author moonone
+	 * @param lessonSeq 수업번호
+	 * @return 튜티목록
+	 */
+	@GetMapping(value="{lessonSeq}")
+	public ResponseEntity<?> applyTuteeList(@PathVariable Long lessonSeq){
+		List<UsersDTO.uNameDTO> list = service.applyTuteeList(lessonSeq);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	/**
+	 * [관리자] 수업을 예약한 튜티 삭제
+	 * @author moonone
+	 * @param lessonSeq 수업번호
+	 * @return 튜티목록
+	 */
+	@DeleteMapping(value="{lessonSeq}")
+	public ResponseEntity<?> deleteTutee(@PathVariable Long lessonSeq, @RequestParam String tuteeId){
+		service.deleteTutee(tuteeId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

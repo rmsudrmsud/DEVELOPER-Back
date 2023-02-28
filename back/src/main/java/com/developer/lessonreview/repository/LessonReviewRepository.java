@@ -10,6 +10,7 @@ import com.developer.lessonreview.entity.LessonReview;
 
 public interface LessonReviewRepository extends CrudRepository<LessonReview, Long> {
 	
+	//[JW]
 	@Query(nativeQuery = true,
 				 value = "select * from applied_lesson al\n"
 				 		+ "INNER JOIN lesson_review lr\n"
@@ -17,6 +18,7 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 				 		+ "WHERE lr.apply_seq = :applySeq")
 	public List<LessonReview> findAllById(@Param("applySeq") Long applySeq);
 	
+	//[JW]
 	@Query(value = "	SELECT COUNT(*)\n"
 			+ "FROM lesson_review lr\n"
 			+ "LEFT OUTER JOIN applied_lesson al\n"
@@ -26,6 +28,7 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 			+ "WHERE l.tutor_id = :tutorId", nativeQuery = true)
 	public int cntLReview(@Param("tutorId") String tutorId);
 	
+	//[JW]
 	@Query(value = "SELECT lr.review, lr.star, u.name "
 			+ "FROM lesson_review lr "
 			+ "LEFT OUTER JOIN applied_lesson al "
@@ -36,18 +39,20 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 					nativeQuery = true)
 	public List<Object[]> listLRList(@Param("tuteeId") String tuteeId);
 	
-	@Query(value = "SELECT a.apply_seq, l.lesson_name "
-			+ "FROM applied_lesson a "
-			+ "INNER JOIN lesson l "
-			+ "ON a.al_lesson_seq = l.lesson_seq "
-			+ "WHERE a.user_id = :userId MINUS "
-			+ "SELECT a.apply_seq, l.lesson_name "
-			+ "FROM lesson_review lr "
-			+ "INNER JOIN applied_lesson a "
-			+ "ON lr.apply_seq = a.apply_seq "
-			+ "INNER JOIN lesson l "
-			+ "ON a.al_lesson_seq = l.lesson_seq "
-			+ "where a.user_id = :userId",
+	//[JW]
+	@Query(value = "SELECT al.apply_seq, l.lesson_name\n"
+			+ "FROM applied_lesson al\n"
+			+ "INNER JOIN lesson l\n"
+			+ "ON al.al_lesson_seq = l.lesson_seq\n"
+			+ "WHERE al.al_tutee_id = :userId\n"
+			+ "MINUS\n"
+			+ "SELECT al.apply_seq, l.lesson_name\n"
+			+ "FROM lesson_review lr\n"
+			+ "INNER JOIN applied_lesson al\n"
+			+ "ON lr.apply_seq = al.apply_seq\n"
+			+ "INNER JOIN lesson l\n"
+			+ "ON al.al_lesson_seq = l.lesson_seq\n"
+			+ "where al.al_tutee_id = :userId",
 					nativeQuery = true)
 	public List<Object[]> noWriteLReview(@Param("userId") String userId);
 

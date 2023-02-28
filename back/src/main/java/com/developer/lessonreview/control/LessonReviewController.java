@@ -25,26 +25,58 @@ public class LessonReviewController {
 	@Autowired
 	private LessonReviewService service;
 	
-	//[JW] 튜터의 수업에 대한 후기 작성  및 수정
-	@PostMapping
+
+	/**
+	 *  튜터의 수업에 대한 후기 추가 및 수정
+	 *  @author moonone
+	 * @param lrDTO 작성한 후기
+	 * @throws FindException
+	 */
+	@PostMapping(value = "review")
 	public ResponseEntity<?> addReview(@RequestBody LessonReviewDTO.lrDTO lrDTO) throws AddException, FindException{
 		service.addReview(lrDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	//[JW] 해당 튜터의 후기 개수
+	/**
+	 *  해당 튜터의 후기 개수
+	 * @param tutorId 튜티아이디
+	 * @return 개수
+	 * @throws FindException
+	 */
 	@GetMapping(value = "{tutorId}")
 	public ResponseEntity<?> cntReview(@PathVariable String tutorId) throws FindException{		
 		int cnt = service.cntReview(tutorId);
 		return new ResponseEntity<>(cnt, HttpStatus.OK);
 	}
 	
-	//[JW] 작성한 후기 목록 확인  
-	@GetMapping
+
+	/**
+	 * 작성한 후기 목록 확인  
+	 * @author moonone
+	 * @param userId 사용자아이디
+	 * @return 후기목록
+	 * @throws FindException
+	 */
+	@GetMapping(value="lesson")
 	public ResponseEntity<?> lReviewList(HttpSession session) throws FindException{
-		String logined = "tutee2";
-//		String logined = (String)session.getAttribute("logined");
+		String logined = (String)session.getAttribute("logined");
 		List<LessonReviewDTO.listLRListDTO> list	= service.lReviewList(logined);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+
+	/**
+	 * 후기를 작성하지 않은 수업 목록 확인
+	 * @author moonone
+	 * @param userId 사용자아이디 
+	 * @return 수업목록
+	 * @throws FindException
+	 */
+	@GetMapping
+	public ResponseEntity<?> noWriteLReview(HttpSession session) throws FindException{
+		String logined = (String)session.getAttribute("logined");
+		List<LessonReviewDTO.noWriteLReviewDTO> list	= service.noWriteLReview(logined);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 

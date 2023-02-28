@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class LessonReviewDTO {
 	
+	//[JW]
 	@Data
 	@NoArgsConstructor
 	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
@@ -31,11 +32,20 @@ public class LessonReviewDTO {
 		private Integer star;	
 	}
 	
+	//[JW]
 	@Data
 	@NoArgsConstructor
 	public static class listLRListDTO{
 		private String review;
 		private Integer star;	
 		private String name;
+	}
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class noWriteLReviewDTO{
+		private Long applySeq;
+		private String lessonName;
 	}
 }

@@ -10,12 +10,17 @@ import com.developer.appliedlesson.entity.AppliedLesson;
 
 public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Long> {
 
+	//[JW]
 	@Query(nativeQuery =  true,
 				value = "select * from applied_lesson al\n"
 						+ "INNER JOIN lesson l\n"
 						+ "ON al.al_lesson_seq = l.lesson_seq\n"
 						+ "WHERE l.lesson_seq = :lessonSeq")
 	public List<AppliedLesson> findByAlLessonSeq(@Param("lessonSeq") Long lessonSeq);
+
+	//[JW]	
+	public AppliedLesson findByTuteeId(String tuteeId);
+
 
 
 }

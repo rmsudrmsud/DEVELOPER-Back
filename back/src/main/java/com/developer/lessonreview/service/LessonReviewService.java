@@ -31,7 +31,12 @@ public class LessonReviewService {
 	UsersRepository uRepository;
 
 
-	//[JW] 튜터의 수업에 대한 후기 추가 및 수정
+	/**
+	 *  튜터의 수업에 대한 후기 추가 및 수정
+	 *  @author moonone
+	 * @param lrDTO 작성한 후기
+	 * @throws FindException
+	 */
 	public void addReview(LessonReviewDTO.lrDTO lrDTO) throws FindException {
     	Optional<LessonReview> lr = lrRepository.findById(lrDTO.getApplySeq());
     	LessonReview lessonReview = new LessonReview();
@@ -55,13 +60,25 @@ public class LessonReviewService {
 	}
 
 	
-	//[JW] 해당 튜터의 후기 개수
+	/**
+	 *  해당 튜터의 후기 개수
+	 * @param tutorId 튜티아이디
+	 * @return 개수
+	 * @throws FindException
+	 */
 	public int cntReview(String tutorId) throws FindException{
 		int cnt = lrRepository.cntLReview(tutorId);
 		return cnt;
 	}
 	
-	//[JW] 작성한 후기 목록 확인  
+
+	/**
+	 * 작성한 후기 목록 확인  
+	 * @author moonone
+	 * @param userId 사용자아이디
+	 * @return 후기목록
+	 * @throws FindException
+	 */
 	public List<LessonReviewDTO.listLRListDTO> lReviewList(String userId) throws FindException{
 		List<Object[]> list = lrRepository.listLRList(userId);
 		List<LessonReviewDTO.listLRListDTO> result = new ArrayList<>();
@@ -78,10 +95,24 @@ public class LessonReviewService {
 		return result;
 	}
 	
-	//[JW] 후기를 작성하지 않은 수업 목록 확인
-	public List<Object[]> noWriteLReview(String userId) throws FindException{
+	/**
+	 * 후기를 작성하지 않은 수업 목록 확인
+	 * @author moonone
+	 * @param userId 사용자아이디 
+	 * @return 수업목록
+	 * @throws FindException
+	 */
+	public List<LessonReviewDTO.noWriteLReviewDTO> noWriteLReview(String userId) throws FindException{
 		List<Object[]> list = lrRepository.noWriteLReview(userId);
-		return list;
+		List<LessonReviewDTO.noWriteLReviewDTO> result = new ArrayList<>();
+		
+		for(int i=0; i<list.size(); i++) {
+			LessonReviewDTO.noWriteLReviewDTO dto = new LessonReviewDTO.noWriteLReviewDTO();
+			dto.setApplySeq(((BigDecimal)list.get(i)[0]).longValue());
+			dto.setLessonName((String)list.get(i)[1]);
+			result.add(dto);
+			}
+		return result;
 	}
 
 }
