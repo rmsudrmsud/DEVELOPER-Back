@@ -7,7 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 
-public class myApplicationContext2 {
+public class myApplicationContext {
 	
 	@Bean
 	public HikariConfig hikariConfig() {
