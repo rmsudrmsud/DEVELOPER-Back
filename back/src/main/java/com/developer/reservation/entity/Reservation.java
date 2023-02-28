@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,7 +24,6 @@ import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
 import com.developer.users.entity.Users;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,14 +53,14 @@ public class Reservation {
 
 	@ManyToOne
 	@JoinColumn(name="user_id")
-	private Users userId;
+	private Users users;
 	
 	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="host_id", nullable = false)
+	@JoinColumn(name ="host_id")
 	private HostUser hostUser; 
 	
 	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="room_seq", nullable = false)
+	@JoinColumn(name ="room_seq")
 	private RoomInfo roominfo;
 	
 	@Column(name = "start_time", nullable = false)
@@ -68,7 +69,7 @@ public class Reservation {
 	@Column(name = "end_time", nullable = false)
 	private String endTime;
 	
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
+	@Temporal(TemporalType.DATE)
 	@Column(name = "using_date")
 	private Date usingDate;
 	

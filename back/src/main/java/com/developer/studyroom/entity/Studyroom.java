@@ -49,22 +49,22 @@ public class Studyroom {
 	)
 	private long srSeq;
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false,length = 200)
 	private String name;
 
-	@Column(name = "addr", nullable = false)
+	@Column(name = "addr", nullable = false,length = 200)
 	private String addr;
 
-	@Column(name = "info")
+	@Column(name = "info",length = 2000)
 	private String info;
 
-	@Column(name = "open_time", nullable = false)
+	@Column(name = "open_time", nullable = false,length = 100)
 	private String openTime;
 
-	@Column(name = "end_time", nullable = false)
+	@Column(name = "end_time", nullable = false,length = 100)
 	private String endTime;
 
-	@Column(name = "img_path", nullable = false)
+	@Column(name = "img_path", nullable = false,length = 200)
 	private String imgPath;
 
 	@Column(name = "oc")
@@ -74,8 +74,8 @@ public class Studyroom {
 	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "studyroom")
 	private List<RoomInfo> roomInfo;
 
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinColumn(name = "host_id", nullable = false)
+	@OneToOne(cascade = { CascadeType.MERGE})
+	@JoinColumn(name = "host_id",nullable = false)
 	private HostUser hostUser;
 
 	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "studyroom")

@@ -1,6 +1,7 @@
 package com.developer.board.entity;
 
 
+
 import java.util.Date;
 import java.util.List;
 

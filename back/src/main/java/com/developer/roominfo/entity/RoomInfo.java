@@ -18,6 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.reservation.entity.Reservation;
 import com.developer.studyroom.entity.Studyroom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,13 +52,13 @@ public class RoomInfo {
 			)
 	private long roomSeq;
 	
-	@Column(name="name", nullable = false)
+	@Column(name="name", nullable = false,length = 100)
 	private String name;
 	
-	@Column(name="info", nullable = false)
+	@Column(name="info", nullable = false,length = 300)
 	private String info;
 	
-	@Column(name="img_path", nullable = false)
+	@Column(name="img_path", nullable = false,length = 300)
 	private String imgPath;
 	
 	@Column(name="person", nullable = false)

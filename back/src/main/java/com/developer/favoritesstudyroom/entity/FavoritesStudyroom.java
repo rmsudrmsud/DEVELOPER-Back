@@ -36,7 +36,7 @@ public class FavoritesStudyroom {
 
    @ManyToOne
    @JoinColumn(name = "user_id")
-   private Users userId;
+   private Users users;
 
    @ManyToOne(cascade = {CascadeType.MERGE })
    @JoinColumn(name = "sr_seq")

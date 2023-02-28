@@ -24,7 +24,7 @@ public class BoardService {
 	
 	/**[메인페이지] 글작성 최신순으로 list를 출력한다.
 	 * @author SR
-	 * @return List<BoardDTO>
+	 * @return List<BoardDTO> 글목록
 	 * @throws FindException
 	 */
 	public List<BoardDTO.selectAllBydateBoardDTO> listByDate() throws FindException{

@@ -17,6 +17,7 @@ import com.developer.exception.FindException;
 @RestController
 @RequestMapping("board/*")
 public class BoardController {
+	
 	@Autowired
 	private BoardService boardService;
 	
@@ -28,7 +29,11 @@ public class BoardController {
 	@GetMapping(value="listbydate", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> listBoardByDate() throws FindException {
 		List<BoardDTO.selectAllBydateBoardDTO> list = boardService.listByDate();
-		return new ResponseEntity<>(list, HttpStatus.OK);
+		if(list.isEmpty()) {
+			return new ResponseEntity<>("작성된 게시글이 없습니다.", HttpStatus.BAD_REQUEST);
+		}else {
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
 	}
 	
 }

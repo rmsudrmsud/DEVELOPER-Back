@@ -2,8 +2,10 @@ package com.developer.hostuser.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -34,34 +36,33 @@ import lombok.Setter;
 public class HostUser { 
 	
 	@Id
-	@Column(name="host_id")
+	@Column(name="host_id",length = 100)
 	private String hostId;
 	
-	@Column(name="pwd", nullable = false)
+	@Column(name="pwd", nullable = false,length = 100)
 	private String pwd;
 	
-	@Column(name="num", nullable = false)
+	@Column(name="num", nullable = false,length = 100)
 	private String num;
 	
 	@Column(name="ready")
 	@ColumnDefault(value = "0")
 	private Integer ready;
 	
-	@Column(name="name" , nullable = false)
+	@Column(name="name" , nullable = false,length = 100)
 	private String name;
 	
-	@Column(name="tel", nullable = false)
+	@Column(name="tel", nullable = false,length = 200)
 	private String tel;
 	
-	@Column(name="email", nullable = false)
+	@Column(name="email", nullable = false,length = 200)
 	private String email;
-	
-	
-	
-	@OneToOne(mappedBy = "hostUser")
+
+	@OneToOne(mappedBy = "hostUser")//, cascade = CascadeType.ALL)//, cascade = CascadeType.REMOVE)
 	private Studyroom studyroom;
-	
 	
 	@OneToMany(mappedBy = "hostUser")
 	private List<Reservation> reservation;
+
+	
 }
