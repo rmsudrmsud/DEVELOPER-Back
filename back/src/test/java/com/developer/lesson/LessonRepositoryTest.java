@@ -62,6 +62,12 @@ public class LessonRepositoryTest {
 			logger.info(classList.toString());
 		}
 	}
+	
+	@Test
+	@DisplayName("가보자고")
+	void testselectDetail() {
+		List<Object[]> list = lRepository.getLessonDetail(1L);
+	}
 
 
 	@Test
@@ -75,7 +81,7 @@ public class LessonRepositoryTest {
 		lesson.setEndDate(date);
 		lesson.setImgPath("...");
 		lesson.setLessonName("2번수업.");
-		lesson.setLessonSeq(124L);
+		lesson.setLessonSeq(1L);
 		lesson.setLocation("..."); 
 		lesson.setPayLesson(0);
 		lesson.setPeople(10);

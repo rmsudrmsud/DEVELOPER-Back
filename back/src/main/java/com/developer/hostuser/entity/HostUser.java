@@ -28,9 +28,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "host_user")
-
-@DynamicInsert()  //ColumnDefault때문에
-@DynamicUpdate()
+@DynamicInsert  //ColumnDefault때문에
+@DynamicUpdate
 public class HostUser { 
 	
 	@Id
