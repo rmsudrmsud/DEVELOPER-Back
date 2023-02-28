@@ -32,7 +32,7 @@ class StudyroomRepositoryTest {
 	@Test
 	@DisplayName("Studyroom insert() 테스트")
 	void testSave() {
-		Optional<HostUser>optH =hur.findById("아이디3");
+		Optional<HostUser>optH =hur.findById("아이디1");
 		assertTrue(optH.isPresent());
 		HostUser h = optH.get();
 		Studyroom s = new Studyroom();

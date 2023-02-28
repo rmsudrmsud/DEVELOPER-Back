@@ -74,10 +74,10 @@ public class Users{
    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
    private List<Recommend> recommend;
    
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
    private List<Reservation> reservation;
    
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userId")
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
    private List<FavoritesStudyroom> favoritesStudyroom;
    
 

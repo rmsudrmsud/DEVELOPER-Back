@@ -1,98 +1,128 @@
 package com.developer.reservation.service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.FindException;
-import com.developer.hostuser.entity.HostUser;
+import com.developer.exception.RemoveException;
 import com.developer.hostuser.repository.HostUserRepository;
+import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.entity.Reservation;
 import com.developer.reservation.repository.ReservationRepository;
-import com.developer.roominfo.entity.RoomInfo;
+import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.repository.RoomInfoRepository;
-import com.developer.users.entity.Users;
+import com.developer.users.dto.UsersDTO;
 import com.developer.users.repository.UsersRepository;
 
 @Service
 public class ReservationService {
 	@Autowired
 	ReservationRepository rRepository;
+	@Autowired
 	private UsersRepository uRepository;
 	@Autowired
 	private RoomInfoRepository roomRepository;
-	
 	@Autowired
 	private HostUserRepository hRepository;
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	//예약하기
-	public void insertRv(String userId, String hostId, Long roomSeq, String usingDate, String startTime, String endTime) throws FindException {
-		Reservation r = new Reservation();
-		Optional<Users> optU = uRepository.findById(userId);
-		Users u = optU.get();
-		r.setUserId(u);
-		Optional<HostUser> optH = hRepository.findById(hostId);
-		HostUser hu= optH.get();
-		r.setHostUser(hu);
-		Optional<RoomInfo> optR= roomRepository.findById(roomSeq);
-		RoomInfo ri = optR.get();
-		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		Date date;
-		try {
-			date = format.parse(usingDate);
-			r.setUsingDate(date);
-			r.setRoominfo(ri);
-			r.setStartTime(startTime);
-			r.setEndTime(endTime);
-			rRepository.save(r);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	/**
+	 * 해당 스터디카페의 모든 예약내역을 출력한다(목록)
+	 * @author SR
+	 * @param hostId
+	 * @return
+	 * @throws FindException
+	 */
+	public List<ReservationDTO.selectAllReservationDTO> selectAllReservation(String hostId) throws FindException {
+		List<Object[]> rList = rRepository.selectAllReservation(hostId);
+		System.err.println("값"+rList.size());
+		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
+		for (int i = 0; i < rList.size(); i++) {
+			ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
+			BigDecimal resSeq = (BigDecimal) rList.get(i)[0];
+			long convertResSeq = resSeq.longValue();
+			rDto.setResSeq(convertResSeq);
+			rDto.setUserId((String) rList.get(i)[2]);
+			rDto.setHostId((String) rList.get(i)[4]);
+
+			//logger.error("값"+rList.get(i)[5].getClass().getName());
+			rDto.setUsingDate((Date) rList.get(i)[5]);
+			rDto.setStartTime((String) rList.get(i)[6]);
+			rDto.setEndTime((String) rList.get(i)[7]);
+			RoomInfoDTO.selectAllReservationDTO roomDto = new RoomInfoDTO.selectAllReservationDTO();
+			roomDto.setName((String) rList.get(i)[1]);
+
+			UsersDTO.selectAllReservationDTO uDto = new UsersDTO.selectAllReservationDTO();
+			uDto.setName((String) rList.get(i)[3]);
+
+			rDto.setUsersDTO(uDto);
+			rDto.setRoomInfoDTO(roomDto);
+
+			rListDto.add(rDto);
 		}
+		return rListDto;
+	}
+
+	/**
+	 * 예약내역 1건을 출력한다.
+	 * @author SR
+	 * @param resSeq
+	 * @return
+	 * @throws FindException
+	 */
+	public List<ReservationDTO.selectAllReservationDTO> infoReservation(long resSeq) throws FindException {
+		//Optional<ReservationDTO.selectAllReservationDTO> optR= rRepository.selectReservation(resSeq);
+		List<Object[]> rList = rRepository.selectReservation(resSeq);
+		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
+			
+		for(int i=0; i<rList.size(); i++) {
+			ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
+			BigDecimal resSeq1 = (BigDecimal) rList.get(i)[0];
+			long convertSeq = resSeq1.longValue();
+			rDto.setResSeq(convertSeq);
+			rDto.setUserId((String)rList.get(i)[1]);
+			rDto.setUsingDate((Date)rList.get(i)[5]);
+			rDto.setStartTime((String)rList.get(i)[6]);
+			rDto.setEndTime((String)rList.get(i)[7]);
+			rDto.setHostId((String)rList.get(i)[8]);
+			
+			UsersDTO.selectAllReservationDTO uDto = new UsersDTO.selectAllReservationDTO();
+			uDto.setName((String)rList.get(i)[2]);
+			uDto.setTel((String)rList.get(i)[3]);
+			
+			RoomInfoDTO.selectAllReservationDTO riDto = new RoomInfoDTO.selectAllReservationDTO();
+			riDto.setName((String)rList.get(i)[4]);
+			
+			rDto.setUsersDTO(uDto);
+			rDto.setRoomInfoDTO(riDto);
+			
+			rListDto.add(rDto);
 		}
-	
-	//예약시퀀스로 예약상세 검색
-	public Reservation selectReservation(Long resSeq)throws FindException{
-		Optional<Reservation> optR=rRepository.findById(resSeq);
-		
-		return optR.get();
-		
+		return rListDto;
 	}
-	
-	//특정날짜에 예약가능한지 확인(룸시퀀스와 예약날짜)
-	public List<Object[]> selectAllByUsingDate(Long roomSeq, String usingDate) throws FindException, ParseException{
-		 SimpleDateFormat formatter = new SimpleDateFormat("yy/MM/dd");
-		 Date date=formatter.parse(usingDate);
-		List<Object[]> list= rRepository.findAllByUsingDate(roomSeq, date);
-		return list;
+	 
+	/**
+	 * 예약내역 1건을 삭제한다.
+	 * @author SR
+	 * @param resSeq
+	 * @throws RemoveException
+	 */
+	public void deleteReservation(long resSeq) throws RemoveException {
+		 Optional<Reservation> optR = rRepository.findById(resSeq);
+		if (optR.isPresent()) {
+			Reservation entityR = optR.get();
+			rRepository.delete(entityR);
+		} else {
+			throw new RemoveException("잘못된 예약번호입니다.");
+		}
 	}
-	
-	//유저아이디로 예약내역 찾기
-	public List<Object[]> selectMyResHistory(String userId)throws FindException{
-		List<Object[]> list = rRepository.findByUserId(userId);
-		return list;
-	}
-	
-	//예약삭제
-	public void deleteRv(Long resSeq)throws FindException {
-		rRepository.deleteById(resSeq);
-	}
-	
-	//호스트 아이디로 해당 스터디카페의 예약내역 전체출력
-	public Reservation[] selectByHostId(String hostId)throws FindException{
-		Optional<HostUser> optH = hRepository.findById(hostId);
-		HostUser hu=optH.get();
-		Reservation[] r = rRepository.findByhostUser(hu.getHostId());
-		return r;
-	}
-	
-	
-	
-	
+
 }
