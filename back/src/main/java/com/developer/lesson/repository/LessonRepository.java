@@ -9,39 +9,8 @@ import org.springframework.data.repository.query.Param;
 import com.developer.lesson.entity.Lesson;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
-	
-//    @Query("select DISTINCT l from Lesson l join fetch l.alList ")
-//    List<Lesson> findAll();
-//    
-//	@Query(value = "SELECT lr.cdate, lr.review, lr.star, al.user_id, l.lesson_name, u.name\n"
-//			+ "FROM users u\n"
-//			+ "INNER JOIN applied_lesson al\n"
-//			+ "ON al.tutor_id = u.user_id\n"
-//			+ "INNER JOIN lesson l\n"
-//			+ "ON al.al_lesson_seq = l.lesson_seq\n"
-//			+ "INNER JOIN lesson_review lr\n"
-//			+ "ON lr.apply_seq = al.apply_seq\n"
-//			+ "WHERE l.lesson_seq = :lessonSeq", 
-//				nativeQuery = true)
-//	public List<Object[]> selectAllReview(@Param("lessonSeq") Long lessonSeq);
-//	
-//	
-//	@Query(value="SELECT \n"
-//			+ "	l.lesson_seq, l.lesson_name, l.category, l.content, l.people, l.img_path, l.start_cdate, l.end_cdate,\n"
-//			+ "	l.price, l.start_date, l.end_date, l.location,\n"
-//			+ "	t.info, t.img_path AS tutorImg, t.star_avg,\n"
-//			+ "	u.name\n"
-//			+ "FROM lesson l\n"
-//			+ "INNER JOIN tutor t\n"
-//			+ "ON l.tutor_id = t.user_id\n"
-//			+ "INNER JOIN users u \n"
-//			+ "ON t.user_id = u.user_id\n"
-//			+ "WHERE l.tutor_id = :userId \n"
-//			+ "AND pay_lesson != 2",
-//			nativeQuery = true)
-//	public List<Object[]> selectTutorDetail(@Param("userId") String userId);
-	
-	  @Query(value="   SELECT l.lesson_name"
+	@Query(value="   SELECT l.lesson_name"
+
 		         + "   from LESSON l, TUTOR t, USERS u"
 		         + "   where l.tutor_id = t.tutor_id"
 		         + "   and t.tutor_id = u.user_id"
@@ -50,4 +19,41 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 		         + "   order by l.lesson_seq desc",
 		         nativeQuery = true)
 		   public List<Object[]> getLessonByUser3(@Param("tutorId") String tutorId);
+
+	//[JW]
+    @Query("select DISTINCT l from Lesson l join fetch l.alList ")
+    public List<Lesson> findAll();
+    
+	//[JW]
+    @Query(nativeQuery = true,
+    			 	value = "SELECT lr.cdate AS cDate, lr.review AS review, lr.star AS star, al.tutee_id AS tuteeId, l.lesson_name AS lessonName, u.name AS name "
+    			 	+ "FROM users u "
+    			 	+ "INNER JOIN applied_lesson al "
+    			 	+ "ON al.tutee_id = u.user_id "
+    			 	+ "INNER JOIN lesson l "
+    			 	+ "ON al.al_lesson_seq = l.lesson_seq "
+    			 	+ "INNER JOIN lesson_review lr "
+    			 	+ "ON lr.apply_seq = al.apply_seq "
+    			 	+ "WHERE l.lesson_seq = :lessonSeq")
+	public List<Object[]> selectAllReview(@Param("lessonSeq") Long lessonSeq);
+	
+	//[JW]
+	@Query(nativeQuery = true,
+					value ="SELECT * FROM LESSON "
+							+ "ORDER BY lesson_seq DESC ")
+	public List<Object[]> selectAllLesson();
+	
+	//[JW]
+	public List<Object[]> findByLessonNameContaining(String searchKeyword);
+
+	//[SR]메인페이지 - 신청종료일 임박순으로 list 출력
+	@Query(value = "SELECT *"
+			+ "FROM (SELECT lesson_seq, lesson_name, img_path, price"
+			+ "                FROM lesson"
+			+ "                WHERE pay_lesson != 2"
+			+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD')"
+			+ "                ORDER BY end_date ASC)"
+			+ "WHERE rownum BETWEEN 1 AND 4", nativeQuery = true)
+	public List<Object[]> selectAllBydateLesson();
+	
 }

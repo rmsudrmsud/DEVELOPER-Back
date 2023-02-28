@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 
+
 public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Long> {  
 	
 	//근형 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록
@@ -31,4 +32,16 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
 			+ "and u.user_id = :userId "
 			+ "order by l.lesson_seq desc", nativeQuery= true)
 	public List<Object[]> selectCompletedClassList(@Param("userId") String userId);
+
+	//[JW]
+	@Query(nativeQuery =  true,
+				value = "select * from applied_lesson al\n"
+						+ "INNER JOIN lesson l\n"
+						+ "ON al.al_lesson_seq = l.lesson_seq\n"
+						+ "WHERE l.lesson_seq = :lessonSeq")
+	public List<AppliedLesson> findByAlLessonSeq(@Param("lessonSeq") Long lessonSeq);
+
+	//[JW]	
+	public AppliedLesson findByTuteeId(String tuteeId);
+
 }

@@ -1,7 +1,6 @@
 package com.developer.board.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,15 +24,16 @@ import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
+import com.developer.users.repository.UsersRepository;
 
 @Service
 public class BoardService {
 	@Autowired
-	private BoardRepository BoardRepository;
-
+	private BoardRepository bRepository;
+	@Autowired
+	private UsersRepository uRepository;
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
-
 	/**
 	 * 게시글 작성
 	 * 
@@ -50,7 +50,7 @@ public class BoardService {
 		board.setContent(saveBoardDTO.getContent());
 		board.setImgPath(saveBoardDTO.getImgPath());
 		board.setUsers(writer);
-		BoardRepository.save(board);
+		bRepository.save(board);
 
 	}
 	/**
@@ -60,7 +60,7 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public List<BoardDTO.getBoardByBoardTypeDTO> getBoardByC_date() throws FindException {
-		List<Object[]> Blist = BoardRepository.getBoardByC_date();
+		List<Object[]> Blist = bRepository.getBoardByC_date();
 		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
 		for (int i = 0; i < Blist.size(); i++) {
 			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
@@ -101,7 +101,7 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public List<BoardDTO.getBoardByBoardTypeDTO> getBoardByRecommend() throws FindException {
-		List<Object[]> Blist = BoardRepository.getBoardByRecommend();
+		List<Object[]> Blist = bRepository.getBoardByRecommend();
 		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
 		for (int i = 0; i < Blist.size(); i++) {
 			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
@@ -142,7 +142,7 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public List<BoardDTO.getBoardByBoardTypeDTO> getBoardByCnt() throws FindException {
-		List<Object[]> Blist = BoardRepository.getBoardByCnt();
+		List<Object[]> Blist = bRepository.getBoardByCnt();
 		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
 		for (int i = 0; i < Blist.size(); i++) {
 			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
@@ -221,7 +221,7 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public List<BoardDTO.BoardAllSelectDTO> selectAllPostSeq(Long postSeq) throws FindException {
-		List<Object[]> Blist = BoardRepository.findPostSeq(postSeq);
+		List<Object[]> Blist = bRepository.findPostSeq(postSeq);
 		List<BoardDTO.BoardAllSelectDTO> dto = new ArrayList<>();
 		for (int i = 0; i < Blist.size(); i++) {
 			BoardDTO.BoardAllSelectDTO bDTO = new BoardDTO.BoardAllSelectDTO();
@@ -272,7 +272,7 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public getBoardByBoardTypeDTO detailBoard(Long postSeq) throws FindException {
-		Object[] obj = BoardRepository.detailBoard(postSeq);
+		Object[] obj = bRepository.detailBoard(postSeq);
 		logger.error("대체뭔데: " + obj.length);
 		getBoardByBoardTypeDTO dto = new getBoardByBoardTypeDTO();
 
@@ -305,14 +305,14 @@ public class BoardService {
 	 */
 	@Transactional
 	public void editBoard(BoardDTO.saveBoardDTO boardDTO, Long postSeq) throws ModifyException{
-	    Optional<Board> optB = BoardRepository.findById(postSeq);
+	    Optional<Board> optB = bRepository.findById(postSeq);
 
 	    if (optB.isPresent()) {
 	    	Board b = optB.get();
 	    	b.setTitle(boardDTO.getTitle());
 	    	b.setContent(boardDTO.getContent());
 	    	b.setImgPath(boardDTO.getImgPath());
-	    	BoardRepository.save(b);
+	    	bRepository.save(b);
 	    } else {
 	        throw new ModifyException("정상적인 수정이 되지 않았습니다.");
 	    }
@@ -328,7 +328,7 @@ public class BoardService {
 
 	@Transactional
 	public void updateCnt(Long postSeq) throws ModifyException {
-		Optional<Board> optB = BoardRepository.findById(postSeq);
+		Optional<Board> optB = bRepository.findById(postSeq);
 		if (optB.isPresent()) {
 			Integer oldcnt = optB.get().getCnt();
 			optB.get().setCnt(oldcnt + 1);
@@ -346,9 +346,9 @@ public class BoardService {
 	 * @throws RemoveException
 	 */
 	public void deleteBoard(Long postSeq) throws RemoveException {
-		Optional<Board> optB = BoardRepository.findById(postSeq);
+		Optional<Board> optB = bRepository.findById(postSeq);
 		if (optB.isPresent()) {
-			BoardRepository.deleteById(postSeq);
+			bRepository.deleteById(postSeq);
 		} else {
 			 throw new RemoveException("정상적인 삭제가 되지 않았습니다.");
 		}
@@ -363,8 +363,47 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	public List<Board> findByTitle(String title) throws FindException {
-		List<Board> list = BoardRepository.findByTitleLike(title);
+		List<Board> list = bRepository.findByTitleLike(title);
 		return list;
+	}
+	/**[메인페이지] 글작성 최신순으로 list를 출력한다.
+	 * @author SR
+	 * @return List<BoardDTO> 글목록
+	 * @throws FindException
+	 */
+	public List<BoardDTO.selectAllBydateBoardDTO> listByDate() throws FindException{
+		List<Object[]> bList =  bRepository.selectAllByDate();
+		
+		List<BoardDTO.selectAllBydateBoardDTO> bListDto = new ArrayList<>() ;
+		
+		for(int i=0; i<bList.size(); i++) {
+		
+			BoardDTO.selectAllBydateBoardDTO bDto = new BoardDTO.selectAllBydateBoardDTO();
+			BigDecimal postSeq = (BigDecimal) bList.get(i)[0];
+			long convertSeq = postSeq.longValue();
+			bDto.setPostSeq(convertSeq);
+			BigDecimal category = (BigDecimal) bList.get(i)[2];
+			int convertCate = category.intValue();
+			bDto.setCategory(convertCate);
+			bDto.setTitle((String)bList.get(i)[3]);
+			bDto.setContent((String)bList.get(i)[4]);
+			bDto.setImgPath((String)bList.get(i)[5]);
+			bDto.setCDate((Date)bList.get(i)[6]);
+			BigDecimal recommend = (BigDecimal) bList.get(i)[7];
+			int convertRec = recommend.intValue();
+			bDto.setRecommend(convertRec);
+			BigDecimal cnt = (BigDecimal) bList.get(i)[8];
+			int convertCnt = cnt.intValue();
+			bDto.setCnt(convertCnt);
+			
+			UsersDTO.selectAllBydateBoardDTO uDto = new UsersDTO.selectAllBydateBoardDTO();
+			uDto.setNickname((String)bList.get(i)[1]);
+			
+			bDto.setUsersDTO(uDto);
+			bListDto.add(bDto);
+		}
+		return bListDto;	
+
 	}
 
 }
