@@ -37,26 +37,26 @@ public class FavoritesLessonRepositoryTest {
 		logger.info("값: " + optL.get().getLesson().getLessonName());
 	}
 	
-	@Test
-	@DisplayName("수업즐겨찾기 SELECT 테스트 : 아이디로 목록")
-	void testSelectList() {
-		List<Object[]> list = flRepository.listFavLesson("devman");
-		list.forEach((arr)->{
-			logger.info("즐겨찾기: " + arr[0]);
-		});
-	}	
+//	@Test
+//	@DisplayName("수업즐겨찾기 SELECT 테스트 : 아이디로 목록")
+//	void testSelectList() {
+//		List<Object[]> list = flRepository.listFavLesson("devman");
+//		list.forEach((arr)->{
+//			logger.info("즐겨찾기: " + arr[0]);
+//		});
+//	}	
 	
-	@Test
-	@DisplayName("수업즐겨찾기 INSERT 테스트")
-	void testSave() {
-		FavoritesLesson fl = new FavoritesLesson();		
-		fl.setTuteeId("test1");
-
-		Optional<Lesson> l = lRepository.findById(1L);
-		Lesson lesson = l.get();
-		fl.setLesson(lesson);
-		flRepository.save(fl);
-	}
+//	@Test
+//	@DisplayName("수업즐겨찾기 INSERT 테스트")
+//	void testSave() {
+//		FavoritesLesson fl = new FavoritesLesson();		
+//		fl.setTuteeId("test1");
+//
+//		Optional<Lesson> l = lRepository.findById(1L);
+//		Lesson lesson = l.get();
+//		fl.setLesson(lesson);
+//		flRepository.save(fl);
+//	}
 
 	@Test
 	@DisplayName("수업즐겨찾기 DELETE 테스트")

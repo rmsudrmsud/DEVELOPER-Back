@@ -1,6 +1,8 @@
 package com.developer.reservation.entity;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,27 +16,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
 import com.developer.users.entity.Users;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor
+@Setter @Getter @NoArgsConstructor 
 @Entity
 @Table(name = "RESERVATION")
-@DynamicInsert
-@DynamicUpdate
-
 @SequenceGenerator(
 name =
 "RES_SEQ_GENERATOR", // 사용할 sequence 이름
@@ -54,29 +51,34 @@ public class Reservation {
 	@JoinColumn(name="user_id")
 	private Users userId;
 	
-	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="host_id", nullable = false)
-	private HostUser hostUser; 
-	
-	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="room_seq", nullable = false)
-	private RoomInfo roominfo;
-	
-	@Column(name = "start_time", nullable = false)
+	@NotNull
+	@Column(name = "start_time")
 	private String startTime;
 	
-	@Column(name = "end_time", nullable = false)
+	@NotNull
+	@Column(name = "end_time")
 	private String endTime;
 	
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd", timezone = "Asia/Seoul")
+	@NotNull
+	@Temporal(TemporalType.DATE)
 	@Column(name = "using_date")
 	private Date usingDate;
 	
 	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
 	private RoomReview roomReview;
-
+	
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private Users users;
+	
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="host_id")
+	private HostUser hostUser; 
+	
+	@ManyToOne//(cascade= {CascadeType.MERGE})
+	@JoinColumn(name ="room_seq")
+	private RoomInfo roominfo;
 
 
 }
-
 

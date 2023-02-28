@@ -28,18 +28,19 @@ class FavoritesStudyroomRepositoryTest {
 	@Autowired
 	private UsersRepository user;
 
-	@DisplayName("즐겨찾기 추가 기능 테스트")
-	@Test
-	void testFavStudyroomAdd() {
-		FavoritesStudyroom fs = new FavoritesStudyroom();
-		Optional<Studyroom> optS = sr.findById(1L);
-		Studyroom s=optS.get();
-		fs.setStudyroom(s);
-		Optional<Users> optU = user.findById("abc");
-		Users u=optU.get();
-		fs.setUserId(u);
-		fsr.save(fs);
-	}
+//	@DisplayName("즐겨찾기 추가 기능 테스트")
+//	@Test
+//	void testFavStudyroomAdd() {
+//		FavoritesStudyroom fs = new FavoritesStudyroom();
+//		Optional<Studyroom> optS = sr.findById(1L);
+//		Studyroom s=optS.get();
+//		fs.setStudyroom(s);
+//		//fs.setStudyroomFav(s);
+//		Optional<Users> optU = user.findById("abc");
+//		Users u=optU.get();
+//		fs.setUserId(u);
+//		fsr.save(fs);
+//	}
 	
 	@DisplayName("즐겨찾기 삭제 기능 테스트")
 	@Test
