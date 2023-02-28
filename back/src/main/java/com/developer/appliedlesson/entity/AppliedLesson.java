@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import com.developer.lesson.dto.LessonDTO;
 import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.userreview.entity.UserReview;
@@ -26,6 +27,7 @@ import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,7 +37,7 @@ import lombok.Setter;
 @DynamicInsert
 
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
 @SequenceGenerator(
       name ="applySeq", 
@@ -67,11 +69,12 @@ public class AppliedLesson {
 	@OneToMany(mappedBy = "alLesson")
 	private List<LessonReview> lrList;
 	
-	@JoinColumn(name = "al_tutee_id")
+	@JoinColumn(name = "al_user_id")
 	@ManyToOne
 	private Users users;
 	
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
-   
+
+
 }
