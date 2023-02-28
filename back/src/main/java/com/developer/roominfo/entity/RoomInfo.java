@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,9 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.reservation.entity.Reservation;
 import com.developer.studyroom.entity.Studyroom;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +27,6 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "room_info")
@@ -52,32 +50,36 @@ public class RoomInfo {
 			)
 	private long roomSeq;
 	
-	@Column(name="name", nullable = false,length = 100)
+	@NotNull
+	@Column(name="name")
 	private String name;
 	
-	@Column(name="info", nullable = false,length = 300)
+	@NotNull
+	@Column(name="info")
 	private String info;
 	
-	@Column(name="img_path", nullable = false,length = 300)
+	@NotNull
+	@Column(name="img_path")
 	private String imgPath;
 	
-	@Column(name="person", nullable = false)
+	@NotNull
+	@Column(name="person")
 	private Integer person;
 	
-	@Column(name="price", nullable = false)
+	@NotNull
+	@Column(name="price")
 	private Integer price;
 	
 	@Column(name="status")
-	@ColumnDefault(value = "0")
+	@ColumnDefault(value = "0") //0: 활성화, 1: 비활성화(삭제)
 	private Integer status;
 
+	
 	
 	@ManyToOne//(cascade= {CascadeType.MERGE})
 	@JoinColumn(name="sr_seq", nullable = false)
 	private Studyroom studyroom;
 	
-	
 	@OneToMany(mappedBy = "roominfo")
 	private List<Reservation> reservation;
-
 }

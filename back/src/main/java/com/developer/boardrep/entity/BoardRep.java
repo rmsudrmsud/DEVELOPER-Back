@@ -1,8 +1,6 @@
-
 package com.developer.boardrep.entity;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,21 +11,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import com.developer.board.entity.Board;
 import com.developer.users.entity.Users;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter @Getter	@NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "board_rep")
@@ -48,27 +43,21 @@ public class BoardRep {
 			)
 	private Long postRepSeq;
 
-	@Column(name = "content",nullable=false)
+	@NotNull
+	@Column(name = "content")
 	private String content;
 
 	@Column(name = "cdate")
 	@ColumnDefault(value="SYSDATE")
 	private Date cDate;
 	
+	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_seq")
 	private Board board;
 	
-//	@Column(name = "post_seq", nullable = false)
-//	private Integer postSeq;
-
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
-	
-//	@Column(name = "user_id",nullable=false)
-//	private String userId;
-	
-	
-	
 }

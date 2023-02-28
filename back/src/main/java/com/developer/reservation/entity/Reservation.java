@@ -16,21 +16,18 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
 import com.developer.users.entity.Users;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor
+@Setter @Getter @NoArgsConstructor 
 @Entity
 @Table(name = "RESERVATION")
 @DynamicInsert
@@ -51,6 +48,24 @@ public class Reservation {
 			"RES_SEQ_GENERATOR") 
 	private Long resSeq;
 
+	@NotNull
+	@Column(name = "start_time")
+	private String startTime;
+	
+	@NotNull
+	@Column(name = "end_time")
+	private String endTime;
+	
+	@NotNull
+	@Temporal(TemporalType.DATE)
+	@Column(name = "using_date")
+	private Date usingDate;
+	
+	
+	
+	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+	private RoomReview roomReview;
+	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private Users users;
@@ -62,20 +77,6 @@ public class Reservation {
 	@ManyToOne//(cascade= {CascadeType.MERGE})
 	@JoinColumn(name ="room_seq")
 	private RoomInfo roominfo;
-	
-	@Column(name = "start_time", nullable = false)
-	private String startTime;
-	
-	@Column(name = "end_time", nullable = false)
-	private String endTime;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "using_date")
-	private Date usingDate;
-	
-	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-	private RoomReview roomReview;
-
 
 }
 

@@ -1,7 +1,6 @@
 package com.developer.studyroom.entity;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,17 +12,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +26,6 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "studyroom")
@@ -39,8 +33,8 @@ import lombok.Setter;
 		sequenceName = "SR_SEQ", // 실제 데이터베이스 sequence 이름
 		initialValue = 1, allocationSize = 1)
 
-@DynamicInsert() // ColumnDefault때문에
-@DynamicUpdate()
+@DynamicInsert
+@DynamicUpdate
 public class Studyroom {
 
 	@Id
@@ -49,28 +43,35 @@ public class Studyroom {
 	)
 	private long srSeq;
 
-	@Column(name = "name", nullable = false,length = 200)
+	@NotNull
+	@Column(name = "name")
 	private String name;
 
-	@Column(name = "addr", nullable = false,length = 200)
+	@NotNull
+	@Column(name = "addr")
 	private String addr;
 
-	@Column(name = "info",length = 2000)
+	@Column(name = "info")
 	private String info;
 
-	@Column(name = "open_time", nullable = false,length = 100)
+	@NotNull
+	@Column(name = "open_time")
 	private String openTime;
 
-	@Column(name = "end_time", nullable = false,length = 100)
+	@NotNull
+	@Column(name = "end_time")
 	private String endTime;
 
-	@Column(name = "img_path", nullable = false,length = 200)
+	@NotNull
+	@Column(name = "img_path")
 	private String imgPath;
 
 	@Column(name = "oc")
-	@ColumnDefault(value = "0")
+	@ColumnDefault(value = "0") //0: 오픈, 1: 마감
 	private Integer oc;
 
+	
+	
 	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "studyroom")
 	private List<RoomInfo> roomInfo;
 
