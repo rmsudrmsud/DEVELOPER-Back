@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
@@ -16,60 +17,33 @@ import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UsersService {
 
-	private final UsersRepository usersRepository;
-	private final AppliedLessonRepository alRepository;
-	private final ModelMapper modelMapper;
+	@Autowired
+	private UsersRepository uRepository;
+	private AppliedLessonRepository alRepository;
+	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	ModelMapper modelMapper = new ModelMapper();
 	
 	/**
-	 * 로그인 
-	 * @author choigeunhyeong
+	 * user 객체 1개를 출력한다
+	 * @author SR
 	 * @param userId
-	 * @param pwd
 	 * @return
 	 * @throws FindException
 	 */
-	public UsersDTO.uDTO userLogin(String userId, String pwd) throws FindException {
-		
-		Optional<Users> optU = usersRepository.findById(userId);
-		logger.error("optU : "+optU);
-		if(optU.isPresent()) {
-			Users users = optU.get();
-			logger.error("값"+users);			
-			UsersDTO.uDTO usersDTO = modelMapper.map(users, UsersDTO.uDTO.class);
-			if(usersDTO.getPwd().equals(pwd)) {
-				usersDTO.setPwd("");
-				return usersDTO;
-			}else {
-				throw new FindException("실패");
-			}
-		}
-		else {
-			throw new FindException("로그인 실패");
+	public UsersDTO selectUsers(String userId) throws FindException {
+		Optional<Users> optU = uRepository.findById(userId);
+		if (optU.isPresent()) {
+			Users entityU = optU.get();
+			UsersDTO usersDTO = modelMapper.map(entityU, UsersDTO.class);
+			return usersDTO;
+		} else {
+			throw new FindException("해당 ID가 존재하지 않습니다.");
 		}
 	}
-	
-	/**
-	 * 회원정보 찾기
-	 * @author choigeunhyeong
-	 * @param id
-	 * @return
-	 * @throws FindException
-	 */
-	public Users findById(String userId)throws FindException{
-		Optional<Users> optU= usersRepository.findById(userId);
-		if(optU.isPresent()) {
-			return optU.get();
-		}
-		throw new FindException("아이디에 해당하는 고객이 없습니다");
-	}
-	
 	
 	/**
 	 * [관리자] 수업을 예약한 튜티 목록
@@ -78,7 +52,7 @@ public class UsersService {
 	 * @return 튜티목록
 	 */
 	public List<UsersDTO.uNameDTO> applyTuteeList(Long lessonSeq) {
-		 List<Object> list = usersRepository.applyTuteeList(lessonSeq);
+		 List<Object> list = uRepository.applyTuteeList(lessonSeq);
 		 List<UsersDTO.uNameDTO> uDTO = new ArrayList<>();
 		 for(int i=0; i<list.size(); i++) {
 			 UsersDTO.uNameDTO dto = new UsersDTO.uNameDTO();
@@ -98,5 +72,42 @@ public class UsersService {
 	public void deleteTutee(String tuteeId) {
 		AppliedLesson al = alRepository.findByTuteeId(tuteeId);
 		alRepository.delete(al);
+	}
+
+	/**
+	 * 튜터로 승인한다.
+	 * @author SR
+	 * @param userId
+	 * @throws FindException
+	 */
+	public void tutorApply(String userId) throws FindException {
+		UsersDTO usersDTO = this.selectUsers(userId);
+		usersDTO.setRole(1);
+		Users EntityU = modelMapper.map(usersDTO, Users.class);
+		uRepository.save(EntityU);
+	}
+	
+
+	/**
+	 * 튜터 미승인 목록을 출력한다.
+	 * @author SR
+	 * @return
+	 * @throws FindException
+	 */
+	public List<UsersDTO.unapproveTutorDTO> selectAllUnapproveTutor() throws FindException{
+		List<Object[]> uList = uRepository.selectAllUnapproveTutor();
+		
+		List<UsersDTO.unapproveTutorDTO> uListDto = new ArrayList<>();
+		for(int i=0; i<uList.size(); i++) {
+			UsersDTO.unapproveTutorDTO uDto = new UsersDTO.unapproveTutorDTO();
+			uDto.setUserId((String)uList.get(i)[0]);
+			uDto.setName((String)uList.get(i)[1]);
+			uDto.setNickname((String)uList.get(i)[2]);
+			uDto.setEmail((String)uList.get(i)[3]);
+			uDto.setTel((String)uList.get(i)[4]);
+			
+			uListDto.add(uDto);
+		}
+		return uListDto;
 	}
 }

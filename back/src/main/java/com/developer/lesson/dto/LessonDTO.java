@@ -1,6 +1,5 @@
 package com.developer.lesson.dto;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.tutor.dto.TutorDTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +31,11 @@ public class LessonDTO {
 	private TutorDTO tDTO;
 	private FavoritesLessonDTO flDTO;
 	private AppliedLessonDTO alDTO;
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class selectDetailDTO{
+	public static class selectDetailDTO {
 		private Long lessonSeq;
 		private String lessonName;
 		private Integer category;
@@ -57,7 +57,7 @@ public class LessonDTO {
 
 	@Data
 	@NoArgsConstructor
-	public static class onlyLessonDTO{
+	public static class onlyLessonDTO {
 		private Long lessonSeq;
 		private String lessonName;
 		private Integer category;
@@ -75,7 +75,7 @@ public class LessonDTO {
 
 	@Data
 	@NoArgsConstructor
-	public static class addLessonDTO{
+	public static class addLessonDTO {
 		private Long lessonSeq;
 		private String lessonName;
 		private Integer category;
@@ -93,38 +93,37 @@ public class LessonDTO {
 		private TutorDTO tDTO;
 	}
 
-	
-	//[JW]
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class selectAllReviewDTO{
+	public static class selectAllReviewDTO {
 		private String lessonName;
 		private String name;
-		
+
 		private List<AppliedLessonDTO.alLessonDTO> alDTO;
 	}
-	
+
 	@Data
 	@NoArgsConstructor
-	public static class flListDTO{
+	public static class flListDTO {
 		private String lessonName;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class allLessonListDTO{
+	public static class allLessonListDTO {
 		private String lessonName;
 		private Integer category;
 		private Integer payLesson;
 		private Integer price;
 		private String tutorId;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class searchLessonDTO{
+	public static class searchLessonDTO {
 		private String lessonName;
 		private Integer category;
 		private String imgPath;
@@ -132,12 +131,22 @@ public class LessonDTO {
 		private LocalDate endCdate;
 		private Integer price;
 	}
-	
+
 	@Data
 	@NoArgsConstructor
-	public static class applyLessonDTO{
+	public static class applyLessonDTO {
 		private Long lessonSeq;
 	}
-	
+
+	// SR
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllBydateLessonDTO {
+		private Long lessonSeq;
+		private String lessonName;
+		private String imgPath;
+		private Integer price;
+	}
 
 }

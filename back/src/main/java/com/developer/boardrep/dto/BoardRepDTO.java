@@ -1,7 +1,6 @@
 package com.developer.boardrep.dto;
 
 
-
 import java.util.Date;
 
 import com.developer.board.dto.BoardDTO;
@@ -18,8 +17,8 @@ public class BoardRepDTO {
 	private Long postRepSeq;
 	private String content;
 	private Date cDate;
-	private BoardDTO boardDTO;
-	private UsersDTO usersDTO;
+	private BoardDTO bDTO;
+	private UsersDTO uDTO;
 	
 	@Data
 	@NoArgsConstructor
@@ -31,3 +30,4 @@ public class BoardRepDTO {
 		private UsersDTO.UsersNameDTO usersNameDTO;
 	}
 }
+

@@ -88,12 +88,11 @@ public class Users{
 		   cascade = CascadeType.REMOVE)
    private List<Recommend> recommend;
    
-   @OneToMany(mappedBy="userId",
-		   cascade = CascadeType.REMOVE)
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
    private List<Reservation> reservation;
    
-	@OneToMany(mappedBy = "users")
-	private List<FavoritesLesson> favoritesLesson;
+   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+   private List<FavoritesStudyroom> favoritesStudyroom;
    
    @OneToMany(mappedBy = "userId",
 		   cascade=CascadeType.REMOVE)

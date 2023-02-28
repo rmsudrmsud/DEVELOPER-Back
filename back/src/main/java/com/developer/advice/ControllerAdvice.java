@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
@@ -28,29 +29,40 @@ public class ControllerAdvice {
 		System.out.println("---------------findControllerAdvice----------------");
 		return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-	//예외처리용 부가로직 
-	@ExceptionHandler(AddException.class)
-	@ResponseBody
-	public ResponseEntity<?> addExceptionHandler(AddException e){
-		System.out.println("======AddException, ControllerAdvice=======");
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json;charset-UTF-8"); //한글깨짐방지를 위해 HttpHeader설정
-		e.printStackTrace();
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
 	
-	//예외처리용 부가로직 
 	@ExceptionHandler(RemoveException.class)
 	@ResponseBody
-	public ResponseEntity<?> RemoveExceptionHandler(FindException e){
-		System.out.println("======RemoveException, ControllerAdvice=======");
+	public ResponseEntity<?> RemoveExceptionHandler(Exception e) {
+		System.out.println("---------------RemoveControllerAdvice----------------");
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json;charset-UTF-8"); //한글깨짐방지를 위해 HttpHeader설정
-		e.printStackTrace();
-		Map<String, String> map = new HashMap<>();
-		map.put("message", e.getMessage());
-		return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR); 
+		headers.add("Content-Type", "application/json;charset=UTF-8");
+		return new ResponseEntity<>(e.getMessage(),headers, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(AddException.class)
+	@ResponseBody
+	public ResponseEntity<?> AddExceptionHandler(Exception e) {
+		System.out.println("---------------AddControllerAdvice----------------");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json;charset=UTF-8");
+		return new ResponseEntity<>(e.getMessage(),headers, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	@ExceptionHandler(MaxUploadSizeExceededException.class)
+	@ResponseBody
+	public ResponseEntity<?> exceptMaxUploadSize(MaxUploadSizeExceededException e){
+		System.out.println("---------------파일크기 초과 ControllerAdvice----------------");
+		
+		//전달하고자 하는 메시지가 한글깨짐! header 설정 추가
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json;charset=UTF-8"); //단순 text하려면 text/html;charset=UTF-*
+		
+		//xml의 cors설정은 컨트롤러관련된 설정!즉 컨트롤러만 적용! Advice는 적용이 안됨
+		//advice에서 설정은 추가해줘야 함.
+		headers.add("Access-Control-Allow-Origin", "http://192.168.0.20:5500"); //본인 IP적어줘야함
+		headers.add("Access-Control-Allow-Credentials", "true");
+		return new ResponseEntity<>("파일크기가 초과되었습니다", headers, HttpStatus.BAD_REQUEST);
 	}
 }
 

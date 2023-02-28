@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.exception.FindException;
 import com.developer.lesson.dto.LessonDTO;
+import com.developer.lesson.dto.LessonDTO.selectAllBydateLessonDTO;
 import com.developer.lesson.entity.Lesson;
 import com.developer.lesson.repository.LessonRepository;
 import com.developer.lessonreview.dto.LessonReviewDTO;
@@ -20,7 +21,6 @@ import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.dto.UsersDTO;
-import com.developer.users.repository.UsersRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -157,5 +157,31 @@ public class LessonService {
 		}
 		return lesson;
 	}
-	
+
+	/**
+	 * [메인페이지] 신청종료날짜 임박순으로 list를 출력한다.
+	 * @author SR
+	 * @return List<Object[]>
+	 * @throws FindException
+	 */
+	public List<selectAllBydateLessonDTO> selectAllByDateLesson() throws FindException {
+		List<Object[]> lList = lRepository.selectAllBydateLesson();
+
+		List<LessonDTO.selectAllBydateLessonDTO> lListDto = new ArrayList<>();
+		for (int i = 0; i < lList.size(); i++) {
+			LessonDTO.selectAllBydateLessonDTO lDto = new LessonDTO.selectAllBydateLessonDTO();
+			BigDecimal lessonSeq = (BigDecimal)lList.get(i)[0];
+			long convertSeq = lessonSeq.longValue();
+			lDto.setLessonSeq(convertSeq);
+			lDto.setLessonName((String)lList.get(i)[1]);
+			lDto.setImgPath((String)lList.get(i)[2]);
+			BigDecimal price = (BigDecimal)lList.get(i)[3];
+			int convertPrice = price.intValue();
+			lDto.setPrice(convertPrice);
+			
+			lListDto.add(lDto);
+		}
+		return lListDto;
+	}
+
 }

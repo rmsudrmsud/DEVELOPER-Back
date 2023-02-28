@@ -88,6 +88,20 @@ public class LessonController {
 		return new ResponseEntity<>(list ,HttpStatus.OK);
 	}
 	
-	//
-	
+
+	/**
+	 * [메인페이지] 신청종료날짜 임박순으로 list를 출력한다.
+	 * @author SR
+	 * @return 신청종료남짜 임박순으로 정렬한 list
+	 * @throws FindException
+	 */
+	@GetMapping(value ="listbydate", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<?> ListLessonByDateController() throws FindException{
+		List<LessonDTO.selectAllBydateLessonDTO> list = service.selectAllByDateLesson();
+		if(list.isEmpty()) {
+			return new ResponseEntity<>("신청진행중인 수업이 없습니다.", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
 }

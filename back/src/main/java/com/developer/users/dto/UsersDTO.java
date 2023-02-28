@@ -13,11 +13,12 @@ import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 public class UsersDTO {
 		private String userId;
@@ -73,5 +74,42 @@ public class UsersDTO {
 		private String userId;
 	}
 
+	// SR
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllBydateBoardDTO {
+		private String nickname;
+	}
+
+	// SR: 예약상세 & 목록용
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllReservationDTO {
+		private String name;
+		private String tel;
+	}
+
+	// SR
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class tutorApplyDTO {
+		private String name;
+	}
+	
+	//SR 튜터미승인목록
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class unapproveTutorDTO {
+		private String userId;
+		private String nickname;
+		private String name;
+		private String email;
+		private String tel;
+		
+	}
 	
 }

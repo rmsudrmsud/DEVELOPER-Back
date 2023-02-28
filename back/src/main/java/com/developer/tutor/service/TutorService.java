@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.FindException;
+import com.developer.exception.RemoveException;
 import com.developer.lesson.dto.LessonDTO;
 import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
@@ -97,4 +98,20 @@ public class TutorService {
 	}
 	
 	
+	   /**
+	    * 튜터승인거절
+	    * @author SR
+	    * @param userId
+	    * @throws RemoveException
+	    */
+	   public void deleteTutor(String userId) throws RemoveException{
+	      Optional<Tutor> optT = tRepository.findById(userId);
+	      if (optT.isPresent()) {
+	         Tutor entityT = optT.get();
+	         tRepository.delete(entityT);
+	      } else {
+	         throw new RemoveException("해당 유저가 존재하지 않습니다.");
+	      }   
+	   }
+
 }
