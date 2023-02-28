@@ -28,7 +28,7 @@ public class TutorService {
 	
 	private final TutorRepository tRepository;
 	private final UsersRepository uRepository;
-	private final ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	/**

@@ -56,4 +56,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 			+ "WHERE rownum BETWEEN 1 AND 4", nativeQuery = true)
 	public List<Object[]> selectAllBydateLesson();
 	
+	//[DS]
+		@Query(value="SELECT * \r\n"
+				+ "FROM (SELECT lesson_name, category, people FROM lesson ORDER BY lesson_seq DESC)\r\n"
+				+ "WHERE rownum BETWEEN 1 AND 5",nativeQuery = true)
+		public List<Object[]> selectClassList5();
 }

@@ -27,5 +27,16 @@ public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
 				+ "ON h.host_id = s.host_id "
 				+ "WHERE h.host_id = :hostId", nativeQuery = true)
 		public Optional<Studyroom> getHostAndStudyroom(@Param("hostId") String hostId);
+		
+		//ds
+		@Query(value = "SELECT * \r\n"
+				+ "FROM (SELECT sr_seq, name, host_id FROM studyroom ORDER BY sr_seq DESC)\r\n"
+				+ "WHERE rownum BETWEEN 1 AND 5",nativeQuery = true)
+		public List<Object[]> getList5();
+		
+		//ds
+		@Query(value = "select * from studyroom where SR_Seq= :srSeq", nativeQuery = true)
+		public Studyroom getById(@Param("srSeq") Long srSeq);
+			
 
 }

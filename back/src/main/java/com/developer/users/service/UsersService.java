@@ -151,4 +151,47 @@ public class UsersService {
 		}
 		return uListDto;
 	}
+	
+	/**
+	 * 관리자페이지에서 회원리스트 전체출력
+	 * @author DS
+	 * @return
+	 * @throws FindException
+	 */
+	public List<UsersDTO> getALLUsers() throws FindException{
+		List<Object[]> list = uRepository.selectALLUsers();
+		List<UsersDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			UsersDTO uDTO = new UsersDTO();
+			uDTO.setUserId((String)list.get(i)[0]);
+			uDTO.setRole(Integer.parseInt(String.valueOf(list.get(i)[1])));
+			uDTO.setName((String)list.get(i)[2]);
+			uDTO.setNickname((String)list.get(i)[3]);
+			uDTO.setTel((String)list.get(i)[4]);
+			dto.add(uDTO);
+			
+		}
+		return dto;
+	}
+	/**관리자페이지 회원리스트에서 검색하기
+	 * @author DS
+	 * @param userId
+	 * @return List<UsersDTO> 
+	 * @throws FindException
+	 */
+	public List<UsersDTO> getUserById(String userId) throws FindException{
+		List<Object[]> list = uRepository.selectALLUsers();
+		List<UsersDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			UsersDTO uDTO = new UsersDTO();
+			uDTO.setUserId((String)list.get(i)[0]);
+			uDTO.setRole(Integer.parseInt(String.valueOf(list.get(i)[1])));
+			uDTO.setName((String)list.get(i)[2]);
+			uDTO.setNickname((String)list.get(i)[3]);
+			uDTO.setTel((String)list.get(i)[4]);
+			dto.add(uDTO);
+			
+		}
+		return dto;
+	}
 }

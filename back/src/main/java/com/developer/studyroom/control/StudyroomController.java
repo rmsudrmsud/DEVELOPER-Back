@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -204,9 +205,40 @@ public class StudyroomController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
+	/**
+	 * 관리자페이지 방상세 페이지
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "detail/{srSeq}")
 	public ResponseEntity<?> detailStudyroom(@PathVariable Long srSeq) throws FindException{
 		Studyroom s = sService.detailStudyroom(srSeq);
 		return new ResponseEntity<>(s, HttpStatus.OK);
+	}
+	
+	/**
+	 * [스터디카페 메인] 주소(1) 또는 스터디카페명(2) 및 인원 수 로 스터디카페리스트를 검색한다
+	 * @author ds
+	 * @param srNameAddrName, searchBy, person, orderBy
+	 * @throws 전체정보 출력시  FindException예외발생한다
+	 */
+	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<?> getListBySearch(@RequestParam String srNameAddrName, @RequestParam Integer searchBy, @RequestParam Integer person, @RequestParam Integer orderBy)throws FindException{
+
+		List<StudyroomDTO.StudyroomSelectBySearchDTO> list=sService.selectBySearch(srNameAddrName, searchBy, person, orderBy);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	/**
+	 * [관리자 대쉬보드] 스터디카페 최신 순 5개 리스트
+	 * @return List<StudyroomDTO.studyroomList5DTO>
+	 * @throws FindException
+	 */
+	@GetMapping(value="list5", produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<?> getList5()throws FindException{
+		List<StudyroomDTO.studyroomList5DTO> list = sService.selectList5();
+		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 }

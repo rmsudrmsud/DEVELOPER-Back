@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +17,15 @@ import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
+import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.repository.StudyroomRepository;
+import com.developer.users.dto.UsersDTO;
 
 @Service
 public class StudyroomService {
@@ -183,5 +190,105 @@ public class StudyroomService {
 			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
 		}
 	}
+	
+	/**
+	 * [스터디카페 메인] 주소(1) 또는 스터디카페명(2) 및 인원 수와 정렬로 스터디카페리스트를 검색한다
+	 * @author ds
+	 * @param srNameAddrName, searchBy, person, orderBy
+	 * @throws 전체정보 출력시  FindException예외발생한다
+	 */
+	@PersistenceContext
+	private EntityManager entityManager;
+	 
+	public List<StudyroomDTO.StudyroomSelectBySearchDTO> selectBySearch(String srNameAddrName, Integer searchBy, Integer person, Integer orderBy) throws FindException{
+		String jpql1 = "	SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON,\r\n"
+				+ "		MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT\r\n"
+				+ "		FROM STUDYROOM S\r\n"
+				+ "		join\r\n"
+				+ "		ROOM_INFO R\r\n"
+				+ "		ON s.sr_seq = r.sr_seq\r\n"
+				+ "		left outer join\r\n"
+				+ "		FAVORITES_STUDYROOM F\r\n"
+				+ "		ON F.SR_SEQ = S.SR_SEQ\r\n"
+				+ "		where ";
+		
+		String choose1 = "";
+		
+		
+		if(searchBy == 1) {			
+			choose1 = "S.ADDR LIKE '%"+srNameAddrName+ "%'";
+			System.out.println(choose1);
+		}else if(searchBy == 2) {
+			choose1 =  "S.NAME LIKE '%"+srNameAddrName+ "%'";
+		}
+		jpql1+=choose1;
+		
+		String jpql2 = 
+				"		And\r\n"
+				+ "		R.person >= ";
+		
+		jpql2 += person;
+		
+		String jpql3 = 
+				"   GROUP BY S.NAME , S.ADDR , S.IMG_PATH\r\n"
+				+ "	ORDER BY ";
+		String choose2 = "";
+		if(orderBy==1) {
+			choose2 = "PRICE ASC";
+			
+		}else if(orderBy == 2) {
+			choose2 = "FAV_CNT DESC";
+		}
+		jpql3+=choose2;
+		
+		Query query = entityManager.createNativeQuery(jpql1+jpql2+jpql3);
+		
+		List<Object[]> list = query.getResultList();
+		System.out.println("listSize=" + list.size());
+		System.out.println("list.get(0).name=" + list.get(0)[0]);
+		List<StudyroomDTO.StudyroomSelectBySearchDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size();i++) {
+			StudyroomDTO.StudyroomSelectBySearchDTO sDTO = new StudyroomDTO.StudyroomSelectBySearchDTO();
+			sDTO.setName((String)list.get(i)[0]);
+			sDTO.setAddr((String)list.get(i)[1]);
+			sDTO.setImgPath((String)list.get(i)[2]);
+			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
+			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
+			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
+			sDTO.setRoomInfoPriceAndPersonDTO(ripDTO);
+			FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favStudyroomDTO = new FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO();
+			UsersDTO.UserIdDTO uIDTO = new UsersDTO.UserIdDTO();
+			uIDTO.setUserId(Integer.parseInt(String.valueOf(list.get(i)[5])));
+			favStudyroomDTO.setUserIdDTO(uIDTO);
+			sDTO.setFavoritesStudyroomUserIdDTO(favStudyroomDTO);
+			dto.add(sDTO);
+			//순서 			name, addr, imgpath, person, price, fav_cnt
+		}
+		return dto;
+	}
+	/**
+	 * [관리자 대쉬보드] 스터디카페 최신 순 5개 리스트
+	 * @author DS
+	 * @return 스터디카페 최신 순 5개 리스트
+	 * @throws FindException
+	 */
+	public List<StudyroomDTO.studyroomList5DTO> selectList5()throws FindException{
+		List<Object[]> list= studyroomRepository.getList5();
+		List<StudyroomDTO.studyroomList5DTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size();i++) {
+			StudyroomDTO.studyroomList5DTO slDTO = new StudyroomDTO.studyroomList5DTO();
+			BigDecimal sr_seq = (BigDecimal) list.get(i)[0];
+			Long resultSrSeq = sr_seq.longValue();
+			slDTO.setSrSeq(resultSrSeq);
+			slDTO.setName((String)list.get(i)[1]);
+			HostUserDTO.HostIdDTO hiDTO = new HostUserDTO.HostIdDTO();
+			hiDTO.setHostId((String)list.get(i)[2]);
+			slDTO.setHostIdDTO(hiDTO);
+			
+			dto.add(slDTO);
+		}
+		return dto;
+	}
+	
 	
 }

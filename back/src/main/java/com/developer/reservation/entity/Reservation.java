@@ -1,6 +1,6 @@
 package com.developer.reservation.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,9 +45,6 @@ public class Reservation {
 			"RES_SEQ_GENERATOR") 
 	private Long resSeq;
 	
-	@Column(name = "user_id")
-	private String userId;
-
 	@NotNull
 	@Column(name = "start_time")
 	private String startTime;

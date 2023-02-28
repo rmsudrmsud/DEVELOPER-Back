@@ -154,4 +154,12 @@ public class LessonDTO {
     public static class getLessonNameDTO{
    	 private String lessonName;
     }
+	//DS
+	@Data
+	@NoArgsConstructor
+	public static class LessonList5DTO{
+		private String lessonName;
+		private Integer category;
+		private Integer people;
+	}
 }

@@ -131,4 +131,19 @@ public class UsersDTO {
 		private String username;
 		private LessonReviewDTO.getReviewList review;
 	}
+	
+		
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserIdDTO{
+		private Integer userId; //count함수
+	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserNickNameDTO{
+		private String nickname;
+	}
 }

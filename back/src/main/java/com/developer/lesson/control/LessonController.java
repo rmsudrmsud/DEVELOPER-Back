@@ -102,4 +102,15 @@ public class LessonController {
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
+	/**
+	 * [관리자] 관리자 대시보드 최신 생성된 수업 5개 리스트
+	 * @author ds
+	 * @return 최신 생성된 수업 5개 리스트
+	 * @throws FindException
+	 */
+	@GetMapping(value="list5", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<?> getList5()throws FindException{
+		List<LessonDTO.LessonList5DTO> list= lservice.selectList5();
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
 }
