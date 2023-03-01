@@ -1,6 +1,7 @@
 package com.developer.board.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -63,7 +64,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 			+ "		on users.user_id = board.user_id"
 			+ "		order by c_date desc", nativeQuery = true)
 	public List<Object[]>getBoardByC_date();	
-//	
+
 	/**
 	 * 게시글목록 조회수높은 순으로 정렬해서 출력
 	 * @author choigeunhyeong

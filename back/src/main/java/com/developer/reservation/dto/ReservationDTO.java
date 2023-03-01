@@ -54,5 +54,71 @@ public class ReservationDTO {
 		private String startTime;
 		private String endTime;
 	}
+	//ds
+		@Data
+		@NoArgsConstructor
+		public static class selectRmRvDTO{
+			private Long resSeq;
+			private String startTime;
+			private String endTime;
+			private Date usingDate;
+			private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO; 
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class selectAllByUsingDateDTO{
+			private Long roomSeq;
+			private String startTime;
+			private String endTime;
+			private Date usingDate;
+			private RoomInfoDTO.RoomInfoPriceDTO roomInfoPriceDTO;
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class selectMyResHistoryDTO{
+			private Long resSeq;
+			private Date usingDate;
+			private String startTime;
+			private String endTime;
+			private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class insertRvDTO{
+			private String startTime;
+			private String endTime;
+			private Date usingDate;
+			private String userId;
+			//아이디도 session으로 넘어옴
+			private String hostId;
+			//스터디룸
+			private Long roomSeq;
+			//방번호는 이전페이지에서 넘어옴
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class RoomReviewSelectAllDTO{
+			private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
+			private UsersDTO.UserNickNameDTO userNickNameDTO;
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class RoomReviewSelectMyRmRvDTO{
+			private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
+			
+		}
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class RoomReviewSelectMyRmRvDetailDTO{
+			private Date usingDate;
+			private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
+			
+		}
 
 }

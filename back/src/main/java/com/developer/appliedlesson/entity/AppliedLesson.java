@@ -24,6 +24,7 @@ import com.developer.lesson.entity.Lesson;
 import com.developer.lessonreview.entity.LessonReview;
 import com.developer.userreview.entity.UserReview;
 import com.developer.users.entity.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ import lombok.Setter;
 @DynamicInsert @DynamicUpdate
 
 @Getter @Setter
+@JsonFormat(pattern = "yy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
 @NoArgsConstructor 
 @SequenceGenerator(
       name ="applySeq", 
@@ -61,20 +63,19 @@ public class AppliedLesson {
 	@Column(name="tutee_id")
 	private String tuteeId;
 	
-	
-	
 	@ManyToOne
 	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;
 	
-	 @OneToOne(mappedBy = "appliedLesson",
+	@OneToOne(mappedBy = "appliedLesson",
   				cascade = CascadeType.MERGE)	
-	 private LessonReview lessonReview;
-	
+	private LessonReview lessonReview;
+
 	@ManyToOne
 	@JoinColumn(name = "al_user_id")
 	private Users users;
 	
 	@OneToOne(mappedBy = "alLesson")
 	private UserReview userReview;
+
 }

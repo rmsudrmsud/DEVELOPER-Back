@@ -33,5 +33,17 @@ public interface RoomInfoRepository extends CrudRepository<RoomInfo, Long> {
 			+ "AND rif.status = 0 "
 			+ "ORDER BY rif.room_seq ASC ", nativeQuery = true)
 	public List<Object[]> selectAllRoom(@Param("srSeq")long srSreq);
+	
+	/**
+	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
+	 * @author ds
+	 * @param srSeq 스터디카페 시퀀스(장소번호) 
+	 * @return  특정스터디카페 전체정보들(방여러개)
+	 * 
+	 */
+	@Query(value="select * \r\n"
+			+ "from room_info \r\n"
+			+ "where sr_seq = :srSeq", nativeQuery=true)
+	public List<Object[]> selectAll(@Param("srSeq") Long srSeq);
 }
 

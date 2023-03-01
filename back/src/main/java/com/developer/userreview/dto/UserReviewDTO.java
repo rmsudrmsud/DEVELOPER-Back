@@ -1,22 +1,35 @@
 package com.developer.userreview.dto;
 
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.developer.appliedlesson.entity.AppliedLesson;
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@DynamicInsert
-@DynamicUpdate
-@Data
-@NoArgsConstructor
+
 public class UserReviewDTO {
-	private Long applySeqRv;
-	private Integer star;
-	private String review;
-	private AppliedLesson alLesson;
+
+	@Data @NoArgsConstructor
+	public static class selectUserReview{
+		private Long applySeqRv;
+		private Integer star;
+		private String review;
+		private AppliedLessonDTO appliedLessonDTO;
+	}
+	
+	//[JH]
+	@Data
+	@NoArgsConstructor
+	public static class getTuteeReview{
+		private Long applySeqRv;
+		private Integer star;
+		private String review;
+		private AppliedLessonDTO.selectAppliedLessonDTO appliedLessonDTO;
+	}
+
 	
 	//근형
 	@Data

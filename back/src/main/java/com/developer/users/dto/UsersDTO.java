@@ -1,6 +1,14 @@
 package com.developer.users.dto;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
+import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
+import com.developer.reservation.dto.ReservationDTO;
+import com.developer.tutor.dto.TutorDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import java.util.List;
+
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.dto.BoardDTO;
@@ -18,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
@@ -130,5 +139,20 @@ public class UsersDTO {
 	public static class getCompletedClassDTO{
 		private String username;
 		private LessonReviewDTO.getReviewList review;
+	}
+	
+		
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserIdDTO{
+		private Integer userId; //count함수
+	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserNickNameDTO{
+		private String nickname;
 	}
 }

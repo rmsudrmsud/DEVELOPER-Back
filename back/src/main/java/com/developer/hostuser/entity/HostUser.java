@@ -61,7 +61,6 @@ public class HostUser {
 	private String email;
 
 	
-	
 	@OneToOne(mappedBy = "hostUser")//, cascade = CascadeType.ALL)//, cascade = CascadeType.REMOVE)
 	private Studyroom studyroom;
 	

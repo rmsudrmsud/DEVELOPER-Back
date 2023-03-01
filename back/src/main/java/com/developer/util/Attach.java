@@ -16,7 +16,7 @@ public class Attach {
 	public static void upload(byte[]bytes,File file) throws IOException {
 		File saveDirFile = file.getParentFile();
 		if(!saveDirFile.exists()) {
-			saveDirFile.mkdir(); //attach폴더 생성
+			saveDirFile.mkdir(); 
 		}
 		FileCopyUtils.copy(bytes, file); //파일저장
 	}

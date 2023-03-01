@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.entity.Reservation;
+import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,4 +59,31 @@ public class RoomInfoDTO {
 	public static class selectAllReservationDTO {
 		private String name;
 	}
+	   //ds
+	   @Data
+	   @NoArgsConstructor
+	   public static class RoomInfoNameDTO {
+		   private String name;
+		   private StudyroomDTO.StudyroomNameDTO studyroomNameDTO;
+	   }
+	   //ds
+	   @Data
+	   @NoArgsConstructor
+	      public static class RoomInfoPriceDTO {
+	   	  private Integer price;
+	   	 private StudyroomDTO.StudyroomTimeDTO studyroomTimeDTO;
+	      }
+	   //ds
+	   @Data
+	   @NoArgsConstructor
+	      public static class RoomInfoPriceAndPersonDTO {
+	   	  private Integer price;
+	   	  private Integer person;
+	      }
+	   //ds
+	   @Data
+	   @NoArgsConstructor
+	   public static class RoomInfoRoomSeqDTO{
+		   private Long roomSeq;
+	   }
 }
