@@ -31,7 +31,7 @@ public class TutorRepositoryTest {
 		t.setTutorId("test4");
 		t.setInfo("테스트내용");
 		t.setImgPath("테스트이미지");
-		t.setStarAvg(4.4);
+		//t.setStarAvg(4.4);
 		t.setApplyOk(1);
 		
 		Optional<Users> u = uRepository.findById("test4");

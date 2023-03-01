@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +39,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 @RequestMapping("studyroom/*")
 public class StudyroomController {
 	@Autowired
-	private StudyroomService studyroomService;
+	private StudyroomService sService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	/**
 	 * Studyroom 객체 1개를 출력한다.
@@ -51,7 +52,7 @@ public class StudyroomController {
 	 */
 	@GetMapping(value = "{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> infoCafe(@PathVariable long srSeq, HttpSession session) throws FindException {
-		StudyroomDTO dto = studyroomService.selectStudyroom(srSeq);
+		StudyroomDTO dto = sService.selectStudyroom(srSeq);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
@@ -68,7 +69,7 @@ public class StudyroomController {
 	public ResponseEntity<?> openCafe(@PathVariable Optional<Integer> srSeq, HttpSession session) throws FindException {
 		Integer seq = srSeq.get();
 		Long srSeqValue = Long.valueOf(seq);
-		studyroomService.openOc(srSeqValue);
+		sService.openOc(srSeqValue);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -85,7 +86,7 @@ public class StudyroomController {
 	public ResponseEntity<?> closeCafe(@PathVariable long srSeq, HttpSession session)
 			throws FindException {
 
-		studyroomService.closeOc(srSeq);
+		sService.closeOc(srSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -103,7 +104,7 @@ public class StudyroomController {
 		if (hostId == null) {
 			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
 		} else {
-			StudyroomDTO.getHostAndStudyroomDTO dto = studyroomService.getHostAndStudyroom(hostId);
+			StudyroomDTO.getHostAndStudyroomDTO dto = sService.getHostAndStudyroom(hostId);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		}
 
@@ -133,7 +134,7 @@ public class StudyroomController {
 		String saveDirectory = "C:\\dev\\studyroom";  //각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
-		if (f != null && f.getSize() > 0) { // 첨부파일 f1이 전달된 경우만 처리해라!, f1값이 없는경우
+		if (f != null && f.getSize() > 0) { // 첨부파일 f이 전달된 경우만 처리해라!, f1값이 없는경우
 			long fSize = f.getSize(); // 첨부된 파일크기 확인
 			String fOrigin = f.getOriginalFilename(); // 첨부된(업로드된)파일의 이름
 			System.out.println("---파일---");
@@ -166,7 +167,7 @@ public class StudyroomController {
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
 				
 				studyroomDTO.setImgPath(fileName);
-				studyroomService.insertCafe(studyroomDTO, hostId);
+				sService.insertCafe(studyroomDTO, hostId);
 				// 읽기       쓰기
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -190,8 +191,58 @@ public class StudyroomController {
 	public ResponseEntity<?> editCafe(@PathVariable long srSeq, @RequestBody StudyroomDTO studyroomDTO,
 			HttpSession session) throws FindException {
 
-		studyroomService.updateCafe(srSeq, studyroomDTO);
+		sService.updateCafe(srSeq, studyroomDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 
+	}
+	
+	 /**
+	  * 관리자 스터디카페 전체목록 출력
+	  * @author choigeunhyeong
+	  * @return
+	  * @throws FindException
+	  */
+	@GetMapping(value = "getall")
+	public ResponseEntity<?> getAllStudyroom() throws FindException{
+		List<StudyroomDTO.getAllStudyroomDTO> list= sService.getAllStudyroom();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	/**
+	 * 관리자페이지 방상세 페이지
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "detail/{srSeq}")
+	public ResponseEntity<?> detailStudyroom(@PathVariable Long srSeq) throws FindException{
+		Studyroom s = sService.detailStudyroom(srSeq);
+		return new ResponseEntity<>(s, HttpStatus.OK);
+	}
+	
+	/**
+	 * [스터디카페 메인] 주소(1) 또는 스터디카페명(2) 및 인원 수 로 스터디카페리스트를 검색한다
+	 * @author ds
+	 * @param srNameAddrName, searchBy, person, orderBy
+	 * @throws 전체정보 출력시  FindException예외발생한다
+	 */
+	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<?> getListBySearch(@RequestParam String srNameAddrName, @RequestParam Integer searchBy, @RequestParam Integer person, @RequestParam Integer orderBy)throws FindException{
+
+		List<StudyroomDTO.StudyroomSelectBySearchDTO> list=sService.selectBySearch(srNameAddrName, searchBy, person, orderBy);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	/**
+	 * [관리자 대쉬보드] 스터디카페 최신 순 5개 리스트
+	 * @author ds
+	 * @return List<StudyroomDTO.studyroomList5DTO>
+	 * @throws FindException
+	 */
+	@GetMapping(value="list5", produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<?> getList5()throws FindException{
+		List<StudyroomDTO.studyroomList5DTO> list = sService.selectList5();
+		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 }

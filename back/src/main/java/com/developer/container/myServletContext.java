@@ -16,7 +16,7 @@ public class myServletContext implements WebMvcConfigurer{
 	public void addCorsMappings(CorsRegistry registry) {
 		WebMvcConfigurer.super.addCorsMappings(registry);
 		registry.addMapping("/**")
-			.allowedOrigins("http://192.168.0.20:5500")
+			.allowedOrigins("http://192.168.0.9:5500", "http://192.168.0.20:5500")
 			.allowCredentials(true)
 			.allowedMethods("GET", "POST", "PUT", "DELETE");
 	}
@@ -29,4 +29,5 @@ public class myServletContext implements WebMvcConfigurer{
 		//cmr.setMaxUploadSizePerFile(100*1024);
 		return cmr;
 	}
+
 }

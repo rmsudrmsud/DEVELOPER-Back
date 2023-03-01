@@ -1,12 +1,12 @@
 package com.developer.lesson.entity;
 
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,25 +15,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="LESSON")
-@DynamicInsert
-
-@Setter@Getter
-@NoArgsConstructor @AllArgsConstructor
+@DynamicInsert @DynamicUpdate
+@Setter @Getter @NoArgsConstructor
 @JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
 @SequenceGenerator(
 		name ="lessonSeq", 
@@ -49,30 +49,54 @@ public class Lesson {
 		)
 	private Long lessonSeq;
 
-	@Column(name="lesson_name", nullable = false)
+	@NotNull
+	@Column(name="lesson_name")
 	private String lessonName;
-	@Column(name="category", nullable = false)
-	private Integer category;
-	@Column(name="content", nullable = false)
+	
+	@NotNull
+	@Column(name="category")
+	private Integer category; //0:프로그래밍언어, 1:웹개발, 2:앱개발, 3:보안/네트워크, 4:데이터
+	
+	@NotNull
+	@Column(name="content")
 	private String content;
-	@Column(name="people", nullable = false)
+	
+	@NotNull
+	@Column(name="people")
 	private Integer people;
+	
+	@NotNull
 	@Column(name="img_path")
 	private String imgPath;
-	@Column(name="start_cdate", nullable = false)
-	private Date startCdate;
-	@Column(name="end_cdate", nullable = false)
-	private Date endCdate;
-	@Column(name="price", nullable = false)
+	
+	@NotNull
+	@Column(name="start_cdate")
+	private LocalDate startCdate;
+	
+	@NotNull
+	@Column(name="end_cdate")
+	private LocalDate endCdate;
+	
+	@NotNull
+	@Column(name="price")
 	private Integer price;
-	@Column(name="start_date", nullable = false)
-	private Date startDate;
-	@Column(name="end_date", nullable = false)
-	private Date endDate;
-	@Column(name="pay_lesson", columnDefinition = "NUMBER DEFAULT 0")
-	private Integer payLesson;
-	@Column(name="location" , nullable = false)
+	
+	@NotNull
+	@Column(name="start_date")
+	private LocalDate startDate;
+	
+	@NotNull
+	@Column(name="end_date")
+	private LocalDate endDate;
+	
+	@ColumnDefault(value = "2")
+	@Column(name="pay_lesson")
+	private Integer payLesson; //0무료 1유료 2결제대기
+	
+	@NotNull
+	@Column(name="location")
 	private String location;
+
 	
 	@ManyToOne
 	@JoinColumn(name="tutor_id")
@@ -84,5 +108,6 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
-	
 }
+
+
