@@ -11,11 +11,10 @@ import com.developer.userreview.entity.UserReview;
 public interface UserReviewRepository extends CrudRepository<UserReview, Long> {
 
 	@Query(value = "SELECT u.name, r.review, r.star"
-		+ " FROM APPLIED_LESSON a, USER_REVIEW r, USERS u, lesson l"
-		+ " WHERE u.user_id = a.al_tutee_id"
-		+ " and l.lesson_seq = a.al_lesson_seq"
-		+ " and r.apply_seq_rv = a.apply_seq"
-		+ " and u.user_id=:userId", nativeQuery = true)
-	public List<Object[]> getTuteeReview(@Param("userId") String userId);
-	
+		      + " FROM APPLIED_LESSON a, USER_REVIEW r, USERS u, lesson l"
+		      + " WHERE u.user_id = a.al_user_id"
+		      + " and l.lesson_seq = a.al_lesson_seq"
+		      + " and r.apply_seq_rv = a.apply_seq"
+		      + " and u.user_id=:userId", nativeQuery = true)
+		   public List<Object[]> getTuteeReview(@Param("userId") String userId);
 }
