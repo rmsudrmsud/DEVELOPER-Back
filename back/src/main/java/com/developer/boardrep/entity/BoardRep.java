@@ -1,6 +1,7 @@
 package com.developer.boardrep.entity;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,14 +17,16 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import com.developer.board.entity.Board;
 import com.developer.users.entity.Users;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter	@NoArgsConstructor
-
+@Getter @Setter	
+@NoArgsConstructor 
 @Entity
 @Table(name = "board_rep")
 
@@ -32,7 +35,7 @@ import lombok.Setter;
 @SequenceGenerator(
 name = "POST_REP_SEQ_GENERATOR", // 사용할 sequence 이름
 sequenceName =
-"post_rep_seq", // 실제 데이터베이스 sequence 이름
+"post_rep_seq", // 실제 데이터s베이스 sequence 이름
 initialValue = 1, allocationSize = 1)
 
 public class BoardRep {
@@ -56,8 +59,9 @@ public class BoardRep {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_seq")
 	private Board board;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
+
 }

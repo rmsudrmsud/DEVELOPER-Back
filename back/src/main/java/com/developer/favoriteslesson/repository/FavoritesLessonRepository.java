@@ -10,7 +10,8 @@ import com.developer.favoriteslesson.entity.FavoritesLesson;
 
 public interface FavoritesLessonRepository extends CrudRepository<FavoritesLesson, Long> {
 
-//	@Query(value = "SELECT * FROM FAVORITES_LESSON WHERE user_id = :userId", nativeQuery = true)
-//	public List<Object[]> listFavLesson(@Param ("userId") String userId);
+	//[JW]
+	@Query(value = "SELECT * FROM FAVORITES_LESSON WHERE tutee_id = :tuteeId", nativeQuery = true)
+	public List<Object[]> listFavLesson(@Param ("tuteeId") String tuteeId);
 	
 }

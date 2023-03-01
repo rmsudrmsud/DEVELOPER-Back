@@ -1,6 +1,7 @@
 package com.developer.roominfo.entity;
 
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +70,7 @@ public class RoomInfo {
 	@NotNull
 	@Column(name="price")
 	private Integer price;
-	
+
 	@Column(name="status")
 	@ColumnDefault(value = "0") //0: 활성화, 1: 비활성화(삭제)
 	private Integer status;

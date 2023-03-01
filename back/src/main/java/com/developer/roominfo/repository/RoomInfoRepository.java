@@ -9,6 +9,22 @@ import org.springframework.data.repository.query.Param;
 import com.developer.roominfo.entity.RoomInfo;
 
 public interface RoomInfoRepository extends CrudRepository<RoomInfo, Long> {
+
+	/**
+	 * 방 번호에 대한 예약내역출력
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 */
+	@Query(value="SELECT r.res_seq, rif.name, u.user_id, u.name AS uName, r.using_date, r.start_time, r.end_time "
+			+ "FROM room_info rif, reservation r, users u "
+			+ "WHERE rif.room_seq = r.room_seq "
+			+ "AND r.user_id = u.user_id "
+			+ "AND rif.sr_seq = :srSeq "
+			+ "ORDER BY r.using_date DESC", nativeQuery= true)
+	public List<Object[]> getReservation(@Param("srSeq") Long srSeq);
+	
+
 	//[SR]호스트마이페이지 - 가지고 있는 방 목록 출력
 	@Query(value="SELECT rif.room_seq, rif.name, rif.info, rif.img_path, rif.person, rif.price "
 			+ "FROM studyroom s, room_info rif "
@@ -17,5 +33,17 @@ public interface RoomInfoRepository extends CrudRepository<RoomInfo, Long> {
 			+ "AND rif.status = 0 "
 			+ "ORDER BY rif.room_seq ASC ", nativeQuery = true)
 	public List<Object[]> selectAllRoom(@Param("srSeq")long srSreq);
+	
+	/**
+	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
+	 * @author ds
+	 * @param srSeq 스터디카페 시퀀스(장소번호) 
+	 * @return  특정스터디카페 전체정보들(방여러개)
+	 * 
+	 */
+	@Query(value="select * \r\n"
+			+ "from room_info \r\n"
+			+ "where sr_seq = :srSeq", nativeQuery=true)
+	public List<Object[]> selectAll(@Param("srSeq") Long srSeq);
 }
 

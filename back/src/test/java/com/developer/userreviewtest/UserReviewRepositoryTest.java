@@ -32,8 +32,8 @@ class UserReviewRepositoryTest {
 		
 		UserReview ur = new UserReview();
 		
-		ur.setApplySeqRv(al.getApplySeq());
-		ur.setAlLesson(al);
+//		ur.setApplySeqRv(al.getApplySeq());
+//		ur.setAlLesson(al);
 		ur.setReview("좋아요");
 		ur.setStar(5);
 		
@@ -48,7 +48,7 @@ class UserReviewRepositoryTest {
 		Optional<UserReview> optUr = urRepository.findById(1L);
 		assertTrue(optUr.isPresent());
 		Long expected = 1L;
-		assertEquals(expected, optUr.get().getApplySeqRv());
+//		assertEquals(expected, optUr.get().getApplySeqRv());
 	}
 	
 	@Test

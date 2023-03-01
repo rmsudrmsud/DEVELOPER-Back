@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,64 +23,71 @@ import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
 import com.developer.tutor.entity.Tutor;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{   
-   @Id
-   @Column(name = "user_id", nullable = false)
-   private String userId;
-   
-   @ColumnDefault(value="2")
-   private Integer role;
-   
-   @Column(nullable = false)
-   private String pwd;
-   
-   @Column(nullable = false)
-   private String nickname;
-   
-   @Column(nullable = false)
-   private String name;
-   
-   @Column(nullable = false)
-   private String email;
+public class Users {
+	@Id
+	@Column(name = "user_id")
+	private String userId;
 
-   @Column(name="tel", nullable = false)
-   private String tel;
-   @Column(name="addr", nullable = false)
-   private String addr;   
-   
-   @OneToOne(mappedBy = "users",
-         cascade = CascadeType.REMOVE)
-   private Tutor tutor;
-   
-   @OneToMany(mappedBy = "users")
-   private List<AppliedLesson> appliedLesson;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
-   private List<Board> board;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
-   private List<BoardRep> boardRep;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
-   private List<Recommend> recommend;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
-   private List<Reservation> reservation;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
-   private List<FavoritesStudyroom> favoritesStudyroom;
-   
+	@Column(name = "role")
+	@ColumnDefault(value = "2")
+	private Integer role; // 1튜터 2튜티 3탈퇴 9관리
 
-   
-   }
+	@NotNull
+	@Column(name = "pwd")
+	private String pwd;
+
+	@NotNull
+	@Column(name = "nickname")
+	private String nickname;
+
+	@NotNull
+	@Column(name = "name")
+	private String name;
+
+	@NotNull
+	@Column(name = "email")
+	private String email;
+
+	@NotNull
+	@Column(name = "tel")
+	private String tel;
+
+	@NotNull
+	@Column(name = "addr")
+	private String addr;
+
+	@OneToOne(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private Tutor tutor;
+
+	@OneToMany(mappedBy = "users")
+	private List<AppliedLesson> appliedLesson;
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private List<Board> board;
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private List<BoardRep> boardRep;
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private List<Recommend> recommend;
+
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+	private List<Reservation> reservation;
+
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+	private List<FavoritesStudyroom> favoritesStudyroom;
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private List<FavoritesStudyroom> favStudyroom;
+}

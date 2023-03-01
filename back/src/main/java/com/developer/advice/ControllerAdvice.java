@@ -1,5 +1,7 @@
 package com.developer.advice;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,23 +10,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.RemoveException;
 
+@RestControllerAdvice
 public class ControllerAdvice {
 	@ExceptionHandler(FindException.class)
 	@ResponseBody
 	public ResponseEntity<?> findExceptionHandler(Exception e) {
-		System.out.println("---------------FindControllerAdvice----------------");
+		System.out.println("---------------findControllerAdvice----------------");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json;charset-UTF-8"); //한글깨짐방지를 위해 HttpHeader설정
 		e.printStackTrace();
 		Map<String, String> map = new HashMap<>();
 		map.put("msg", e.getMessage());
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json;charset=UTF-8");
-		return new ResponseEntity<>(map, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		System.out.println("---------------findControllerAdvice----------------");
+		return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler(RemoveException.class)
@@ -60,6 +65,9 @@ public class ControllerAdvice {
 		headers.add("Access-Control-Allow-Origin", "http://192.168.0.20:5500"); //본인 IP적어줘야함
 		headers.add("Access-Control-Allow-Credentials", "true");
 		return new ResponseEntity<>("파일크기가 초과되었습니다", headers, HttpStatus.BAD_REQUEST);
-		
 	}
 }
+
+
+
+
