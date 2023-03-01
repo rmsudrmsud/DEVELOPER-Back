@@ -1,6 +1,7 @@
 package com.developer.reservation.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.RemoveException;
 import com.developer.hostuser.entity.HostUser;
@@ -19,8 +21,11 @@ import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.entity.Reservation;
 import com.developer.reservation.repository.ReservationRepository;
 import com.developer.roominfo.dto.RoomInfoDTO;
+import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roominfo.repository.RoomInfoRepository;
+import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.users.dto.UsersDTO;
+import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
 @Service
@@ -30,7 +35,7 @@ public class ReservationService {
 	@Autowired
 	private UsersRepository uRepository;
 	@Autowired
-	private RoomInfoRepository roomRepository;
+	private RoomInfoRepository riRepository;
 	@Autowired
 	private HostUserRepository hRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -81,7 +86,7 @@ public class ReservationService {
 	 * @throws FindException
 	 */
 	public List<ReservationDTO.selectAllReservationDTO> infoReservation(long resSeq) throws FindException {
-		//Optional<ReservationDTO.selectAllReservationDTO> optR= rRepository.selectReservation(resSeq);
+	
 		List<Object[]> rList = rRepository.selectReservation(resSeq);
 		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
 			
@@ -125,5 +130,135 @@ public class ReservationService {
 		} else {
 			throw new RemoveException("잘못된 예약번호입니다.");
 		}
+	}
+	
+	/**포스트맨 성공
+	 * [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
+	 * @author ds
+	 * @throws 전체정보 출력시  FindException예외발생한다
+	 */
+	public void insertRv(ReservationDTO.insertRvDTO rvDTO) throws AddException {
+		
+		Reservation r = new Reservation();
+		Optional<Users> optU = uRepository.findById(rvDTO.getUserId());
+		Users u = optU.get();
+		r.setUsers(u);
+	   Optional<HostUser> optH = hRepository.findById(rvDTO.getHostId());
+		//r.setUserId(u);
+	
+		HostUser hu= optH.get();
+		r.setHostUser(hu);
+		Optional<RoomInfo> optR= riRepository.findById(rvDTO.getRoomSeq());
+		RoomInfo ri = optR.get();
+		
+		r.setUsingDate(rvDTO.getUsingDate());
+		r.setRoominfo(ri);
+		r.setStartTime(rvDTO.getStartTime());
+		r.setEndTime(rvDTO.getEndTime());
+		rRepository.save(r);
+	}
+		
+		
+	
+
+	/**포스트맨 성공
+	 * [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
+	 * @author ds
+	 * @param roomSeq 스터디룸 시퀀스
+	 * @param usingDate 예약일 
+	 * @return List<ReservationDTO.selectAllByUsingDateDTO> 특정일자의 해당 스터디룸 예약정보
+	 * @throws 전체정보 출력시  FindException, ParseException예외발생한다
+	 */
+	public List<ReservationDTO.selectAllByUsingDateDTO> selectAllByUsingDate(Long roomSeq, String usingDate) throws FindException, ParseException{
+//		 SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+//		 Date date=formatter.parse(usingDate);
+		List<Object[]> list= rRepository.findAllByUsingDate(roomSeq, usingDate);
+		List<ReservationDTO.selectAllByUsingDateDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			ReservationDTO.selectAllByUsingDateDTO sDTO = new ReservationDTO.selectAllByUsingDateDTO();
+			BigDecimal room_seq = (BigDecimal) list.get(i)[0];
+			Long resultRoom_seq = room_seq.longValue();
+			sDTO.setRoomSeq(resultRoom_seq);
+			sDTO.setStartTime((String)list.get(i)[1]);
+			sDTO.setEndTime((String)list.get(i)[2]);
+			sDTO.setUsingDate((Date)list.get(i)[3]);
+			
+			RoomInfoDTO.RoomInfoPriceDTO riDTO = new RoomInfoDTO.RoomInfoPriceDTO();
+			StudyroomDTO.StudyroomTimeDTO srDTO = new StudyroomDTO.StudyroomTimeDTO();
+			srDTO.setOpenTime((String)list.get(i)[5]);
+			srDTO.setEndTime((String)list.get(i)[6]);
+			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
+			riDTO.setStudyroomTimeDTO(srDTO);
+			
+			
+			sDTO.setRoomInfoPriceDTO(riDTO);
+			dto.add(sDTO);
+			
+		}
+		return dto;
+	}
+	
+	/**
+	 * [마이페이지 - 스터디카페 예약내역 페이지] 아이디값을 받아와 전체 예약내역을 최신순으로 출력한다
+	 * @author ds
+	 * @param userId 유저 아이디 
+	 * @return List<ReservationDTO.selectMyResHistoryDTO> 유저의 전체 예약 내역(최신순) 
+	 * @throws 전체정보 출력시  FindException예외발생한다
+	 */
+	public List<ReservationDTO.selectMyResHistoryDTO> selectMyResHistory(String userId)throws FindException{
+		List<Object[]> list = rRepository.findByUserId(userId);
+		List<ReservationDTO.selectMyResHistoryDTO> rDTO = new ArrayList<>();
+		for(int i=0; i<list.size(); i++) {
+			ReservationDTO.selectMyResHistoryDTO dto = new ReservationDTO.selectMyResHistoryDTO();
+			BigDecimal res_seq = (BigDecimal) list.get(i)[0];
+			Long resultRes_seq = res_seq.longValue();
+			dto.setResSeq(resultRes_seq);
+			dto.setStartTime((String)list.get(i)[4]);
+			dto.setEndTime((String)list.get(i)[5]);
+			dto.setUsingDate((Date)list.get(i)[3]);
+			RoomInfoDTO.RoomInfoNameDTO riDTO = new RoomInfoDTO.RoomInfoNameDTO();
+			StudyroomDTO.StudyroomNameDTO srDTO = new StudyroomDTO.StudyroomNameDTO();
+			srDTO.setName((String)list.get(i)[1]);
+			
+			riDTO.setName((String)list.get(i)[2]);
+			riDTO.setStudyroomNameDTO(srDTO);
+			dto.setRoomInfoNameDTO(riDTO);
+			rDTO.add(dto);
+		}
+		return rDTO;
+	}
+	
+	
+
+	/**
+	 * 후기관련이지만 쿼리상 reservation 테이블이 메인
+	 * [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를 출력한다
+	 * @author ds
+	 * @param userId
+	 * @return List<ReservationDTO.selectRmRvDTO> 유저의 작성한 이용후기 리스트
+	 */
+	public List<ReservationDTO.selectRmRvDTO> selectMyReqRmRv(String userId) throws FindException{
+		List<Object[]> rlist= rRepository.selectReqRmRv(userId);
+		List<ReservationDTO.selectRmRvDTO> dto = new ArrayList<>();
+		for(int i=0; i<rlist.size(); i++) {
+			
+			//기본 reservation
+			ReservationDTO.selectRmRvDTO rDTO = new ReservationDTO.selectRmRvDTO();
+			BigDecimal res_seq = (BigDecimal) rlist.get(i)[0];
+			Long	resultRes_seq = res_seq.longValue();
+			rDTO.setResSeq(resultRes_seq);
+			rDTO.setStartTime((String)rlist.get(i)[4]);
+			rDTO.setEndTime((String)rlist.get(i)[5]);
+			rDTO.setUsingDate((Date)rlist.get(i)[3]);
+			
+			RoomInfoDTO.RoomInfoNameDTO riDTO = new RoomInfoDTO.RoomInfoNameDTO();
+			StudyroomDTO.StudyroomNameDTO sDTO = new StudyroomDTO.StudyroomNameDTO();
+			sDTO.setName((String)rlist.get(i)[1]);
+			riDTO.setName((String)rlist.get(i)[2]);
+			riDTO.setStudyroomNameDTO(sDTO);
+			rDTO.setRoomInfoNameDTO(riDTO);
+			dto.add(rDTO);
+		}
+		return dto;
 	}
 }

@@ -1,5 +1,4 @@
 package com.developer.users.control;
-
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -15,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.service.UsersService;
@@ -26,10 +27,47 @@ import com.developer.users.service.UsersService;
 @RestController
 @RequestMapping("users/*")
 public class UsersController {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	private UsersService uService;
-	private Logger logger = LoggerFactory.getLogger(getClass());
 	
+	//[JH]
+	@PostMapping(value = "")
+	public ResponseEntity<?> addUsers(@RequestBody UsersDTO usersDTO) throws AddException{
+		uService.addUsers(usersDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	//[JH]
+	@PatchMapping(value = "update/{userId}")
+	public ResponseEntity<?> updateLesson(@PathVariable String userId, @RequestBody UsersDTO uDTO) throws FindException, AddException{
+		uService.addUsers(uDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	//[JH]
+	@GetMapping(value = "selectuser/{userId}")
+	public ResponseEntity<?> getUser(@PathVariable String userId) throws FindException{
+		if(userId == null) {
+			return new ResponseEntity<>("존재하지 않는 회원입니다.",HttpStatus.BAD_REQUEST);
+		} else {
+			UsersDTO usersDTO = uService.getUser(userId);
+			return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+		}
+	}
+	
+	//[JH]
+	@PatchMapping(value = "delete/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable String userId, HttpSession session) throws FindException{
+		if(userId == null) {
+			return new ResponseEntity<>("수업 내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+		} else {
+			uService.deleteUser(userId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+	}	
+
 	/**
 	 * [관리자] 수업을 예약한 튜티 목록
 	 * @author moonone
@@ -74,6 +112,21 @@ public class UsersController {
 		}
 	}
 	
+	//[JH]
+	@GetMapping(value = "check/{userId}")
+	public boolean checkUser(@PathVariable String userId,HttpSession session) throws FindException{
+		UsersDTO usersDTO;
+		boolean flag = true;
+		usersDTO = uService.getUser(userId);
+		String check = usersDTO.getUserId();
+			if (check == null) {
+				flag = true;
+			} else if (check != null) {
+				flag = false;
+			}
+			return flag;
+	}
+
 	/**
 	 * 튜터 미승인 목록을 출력한다.
 	 * @author SR
@@ -136,4 +189,29 @@ public class UsersController {
 		session.invalidate();
 		return "";
 	}
+	
+	/**
+	 * 관리자페이지에서 회원리스트 전체출력
+	 * @author DS
+	 * @return 회원리스트
+	 * @throws FindException
+	 */
+	@GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllUsers()throws FindException{
+	 List<UsersDTO> list	= uService.getALLUsers();
+	 return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	/**관리자페이지 회원리스트에서 검색하기
+	 * @author DS
+	 * @param userId
+	 * @return 검색된 회원정보
+	 * @throws FindException
+	 */
+	@GetMapping(value = "all/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getuserById(@PathVariable String userId)throws FindException{
+	 List<UsersDTO> list	= uService.getUserById(userId);
+	 return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
 }

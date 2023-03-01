@@ -64,7 +64,7 @@ public class HostUserDTO {
 		private String email;
 	}
 	
-	//근
+	//근형
 	@Data
 	@NoArgsConstructor
 	public static class HostLoginDTO{
@@ -72,6 +72,13 @@ public class HostUserDTO {
 		private String pwd;
 		private Integer ready;
 	}
+	//ds
+    @Data
+    @NoArgsConstructor
+    public static class HostIdDTO{
+    	private String hostId;
+    }
+	
 }
 
 

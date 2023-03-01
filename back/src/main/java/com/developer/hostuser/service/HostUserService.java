@@ -1,26 +1,35 @@
 package com.developer.hostuser.service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+
 import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class HostUserService {
 
+	
+	private ModelMapper mapper = new ModelMapper();
+	
 	@Autowired
-	private HostUserRepository hostRepository;
+	private HostUserRepository hRepository;
 
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -33,7 +42,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public HostUserDTO selectHost(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 			HostUserDTO hostDTO = modelMapper.map(hostEntity, HostUserDTO.class);
@@ -42,6 +51,29 @@ public class HostUserService {
 			throw new FindException("해당 HOST_ID가 존재하지 않습니다.");
 		}
 	}
+	
+	/**
+	 * 호스트유저 추가하기
+	 * @author Jin
+	 * @param hostUserDTO
+	 * @throws AddException
+	 */
+	public void addHost(HostUserDTO hostUserDTO) throws AddException{ 
+		HostUser hostUserEntity = mapper.map(hostUserDTO, HostUser.class);
+		hRepository.save(hostUserEntity);
+	}
+	
+	/**
+	 * 호스트유저 전체목록 불러오기
+	 * @author Jin
+	 * @return
+	 * @throws FindException
+	 */
+	public List<HostUser> selectAll() throws FindException{
+		List<HostUser> list = hRepository.selectAll();
+		return list;
+	}
+		
 	/**
 	 * HostUser 상태값을 변환한다(탈퇴기능 ready=2).
 	 * 
@@ -50,11 +82,11 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public void outHost(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 			hostEntity.setReady(2);
-			hostRepository.save(hostEntity);
+			hRepository.save(hostEntity);
 		}
 	}
 
@@ -68,7 +100,7 @@ public class HostUserService {
 	 */
 	public void updateHost(String hostId, HostUserDTO hostuserDTO) throws FindException {
 
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 
@@ -76,7 +108,7 @@ public class HostUserService {
 			hostEntity.setPwd(hostuserDTO.getPwd());
 			hostEntity.setTel(hostuserDTO.getTel());
 			hostEntity.setEmail(hostuserDTO.getEmail());
-			hostRepository.save(hostEntity);
+			hRepository.save(hostEntity);
 
 		} else {
 			throw new FindException("호스트회원정보 수정 오류");
@@ -91,7 +123,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public List<HostUserDTO.unApproveHostDTO> hostUnapproveList() throws FindException {
-		List<Object[]> hList = hostRepository.selectAllUnapproveHost();
+		List<Object[]> hList = hRepository.selectAllUnapproveHost();
 		List<HostUserDTO.unApproveHostDTO> hListDto = new ArrayList<>();
 
 		for (int i = 0; i < hList.size(); i++) {
@@ -115,10 +147,10 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public void readyOk(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		HostUser hostEntity = optHost.get();
 		hostEntity.setReady(1);
-		hostRepository.save(hostEntity);
+		hRepository.save(hostEntity);
 	}
 
 	/**
@@ -129,9 +161,9 @@ public class HostUserService {
 	 * @throws RemoveException
 	 */
 	public void deleteHost(String hostId) throws RemoveException {
-		Optional<HostUser> optH = hostRepository.findById(hostId);
+		Optional<HostUser> optH = hRepository.findById(hostId);
 		HostUser entityH = optH.get();
-		hostRepository.delete(entityH);
+		hRepository.delete(entityH);
 	}
 	
 	/**
@@ -144,7 +176,7 @@ public class HostUserService {
 	 */
 	public HostUserDTO.HostLoginDTO HostLogin(String HostId, String pwd) throws FindException {
 		
-		Optional<HostUser> optH = hostRepository.findById(HostId);
+		Optional<HostUser> optH = hRepository.findById(HostId);
 		if(optH.isPresent()) {
 			HostUser hostuser = optH.get();			
 			HostUserDTO.HostLoginDTO hostLoginDTO = modelMapper.map(hostuser, HostUserDTO.HostLoginDTO.class);
@@ -168,7 +200,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public HostUser findById(String hostId)throws FindException{
-		Optional<HostUser> optH= hostRepository.findById(hostId);
+		Optional<HostUser> optH= hRepository.findById(hostId);
 		if(optH.isPresent()) {
 			return optH.get();
 		}

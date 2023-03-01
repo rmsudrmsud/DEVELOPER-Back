@@ -23,7 +23,7 @@ import com.developer.lessonreview.service.LessonReviewService;
 @RequestMapping("lessonreview/*")
 public class LessonReviewController {
 	@Autowired
-	private LessonReviewService service;
+	private LessonReviewService lrservice;
 	
 
 	/**
@@ -34,7 +34,7 @@ public class LessonReviewController {
 	 */
 	@PostMapping(value = "review")
 	public ResponseEntity<?> addReview(@RequestBody LessonReviewDTO.lrDTO lrDTO) throws AddException, FindException{
-		service.addReview(lrDTO);
+		lrservice.addReview(lrDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -46,7 +46,7 @@ public class LessonReviewController {
 	 */
 	@GetMapping(value = "{tutorId}")
 	public ResponseEntity<?> cntReview(@PathVariable String tutorId) throws FindException{		
-		int cnt = service.cntReview(tutorId);
+		int cnt = lrservice.cntReview(tutorId);
 		return new ResponseEntity<>(cnt, HttpStatus.OK);
 	}
 	
@@ -61,7 +61,7 @@ public class LessonReviewController {
 	@GetMapping(value="lesson")
 	public ResponseEntity<?> lReviewList(HttpSession session) throws FindException{
 		String logined = (String)session.getAttribute("logined");
-		List<LessonReviewDTO.listLRListDTO> list	= service.lReviewList(logined);
+		List<LessonReviewDTO.listLRListDTO> list	= lrservice.lReviewList(logined);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
@@ -76,7 +76,7 @@ public class LessonReviewController {
 	@GetMapping
 	public ResponseEntity<?> noWriteLReview(HttpSession session) throws FindException{
 		String logined = (String)session.getAttribute("logined");
-		List<LessonReviewDTO.noWriteLReviewDTO> list	= service.noWriteLReview(logined);
+		List<LessonReviewDTO.noWriteLReviewDTO> list	= lrservice.noWriteLReview(logined);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 

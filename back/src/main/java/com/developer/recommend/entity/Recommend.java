@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import com.developer.board.entity.Board;
 import com.developer.users.entity.Users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
