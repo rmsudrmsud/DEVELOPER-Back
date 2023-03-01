@@ -203,7 +203,13 @@ public class StudyroomController {
 		List<StudyroomDTO.getAllStudyroomDTO> list= sService.getAllStudyroom();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-	
+	/**
+	 * 스터디카페 상세페이지
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "detail/{srSeq}")
 	public ResponseEntity<?> detailStudyroom(@PathVariable Long srSeq) throws FindException{
 		Studyroom s = sService.detailStudyroom(srSeq);

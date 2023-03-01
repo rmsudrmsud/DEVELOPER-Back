@@ -39,7 +39,7 @@ class FavoritesStudyroomRepositoryTest {
 		//fs.setStudyroomFav(s);
 		Optional<Users> optU = user.findById("abc");
 		Users u=optU.get();
-		fs.setUserId(u);
+		//fs.setUserId(u);
 		fsr.save(fs);
 		
 		

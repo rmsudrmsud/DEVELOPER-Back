@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 //package com.developer.appliedlessontest;
 //
 //import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,7 +78,7 @@
 //	}
 //
 //}
-=======
+
 package com.developer.appliedlessontest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -158,4 +158,3 @@ class AppliedLessonRepositoryTest {
 	}
 
 }
->>>>>>> c3b1e1b19b4d9981d68faac31b0a2a3bd82a2d80
