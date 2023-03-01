@@ -29,7 +29,7 @@ public class HostUserService {
 	private ModelMapper mapper = new ModelMapper();
 	
 	@Autowired
-	private HostUserRepository hostRepository;
+	private HostUserRepository hRepository;
 
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -42,7 +42,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public HostUserDTO selectHost(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 			HostUserDTO hostDTO = modelMapper.map(hostEntity, HostUserDTO.class);
@@ -60,7 +60,7 @@ public class HostUserService {
 	 */
 	public void addHost(HostUserDTO hostUserDTO) throws AddException{ 
 		HostUser hostUserEntity = mapper.map(hostUserDTO, HostUser.class);
-		hostRepository.save(hostUserEntity);
+		hRepository.save(hostUserEntity);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public List<HostUser> selectAll() throws FindException{
-		List<HostUser> list = hostRepository.selectAll();
+		List<HostUser> list = hRepository.selectAll();
 		return list;
 	}
 		
@@ -82,11 +82,11 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public void outHost(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 			hostEntity.setReady(2);
-			hostRepository.save(hostEntity);
+			hRepository.save(hostEntity);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class HostUserService {
 	 */
 	public void updateHost(String hostId, HostUserDTO hostuserDTO) throws FindException {
 
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
 
@@ -108,7 +108,7 @@ public class HostUserService {
 			hostEntity.setPwd(hostuserDTO.getPwd());
 			hostEntity.setTel(hostuserDTO.getTel());
 			hostEntity.setEmail(hostuserDTO.getEmail());
-			hostRepository.save(hostEntity);
+			hRepository.save(hostEntity);
 
 		} else {
 			throw new FindException("호스트회원정보 수정 오류");
@@ -123,7 +123,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public List<HostUserDTO.unApproveHostDTO> hostUnapproveList() throws FindException {
-		List<Object[]> hList = hostRepository.selectAllUnapproveHost();
+		List<Object[]> hList = hRepository.selectAllUnapproveHost();
 		List<HostUserDTO.unApproveHostDTO> hListDto = new ArrayList<>();
 
 		for (int i = 0; i < hList.size(); i++) {
@@ -147,10 +147,10 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public void readyOk(String hostId) throws FindException {
-		Optional<HostUser> optHost = hostRepository.findById(hostId);
+		Optional<HostUser> optHost = hRepository.findById(hostId);
 		HostUser hostEntity = optHost.get();
 		hostEntity.setReady(1);
-		hostRepository.save(hostEntity);
+		hRepository.save(hostEntity);
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class HostUserService {
 	 * @throws RemoveException
 	 */
 	public void deleteHost(String hostId) throws RemoveException {
-		Optional<HostUser> optH = hostRepository.findById(hostId);
+		Optional<HostUser> optH = hRepository.findById(hostId);
 		HostUser entityH = optH.get();
-		hostRepository.delete(entityH);
+		hRepository.delete(entityH);
 	}
 	
 	/**
@@ -176,7 +176,7 @@ public class HostUserService {
 	 */
 	public HostUserDTO.HostLoginDTO HostLogin(String HostId, String pwd) throws FindException {
 		
-		Optional<HostUser> optH = hostRepository.findById(HostId);
+		Optional<HostUser> optH = hRepository.findById(HostId);
 		if(optH.isPresent()) {
 			HostUser hostuser = optH.get();			
 			HostUserDTO.HostLoginDTO hostLoginDTO = modelMapper.map(hostuser, HostUserDTO.HostLoginDTO.class);
@@ -200,7 +200,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public HostUser findById(String hostId)throws FindException{
-		Optional<HostUser> optH= hostRepository.findById(hostId);
+		Optional<HostUser> optH= hRepository.findById(hostId);
 		if(optH.isPresent()) {
 			return optH.get();
 		}

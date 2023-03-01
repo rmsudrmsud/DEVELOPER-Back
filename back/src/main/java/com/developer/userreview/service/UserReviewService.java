@@ -34,7 +34,7 @@ public class UserReviewService {
 	private LessonRepository lRepository;
 	
 	@Autowired
-	private AppliedLessonRepository appliedLessonRepository;
+	private AppliedLessonRepository alRepository;
 	
 
 	ModelMapper modelMapper = new ModelMapper();
@@ -85,7 +85,7 @@ public class UserReviewService {
 	@Transactional
 	public void addUserReview(UserReviewDTO.addReviewDTO addReviewDTO,Long applySeqRv) throws AddException{
 		
-		Optional<AppliedLesson> optA = appliedLessonRepository.findById(applySeqRv);
+		Optional<AppliedLesson> optA = alRepository.findById(applySeqRv);
 		AppliedLesson a = optA.get();
 		UserReview userReview = new UserReview();
 		userReview.setReview(addReviewDTO.getReview());

@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.favoritesstudyroom.repository.FavoritesStudyroomRepository;
 import com.developer.studyroom.entity.Studyroom;
@@ -16,29 +18,29 @@ import com.developer.users.repository.UsersRepository;
 @Service
 public class FavoritesStudyroomService {
 	@Autowired
-	private FavoritesStudyroomRepository fsr;
+	private FavoritesStudyroomRepository fsRepository;
 	
 	@Autowired
-	private StudyroomRepository sr;
+	private StudyroomRepository sRepository;
 	
 	@Autowired
-	private UsersRepository user;
+	private UsersRepository uRepository;
 	
-	//즐겨찾기 추가
-	public void insert(Long srSeq, String userId)throws FindException{
-		FavoritesStudyroom fs = new FavoritesStudyroom();
-		Optional<Studyroom> optS = sr.findById(srSeq);
-		Studyroom s=optS.get();
-		fs.setStudyroom(s);
-		Optional<Users> optU = user.findById(userId);
-		Users u=optU.get();
-		fs.setUserId(u);
-		fsr.save(fs);
-		
-	}
-	
-	//즐겨찾기 삭제
-	public void delete(Long favSeq)throws FindException{
-		fsr.deleteById(favSeq);
-	}
+	 /**
+	    * [스터디카페 상세페이지]즐겨찾기 추가기능
+	    * @author ds
+	    * @param fvDTO
+	    * @throws AddException
+	    */
+	   
+	   public void insertFVstudyroom(FavoritesStudyroomDTO.fvInsertDTO fvDTO)throws AddException{
+	      FavoritesStudyroom fs = new FavoritesStudyroom ();
+	      Optional<Users> optU= uRepository.findById(fvDTO.getUserId());
+	      Users u = optU.get();
+	      fs.setUsers(u);
+	      Optional<Studyroom> optS = sRepository.findById(fvDTO.getSrSeq());
+	      Studyroom s = optS.get();
+	      fs.setStudyroom(s);
+	      fsRepository.save(fs);
+	   }
 }

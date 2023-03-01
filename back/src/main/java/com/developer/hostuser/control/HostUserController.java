@@ -101,103 +101,102 @@ public class HostUserController {
 			return "";
 		}
 
-	/**
-	 * 호스트 유저를 탈퇴한다. ready=2
-	 * 
-	 * @author SR
-	 * @param hostId
-	 * @param session
-	 * @return
-	 * @throws FindException
-	 */
-	
-	@PatchMapping(value = "out")
-	public ResponseEntity<?> outHost(String hostId, HttpSession session) throws FindException {
-		hostId="아이디2";
-		// hostId = (String) session.getAttribute("logined");
-		if (hostId == null) {
+		/**
+		 * 호스트 유저를 탈퇴한다. ready=2
+		 * 
+		 * @author SR
+		 * @param hostId
+		 * @param session
+		 * @return
+		 * @throws FindException
+		 */
+		@PatchMapping(value = "out")
+		public ResponseEntity<?> outHost(String hostId, HttpSession session) throws FindException {
+			hostId="아이디2";
+			// hostId = (String) session.getAttribute("logined");
+			if (hostId == null) {
+			
+				return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
+			} else {
+				hService.outHost(hostId);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		}
+
+		/**
+		 * 호스트 유저 정보를 수정한다.
+		 * 
+		 * @author SR
+		 * @param hostId
+		 * @param hostUserDTO
+		 * @param session
+		 * @return
+		 * @throws FindException
+		 */
+		@PutMapping(value = "edit")
+		public ResponseEntity<?> editHost(String hostId, @RequestBody HostUserDTO hostUserDTO, HttpSession session)
+				throws FindException {
+			hostId = "아이디4";
+			// hostId = (String) session.getAttribute("logined");
+
+			if (hostId == null) {
+				return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
+			} else {
+				//logger.error("컨트롤러값:" + hostUserDTO.getEmail());
+				hService.updateHost(hostId, hostUserDTO);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		}
+
+		/**
+		 * 미승인 호스트 유저 목록 출력한다.
+		 * 
+		 * @author SR
+		 * @return
+		 * @throws FindException
+		 */
+		@GetMapping(value = "unapprovelist")
+		public ResponseEntity<?> hostUnapproveList() throws FindException {
+			List<HostUserDTO.unApproveHostDTO> list = hService.hostUnapproveList();
+			if (list.isEmpty()) {
+				return new ResponseEntity<>("미승인 호스트 유저가 없습니다.", HttpStatus.BAD_REQUEST);
+			} else {
+				return new ResponseEntity<>(list, HttpStatus.OK);
+			}
+		}
+
+		@PatchMapping(value = "ok", produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> hostOk(String hostId, HttpSession session) throws FindException {
+			hostId = "아이디4";
+			// hostId = (String) session.getAttribute("logined");
+
+			if (hostId == null) {
+				return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
+			} else {
+				hService.readyOk(hostId);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+		}
+
 		
-			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
-		} else {
-			hService.outHost(hostId);
-			return new ResponseEntity<>(HttpStatus.OK);
+		/**
+		 * 호스트 승인을 거절한다(삭제)
+		 * @author SR
+		 * @param hostId
+		 * @param session
+		 * @return
+		 * @throws RemoveException
+		 */
+		@DeleteMapping(value = "reject", produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> hostReject(String hostId, HttpSession session) throws RemoveException {
+			hostId = "hostdef";
+			if (hostId == null) {
+				return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
+			} else {
+				hService.deleteHost(hostId);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
 		}
-	}
-
-	/**
-	 * 호스트 유저 정보를 수정한다.
-	 * 
-	 * @author SR
-	 * @param hostId
-	 * @param hostUserDTO
-	 * @param session
-	 * @return
-	 * @throws FindException
-	 */
-	@PutMapping(value = "edit")
-	public ResponseEntity<?> editHost(String hostId, @RequestBody HostUserDTO hostUserDTO, HttpSession session)
-			throws FindException {
-		hostId = "아이디4";
-		// hostId = (String) session.getAttribute("logined");
-
-		if (hostId == null) {
-			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
-		} else {
-			//logger.error("컨트롤러값:" + hostUserDTO.getEmail());
-			hService.updateHost(hostId, hostUserDTO);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}
-
-	/**
-	 * 미승인 호스트 유저 목록 출력한다.
-	 * 
-	 * @author SR
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value = "unapprovelist")
-	public ResponseEntity<?> hostUnapproveList() throws FindException {
-		List<HostUserDTO.unApproveHostDTO> list = hService.hostUnapproveList();
-		if (list.isEmpty()) {
-			return new ResponseEntity<>("미승인 호스트 유저가 없습니다.", HttpStatus.BAD_REQUEST);
-		} else {
-			return new ResponseEntity<>(list, HttpStatus.OK);
-		}
-	}
-
-	@PatchMapping(value = "ok", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> hostOk(String hostId, HttpSession session) throws FindException {
-		hostId = "아이디4";
-		// hostId = (String) session.getAttribute("logined");
-
-		if (hostId == null) {
-			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
-		} else {
-			hService.readyOk(hostId);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}
-
-	
-	/**
-	 * 호스트 승인을 거절한다(삭제)
-	 * @author SR
-	 * @param hostId
-	 * @param session
-	 * @return
-	 * @throws RemoveException
-	 */
-	@DeleteMapping(value = "reject", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> hostReject(String hostId, HttpSession session) throws RemoveException {
-		hostId = "hostdef";
-		if (hostId == null) {
-			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
-		} else {
-			hService.deleteHost(hostId);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}
 }
 
 

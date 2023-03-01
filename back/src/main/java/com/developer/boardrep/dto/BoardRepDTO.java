@@ -1,10 +1,6 @@
 package com.developer.boardrep.dto;
 
-
-
-import java.time.LocalDate;
 import java.util.Date;
-
 import com.developer.board.dto.BoardDTO;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;

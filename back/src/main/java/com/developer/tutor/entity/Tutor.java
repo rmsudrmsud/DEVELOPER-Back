@@ -1,8 +1,6 @@
 package com.developer.tutor.entity;
-import java.util.List;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,13 +35,12 @@ public class Tutor {
 	private String info;
 	@Column(name="img_path")
 	private String imgPath;
-	@Column(name="star_avg", columnDefinition = "NUMBER DEFAULT 0")
+	@Column(name="star_avg")
 	private Double starAvg;
-	@Column(name="apply_ok", columnDefinition = "NUMBER DEFAULT 0")
+	@Column(name="apply_ok")
 	private Integer applyOk;
 	
-	@OneToMany(mappedBy = "tutor")
-	private List<Lesson> lesson;
+	
 	
 	@MapsId("tutorId")
 	@OneToOne(optional = true, 
@@ -51,5 +48,6 @@ public class Tutor {
 	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 
-
+	@OneToMany(mappedBy = "tutor")
+	private List<Lesson> lesson;
 }

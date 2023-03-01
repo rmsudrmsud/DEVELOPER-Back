@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("favoriteslesson/*")
 public class FavoritesLessonController {
 	@Autowired
-	FavoritesLessonService service;
+	FavoritesLessonService flService;
 	
 	/**
 	 *  나의 수업 즐겨찾기 목록 확인 
@@ -43,7 +42,7 @@ public class FavoritesLessonController {
 	public ResponseEntity<?> list(HttpSession session) throws FindException {
 		String logined = (String)session.getAttribute("logined");
 		if(logined != null) {
-			List<FavoritesLessonDTO.flListDTO> flDTO = service.listFavLesson(logined);
+			List<FavoritesLessonDTO.flListDTO> flDTO = flService.listFavLesson(logined);
 			return new ResponseEntity<>(flDTO, HttpStatus.OK);			
 		} 
 		return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);						 
@@ -61,7 +60,7 @@ public class FavoritesLessonController {
 	public ResponseEntity<?> add(@RequestBody String requestBody, @PathVariable Long lessonSeq) throws AddException, FindException, JsonMappingException, JsonProcessingException{
 		ObjectMapper mapper = new ObjectMapper();
 		FavoritesLessonDTO.favoritesLessonDTO flDTO = mapper.readValue(requestBody, FavoritesLessonDTO.favoritesLessonDTO.class);
-		service.addFavLesson(flDTO, lessonSeq);
+		flService.addFavLesson(flDTO, lessonSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -73,7 +72,7 @@ public class FavoritesLessonController {
 	 */
 	@DeleteMapping(value = "{favLesSeq}")
 	public ResponseEntity<?> del(@PathVariable Long favLesSeq) throws RemoveException, FindException{
-		service.delFavLesson(favLesSeq);
+		flService.delFavLesson(favLesSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

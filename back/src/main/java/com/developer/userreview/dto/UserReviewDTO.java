@@ -5,7 +5,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
-import com.developer.appliedlesson.entity.AppliedLesson;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

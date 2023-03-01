@@ -28,7 +28,7 @@ import com.developer.reservation.service.ReservationService;
 @RequestMapping("reservation/*")
 public class ReservationController {
 	@Autowired
-	private ReservationService reservationService;
+	private ReservationService rService;
 
 	/**
 	 * 해당 스터디카페의 모든 예약내역을 출력한다(목록)
@@ -42,7 +42,7 @@ public class ReservationController {
 	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> ListReservation(String hostId, HttpSession session) throws FindException {
 		hostId = "아이디4";
-		List<ReservationDTO.selectAllReservationDTO> list = reservationService.selectAllReservation(hostId);
+		List<ReservationDTO.selectAllReservationDTO> list = rService.selectAllReservation(hostId);
 		// hostId = (String) session.getAttribute("logined");
 
 		if (hostId == null) {
@@ -56,14 +56,14 @@ public class ReservationController {
 
 	/**
 	 * 예약 내역 1건을 출력한다.
-	 * @author tpfks
+	 * @author SR
 	 * @param resSeq
 	 * @return
 	 * @throws FindException
 	 */
 	@GetMapping(value = "info/{resSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> InfoReservation(@PathVariable long resSeq) throws FindException {
-		List<ReservationDTO.selectAllReservationDTO>list = reservationService.infoReservation(resSeq);
+		List<ReservationDTO.selectAllReservationDTO>list = rService.infoReservation(resSeq);
 		
 		if(list.isEmpty()) {
 			return new ResponseEntity<>("예약 내역이 없습니다", HttpStatus.BAD_REQUEST);
@@ -81,9 +81,10 @@ public class ReservationController {
 	 */
 	@DeleteMapping(value = "{resSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> ListReservation(@PathVariable long resSeq, HttpSession session) throws RemoveException {
-		reservationService.deleteReservation(resSeq);
+		rService.deleteReservation(resSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 	/**
 	 * [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * @author ds
@@ -92,7 +93,7 @@ public class ReservationController {
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> reserve(@RequestBody ReservationDTO.insertRvDTO rDTO)throws AddException{
 		
-		reservationService.insertRv(rDTO);
+		rService.insertRv(rDTO);
 		return new ResponseEntity<>(rDTO,HttpStatus.OK);
 	}
 	
@@ -104,7 +105,7 @@ public class ReservationController {
 	 */
 	@GetMapping(value="get/{userId}")//, produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
 	public ResponseEntity<?> getRqRmRv(@PathVariable String userId) throws FindException{
-		List<ReservationDTO.selectRmRvDTO> list = reservationService.selectMyReqRmRv(userId);
+		List<ReservationDTO.selectRmRvDTO> list = rService.selectMyReqRmRv(userId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
@@ -121,7 +122,7 @@ public class ReservationController {
 	public ResponseEntity<?> getReservablity(@PathVariable Long roomSeq, @RequestParam String usingDate) throws FindException, ParseException{
 		try {
 			
-			List<ReservationDTO.selectAllByUsingDateDTO> list = reservationService.selectAllByUsingDate(roomSeq, usingDate);
+			List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
 			return new ResponseEntity<>(list,HttpStatus.OK);
 		} catch (FindException e) {
 			// TODO Auto-generated catch block
@@ -141,7 +142,7 @@ public class ReservationController {
 	 */
 	@GetMapping(value = "get",produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
 	public ResponseEntity<?> getMyResHistoery(@RequestBody String userId)throws FindException{
-		List<ReservationDTO.selectMyResHistoryDTO> list = reservationService.selectMyResHistory(userId);
+		List<ReservationDTO.selectMyResHistoryDTO> list = rService.selectMyResHistory(userId);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 }

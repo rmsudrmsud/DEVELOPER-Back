@@ -29,9 +29,6 @@ public class UserReviewController {
 		List<UserReviewDTO.getTuteeReview> list = urService.getTuteeReview(userId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-
-	@Autowired
-	private UserReviewService userReviewService;
 	
 	/**
 	 * 튜티가 튜터에게받은수업후기 
@@ -43,7 +40,7 @@ public class UserReviewController {
 	 */
 	@PostMapping(value="addreview/{applySeqRv}")
 	public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv) throws AddException{
-		userReviewService.addUserReview(addReviewDTO, applySeqRv);
+		urService.addUserReview(addReviewDTO, applySeqRv);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
