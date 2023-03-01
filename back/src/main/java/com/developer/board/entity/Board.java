@@ -24,6 +24,7 @@ import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,13 +78,14 @@ public class Board {
 	private Integer cnt;
 	
 	
-	
+	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
 	private List<BoardRep> boardRep;
 	
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
 	private List<Recommend> Recommend;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;

@@ -100,8 +100,8 @@ public class UsersController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "ok/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorApply(@PathVariable String userId, HttpSession session) throws FindException {
+	@PatchMapping(value = "ok", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tutorApply(String userId, HttpSession session) throws FindException {
 		userId = "3";
 		// userId = (String) session.getAttribute("logined");
 		if (userId == null) {

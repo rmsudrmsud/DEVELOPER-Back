@@ -72,10 +72,16 @@ public class TutorController {
 	 * @throws RemoveException
 	 */
 
-	@DeleteMapping(value= "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorReject(@PathVariable String userId, HttpSession session) throws RemoveException {
-		tservice.deleteTutor(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@DeleteMapping(value= "", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tutorReject(String userId, HttpSession session) throws RemoveException {
+		
+		userId = "3";
+		// userId = (String) session.getAttribute("logined");
+		if (userId == null) {
+			return new ResponseEntity<>("먼저 로그인을 해주세요", HttpStatus.BAD_REQUEST);
+		} else {
+			tservice.deleteTutor(userId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 	}
-
 }

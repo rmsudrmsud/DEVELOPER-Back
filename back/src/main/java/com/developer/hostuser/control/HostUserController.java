@@ -165,6 +165,14 @@ public class HostUserController {
 			}
 		}
 
+		/**
+		 * 미승인 호스트를 승인한다.
+		 * @author SR
+		 * @param hostId
+		 * @param session
+		 * @return
+		 * @throws FindException
+		 */
 		@PatchMapping(value = "ok", produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<?> hostOk(String hostId, HttpSession session) throws FindException {
 			hostId = "아이디4";
