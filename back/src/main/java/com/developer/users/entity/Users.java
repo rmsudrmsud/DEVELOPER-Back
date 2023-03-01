@@ -94,7 +94,7 @@ public class Users{
    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
    private List<FavoritesStudyroom> favoritesStudyroom;
    
-   @OneToMany(mappedBy = "userId",
+   @OneToMany(mappedBy = "users",
 		   cascade=CascadeType.REMOVE)
    private List<FavoritesStudyroom> favStudyroom;
   

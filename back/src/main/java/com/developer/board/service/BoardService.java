@@ -366,6 +366,7 @@ public class BoardService {
 		List<Board> list = bRepository.findByTitleLike(title);
 		return list;
 	}
+	
 	/**[메인페이지] 글작성 최신순으로 list를 출력한다.
 	 * @author SR
 	 * @return List<BoardDTO> 글목록

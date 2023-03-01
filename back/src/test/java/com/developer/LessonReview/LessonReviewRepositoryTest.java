@@ -39,32 +39,20 @@ public class LessonReviewRepositoryTest {
 		Long applySeq = appliedLesson.getApplySeq();
 		
 		LessonReview lr = new LessonReview();
-<<<<<<< HEAD
+
 		lr.setApplySeq(applySeq);
 		lr.setReview("22후기작성테스트중입니다.");
 		lr.setStar(4);
 		lr.setAppliedLesson(appliedLesson);
-=======
+
 	//	lr.setApplySeq(applySeq);
 		lr.setReview("후기작성테스트중입니다.");
 		lr.setStar(3);
 	//	lr.setAppliedLesson(appliedLesson);
->>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
-		
 		lrRepository.save(lr);
 	}
 	
-<<<<<<< HEAD
-//	@Test
-//	@DisplayName("수업후기 SELECT 테스트")
-//	void testSelectDetail() {
-//		Optional<LessonReview> optLR = lrRepository.findById(1L);
-//		assertTrue(optLR.isPresent());
-//		Long expected = 1L;
-//		assertEquals(expected, optLR.get().getApplySeq());
-//	}
-//	
-=======
+
 	@Test
 	@DisplayName("수업후기 SELECT 테스트")
 	void testSelectDetail() {
@@ -74,32 +62,5 @@ public class LessonReviewRepositoryTest {
 		//assertEquals(expected, optLR.get().getApplySeq());
 	}
 	
->>>>>>> e6850c67185d5c116007acb9bc247d69b399bb55
-//	@Test
-//	@DisplayName("수업후기 SELECT 테스트: 작성한 후기 목록")
-//	void testSelectById() {
-//		List<Object[]> list = lrRepository.listLRList("devman"); 
-//		list.forEach((arr)->{
-//			logger.info("출력값: " + arr[0] + ", " + arr[1]);
-//		});
-//	}
-//	
-//	@Test
-//	@DisplayName("수업후기개수 SELECT 테스트")
-//	void testCntReview() {
-//		int cnt = lrRepository.cntLReview("test");
-//		logger.info("개수: " + cnt);
-//	}
-//	
-//	@Test
-//	@DisplayName("작성하지 않은 수업후기 목록  SELECT 테스트")
-//	void testNoWriteReview() {
-//		List<Object[]> list = lrRepository.noWriteLReview("test1");
-//		for(int i=0; i<list.size(); i++) {
-//			logger.info(list.get(i).toString());
-//		}
-//	}
-	
-
 
 }

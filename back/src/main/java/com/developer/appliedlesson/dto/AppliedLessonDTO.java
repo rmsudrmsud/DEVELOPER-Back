@@ -35,5 +35,6 @@ public class AppliedLessonDTO {
 		private Date cdate;
 		private Integer applyOk;
 	}
-
+	
+	//adff
 }
