@@ -48,4 +48,12 @@ public class LessonReviewDTO {
 		private Long applySeq;
 		private String lessonName;
 	}
+	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class getReviewList{
+		private String review;
+		private Integer star;
+	}
 }

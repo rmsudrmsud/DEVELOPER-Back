@@ -31,25 +31,23 @@ class BoardRepRepositoryTest {
 	@Autowired
 	private UsersRepository ur;
 	
-//	@Test
-//	@DisplayName("testCreateBoardRep 테스트")
-//	void testCreateBoardRep() {
-//		Optional<Board> optB = br.findById(1L);
-//		Board board = optB.get();
-//		
-//		Optional<Users> optU = ur.findById("test1");
-//		Users users = optU.get();
-//
-//		BoardRep boardRep = new BoardRep();
-//		boardRep.setUsers(users);
-//		boardRep.setPostRepSeq(null);
-//		boardRep.setContent("테스트 댓글");
-//		boardRep.setCDate(null);
-//		//boardRep.setUserId("아이디");
-//		boardRep.setBoard(board);
-//		
-//		brr.save(boardRep);
-//	}	
+	@Test
+	@DisplayName("testCreateBoardRep 테스트")
+	void testCreateBoardRep() {
+		Optional<Board> optB = br.findById(1L);
+		Board board = optB.get();
+		
+		Optional<Users> optU = ur.findById("test1");
+		Users users = optU.get();
+
+		BoardRep boardRep = new BoardRep();
+		boardRep.setUsers(users);
+		boardRep.setContent("테스트 댓글");
+		//boardRep.setUserId("아이디");
+		boardRep.setBoard(board);
+		
+		brr.save(boardRep);
+	}	
 	
 	@Test
 	@DisplayName("BoardRep FindById 테스트")

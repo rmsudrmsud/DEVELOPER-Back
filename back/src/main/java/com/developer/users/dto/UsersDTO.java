@@ -1,12 +1,22 @@
 package com.developer.users.dto;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
+import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
+import com.developer.reservation.dto.ReservationDTO;
+import com.developer.tutor.dto.TutorDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import java.util.List;
+
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.dto.BoardDTO;
 import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
+import com.developer.lesson.dto.LessonDTO;
+import com.developer.lessonreview.dto.LessonReviewDTO;
 import com.developer.recommend.dto.RecommendDTO;
 import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
@@ -16,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
@@ -39,27 +50,6 @@ public class UsersDTO {
 		private List<Recommend> recommend;
 		private List<Reservation> reservation;
 		private List<FavoritesStudyroom> favStudyroom;
-
-	@Data
-	@NoArgsConstructor
-	public static class uDTO{
-		private String userId;
-		private String pwd;
-		private Integer role;
-		private String nickname;
-		private String name;
-		private String email;
-		private String tel;
-		private String addr;
-	}
-	
-	@Data
-	@NoArgsConstructor
-	public static class UsersNameDTO{
-		private String userId;
-		private Integer role;
-		private String nickname;
-	}
 	
 	//[JW]
 	@Data
@@ -112,4 +102,57 @@ public class UsersDTO {
 		
 	}
 	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class uDTO{
+		private String userId;
+		private String pwd;
+		private Integer role;
+		private String nickname;
+		private String name;
+		private String email;
+		private String tel;
+		private String addr;
+	}
+	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class UsersNameDTO{
+		private String userId;
+		private Integer role;
+		private String nickname;
+	}
+	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class getNameDTO{
+		private String username;
+		private LessonDTO.getLessonNameDTO lessonName;
+	}
+	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class getCompletedClassDTO{
+		private String username;
+		private LessonReviewDTO.getReviewList review;
+	}
+	
+		
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserIdDTO{
+		private Integer userId; //count함수
+	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UserNickNameDTO{
+		private String nickname;
+	}
 }

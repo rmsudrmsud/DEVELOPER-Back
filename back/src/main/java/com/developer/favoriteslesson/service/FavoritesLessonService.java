@@ -29,7 +29,7 @@ public class FavoritesLessonService {
 	private final FavoritesLessonRepository flRepository;
 	private final LessonRepository lRepository;
 	private final UsersRepository uRepository;
-	private final ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
 
 	/**

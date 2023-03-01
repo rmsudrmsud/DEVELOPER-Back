@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.FindException;
@@ -25,10 +26,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TutorService {
+	@Autowired
+	private TutorRepository tRepository;
+	@Autowired
+	private UsersRepository uRepository;
 	
-	private final TutorRepository tRepository;
-	private final UsersRepository uRepository;
-	private final ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	/**
@@ -96,7 +99,6 @@ public class TutorService {
 			tResult.add(tDTO);
 			return tResult;	
 	}
-	
 	
 	   /**
 	    * 튜터승인거절

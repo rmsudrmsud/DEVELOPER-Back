@@ -1,6 +1,6 @@
 package com.developer.board.entity;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -23,6 +23,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.boardrep.entity.BoardRep;
 import com.developer.recommend.entity.Recommend;
 import com.developer.users.entity.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -86,4 +87,27 @@ public class Board {
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;
+	
+	 public Board(Long postSeq, Integer category, String title, String content, String imgPath, Date cDate, Integer recommend, Integer cnt) {
+			this.postSeq=postSeq;
+			this.category=category;
+			this.title = title;
+	        this.content = content;
+	        this.imgPath  = imgPath;
+	        this.cDate = cDate;
+	        this.recommend = recommend;
+	        this.cnt = cnt;
+	    }
+		
+	    @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+	    public void update(String title, String content, String imgPath, Date cDate) {
+	        this.title = title;
+	        this.content = content;
+	        this.imgPath = imgPath;
+	        this.cDate = cDate;
+	    }
+	    
+	    public void updateCnt(Integer cnt) {
+	    	this.cnt=cnt;
+	    }
 }

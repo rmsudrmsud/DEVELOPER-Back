@@ -32,6 +32,8 @@ public class UsersRepositoryTest {
 	@DisplayName("유저 INSERT 테스트")
 	void testUsersAdd() {
 		Users u = new Users();
+		u.setUserId("test1");
+		u.setRole(1);
 		u.setUserId("tutor1");
 		u.setRole(2);
 		u.setPwd("1234");

@@ -28,6 +28,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 							+ "WHERE l.lesson_seq = :lessonSeq ")
 	public List<Object> applyTuteeList(@Param("lessonSeq") Long lessonSeq);
 	
+	//근형 (사용안할수도)
 	@Query(value="SELECT *"
 			+ "	FROM users"
 			+ "	WHERE"
@@ -41,5 +42,20 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 					+ "	WHERE u.user_id = t.user_id " 
 					+ "	AND apply_ok = 0", nativeQuery = true)
 	public List<Object[]> selectAllUnapproveTutor();
+	
+	//ds
+	@Query(value="SELECT user_id, role, name, nickname, tel \r\n"
+				+ "FROM users \r\n"
+				+ "ORDER BY name", nativeQuery = true)
+	public List<Object[]> selectALLUsers();
+		
+	//ds
+	@Query(value="select* from users;\r\n"
+				+ "SELECT user_id, role, name, nickname, tel \r\n"
+				+ "FROM users \r\n"
+				+ "where user_id Like '%:userId%'\r\n"
+				+ "ORDER BY name", nativeQuery = true)
+	public List<Object[]> selectUserById(@Param("userId") String userId);
+		
 
 }

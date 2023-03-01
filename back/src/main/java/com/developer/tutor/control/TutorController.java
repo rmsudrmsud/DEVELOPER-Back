@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("tutor/*")
 @RequiredArgsConstructor
 public class TutorController {
-	private final TutorService service;
+	@Autowired
+	private TutorService tservice;
 
 	/**
 	 * 튜터 등록 및 수정
@@ -41,7 +43,7 @@ public class TutorController {
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session)
 			throws AddException, FindException {
-		service.saveTutor(tDTO);
+		tservice.saveTutor(tDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -56,7 +58,7 @@ public class TutorController {
 	 */
 	@GetMapping(value = "{tutorId}")
 	public ResponseEntity<?> selectTutorDetail(@PathVariable String tutorId) throws AddException, FindException {
-		List<TutorDTO.selectTutorDetailDTO> list = service.selectTutorDetail(tutorId);
+		List<TutorDTO.selectTutorDetailDTO> list = tservice.selectTutorDetail(tutorId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -69,9 +71,10 @@ public class TutorController {
 	 * @return
 	 * @throws RemoveException
 	 */
-	@DeleteMapping(value = "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@DeleteMapping(value= "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorReject(@PathVariable String userId, HttpSession session) throws RemoveException {
-		service.deleteTutor(userId);
+		tservice.deleteTutor(userId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

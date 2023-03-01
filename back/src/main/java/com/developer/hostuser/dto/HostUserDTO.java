@@ -22,7 +22,8 @@ public class HostUserDTO {
 	private String email;
 	@JsonIgnore
 	private StudyroomDTO studyroom;
-	private ReservationDTO reservation; // 원래는 List<>타입
+	private ReservationDTO reservation; //원래는 List<>타입
+	
 
 	// SR
 	@Data
@@ -38,6 +39,7 @@ public class HostUserDTO {
 		private String email;
 	}
 
+
 	// SR: 미승인 호스트 목록
 	@Data
 	@NoArgsConstructor
@@ -50,4 +52,33 @@ public class HostUserDTO {
 		private String email;
 	}
 	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class getAllHostUserDTO{
+		private String hostId;
+		private String pwd;
+		private String num;
+		private Integer ready;
+		private String name;
+		private String email;
+	}
+	
+	//근형
+	@Data
+	@NoArgsConstructor
+	public static class HostLoginDTO{
+		private String hostId;
+		private String pwd;
+		private Integer ready;
+	}
+	//ds
+    @Data
+    @NoArgsConstructor
+    public static class HostIdDTO{
+    	private String hostId;
+    }
+	
 }
+
+
