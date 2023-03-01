@@ -35,7 +35,7 @@ public class ReservationService {
 	@Autowired
 	private UsersRepository uRepository;
 	@Autowired
-	private RoomInfoRepository roomRepository;
+	private RoomInfoRepository riRepository;
 	@Autowired
 	private HostUserRepository hRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -86,7 +86,7 @@ public class ReservationService {
 	 * @throws FindException
 	 */
 	public List<ReservationDTO.selectAllReservationDTO> infoReservation(long resSeq) throws FindException {
-		//Optional<ReservationDTO.selectAllReservationDTO> optR= rRepository.selectReservation(resSeq);
+	
 		List<Object[]> rList = rRepository.selectReservation(resSeq);
 		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
 			
@@ -131,6 +131,7 @@ public class ReservationService {
 			throw new RemoveException("잘못된 예약번호입니다.");
 		}
 	}
+	
 	/**포스트맨 성공
 	 * [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * @author ds
@@ -147,7 +148,7 @@ public class ReservationService {
 	
 		HostUser hu= optH.get();
 		r.setHostUser(hu);
-		Optional<RoomInfo> optR= roomRepository.findById(rvDTO.getRoomSeq());
+		Optional<RoomInfo> optR= riRepository.findById(rvDTO.getRoomSeq());
 		RoomInfo ri = optR.get();
 		
 		r.setUsingDate(rvDTO.getUsingDate());

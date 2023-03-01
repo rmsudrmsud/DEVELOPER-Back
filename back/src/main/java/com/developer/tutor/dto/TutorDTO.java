@@ -1,10 +1,6 @@
 package com.developer.tutor.dto;
 
 
-import com.developer.lesson.dto.LessonDTO;
-import com.developer.users.dto.UsersDTO;
-
-import lombok.Data;
 import java.util.List;
 
 import com.developer.lesson.dto.LessonDTO;
@@ -26,6 +22,19 @@ public class TutorDTO {
 		
 		private UsersDTO.uNameDTO uDTO;
 		private List<LessonDTO> lDTO;
+	}
+	
+	//[JH]
+	@Data
+	public static class tutorDTO{
+		private String tutorId;
+		private String info;
+		private String imgPath;
+		private Double starAvg;
+		private Integer applyOk;
+		
+		private LessonDTO ldto;
+		private UsersDTO udto;
 	}
 	
 	//[JW]

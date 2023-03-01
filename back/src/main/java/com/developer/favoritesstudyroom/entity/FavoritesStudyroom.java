@@ -25,7 +25,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Favorites_Studyroom")
+@Table(name = "FAVORITES_STUDYROOM")
+
 @SequenceGenerator(name = "FAV_SEQ_GENERATOR", // 사용할 sequence 이름
       sequenceName = "fav_seq", // 실제 데이터베이스 sequence 이름
       initialValue = 1, allocationSize = 1)

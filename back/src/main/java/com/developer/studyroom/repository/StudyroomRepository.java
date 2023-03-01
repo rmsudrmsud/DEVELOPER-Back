@@ -11,11 +11,7 @@ import com.developer.studyroom.entity.Studyroom;
 
 public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
 
-	/**
-	 * 스터디카페 전체출력 
-	 * @author choigeunhyeong
-	 * @return
-	 */
+	//GH - 스터디카페 전체출력
 	@Query(value="select * from studyroom order by sr_seq desc", nativeQuery = true)
 	public List<Object[]> getAllStudyroom();
 	

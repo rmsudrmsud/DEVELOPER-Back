@@ -30,7 +30,7 @@ import com.developer.studyroom.dto.StudyroomDTO;
 public class RoomInfoController {
 
 	@Autowired
-	private RoomInfoService roomInfoService;
+	private RoomInfoService riService;
 
 	/**
 	 * 룸 1개정보를 출력한다.
@@ -43,7 +43,7 @@ public class RoomInfoController {
 	@GetMapping(value = "{roomSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> infoRoom(@PathVariable long roomSeq) throws FindException {
 
-		RoomInfoDTO roomDTO = roomInfoService.selectRoom(roomSeq);
+		RoomInfoDTO roomDTO = riService.selectRoom(roomSeq);
 		return new ResponseEntity<>(roomDTO, HttpStatus.OK);
 	}
 
@@ -58,7 +58,7 @@ public class RoomInfoController {
 	 */
 	@PostMapping(value = "{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addRoom(@RequestBody RoomInfoDTO roomInfoDTO, @PathVariable long srSeq) {
-		roomInfoService.insertRoom(roomInfoDTO, srSeq);
+		riService.insertRoom(roomInfoDTO, srSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
@@ -75,7 +75,7 @@ public class RoomInfoController {
 	@PutMapping(value = "edit/{roomSeq}")
 	public ResponseEntity<?> editRoom(@PathVariable long roomSeq, @RequestBody RoomInfoDTO roomInfoDTO)
 			throws FindException {
-		roomInfoService.updateRoom(roomSeq, roomInfoDTO);
+		riService.updateRoom(roomSeq, roomInfoDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
@@ -90,7 +90,7 @@ public class RoomInfoController {
 	 */
 	@PatchMapping(value = "{roomSeq}")
 	public ResponseEntity<?> deleteRoom(@PathVariable long roomSeq) throws FindException {
-		roomInfoService.deleteRoom(roomSeq);
+		riService.deleteRoom(roomSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -104,7 +104,7 @@ public class RoomInfoController {
 	 */
 	@GetMapping(value = "list/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> listRoom(@PathVariable long srSeq) throws FindException {
-		List<RoomInfoDTO.selectAllRoomDTO> list = roomInfoService.selectAllRoom(srSeq);
+		List<RoomInfoDTO.selectAllRoomDTO> list = riService.selectAllRoom(srSeq);
 		if (list.isEmpty()) {
 			return new ResponseEntity<>("추가한 방이 없습니다.", HttpStatus.BAD_REQUEST);
 		} else {
@@ -121,7 +121,7 @@ public class RoomInfoController {
 	 */
 	@GetMapping(value="{srSeq}")
 	public ResponseEntity<?> getReservation(@PathVariable Long srSeq) throws FindException{
-		List<RoomInfoDTO.getReservationDTO> list = roomInfoService.getReservation(srSeq);
+		List<RoomInfoDTO.getReservationDTO> list = riService.getReservation(srSeq);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
@@ -134,7 +134,7 @@ public class RoomInfoController {
 	 */
 	@GetMapping(value = "get/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE )
 	public ResponseEntity<?> getAll(@PathVariable Long srSeq)throws FindException{
-		List<RoomInfoDTO> list = roomInfoService.selectAll(srSeq);
+		List<RoomInfoDTO> list = riService.selectAll(srSeq);
 		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	

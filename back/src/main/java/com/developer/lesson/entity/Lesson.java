@@ -1,5 +1,6 @@
 package com.developer.lesson.entity;
 
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.tutor.entity.Tutor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +34,7 @@ import lombok.Setter;
 @Table(name="LESSON")
 @DynamicInsert @DynamicUpdate
 @Setter @Getter @NoArgsConstructor
+@JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
 @SequenceGenerator(
 		name ="lessonSeq", 
 		sequenceName ="lesson_seq", 
@@ -93,9 +96,7 @@ public class Lesson {
 	@NotNull
 	@Column(name="location")
 	private String location;
-	
-	
-	
+
 	
 	@ManyToOne
 	@JoinColumn(name="tutor_id")

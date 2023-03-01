@@ -32,13 +32,10 @@ public class UsersRepositoryTest {
 	@DisplayName("유저 INSERT 테스트")
 	void testUsersAdd() {
 		Users u = new Users();
-<<<<<<< HEAD
 		u.setUserId("test1");
 		u.setRole(1);
-=======
 		u.setUserId("tutor1");
 		u.setRole(2);
->>>>>>> c3b1e1b19b4d9981d68faac31b0a2a3bd82a2d80
 		u.setPwd("1234");
 		u.setNickname("테스트닉네임");
 		u.setName("테스트이름");
