@@ -15,7 +15,7 @@ public interface TutorRepository extends JpaRepository<Tutor, String> {
 			+ "	l.lesson_seq, l.lesson_name, l.category, l.content, l.people, l.img_path AS lessonImg, l.start_cdate, l.end_cdate,\n"
 			+ "	l.price, l.start_date, l.end_date, l.location,\n"
 			+ "	t.info, t.img_path AS tutorImg, t.star_avg, \n"
-			+ "	u.name\n"
+			+ "	u.name, l.pay_lesson \n"
 			+ "FROM lesson l\n"
 			+ "INNER JOIN tutor t\n"
 			+ "ON l.tutor_id = t.tutor_id\n"

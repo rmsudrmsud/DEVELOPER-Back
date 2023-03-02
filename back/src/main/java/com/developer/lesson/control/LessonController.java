@@ -3,12 +3,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,111 +15,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
+import com.developer.appliedlesson.service.AppliedLessonService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.exception.RemoveException;
+import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
+import com.developer.favoriteslesson.service.FavoritesLessonService;
 import com.developer.lesson.dto.LessonDTO;
+import com.developer.lesson.dto.LessonDTO.lessonDetailDTO;
 import com.developer.lesson.dto.LessonDTO.selectDetailDTO;
 import com.developer.lesson.service.LessonService;
+import com.developer.lessonreview.service.LessonReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("lesson/*")
+@RequiredArgsConstructor
 public class LessonController {
-	@Autowired
-	private LessonService lservice;
-	
-	//[JH]
-	@GetMapping(value = "getlesson1/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser1(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser> list = lservice.getLessonByUser1(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
-	}
-	
-	//[JH]
-	@GetMapping(value = "getlesson2/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser2(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser> list = lservice.getLessonByUser2(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
-	}
-	
-	//[JH]
-	@GetMapping(value = "getlesson3/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser3(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser> list = lservice.getLessonByUser3(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
-	}
-	
-	//[JH]
-	@GetMapping(value = "getapply/{userId}")
-	public ResponseEntity<?> getApplyLesson(@PathVariable String userId) throws FindException{
-		List<LessonDTO.applyLessonBytutee> list = lservice.getApplyLesson(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
-	//[JH]
-	@GetMapping(value = "upcoming/{userId}")
-	public ResponseEntity<?> upComingLesson(@PathVariable String userId) throws FindException{
-		List<LessonDTO.applyLessonBytutee> list = lservice.upComingLesson(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
-	//[JH]
-	@GetMapping(value = "ongoing/{userId}")
-	public ResponseEntity<?> onGoinLesson(@PathVariable String userId) throws FindException{
-		List<LessonDTO.applyLessonBytutee> list = lservice.onGoingLesson(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
-	
-	
-	//[JH]
-	@GetMapping(value = "lessondetail/{lessonSeq}")
-	public ResponseEntity<?> getLessonDetail(@PathVariable Long lessonSeq) throws FindException{
-		List<LessonDTO.selectLessonDTO> list = lservice.getLessonDetail(lessonSeq);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
-	//[JH]
-	@GetMapping(value = "selectlesson/{lessonSeq}")
-	public ResponseEntity<?> selectLesson(@PathVariable Long lessonSeq) throws FindException{
-		if(lessonSeq == null) {
-			return new ResponseEntity<>("수업이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-		} else {
-			LessonDTO.selectLessonDTO lessonDTO = lservice.selectLesson(lessonSeq);
-			return new ResponseEntity<>(lessonDTO, HttpStatus.OK);
-		}
-	}
-	
-	//[JH]
-	@PatchMapping(value = "update/{lessonSeq}")
-	public ResponseEntity<?> updateLesson(@PathVariable Long lessonSeq,@RequestBody LessonDTO.selectLessonDTO lDTO, HttpSession session) throws FindException {
-		lservice.updates(lDTO);
-		return new ResponseEntity<>(HttpStatus.OK);	
-	}
-	
-	//[JH]
-	@PatchMapping(value = "delete/{lessonSeq}")
-	public ResponseEntity<?> deleteLesson(@PathVariable Long lessonSeq, HttpSession session) throws FindException{
-		if(lessonSeq == null) {
-			return new ResponseEntity<>("수업 내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-		} else {
-			lservice.deleteLesson(lessonSeq);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}
+	private final LessonService lservice;
+	private final AppliedLessonService alService;
+	private final FavoritesLessonService flService;
+	private LessonReviewService lrservice;
 
-
-	/**
-	 * 선택한 클래스에 대한 상세 정보
-	 * @author moonone
-	 * @param lessonSeq 수업번호
-	 * @return 상세정보 
-	 * @throws FindException
-	 */
-	@GetMapping (value = {"detail/{lessonSeq}"}, produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<LessonDTO.selectDetailDTO> detail(@PathVariable Long lessonSeq) throws FindException{
-		selectDetailDTO lessonDto = lservice.selectDetail(lessonSeq);
-		return new ResponseEntity<LessonDTO.selectDetailDTO>(lessonDto, HttpStatus.OK);
-	}
 	
 	/**
 	 * 수업 등록 및 수정
@@ -129,8 +49,9 @@ public class LessonController {
 	 * @param userId 사용자 아이디
 	 * @throws FindException
 	 */
-	@PostMapping(value = {"{userId}"}, produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<LessonDTO> add(@RequestBody LessonDTO.selectDetailDTO dto, @PathVariable String userId) throws AddException, FindException{
+	@PostMapping(produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<LessonDTO> add(LessonDTO.selectDetailDTO dto, HttpSession session) throws AddException, FindException{
+		String userId = (String)session.getAttribute("logined");
 		lservice.addLessonDTO(dto, userId);
 		return new ResponseEntity<>(HttpStatus.OK);
 
@@ -150,15 +71,24 @@ public class LessonController {
 	}
 	
 	/**
-	 * 모든 수업 목록
+	 * 선택한 클래스에 대한 상세 정보
 	 * @author moonone
-	 * @return 수업 목록
+	 * @param lessonSeq 수업번호
+	 * @return 상세정보 
+	 * @throws FindException
 	 */
-	@GetMapping(value="lessonlist")
-	public ResponseEntity<?> allLessonList() throws FindException{
-		List<LessonDTO.allLessonListDTO> list = lservice.allLessonList();
-		return new ResponseEntity<>(list ,HttpStatus.OK);
+	@GetMapping (value = {"detail/{lessonSeq}"}, produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<LessonDTO.lessonDetailDTO> detail(@PathVariable Long lessonSeq) throws FindException{
+		LessonDTO.lessonDetailDTO result = new lessonDetailDTO();
+		selectDetailDTO lessonDto = lservice.selectDetail(lessonSeq);
+		//TODO: NULL 반환 막기 ...
+		Integer cnt = lrservice.cntReview(lessonDto.getTDTO().getTutorId());
+
+		result.setCnt(cnt);
+		result.setLessonDto(lessonDto);
+		return new ResponseEntity<LessonDTO.lessonDetailDTO>(result, HttpStatus.OK);
 	}
+	
 	
 	/**
 	 * 수업 이름 검색
@@ -171,30 +101,55 @@ public class LessonController {
 		List<LessonDTO.searchLessonDTO> list = lservice.findByLessonNameContaining(searchWord);
 		return new ResponseEntity<>(list ,HttpStatus.OK);
 	}
-
+	
 	/**
-	 * [메인페이지] 신청종료날짜 임박순으로 list를 출력한다.
-	 * @author SR
-	 * @return 신청종료남짜 임박순으로 정렬한 list
+	 * 수업 신청
+	 * @author moonone
+	 * @param alDTO
+	 * @param session
+	 * @return
+	 * @throws AddException
 	 * @throws FindException
 	 */
-	@GetMapping(value ="listbydate", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<?> ListLessonByDateController() throws FindException{
-		List<LessonDTO.selectAllBydateLessonDTO> list = lservice.selectAllByDateLesson();
-		if(list.isEmpty()) {
-			return new ResponseEntity<>("신청진행중인 수업이 없습니다.", HttpStatus.BAD_REQUEST);
+	@PostMapping(value = "{lessonSeq}")
+	public ResponseEntity<?> applyLesson(@RequestBody AppliedLessonDTO.alAddRequestDTO alDTO, HttpSession session, @PathVariable Long lessonSeq) throws AddException, FindException{
+		String logined = (String)session.getAttribute("logined");
+		if(logined != null) {
+			alService.applyLesson(alDTO, lessonSeq, logined);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인이 안 된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
+	
 	/**
-	 * [관리자] 관리자 대시보드 최신 생성된 수업 5개 리스트
-	 * @author ds
-	 * @return 최신 생성된 수업 5개 리스트
-	 * @throws FindException
+	 * 수업즐겨찾기 추가
+	 * @author moonone
+	 * @param flDTO 수업즐겨찾기
+	 * @param lessonSeq 수업번호
+	 * @throws AddException
 	 */
-	@GetMapping(value="list5", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<?> getList5()throws FindException{
-		List<LessonDTO.LessonList5DTO> list= lservice.selectList5();
-		return new ResponseEntity<>(list,HttpStatus.OK);
+	@PostMapping(value="favoriteslesson/{lessonSeq}", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<?> add(@RequestBody FavoritesLessonDTO.favoritesLessonDTO flDTO, HttpSession session, @PathVariable Long lessonSeq) throws AddException, FindException, JsonMappingException, JsonProcessingException{
+		String userId = (String)session.getAttribute("logined");
+		if(userId != null) {
+			flService.addFavLesson(flDTO, lessonSeq, userId);
+			return new ResponseEntity<>("즐겨찾기 추가 완료", HttpStatus.OK);			
+		} else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.OK);						
+		}
 	}
+	
+	/**
+	 * 수업 즐겨찾기 삭제 
+	 * @author moonone
+	 * @param favLesSeq 수업즐겨찾기SEQ
+	 * @throws RemoveException 
+	 */
+	@DeleteMapping(value = "favoriteslesson/{favLesSeq}")
+	public ResponseEntity<?> del(@PathVariable Long favLesSeq) throws RemoveException, FindException{
+		flService.delFavLesson(favLesSeq);
+		return new ResponseEntity<>("즐겨찾기 삭제됨", HttpStatus.OK);
+	}
+
 }

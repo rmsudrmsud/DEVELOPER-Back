@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
-import com.developer.exception.RemoveException;
 import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.service.TutorService;
 
@@ -40,11 +38,15 @@ public class TutorController {
 	 * @throws AddException
 	 * @throws FindException
 	 */
-	@PostMapping
-	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session)
-			throws AddException, FindException {
-		tservice.saveTutor(tDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session) throws AddException, FindException {
+		String logined = (String) session.getAttribute("logined");
+		if(logined != null) {
+			tservice.saveTutor(tDTO, logined);			
+			return new ResponseEntity<>("등록 성공", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);			
+		}
 	}
 
 	/**
@@ -62,20 +64,5 @@ public class TutorController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	/**
-	 * 튜터 승인거절
-	 * 
-	 * @author SR
-	 * @param userId
-	 * @param session
-	 * @return
-	 * @throws RemoveException
-	 */
-
-	@DeleteMapping(value= "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorReject(@PathVariable String userId, HttpSession session) throws RemoveException {
-		tservice.deleteTutor(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 
 }
