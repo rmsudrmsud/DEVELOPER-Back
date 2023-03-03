@@ -44,7 +44,7 @@ public class Tutor {
 	
 	@MapsId("tutorId")
 	@OneToOne(optional = true, 
-						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+						cascade = {CascadeType.MERGE})
 	@JoinColumn(name="tutor_id", nullable = true)
 	private Users users;
 
