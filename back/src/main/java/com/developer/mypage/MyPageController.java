@@ -55,7 +55,13 @@ public class MyPageController {
 	private final RoomReviewService rrservice;
 
 	
-	//[JH] 튜터메인
+	/**
+	 * 튜터메인
+	 * @author Jin
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/{tutorId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorMain(@PathVariable String tutorId) throws FindException{
 		MyPageDTO.TutorMainDTO dto = new MyPageDTO.TutorMainDTO();
@@ -71,7 +77,13 @@ public class MyPageController {
 	}
 	
 	
-	//[JH] 튜터 진행예정수업 상세페이지
+	/**
+	 * 튜터 진행예정수업 상세페이지
+	 * @author Jin
+	 * @param lessonSeq
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/upcoming/detail/{lessonSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorUpcoming(@PathVariable Long lessonSeq) throws FindException{
 		MyPageDTO.TutorUpcomingDTO dto = new MyPageDTO.TutorUpcomingDTO();
@@ -86,7 +98,14 @@ public class MyPageController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
-	//[JH] 튜터 진행중인수업 상세페이지
+
+	/**
+	 * 튜터 진행중인수업 상세페이지
+	 * @author Jin
+	 * @param lessonSeq
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/ongoing/detail/{lessonSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorOngoing(@PathVariable Long lessonSeq) throws FindException{
 		MyPageDTO.TutorOngoingDTO dto = new MyPageDTO.TutorOngoingDTO();
@@ -99,7 +118,14 @@ public class MyPageController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
-	//[JH] 튜티 진행 예정 수업 목록(승인, 미승인)
+
+	/**
+	 * 튜티 진행 예정 수업 목록(승인, 미승인)
+	 * @author Jin
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutee/upcoming/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tuteeUpcoming(@PathVariable String userId) throws FindException{
 		MyPageDTO.TuteeUpcomingDTO dto = new MyPageDTO.TuteeUpcomingDTO();
@@ -113,9 +139,14 @@ public class MyPageController {
 	}
 	
 	
-	
-	//OK
-	//[JH] 내 클래스에 신청한 튜티 승인
+	/**
+	 * 내 클래스에 신청한 튜티 승인하기
+	 * @author Jin
+	 * @param applySeq
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@PatchMapping(value = "tutor/upcoming/detail/apply/{applySeq}")
 	public ResponseEntity<?> updateApplyLesson(@PathVariable Long applySeq, HttpSession session) throws FindException {
 		applySeq = 1L;
@@ -126,8 +157,16 @@ public class MyPageController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}	
 	}
-	//OK
-	//[JH] 내 클래스에 신청한 튜티 거절
+
+
+	/**
+	 * 내 클래스에 신청한 튜티 거절하기
+	 * @author Jin
+	 * @param applySeq
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@PatchMapping(value = {"tutor/upcoming/detail/notapply/{applySeq}"})
 	public ResponseEntity<?> updateNotApplyLesson(@PathVariable Long applySeq, HttpSession session) throws FindException {
 		applySeq = 1L;
@@ -140,35 +179,72 @@ public class MyPageController {
 		
 	}
 	
-	//[JH] 튜터의 진행예정 수업 리스트 출력(개별페이지에서 필요)
+	/**
+	 * 튜터의 진행예정 수업 리스트 출력하기(개별페이지)
+	 * @author Jin
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/upcoming/{tutorId}" )
 	public ResponseEntity<?> getLessonByUser1(@PathVariable String tutorId) throws FindException{
 		List<LessonDTO.GetLessonByUser1> list = lService.getLessonByUser1(tutorId);
 		return new ResponseEntity<>(list, HttpStatus.OK);		
 	}
 	
-	//[JH] 진행중인 튜터의 수업 리스트 출력(개별페이지에서 필요)
+
+	/**
+	 * 튜터의 진행중인 수업 리스트 출력하기(개별페이지)
+	 * @author Jin
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/ongoing/{tutorId}" )
 	public ResponseEntity<?> getLessonByUser2(@PathVariable String tutorId) throws FindException{
 		List<LessonDTO.GetLessonByUser2> list = lService.getLessonByUser2(tutorId);
 		return new ResponseEntity<>(list, HttpStatus.OK);		
 	}
 	
-	//[GH] 진행완료된 수업 리스트 출력(개별페이지에서 필요)
+
+	/**
+	 * 진행완료된 수업 리스트 출력하기(개별페이지)
+	 * @author GH
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/completed/{tutorId}" )
 	public ResponseEntity<?> getLessonByUser3(@PathVariable String tutorId) throws FindException{
 		List<LessonDTO.GetLessonByUser3> list = lService.getLessonByUser3(tutorId);
 		return new ResponseEntity<>(list, HttpStatus.OK);		
 	}
 	
-	//[JH] 수업 수정하기
+
+	/**
+	 * 튜터의 나의 수업 수정하기
+	 * @author Jin
+	 * @param lessonSeq
+	 * @param lDTO
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@PatchMapping(value = "tutor/upcoming/detail/update/{lessonSeq}")
 	public ResponseEntity<?> updateLesson(@PathVariable Long lessonSeq,@RequestBody LessonDTO.selectLessonDTO lDTO, HttpSession session) throws FindException {
 		lService.updates(lDTO);
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
-	//[JH] 수업 삭제하기
+
+	/**
+	 * 튜터의 나의 수업 삭제하기
+	 * @author Jin
+	 * @param lessonSeq
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@PatchMapping(value = "tutor/upcoming/detail/delete/{lessonSeq}")
 	public ResponseEntity<?> deleteLesson(@PathVariable Long lessonSeq, HttpSession session) throws FindException{
 		if(lessonSeq == null) {
@@ -179,21 +255,42 @@ public class MyPageController {
 		}
 	}
 	
-	//[JH] 튜티가 수강중인 수업
+
+	/**
+	 * 튜티가 수강중인 수업 리스트
+	 * @author Jin
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutee/ongoing/{userId}")
 	public ResponseEntity<?> onGoinLesson(@PathVariable String userId) throws FindException{
 		List<LessonDTO.applyLessonBytutee> list = lService.onGoingLesson(userId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
-	//[JH] 수업에 참여할 튜티의 이전 수업 후기 목록
+
+	/**
+	 * 수업에 참여할 튜티의 이전 수업 후기 목록
+	 * @author Jin
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "tutor/upcoming/detail/tuteereview/{userId}")
 	public ResponseEntity<?> getTuteeReview(@PathVariable String userId) throws FindException{
 		List<UserReviewDTO.getTuteeReview> list = urService.getTuteeReview(userId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	//[JH] 회원 상세정보
+
+	/**
+	 * 사용자 상세정보
+	 * @author Jin
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "{userId}")
 	public ResponseEntity<?> getUser(@PathVariable String userId) throws FindException{
 		if(userId == null) {
@@ -204,14 +301,31 @@ public class MyPageController {
 		}
 	}
 	
-	//[JH] 회원 수정하기
+
+	/**
+	 * 사용자 정보 수정하기
+	 * @author Jin
+	 * @param userId
+	 * @param uDTO
+	 * @return
+	 * @throws FindException
+	 * @throws AddException
+	 */
 	@PatchMapping(value = "update/{userId}")
 	public ResponseEntity<?> updateLesson(@PathVariable String userId, @RequestBody UsersDTO uDTO) throws FindException, AddException{
 		uService.addUsers(uDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	//[JH] 회원 탈퇴하기
+
+	/**
+	 * 사용자 탈퇴하기
+	 * @author Jin
+	 * @param userId
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@PatchMapping(value = "delete/{userId}")
 	public ResponseEntity<?> deleteUser(@PathVariable String userId, HttpSession session) throws FindException{
 		if(userId == null) {
