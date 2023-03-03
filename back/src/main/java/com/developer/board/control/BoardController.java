@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +28,11 @@ import com.developer.recommend.service.RecommendService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @RestController
 @RequestMapping("board/*")
 @RequiredArgsConstructor
 public class BoardController {
 
-	
 	private final BoardService bService;
 	private final RecommendService rService;
 
@@ -174,9 +170,10 @@ public class BoardController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 
 	}
-	
+
 	/**
-	 * 추천수 증가 
+	 * 추천수 증가
+	 * 
 	 * @author choigeunhyeong
 	 * @param recommend
 	 * @param postSeq
@@ -184,25 +181,27 @@ public class BoardController {
 	 * @return
 	 * @throws AddException
 	 */
-	@PostMapping(value="detail/{postSeq}")
-	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session) throws AddException {
+	@PostMapping(value = "detail/{postSeq}")
+	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session)
+			throws AddException {
 		String logined = (String) session.getAttribute("logined");
-		if(logined == null) {
+		if (logined == null) {
 			throw new AddException("로그인하세요");
 		}
 		rService.addRecommend(recommend, postSeq, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 추천수 감소
+	 * 
 	 * @author choigeunhyeong
 	 * @param recSeq
 	 * @return
 	 * @throws RemoveException
 	 */
-	@DeleteMapping(value="detail/{recSeq}")
-	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException{
+	@DeleteMapping(value = "detail/{recSeq}")
+	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException {
 		rService.delRecommend(recSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

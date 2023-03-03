@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 public class AdminDTO {
 
+	// DS
 	@Data
 	@NoArgsConstructor
 	public static class getList5DTO {
