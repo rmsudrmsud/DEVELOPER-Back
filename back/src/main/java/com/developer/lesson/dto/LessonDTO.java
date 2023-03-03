@@ -1,4 +1,5 @@
 package com.developer.lesson.dto;
+
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -46,8 +47,8 @@ public class LessonDTO {
 	
 	// [JW]
 	@Data
-	@NoArgsConstructor
-	@JsonFormat(pattern = "yy-MM-dd")
+	@NoArgsConstructor @AllArgsConstructor
+	
 	public static class selectDetailDTO {
 		private Long lessonSeq;
 		private String lessonName;
@@ -55,11 +56,15 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private LocalDate startCdate;
-		private LocalDate endCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endCdate;
 		private Integer price;
-		private LocalDate startDate;
-		private LocalDate endDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endDate;
 		private Integer payLesson;
 		private String location;
 
@@ -135,7 +140,7 @@ public class LessonDTO {
 	
 	// [JW]
 	@Data
-	@NoArgsConstructor
+	@NoArgsConstructor @AllArgsConstructor
 	public static class lessonDetailDTO {
 		private selectDetailDTO lessonDto;
 		private Integer cnt;

@@ -39,7 +39,7 @@ public class LessonController {
 	private final LessonService lservice;
 	private final AppliedLessonService alService;
 	private final FavoritesLessonService flService;
-	private LessonReviewService lrservice;
+	private final LessonReviewService lrservice;
 
 	
 	/**
@@ -80,10 +80,10 @@ public class LessonController {
 	@GetMapping (value = {"detail/{lessonSeq}"}, produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
 	public ResponseEntity<LessonDTO.lessonDetailDTO> detail(@PathVariable Long lessonSeq) throws FindException{
 		LessonDTO.lessonDetailDTO result = new lessonDetailDTO();
+		
 		selectDetailDTO lessonDto = lservice.selectDetail(lessonSeq);
 		//TODO: NULL 반환 막기 ...
 		Integer cnt = lrservice.cntReview(lessonDto.getTDTO().getTutorId());
-
 		result.setCnt(cnt);
 		result.setLessonDto(lessonDto);
 		return new ResponseEntity<LessonDTO.lessonDetailDTO>(result, HttpStatus.OK);

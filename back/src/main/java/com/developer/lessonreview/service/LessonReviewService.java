@@ -64,8 +64,10 @@ public class LessonReviewService {
 	 */
 	public Integer cntReview(String tutorId) throws FindException{
 		Integer cnt = lrRepository.cntLReview(tutorId);
+		logger.info("값1: " + tutorId);
+		logger.info("값2: " + cnt);
 		if(cnt == null) {
-			cnt = Integer.valueOf(0);
+			cnt = 0;
 		}
 		return cnt;
 	}

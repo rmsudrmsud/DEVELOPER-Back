@@ -304,6 +304,7 @@ public class LessonService {
 		lDTO.setFlDTO(flList);
 		lDTO.setAlDTO(alList);	
 		lDTO.setTDTO(tDTO);	
+		logger.info("값0: " + lDTO.getClass().toString());
 		return lDTO;
 	};
 	
@@ -315,7 +316,7 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public void addLessonDTO(LessonDTO.selectDetailDTO dto, String userId) throws FindException {		
-		Optional<Tutor> optT = tRepository.findById(userId);
+		Optional<Tutor> optT = tRepository.findById("tutor1");
 		Tutor tutor = optT.get();
 		Lesson lesson = new Lesson();
 		lesson.setTutor(tutor);
