@@ -37,22 +37,18 @@ public class LessonReviewService {
 	 * @param lrDTO 작성한 후기
 	 * @throws FindException
 	 */
-	public void addReview(LessonReviewDTO.lrDTO lrDTO) throws FindException {
-    	Optional<LessonReview> lr = lrRepository.findById(lrDTO.getApplySeq());
+	public void addReview(LessonReviewDTO.lrDTO lrDTO, Long applySeq) throws FindException {
+    	Optional<LessonReview> lr = lrRepository.findById(applySeq);
     	LessonReview lessonReview = new LessonReview();
-    	
     	if(!lr.isPresent()) {
-    		lessonReview.setApplySeq(lrDTO.getApplySeq());
+    		lessonReview.setApplySeq(applySeq);
     		lessonReview.setCDate(lrDTO.getCDate());
     		lessonReview.setReview(lrDTO.getReview());
     		lessonReview.setStar(lrDTO.getStar());	
     		
-    		Optional<AppliedLesson> al = alRepository.findById(lrDTO.getApplySeq());
-    		AppliedLesson appliedLesson = al.get();
-    		lessonReview.setAppliedLesson(appliedLesson);
+    		Optional<AppliedLesson> al = alRepository.findById(applySeq);
+    		lessonReview.setAppliedLesson(al.get());
     	} else {
-    		lessonReview = lr.get();
-    		
     		lessonReview.setReview(lrDTO.getReview());
     		lessonReview.setStar(lrDTO.getStar());
     	}
@@ -66,8 +62,11 @@ public class LessonReviewService {
 	 * @return 개수
 	 * @throws FindException
 	 */
-	public int cntReview(String tutorId) throws FindException{
-		int cnt = lrRepository.cntLReview(tutorId);
+	public Integer cntReview(String tutorId) throws FindException{
+		Integer cnt = lrRepository.cntLReview(tutorId);
+		if(cnt == null) {
+			cnt = Integer.valueOf(0);
+		}
 		return cnt;
 	}
 	
@@ -114,5 +113,5 @@ public class LessonReviewService {
 			}
 		return result;
 	}
-
 }
+

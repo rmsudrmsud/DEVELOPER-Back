@@ -2,6 +2,7 @@ package com.developer.lesson.dto;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
+import com.developer.lesson.dto.LessonDTO.selectDetailDTO;
 import com.developer.tutor.dto.TutorDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -59,6 +61,7 @@ public class LessonDTO {
 	// [JW]
 	@Data
 	@NoArgsConstructor
+	@JsonFormat(pattern = "yy-MM-dd")
 	public static class selectDetailDTO {
 		private Long lessonSeq;
 		private String lessonName;
@@ -74,9 +77,9 @@ public class LessonDTO {
 		private Integer payLesson;
 		private String location;
 
-		private TutorDTO tDTO;
-		private FavoritesLessonDTO flDTO;
-		private AppliedLessonDTO alDTO;
+		private TutorDTO.selectDetailDTO tDTO;
+		private List<FavoritesLessonDTO.selectDetailDTO> flDTO;
+		private List<AppliedLessonDTO.alAddRequestDTO> alDTO;
 	}
 		
 	// [JH]
@@ -119,6 +122,7 @@ public class LessonDTO {
 		private AppliedLessonDTO.selectAppliedLessonDTO alDTO;
 	}
 	
+	// [JW]
 	@Data
 	@NoArgsConstructor
 	public static class onlyLessonDTO {
@@ -128,17 +132,17 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private LocalDate startCdate;
-		private LocalDate endCdate;
+		private Date startCdate;
+		private Date endCdate;
 		private Integer price;
-		private LocalDate startDate;
-		private LocalDate endDate;
+		private Date startDate;
+		private Date endDate;
 		private Integer payLesson;
 		private String location;
 	}
 	
-	
-	
+	@Data
+	@NoArgsConstructor
 	public static class addLessonDTO {
 		private Long lessonSeq;
 		private String lessonName;
@@ -166,6 +170,16 @@ public class LessonDTO {
 
 		private List<AppliedLessonDTO.alLessonDTO> alDTO;
 	}
+	
+	// [JW]
+	@Data
+	@NoArgsConstructor
+	public static class lessonDetailDTO {
+		private selectDetailDTO lessonDto;
+		private Integer cnt;
+	}
+	
+	
 
 	@Data
 	@NoArgsConstructor
@@ -191,8 +205,8 @@ public class LessonDTO {
 		private String lessonName;
 		private Integer category;
 		private String imgPath;
-		private LocalDate startCdate;
-		private LocalDate endCdate;
+		private Date startCdate;
+		private Date endCdate;
 		private Integer price;
 	}
 

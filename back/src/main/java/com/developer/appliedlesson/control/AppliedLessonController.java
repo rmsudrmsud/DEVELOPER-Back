@@ -28,32 +28,6 @@ public class AppliedLessonController {
 
 	@Autowired
 	private AppliedLessonService alService;
-	
-	/**
-	 * 진행완료된 클래스 페이지  클래스명, 수강했던 튜티목록
-	 * @author choigeunhyeong
-	 * @param lessonSeq
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value="classandtutee/{lessonSeq}")
-	public ResponseEntity<?> selectClassAndTutee(@PathVariable Long lessonSeq) throws FindException{
-		List<UsersDTO.getNameDTO> list = alService.selectClassAndTutee(lessonSeq);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
-	/**
-	 * 진행완료된 클래스 페이지 후기 전체목록 
-	 * @author choigeunhyeong
-	 * @param userId
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value="completedclass/{userId}")
-	public ResponseEntity<?> selectCompletedClassList(@PathVariable String userId) throws FindException{
-		List<UsersDTO.getCompletedClassDTO> list = alService.selectCompletedClassList(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
 
 	/**
 	 * 수업 신청
@@ -76,3 +50,4 @@ public class AppliedLessonController {
 	}
 	
 }
+

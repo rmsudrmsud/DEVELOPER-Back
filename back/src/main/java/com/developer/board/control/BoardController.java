@@ -24,15 +24,21 @@ import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
+import com.developer.recommend.entity.Recommend;
+import com.developer.recommend.service.RecommendService;
+
+import lombok.RequiredArgsConstructor;
 
 
 
 @RestController
 @RequestMapping("board/*")
+@RequiredArgsConstructor
 public class BoardController {
 
-	@Autowired
-	private BoardService bService;
+	
+	private final BoardService bService;
+	private final RecommendService rService;
 
 	/**
 	 * 게시판 글 작성
@@ -42,7 +48,7 @@ public class BoardController {
 	 * @throws AddException
 	 */
 
-	@PostMapping(value = "add")
+	@PostMapping(value = "*")
 	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session) throws AddException {
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
@@ -53,14 +59,14 @@ public class BoardController {
 	}
 
 	/**
-	 * 글 수정폼..
+	 * 글 수정폼
 	 * 
 	 * @author choigeunhyeong
 	 * @param postSeq
 	 * @return
-	 * @throws FindException 미완
+	 * @throws FindException
 	 */
-	@GetMapping(value = "detail/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
+	@GetMapping(value = "edit/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<?> detailBoard(@PathVariable Long postSeq) throws FindException {
 		BoardDTO.getBoardByBoardTypeDTO detail = bService.detailBoard(postSeq);
@@ -115,7 +121,7 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PutMapping(value = "{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "edit/{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq)
 			throws ModifyException {
 		bService.editBoard(saveBoardDTO, postSeq);
@@ -138,23 +144,6 @@ public class BoardController {
 	}
 
 	/**
-	 * [메인페이지] 글작성 최신순으로 list를 출력한다.
-	 * 
-	 * @author SR
-	 * @return ResponseEntity<?>
-	 * @throws FindException
-	 */
-	@GetMapping(value = "listbydate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> listBoardByDate() throws FindException {
-		List<BoardDTO.selectAllBydateBoardDTO> list = bService.listByDate();
-		if (list.isEmpty()) {
-			return new ResponseEntity<>("작성된 게시글이 없습니다.", HttpStatus.BAD_REQUEST);
-		} else {
-			return new ResponseEntity<>(list, HttpStatus.OK);
-		}
-	}
-
-	/**
 	 * 글 번호로 게시글 상세 검색(닉네임+글상세+댓글)
 	 * 
 	 * @author choigeunhyeong
@@ -162,7 +151,7 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "select/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
+	@GetMapping(value = "detail/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<?> selectAllPostSeq(@PathVariable Long postSeq) throws FindException {
 		List<BoardDTO.BoardAllSelectDTO> list = bService.selectAllPostSeq(postSeq);
@@ -185,5 +174,36 @@ public class BoardController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 
 	}
-
+	
+	/**
+	 * 추천수 증가 
+	 * @author choigeunhyeong
+	 * @param recommend
+	 * @param postSeq
+	 * @param session
+	 * @return
+	 * @throws AddException
+	 */
+	@PostMapping(value="detail/{postSeq}")
+	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session) throws AddException {
+		String logined = (String) session.getAttribute("logined");
+		if(logined == null) {
+			throw new AddException("로그인하세요");
+		}
+		rService.addRecommend(recommend, postSeq, logined);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	 * 추천수 감소
+	 * @author choigeunhyeong
+	 * @param recSeq
+	 * @return
+	 * @throws RemoveException
+	 */
+	@DeleteMapping(value="detail/{recSeq}")
+	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException{
+		rService.delRecommend(recSeq);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

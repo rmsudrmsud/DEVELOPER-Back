@@ -14,10 +14,11 @@ public class FavoritesLessonDTO {
 	public static class flListDTO{
 		private Long favLesSeq;
 		private String tuteeId;
-		
 		private String lessonName;
 	}
 
+
+	
 	 //[JW]
 	@Data
 	@AllArgsConstructor @NoArgsConstructor
@@ -26,6 +27,14 @@ public class FavoritesLessonDTO {
 		private String tuteeId;
 		
 		private LessonDTO.onlyLessonDTO ldto;
+	}
+	
+	//[JW]
+	@Data
+	@AllArgsConstructor @NoArgsConstructor
+	public static class selectDetailDTO{
+		private Long favLesSeq;
+		private String tuteeId;
 	}
 
 }

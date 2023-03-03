@@ -50,12 +50,12 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 	public List<Object[]> selectALLUsers();
 		
 	//ds
-	@Query(value="select* from users;\r\n"
-				+ "SELECT user_id, role, name, nickname, tel \r\n"
-				+ "FROM users \r\n"
-				+ "where user_id Like '%:userId%'\r\n"
-				+ "ORDER BY name", nativeQuery = true)
+	@Query(value= "SELECT user_id, role, name, nickname, tel   \r\n"
+			+ "FROM  users   \r\n"
+			+ "where user_id Like '%t%'  \r\n"
+			+ "ORDER BY name", nativeQuery = true)
 	public List<Object[]> selectUserById(@Param("userId") String userId);
 		
-
+	@Query(value="select* from users where user_id = :userId",nativeQuery= true)
+	public Users getUserdetail(@Param("userId") String userId);
 }

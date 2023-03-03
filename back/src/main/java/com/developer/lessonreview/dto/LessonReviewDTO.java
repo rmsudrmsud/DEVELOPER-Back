@@ -19,8 +19,6 @@ public class LessonReviewDTO {
 		private Date cDate;
 		private String review;
 		private Integer star;	
-
-		private AppliedLessonDTO.alDTO aldto;
 	}
 	
 	@Data
