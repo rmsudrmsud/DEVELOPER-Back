@@ -23,6 +23,7 @@ import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
+import com.developer.users.repository.UsersRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 
 	private final BoardRepository bRepository;
+	private final UsersRepository uRepository;
 	
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -269,16 +271,14 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	@Transactional
-	public void editBoard(BoardDTO.saveBoardDTO boardDTO, Long postSeq, String logined) throws ModifyException{
+	public void editBoard(BoardDTO.saveBoardDTO boardDTO, Long postSeq) throws ModifyException{
 	    Optional<Board> optB = bRepository.findById(postSeq);
-	    //Optional<Users> optU = uRepository.findById(logined);
 	    if (optB.isPresent()) {
 	    	Board b = optB.get();
 	    	b.setTitle(boardDTO.getTitle());
 	    	b.setContent(boardDTO.getContent());
 	    	b.setImgPath(boardDTO.getImgPath());
 	    	b.setCDate(boardDTO.getCDate());
-	    //	b.setUsers(optU.get());
 	    	bRepository.save(b);
 	    } else {
 	        throw new ModifyException("정상적인 수정이 되지 않았습니다.");

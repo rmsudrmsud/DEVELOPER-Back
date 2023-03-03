@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -69,7 +70,8 @@ public class BoardController {
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 			
-			String fName = logined + "_" + fOrigin;
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
 			
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
@@ -166,13 +168,9 @@ public class BoardController {
 	 * @throws FindException
 	 */
 	@PutMapping(value = "edit/{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq, MultipartFile f, HttpSession session)
+	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq, MultipartFile f)
 			throws ModifyException {
 		
-		String logined = (String) session.getAttribute("logined");
-		if (logined == null) { // 로그인 안한 경우
-			throw new ModifyException("로그인하세요");
-		}
 		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
 		File saveDirFile = new File(savdDirectory);
 		String fileName;
@@ -194,10 +192,10 @@ public class BoardController {
 		        }
 		    }
 
-		    String fName = logined + "_" + fOrigin;
+		    UUID uuid = UUID.randomUUID();
+		    String fName = uuid.toString() + "_" + fOrigin;
+		    
 		    fileName = fName;
-		    
-		    
 		    File file = new File(saveDirFile, fileName);
 		    try {
 
@@ -223,7 +221,7 @@ public class BoardController {
 		    fileName = saveBoardDTO.getImgPath();
 		}
 		
-		bService.editBoard(saveBoardDTO, postSeq, logined);
+		bService.editBoard(saveBoardDTO, postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
