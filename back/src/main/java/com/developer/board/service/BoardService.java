@@ -175,42 +175,6 @@ public class BoardService {
 		return dtoList;
 
 	}
-	
-	
-//	public List<BoardDTO.getBoardByBoardTypeDTO> selectAllList() throws FindException {
-//		List<Object[]> Blist = BoardRepository.getBoardByC_date();
-//		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
-//		for (int i = 0; i < Blist.size(); i++) {
-//			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
-//			BigDecimal post_seq = (BigDecimal) Blist.get(i)[1];
-//			Long resultPost_seq = post_seq.longValue();
-//			bDTO.setPostSeq(resultPost_seq);
-//
-//			BigDecimal Category = (BigDecimal) Blist.get(i)[2];
-//			int resultCategory = Category.intValue();
-//			bDTO.setCategory(resultCategory);
-//
-//			bDTO.setTitle((String) Blist.get(i)[3]);
-//			bDTO.setContent((String) Blist.get(i)[4]);
-//			bDTO.setImgPath((String) Blist.get(i)[5]);
-//			bDTO.setCDate((Date) Blist.get(i)[6]);
-//
-//			BigDecimal Recommend = (BigDecimal) Blist.get(i)[7];
-//			int resultRec = Recommend.intValue();
-//			bDTO.setRecommend(resultRec);
-//
-//			BigDecimal Cnt = (BigDecimal) Blist.get(i)[8];
-//			int resultCnt = Cnt.intValue();
-//			bDTO.setCnt(resultCnt);
-//
-//			UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
-//			uDTO.setNickname((String) Blist.get(i)[0]);
-//			bDTO.setUsersNameDTO(uDTO);
-//			dtoList.add(bDTO);
-//		}
-//		return dtoList;
-//
-//	}
 
 	/**
 	 * 글 번호로 게시글 상세 검색(닉네임+글상세+댓글)
@@ -304,14 +268,16 @@ public class BoardService {
 	 * @throws FindException
 	 */
 	@Transactional
-	public void editBoard(BoardDTO.saveBoardDTO boardDTO, Long postSeq) throws ModifyException{
+	public void editBoard(BoardDTO.saveBoardDTO boardDTO, Long postSeq, String logined) throws ModifyException{
 	    Optional<Board> optB = bRepository.findById(postSeq);
-
+	    Optional<Users> optU = uRepository.findById(logined);
 	    if (optB.isPresent()) {
 	    	Board b = optB.get();
 	    	b.setTitle(boardDTO.getTitle());
 	    	b.setContent(boardDTO.getContent());
 	    	b.setImgPath(boardDTO.getImgPath());
+	    	b.setCDate(boardDTO.getCDate());
+	    	b.setUsers(optU.get());
 	    	bRepository.save(b);
 	    } else {
 	        throw new ModifyException("정상적인 수정이 되지 않았습니다.");
