@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpSession;
 
@@ -47,7 +46,6 @@ import net.coobird.thumbnailator.Thumbnailator;
 @RequiredArgsConstructor
 @RequestMapping("host/*")
 public class HostUserController {
-
 	private final HostUserService hService;
 	private final StudyroomService sService;
 	private final RoomInfoService riService;
@@ -108,7 +106,6 @@ public class HostUserController {
 
 	}
 
-	
 	/**
 	 * 호스트 유저를 탈퇴한다. ready=2
 	 * 
@@ -124,8 +121,8 @@ public class HostUserController {
 		hService.outHost(hostId);
 		logger.info("[호스트탈퇴로 인한 로그아웃 완료] hostsessionid - " + session.getId());
 		session.invalidate();
-		
-		//TODO 메인페이지로 돌아가기 하기
+
+		// TODO 메인페이지로 돌아가기 하기
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
@@ -181,13 +178,11 @@ public class HostUserController {
 	 * @param studyroomDTO
 	 * @return
 	 * @throws FindException
-	 * @throws AddException 
+	 * @throws AddException
 	 */
 	@PostMapping(value = "studyroom/{srSeq}")
-	public ResponseEntity<?> editCafe(@PathVariable long srSeq, 
-									 StudyroomDTO studyroomDTO,
-									 HttpSession session, 
-									 MultipartFile f)throws FindException, AddException {
+	public ResponseEntity<?> editCafe(@PathVariable long srSeq, StudyroomDTO studyroomDTO, HttpSession session,
+			MultipartFile f) throws FindException, AddException {
 
 		String hostId = (String) session.getAttribute("hostLogined");
 		logger.error("로그인값:" + hostId);
@@ -201,10 +196,10 @@ public class HostUserController {
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
 			// 결합
-			String fName = hostId + "_"+ fOrigin;
-			
+			String fName = hostId + "_" + fOrigin;
+
 			// 파일저장
-			fileName = fName ;
+			fileName = fName;
 			File file = new File(saveDirFile, fileName);
 
 			try {
@@ -221,9 +216,9 @@ public class HostUserController {
 				InputStream thumbnailIS = f.getInputStream(); // 첨부파일 입력스트림
 
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
-	            
-	            studyroomDTO.setImgPath(fileName);
-	            sService.updateCafe(srSeq, studyroomDTO);
+
+				studyroomDTO.setImgPath(fileName);
+				sService.updateCafe(srSeq, studyroomDTO);
 				logger.info("파일업로드 성공");
 				return new ResponseEntity<>(HttpStatus.OK);
 				// 읽기 쓰기
@@ -233,7 +228,7 @@ public class HostUserController {
 				throw new AddException(e.getMessage());
 			}
 		}
-		return new ResponseEntity<>("오류",HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("오류", HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -246,12 +241,9 @@ public class HostUserController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "roominfo/{srSeq}")
-	public ResponseEntity<?> addRoom(RoomInfoDTO roomInfoDTO,
-									HttpSession session, 
-									MultipartFile f, 
-								    @PathVariable long srSeq) throws AddException {
-		
-		
+	public ResponseEntity<?> addRoom(RoomInfoDTO roomInfoDTO, HttpSession session, MultipartFile f,
+			@PathVariable long srSeq) throws AddException {
+
 		String hostId = (String) session.getAttribute("hostLogined");
 		logger.error("로그인값:" + hostId);
 		String saveDirectory = "C:\\dev\\roominfo"; // 각자 주소로!
@@ -297,7 +289,7 @@ public class HostUserController {
 				throw new AddException(e.getMessage());
 			}
 		}
-		return new ResponseEntity<>("오류",HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("오류", HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -322,14 +314,12 @@ public class HostUserController {
 	 * @param roomInfoDTO
 	 * @return
 	 * @throws FindException
-	 * @throws AddException 
+	 * @throws AddException
 	 */
 	@PostMapping(value = "roominfo/edit/{roomSeq}")
-	public ResponseEntity<?> editRoom(@PathVariable long roomSeq, 
-									RoomInfoDTO roomInfoDTO,
-									HttpSession session, 
-									MultipartFile f) throws FindException, AddException {
-		
+	public ResponseEntity<?> editRoom(@PathVariable long roomSeq, RoomInfoDTO roomInfoDTO, HttpSession session,
+			MultipartFile f) throws FindException, AddException {
+
 		String hostId = (String) session.getAttribute("hostLogined");
 		logger.error("로그인값:" + hostId);
 		String saveDirectory = "C:\\dev\\roominfo"; // 각자 주소로!
@@ -375,7 +365,7 @@ public class HostUserController {
 				throw new AddException(e.getMessage());
 			}
 		}
-		return new ResponseEntity<>("오류",HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("오류", HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -412,19 +402,21 @@ public class HostUserController {
 
 	/**
 	 * [Reservation] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
+	 * 
 	 * @author SR(동수님꺼)
-	 * @param roomSeq 스터디룸 시퀀스
-	 * @param usingDate 예약일 
+	 * @param roomSeq   스터디룸 시퀀스
+	 * @param usingDate 예약일
 	 * @return List<Object[]> 특정일자의 해당 스터디룸 예약정보
-	 * @throws 전체정보 출력시  FindException, ParseException예외발생한다
+	 * @throws 전체정보 출력시 FindException, ParseException예외발생한다
 	 */
-	//스터디룸 패키지에 들어가야됨
+	// 스터디룸 패키지에 들어가야됨
 	@GetMapping(value = "reservation/{roomSeq}")
-	public ResponseEntity<?> getReservablity(@PathVariable long roomSeq, String usingDate) throws FindException, ParseException{
-			List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
-			return new ResponseEntity<>(list,HttpStatus.OK);
+	public ResponseEntity<?> getReservablity(@PathVariable long roomSeq, String usingDate)
+			throws FindException, ParseException {
+		List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * [Reservation] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * 
@@ -500,24 +492,25 @@ public class HostUserController {
 		rService.deleteReservation(resSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
-	
+
 	/**
-	    * 호스트유저 로그인
-	    * @author choigeunhyeong
-	    * @param hostId
-	    * @param pwd
-	    * @param session
-	    * @return
-	    * @throws FindException
-	    */
-	   @PostMapping(value="login",  produces = MediaType.APPLICATION_JSON_VALUE)
-	   public ResponseEntity<?> hostLogin(@RequestParam String hostId, @RequestParam String pwd, HttpSession session) throws FindException{
-		   HostUserDTO.HostLoginDTO hostDTO = hService.HostLogin(hostId, pwd);
-		   session.setAttribute("hostLogined", hostDTO.getHostId());
-		   session.setAttribute("hostLoginedReady", hostDTO.getReady());
-		   logger.info("호스트로그인성공시 hostsessionid : " + session.getId());
-			return new ResponseEntity<>(hostDTO, HttpStatus.OK);
-	   }
+	 * 호스트유저 로그인
+	 * 
+	 * @author choigeunhyeong
+	 * @param hostId
+	 * @param pwd
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> hostLogin(@RequestParam String hostId, @RequestParam String pwd, HttpSession session)
+			throws FindException {
+		HostUserDTO.HostLoginDTO hostDTO = hService.HostLogin(hostId, pwd);
+		session.setAttribute("hostLogined", hostDTO.getHostId());
+		session.setAttribute("hostLoginedReady", hostDTO.getReady());
+		logger.info("호스트로그인성공시 hostsessionid : " + session.getId());
+		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
+	}
+
 }

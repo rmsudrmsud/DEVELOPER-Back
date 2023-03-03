@@ -17,4 +17,5 @@ public interface UserReviewRepository extends CrudRepository<UserReview, Long> {
 		      + " and r.apply_seq_rv = a.apply_seq"
 		      + " and u.user_id=:userId", nativeQuery = true)
 		   public List<Object[]> getTuteeReview(@Param("userId") String userId);
+
 }

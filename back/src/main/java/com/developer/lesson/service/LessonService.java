@@ -1,19 +1,24 @@
 package com.developer.lesson.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.admin.AdminDTO;
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.exception.FindException;
+import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
+import com.developer.favoriteslesson.dto.FavoritesLessonDTO.favoritesLessonDTO;
 import com.developer.lesson.dto.LessonDTO;
+import com.developer.lesson.dto.LessonDTO.applyLessonDTO;
 import com.developer.lesson.dto.LessonDTO.selectAllBydateLessonDTO;
 import com.developer.lesson.entity.Lesson;
 import com.developer.lesson.repository.LessonRepository;
@@ -22,6 +27,7 @@ import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.dto.UsersDTO;
+
 
 
 @Service
@@ -35,6 +41,7 @@ public class LessonService {
 	@Autowired
 	private TutorRepository tRepository;
 	
+	private Logger logger = LoggerFactory.getLogger(getClass());
     
 	/**
 	 * 튜터아이디에 해당하는 진행예정 클래스 리스트 출력
@@ -278,14 +285,27 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public LessonDTO.selectDetailDTO selectDetail(Long lessonSeq) throws FindException {
-		Optional<Lesson> optL = lRepository.findById(lessonSeq); //JPA메서드로 원하는 결과값 꺼내
-		Lesson lessonEntity = optL.get(); //결과값 Lesson Entity로 담아주기 
-		//Entity를 DTO로 바꿔서 전달해줘야하니까 modelMapper 사용하기.
-		LessonDTO.selectDetailDTO lessonDto = modelMapper.map(lessonEntity, LessonDTO.selectDetailDTO.class); 
-		Tutor tutorEntity = lessonEntity.getTutor(); //has-a 관계인 Tutor값을 결과값(lEntity)꺼내서  
-		TutorDTO tutorDto = modelMapper.map(tutorEntity, TutorDTO.class); //반환할 DTO(LessonDTO)에 넣어주기
-		lessonDto.setTDTO(tutorDto);
-		return lessonDto;
+		Optional<Lesson> optL = lRepository.findById(lessonSeq); 
+		LessonDTO.selectDetailDTO lDTO = modelMapper.map(optL.get(), LessonDTO.selectDetailDTO.class); 
+		
+		TutorDTO.selectDetailDTO tDTO = modelMapper.map(optL.get().getTutor(), TutorDTO.selectDetailDTO.class);
+		List<FavoritesLessonDTO.selectDetailDTO> flList =  new ArrayList<>();
+		for(int i=0; i<flList.size(); i++) {
+			 FavoritesLessonDTO.selectDetailDTO flDTO = 
+					 modelMapper.map(optL.get().getFlList().get(i), FavoritesLessonDTO.selectDetailDTO.class);
+			 flList.add(flDTO);
+		}
+		List<AppliedLessonDTO.alAddRequestDTO> alList = new ArrayList<>();
+		for(int i=0; i<alList.size(); i++) {
+			AppliedLessonDTO.alAddRequestDTO alDTO = 
+					modelMapper.map(optL.get().getAlList().get(i), AppliedLessonDTO.alAddRequestDTO.class);
+			alList.add(alDTO);
+		}
+		
+		lDTO.setFlDTO(flList);
+		lDTO.setAlDTO(alList);	
+		lDTO.setTDTO(tDTO);	
+		return lDTO;
 	};
 	
 	/**
@@ -296,13 +316,12 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public void addLessonDTO(LessonDTO.selectDetailDTO dto, String userId) throws FindException {		
-		Optional<Lesson> optl = lRepository.findById(dto.getLessonSeq());
 		Optional<Tutor> optT = tRepository.findById(userId);
 		Tutor tutor = optT.get();
 		Lesson lesson = new Lesson();
 		lesson.setTutor(tutor);
 		modelMapper.map(dto, lesson);
-		lesson = lRepository.save(lesson);
+		lRepository.save(lesson);
 	}
 	
 	/**
@@ -359,11 +378,11 @@ public class LessonService {
 		List<LessonDTO.allLessonListDTO> lesson = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
 			LessonDTO.allLessonListDTO dto = new LessonDTO.allLessonListDTO();
-			dto.setLessonName((String)list.get(i)[6]);
-			dto.setCategory(((BigDecimal)list.get(i)[1]).intValue());
-			dto.setPayLesson(((BigDecimal)list.get(i)[8]).intValue());
-			dto.setPrice(((BigDecimal)list.get(i)[10]).intValue());
-			dto.setTutorId((String)list.get(i)[13]);
+			dto.setLessonName((String)list.get(i)[2]);
+			dto.setCategory(((BigDecimal)list.get(i)[3]).intValue());
+			dto.setPayLesson(((BigDecimal)list.get(i)[12]).intValue());
+			dto.setPrice(((BigDecimal)list.get(i)[9]).intValue());
+			dto.setTutorId((String)list.get(i)[1]);
 			lesson.add(dto);
 			}
 		return lesson;
@@ -376,23 +395,17 @@ public class LessonService {
 	 * @return 해당하는 값 
 	 */
 	public List<LessonDTO.searchLessonDTO> findByLessonNameContaining(String searchKeyword){
-		List<Object[]> list = new ArrayList<>();
-		if(searchKeyword == null) { //전체검색
-			list = lRepository.selectAllLesson();
-		} else { //제목검색 
-			list = lRepository.findByLessonNameContaining(searchKeyword);
-		}
+		List<Object> list = lRepository.findByLessonNameContaining(searchKeyword);
+		logger.error("값0: " + list.size());
 		List<LessonDTO.searchLessonDTO> lesson = new ArrayList<>();
+		
 		for(int i=0; i<list.size(); i++) {
-			LessonDTO.searchLessonDTO dto = new LessonDTO.searchLessonDTO();
-			dto.setLessonName((String)list.get(i)[0]);
-			dto.setCategory(((BigDecimal)list.get(i)[1]).intValue());
-			dto.setImgPath((String)list.get(i)[2]);
-			dto.setStartCdate((LocalDate)list.get(i)[3]);
-			dto.setEndCdate((LocalDate)list.get(i)[4]);
-			dto.setCategory(((BigDecimal)list.get(i)[5]).intValue());
+			LessonDTO.searchLessonDTO dto 
+				= modelMapper.map(list.get(i), LessonDTO.searchLessonDTO.class);
+			logger.error("값00: " + dto.getStartCdate());			
+			logger.error("값00: " + dto.getEndCdate());			
 			lesson.add(dto);
-		}
+			}
 		return lesson;
 	}
 
@@ -431,10 +444,12 @@ public class LessonService {
 		List<Object[]> list = lRepository.selectClassList5();
 		List<LessonDTO.LessonList5DTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
+			
 			LessonDTO.LessonList5DTO llDTO = new LessonDTO.LessonList5DTO();
 			llDTO.setLessonName((String)list.get(i)[0]);
 			llDTO.setCategory(Integer.parseInt(String.valueOf(list.get(i)[1])));
 			llDTO.setPeople(Integer.parseInt(String.valueOf(list.get(i)[2])));
+			
 			dto.add(llDTO);
 			
 		}

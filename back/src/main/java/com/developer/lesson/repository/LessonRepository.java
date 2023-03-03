@@ -127,7 +127,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	public List<Object[]> onGoingLesson(@Param("userId") String userId);
 	
 	//[JW]
-	public List<Object[]> findByLessonNameContaining(String searchKeyword);
+	public List<Object> findByLessonNameContaining(String searchKeyword);
 
 	//[SR]메인페이지 - 신청종료일 임박순으로 list 출력
 	@Query(value = "SELECT *"

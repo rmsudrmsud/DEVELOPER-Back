@@ -28,7 +28,6 @@ public class FavoritesStudyroomDTO {
 	@Data
 	@NoArgsConstructor
 	public static class fvInsertDTO{
-		private String userId;
 		private Long srSeq;
 	}
 	
