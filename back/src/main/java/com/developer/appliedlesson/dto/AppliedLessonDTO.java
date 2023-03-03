@@ -32,13 +32,24 @@ public class AppliedLessonDTO {
 
 	// [JH]
 	@Data @NoArgsConstructor
-	public static class UserByAppliedLessonDTO{
+	public static class NotYetUserByAppliedLessonDTO{
 		private Long applySeq;
 		private Integer applyOk;
 		private String tuteeId;
 		private LessonDTO.selectDetailDTO lessonDTO;
 		private UsersDTO usersDTO;
 	}
+	
+	// [JH]
+	@Data @NoArgsConstructor
+	public static class ApproveUserByAppliedLessonDTO{
+		private Long applySeq;
+		private Integer applyOk;
+		private String tuteeId;
+		private LessonDTO.selectDetailDTO lessonDTO;
+		private UsersDTO usersDTO;
+	}
+	
 	
 	// [JH]
 	@Data @NoArgsConstructor

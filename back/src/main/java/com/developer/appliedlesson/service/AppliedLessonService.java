@@ -114,12 +114,12 @@ public class AppliedLessonService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<AppliedLessonDTO.UserByAppliedLessonDTO> getLessonNotApplyUser(Long lessonSeq) throws FindException{
+	public List<AppliedLessonDTO.NotYetUserByAppliedLessonDTO> getLessonNotApplyUser(Long lessonSeq) throws FindException{
 		List<Object[]> Alist = alRepository.getLessonNotApplyUser(lessonSeq);
-		List<AppliedLessonDTO.UserByAppliedLessonDTO> dto = new ArrayList<>();
+		List<AppliedLessonDTO.NotYetUserByAppliedLessonDTO> dto = new ArrayList<>();
 		for(int i=0; i<Alist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
-			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			AppliedLessonDTO.NotYetUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.NotYetUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String)Alist.get(i)[0]);
 			aDTO.setApplyOk(0);
@@ -139,12 +139,12 @@ public class AppliedLessonService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<AppliedLessonDTO.UserByAppliedLessonDTO> getLessonApplyUser(Long lessonSeq) throws FindException{
+	public List<AppliedLessonDTO.ApproveUserByAppliedLessonDTO> getLessonApplyUser(Long lessonSeq) throws FindException{
 		List<Object[]> Alist = alRepository.getLessonApplyUser(lessonSeq);
-		List<AppliedLessonDTO.UserByAppliedLessonDTO> dto = new ArrayList<>();
+		List<AppliedLessonDTO.ApproveUserByAppliedLessonDTO> dto = new ArrayList<>();
 		for(int i=0; i<Alist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
-			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			AppliedLessonDTO.ApproveUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.ApproveUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String)Alist.get(i)[0]);
 //			aDTO.setApplyOk(1);

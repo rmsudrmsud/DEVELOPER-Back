@@ -51,6 +51,21 @@ public class UsersDTO {
 		private List<Reservation> reservation;
 		private List<FavoritesStudyroom> favStudyroom;
 	
+	//[JH]
+	@Data
+	@NoArgsConstructor
+	public static class UsersDetailDTO{
+		private String userId;
+		private String pwd;
+		private Integer role;
+		private String nickname;
+		private String name;
+		private String email;
+		private String tel;
+		private String addr;
+	}
+		
+		
 	//[JW]
 	@Data
 	@NoArgsConstructor

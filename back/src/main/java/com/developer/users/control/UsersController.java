@@ -31,42 +31,6 @@ public class UsersController {
 
 	@Autowired
 	private UsersService uService;
-	
-	//[JH]
-	@PostMapping(value = "")
-	public ResponseEntity<?> addUsers(@RequestBody UsersDTO usersDTO) throws AddException{
-		uService.addUsers(usersDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	//[JH]
-	@PatchMapping(value = "update/{userId}")
-	public ResponseEntity<?> updateLesson(@PathVariable String userId, @RequestBody UsersDTO uDTO) throws FindException, AddException{
-		uService.addUsers(uDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	//[JH]
-	@GetMapping(value = "selectuser/{userId}")
-	public ResponseEntity<?> getUser(@PathVariable String userId) throws FindException{
-		if(userId == null) {
-			return new ResponseEntity<>("존재하지 않는 회원입니다.",HttpStatus.BAD_REQUEST);
-		} else {
-			UsersDTO usersDTO = uService.getUser(userId);
-			return new ResponseEntity<>(usersDTO, HttpStatus.OK);
-		}
-	}
-	
-	//[JH]
-	@PatchMapping(value = "delete/{userId}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userId, HttpSession session) throws FindException{
-		if(userId == null) {
-			return new ResponseEntity<>("수업 내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-		} else {
-			uService.deleteUser(userId);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-	}	
 
 	/**
 	 * [관리자] 수업을 예약한 튜티 목록
@@ -115,7 +79,7 @@ public class UsersController {
 	//[JH]
 	@GetMapping(value = "check/{userId}")
 	public boolean checkUser(@PathVariable String userId,HttpSession session) throws FindException{
-		UsersDTO usersDTO;
+		UsersDTO.UsersDetailDTO usersDTO;
 		boolean flag = true;
 		usersDTO = uService.getUser(userId);
 		String check = usersDTO.getUserId();

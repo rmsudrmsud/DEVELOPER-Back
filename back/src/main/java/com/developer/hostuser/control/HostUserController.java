@@ -36,20 +36,6 @@ public class HostUserController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	//[JH] 호스트유저 회원가입
-	@PostMapping(value = "")
-	public ResponseEntity<?> addHost(@RequestBody HostUserDTO hostDTO) throws AddException{
-		hService.addHost(hostDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	//[JH] 호스트유저 전체출력
-	@GetMapping(value = "selectall")
-	private ResponseEntity<?> selectAllHostUser() throws FindException{
-		List<HostUser> list = hService.selectAll();
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-
 	   /**
 	    * 호스트유저 1개의 정보를 출력한다.
 	    * @author SR

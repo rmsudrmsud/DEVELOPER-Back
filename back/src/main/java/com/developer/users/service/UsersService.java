@@ -54,11 +54,11 @@ public class UsersService {
 	 * @return usersDTO
 	 * @throws FindException
 	 */
-	public UsersDTO getUser(String userId) throws FindException{
+	public UsersDTO.UsersDetailDTO getUser(String userId) throws FindException{
 		Optional<Users> optU = uRepository.findById(userId);
 		if(optU.isPresent()) {
 			Users users = optU.get();
-			UsersDTO usersDTO = mapper.map(users, UsersDTO.class);
+			UsersDTO.UsersDetailDTO usersDTO = mapper.map(users, UsersDTO.UsersDetailDTO.class);
 			
 			return usersDTO;
 		}else {
@@ -101,7 +101,7 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public void deleteUser(String userId) throws FindException{
-		UsersDTO usersDTO = this.getUser(userId);
+		UsersDTO.UsersDetailDTO usersDTO = this.getUser(userId);
 
     	ModelMapper modelMapper = new ModelMapper();
     	usersDTO.setRole(3);

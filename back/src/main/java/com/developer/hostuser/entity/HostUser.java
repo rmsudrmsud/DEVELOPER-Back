@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.reservation.entity.Reservation;
 import com.developer.studyroom.entity.Studyroom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,10 +61,11 @@ public class HostUser {
 	@Column(name="email")
 	private String email;
 
-	
+	@JsonIgnore
 	@OneToOne(mappedBy = "hostUser")//, cascade = CascadeType.ALL)//, cascade = CascadeType.REMOVE)
 	private Studyroom studyroom;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "hostUser")
 	private List<Reservation> reservation;
 }

@@ -23,13 +23,6 @@ public class UserReviewController {
 	@Autowired
 	private UserReviewService urService;
 	
-	//[JH]
-	@GetMapping(value = "tuteereview/{userId}")
-	public ResponseEntity<?> getTuteeReview(@PathVariable String userId) throws FindException{
-		List<UserReviewDTO.getTuteeReview> list = urService.getTuteeReview(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-	
 	/**
 	 * 튜티가 튜터에게받은수업후기 
 	 * @author choigeunhyeong
