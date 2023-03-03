@@ -146,7 +146,7 @@ public class UsersDTO {
 	@Data
 	@NoArgsConstructor
 	public static class UserIdDTO{
-		private Integer userId; //count함수
+		private Integer fvCNT; //count함수
 	}
 	
 	//ds

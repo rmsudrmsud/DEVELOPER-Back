@@ -31,51 +31,6 @@ public class TutorController {
 	@Autowired
 	private TutorService tservice;
 
-	/**
-	 * 튜터 등록 및 수정
-	 * 
-	 * @author moonone
-	 * @param tDTO
-	 * @return 상태값
-	 * @throws AddException
-	 * @throws FindException
-	 */
-	@PostMapping
-	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session)
-			throws AddException, FindException {
-		tservice.saveTutor(tDTO);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	/**
-	 * 튜터가 생성한 클래스 목록 + 튜터 정보
-	 * 
-	 * @author moonone
-	 * @param tutorId
-	 * @return 튜터가 생성한 클래스 목록 + 튜터 정보
-	 * @throws AddException
-	 * @throws FindException
-	 */
-	@GetMapping(value = "{tutorId}")
-	public ResponseEntity<?> selectTutorDetail(@PathVariable String tutorId) throws AddException, FindException {
-		List<TutorDTO.selectTutorDetailDTO> list = tservice.selectTutorDetail(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-
-	/**
-	 * 튜터 승인거절
-	 * 
-	 * @author SR
-	 * @param userId
-	 * @param session
-	 * @return
-	 * @throws RemoveException
-	 */
-
-	@DeleteMapping(value= "{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorReject(@PathVariable String userId, HttpSession session) throws RemoveException {
-		tservice.deleteTutor(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+	
 
 }

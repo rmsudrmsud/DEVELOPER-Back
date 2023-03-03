@@ -57,7 +57,7 @@ public interface RoomReviewRepository extends JpaRepository<RoomReview, Long> {
 			+ "		AND rif.room_seq = r.room_seq\r\n"
 			+ "		AND s.sr_seq = rif.sr_seq\r\n"
 			+ "		AND r.res_seq = :resSeq", nativeQuery = true)
-	public List<Object[]> findByResSeq(@Param("resSeq") Long resSeq);
+	public List<Object[]> getByResSeq(@Param("resSeq") Long resSeq);
 	
 	
  }

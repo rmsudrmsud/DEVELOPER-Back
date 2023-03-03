@@ -125,18 +125,6 @@ public class RoomInfoController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
-	/**
-	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
-	 * @author ds
-	 * @param srSeq 스터디카페 시퀀스(장소번호) 
-	 * @return List<RoomInfoVO> 특정스터디카페 전체정보들(방여러개)
-	 * @throws 전체정보 출력시  FindException예외발생한다
-	 */
-	@GetMapping(value = "get/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE )
-	public ResponseEntity<?> getAll(@PathVariable Long srSeq)throws FindException{
-		List<RoomInfoDTO> list = riService.selectAll(srSeq);
-		return new ResponseEntity<>(list,HttpStatus.OK);
-	}
-	
+
 	
 }
