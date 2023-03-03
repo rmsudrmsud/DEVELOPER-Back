@@ -44,7 +44,13 @@ public class AdminController {
 	private final RoomInfoService riService;
 	private final StudyroomService sService;
 
-	// [JH] 호스트유저 전체출력
+
+	/**
+	 * 호스트 회원 전체출력
+	 * @author Jin
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "host")
 	private ResponseEntity<?> selectAllHostUser() throws FindException {
 		List<HostUser> list = hService.selectAll();

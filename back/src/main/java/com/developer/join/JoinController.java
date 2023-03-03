@@ -43,21 +43,42 @@ public class JoinController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	// [JH] 호스트 회원가입
+
+	/**
+	 * 호스트 회원가입
+	 * @author Jin
+	 * @param hostDTO
+	 * @return
+	 * @throws AddException
+	 */
 	@PostMapping(value = "hostuser")
 	public ResponseEntity<?> addHost(@RequestBody HostUserDTO hostDTO) throws AddException {
 		hService.addHost(hostDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// [JH] 사용자 회원가입
+	/**
+	 * 사용자 회원가입
+	 * @author Jin
+	 * @param usersDTO
+	 * @return
+	 * @throws AddException
+	 */
 	@PostMapping(value = "users")
 	public ResponseEntity<?> addUsers(@RequestBody UsersDTO usersDTO) throws AddException {
 		uService.addUsers(usersDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	// [JH] 사용자 아이디 중복체크
+
+	/**
+	 * 사용자 아이디 중복체크(수정예정)
+	 * @author Jin
+	 * @param userId
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping(value = "users/check/{userId}")
 	public boolean checkUser(@PathVariable String userId, HttpSession session) throws FindException {
 		UsersDTO.UsersDetailDTO usersDTO;
