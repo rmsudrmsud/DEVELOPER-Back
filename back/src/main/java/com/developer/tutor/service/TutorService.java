@@ -20,7 +20,6 @@ import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -98,6 +97,24 @@ public class TutorService {
 			logger.error("값 " + tDTO.getLesson().toString() + ", " + tDTO.getName() + ", " + tDTO.getInfo());
 			tResult.add(tDTO);
 			return tResult;	
+	}
+	
+	
+	/**
+	 * 튜터로 승인한다.
+	 * @author SR
+	 * @param userId
+	 * @throws FindException
+	 */
+	public void tutorApply(String tutorId) throws FindException {
+		Optional<Tutor> optT = tRepository.findById(tutorId);
+		if (optT.isPresent()) {
+			Tutor entityT = optT.get();
+			entityT.setApplyOk(1);
+			tRepository.save(entityT);
+		} else {
+			throw new FindException("해당 ID가 존재하지 않습니다.");
+		}
 	}
 	
 	   /**

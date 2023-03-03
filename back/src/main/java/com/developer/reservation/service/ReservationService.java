@@ -137,29 +137,55 @@ public class ReservationService {
 	 * @author ds
 	 * @throws 전체정보 출력시  FindException예외발생한다
 	 */
-	public void insertRv(ReservationDTO.insertRvDTO rvDTO) throws AddException {
+	public void insertRv(ReservationDTO.insertRvDTO rvDTO, String logined) throws AddException {
+	      
+	      Reservation r = new Reservation();
+	      Optional<Users> optU = uRepository.findById(logined);
+	      Users u = optU.get();
+	      r.setUsers(u);
+	      Optional<HostUser> optH = hRepository.findById(rvDTO.getHostId());
+	      //r.setUserId(u);
+	   
+	      HostUser hu= optH.get();
+	      r.setHostUser(hu);
+	      Optional<RoomInfo> optR= riRepository.findById(rvDTO.getRoomSeq());
+	      RoomInfo ri = optR.get();
+	      
+	      r.setUsingDate(rvDTO.getUsingDate());
+	      r.setRoominfo(ri);
+	      r.setStartTime(rvDTO.getStartTime());
+	      r.setEndTime(rvDTO.getEndTime());
+	      rRepository.save(r);
+	   }
+	
+	
+	
+	/**
+	 * [호스트마이페이지] 호스트가 예약하는 기능(예약막기용)
+	 * @author SR
+	 * @param rvDTO
+	 * @param hostId
+	 * @throws AddException
+	 */
+	public void insertHostRv(ReservationDTO.insertRvDTO rvDTO, String hostId) throws AddException {
 		
 		Reservation r = new Reservation();
-		Optional<Users> optU = uRepository.findById(rvDTO.getUserId());
-		Users u = optU.get();
-		r.setUsers(u);
-	   Optional<HostUser> optH = hRepository.findById(rvDTO.getHostId());
-		//r.setUserId(u);
-	
-		HostUser hu= optH.get();
-		r.setHostUser(hu);
+		Optional<HostUser> optH = hRepository.findById(hostId);
+		HostUser h= optH.get();
+		r.setHostUser(h);
+		
 		Optional<RoomInfo> optR= riRepository.findById(rvDTO.getRoomSeq());
-		RoomInfo ri = optR.get();
+	    RoomInfo ri = optR.get();
+	    r.setRoominfo(ri);
+	    
+	    r.setUsingDate(rvDTO.getUsingDate());
+	    r.setStartTime(rvDTO.getStartTime());
+	    r.setEndTime(rvDTO.getEndTime());
+		//rvDTO.setHostId(h.getHostId());
+	    rRepository.save(r);
+	    
+	   }
 		
-		r.setUsingDate(rvDTO.getUsingDate());
-		r.setRoominfo(ri);
-		r.setStartTime(rvDTO.getStartTime());
-		r.setEndTime(rvDTO.getEndTime());
-		rRepository.save(r);
-	}
-		
-		
-	
 
 	/**포스트맨 성공
 	 * [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
@@ -170,8 +196,7 @@ public class ReservationService {
 	 * @throws 전체정보 출력시  FindException, ParseException예외발생한다
 	 */
 	public List<ReservationDTO.selectAllByUsingDateDTO> selectAllByUsingDate(Long roomSeq, String usingDate) throws FindException, ParseException{
-//		 SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-//		 Date date=formatter.parse(usingDate);
+
 		List<Object[]> list= rRepository.findAllByUsingDate(roomSeq, usingDate);
 		List<ReservationDTO.selectAllByUsingDateDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {

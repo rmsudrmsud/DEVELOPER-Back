@@ -1,6 +1,5 @@
 package com.developer.favoritesstudyroom.dto;
 
-import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 import com.developer.users.dto.UsersDTO;
@@ -12,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FavoritesStudyroomDTO {
-	private Long favSeq;
+	private long favSeq;
 	private Users userId;
-	private Studyroom Studyroom;
+	private Studyroom studyroom;
 	
 	private Integer cnt;
 	//ds
@@ -31,5 +30,12 @@ public class FavoritesStudyroomDTO {
 	public static class fvInsertDTO{
 		private String userId;
 		private Long srSeq;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	public static class favStudyroomListDTO{
+		private long srSeq;
+		private StudyroomDTO.selectAllFavStudyroomDTO studyroom;
 	}
 }
