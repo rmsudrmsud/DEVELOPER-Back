@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 
 public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
@@ -34,5 +35,16 @@ public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
 		@Query(value = "select * from studyroom where SR_Seq= :srSeq", nativeQuery = true)
 		public Studyroom getById(@Param("srSeq") Long srSeq);
 			
-
+		//ds
+		@Query(value= "SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON, MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT\r\n"
+				+ "FROM STUDYROOM S\r\n"
+				+ "join\r\n"
+				+ " ROOM_INFO R\r\n"
+				+ "ON s.sr_seq = r.sr_seq\r\n"
+				+ "left outer join  \r\n"
+				+ "FAVORITES_STUDYROOM F\r\n"
+				+ "ON F.SR_SEQ = S.SR_SEQ\r\n"
+				+ "GROUP BY S.NAME , S.ADDR , S.IMG_PATH \r\n"
+				+ "ORDER BY PRICE ASC", nativeQuery = true)
+		public List<Object[]> getListAll();
 }

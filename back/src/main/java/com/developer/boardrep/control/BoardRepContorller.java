@@ -39,7 +39,7 @@ public class BoardRepContorller {
 	 * @return
 	 * @throws AddException
 	 */
-	@PostMapping(value = "add/{postSeq}")
+	@PostMapping(value = "{postSeq}")
 	public ResponseEntity<?> addBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postSeq, HttpSession session) throws AddException {
 		String logined = (String) session.getAttribute("logined");
 		if(logined == null) { //로그인 안한 경우
