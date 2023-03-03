@@ -48,4 +48,5 @@ public class FavoritesStudyroomController {
 			fsService.deleteFvstudyroom(favSeq);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
+
 }

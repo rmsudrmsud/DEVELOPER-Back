@@ -44,12 +44,11 @@ public class FavoritesLessonService {
 		List<FavoritesLessonDTO.flListDTO> flDTOList = new ArrayList<>();
 		for(int i=0; i<flList.size(); i++) {
 			FavoritesLessonDTO.flListDTO flDTO = new FavoritesLessonDTO.flListDTO();
-			flDTO.setTuteeId((String)flList.get(i)[2]);
+			flDTO.setTuteeId(userId);
 			
-			Long lessonSeq = ((BigDecimal)flList.get(i)[1]).longValue();
+			Long lessonSeq = ((BigDecimal)flList.get(i)[2]).longValue();
 			Optional<Lesson> l = lRepository.findById(lessonSeq);
-			LessonDTO.onlyLessonDTO ldto = modelMapper.map(l.get(), LessonDTO.onlyLessonDTO.class);
-			flDTO.setLessonName(ldto.getLessonName());
+			flDTO.setLessonName(l.get().getLessonName());
 			
 			Long favLesSeq = ((BigDecimal)flList.get(i)[0]).longValue();
 			flDTO.setFavLesSeq(favLesSeq);
@@ -66,15 +65,12 @@ public class FavoritesLessonService {
 	 * @param lessonSeq 수업번호
 	 * @throws AddException
 	 */
-	public void addFavLesson(FavoritesLessonDTO.favoritesLessonDTO flDTO, Long lessonSeq) throws AddException{
+	public void addFavLesson(FavoritesLessonDTO.favoritesLessonDTO flDTO, Long lessonSeq, String userId) throws AddException{
 		Optional<Lesson> l = lRepository.findById(lessonSeq);
-		Lesson lesson = l.get();
-		Optional<Users> u = uRepository.findByUserId(flDTO.getTuteeId());
-		Users users = u.get();
-		
-		FavoritesLesson flEntity = modelMapper.map(flDTO, FavoritesLesson.class);
-		flEntity.setLesson(lesson);
-		flEntity.setUsers(users);
+		Optional<Users> u = uRepository.findByUserId(userId);
+		FavoritesLesson flEntity = new FavoritesLesson();
+		flEntity.setLesson(l.get());
+		flEntity.setUsers(u.get());
 		flRepository.save(flEntity);
 	}
 	

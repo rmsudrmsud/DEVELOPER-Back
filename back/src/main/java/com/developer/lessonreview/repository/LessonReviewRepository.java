@@ -1,6 +1,7 @@
 package com.developer.lessonreview.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -26,7 +27,7 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 			+ "Inner JOIN lesson l\n"
 			+ "ON al.al_lesson_seq = l.lesson_seq\n"
 			+ "WHERE l.tutor_id = :tutorId", nativeQuery = true)
-	public int cntLReview(@Param("tutorId") String tutorId);
+	public Integer cntLReview(@Param("tutorId") String tutorId);
 	
 	//[JW]
 	@Query(value = "SELECT lr.review, lr.star, u.name "
@@ -34,8 +35,8 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 			+ "LEFT OUTER JOIN applied_lesson al "
 			+ "ON lr.apply_seq = al.apply_seq "
 			+ "FULL OUTER JOIN users u "
-			+ "ON al.al_tutee_id = u.user_id "
-			+ "WHERE al.tutee_id = :tuteeId ",
+			+ "ON al.al_user_id = u.user_id "
+			+ "WHERE al.al_user_id = :tuteeId ",
 					nativeQuery = true)
 	public List<Object[]> listLRList(@Param("tuteeId") String tuteeId);
 	
@@ -44,7 +45,7 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 			+ "FROM applied_lesson al\n"
 			+ "INNER JOIN lesson l\n"
 			+ "ON al.al_lesson_seq = l.lesson_seq\n"
-			+ "WHERE al.al_tutee_id = :userId\n"
+			+ "WHERE al.al_user_id = :userId\n"
 			+ "MINUS\n"
 			+ "SELECT al.apply_seq, l.lesson_name\n"
 			+ "FROM lesson_review lr\n"
@@ -52,7 +53,7 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 			+ "ON lr.apply_seq = al.apply_seq\n"
 			+ "INNER JOIN lesson l\n"
 			+ "ON al.al_lesson_seq = l.lesson_seq\n"
-			+ "where al.al_tutee_id = :userId",
+			+ "where al.al_user_id = :userId",
 					nativeQuery = true)
 	public List<Object[]> noWriteLReview(@Param("userId") String userId);
 

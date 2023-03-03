@@ -24,6 +24,17 @@ public class TutorDTO {
 		private List<LessonDTO> lDTO;
 	}
 	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class selectDetailDTO{
+		private String tutorId;
+		private String info;
+		private String imgPath;
+		private Double starAvg;
+		private Integer applyOk;
+	}
+	
 	//[JH]
 	@Data
 	public static class tutorDTO{
@@ -41,12 +52,20 @@ public class TutorDTO {
 	@Data
 	@NoArgsConstructor
 	public static class saveTutorDTO{
-		private String tutorId;
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
-		
+	}
+	
+	//[JW]
+	@Data
+	@NoArgsConstructor
+	public static class saveTutorResDTO{
+		private String info;
+		private String imgPath;
+		private Double starAvg;
+		private Integer applyOk;
 		private Users users;
 	}
 	
