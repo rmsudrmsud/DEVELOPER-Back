@@ -2,6 +2,7 @@ package com.developer.hostuser.service;
 
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 public class HostUserService {

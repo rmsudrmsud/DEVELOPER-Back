@@ -17,6 +17,7 @@ public class LessonReviewController {
 	@Autowired
 	private LessonReviewService lrservice;
 	
+
 	/**
 	 *  해당 튜터의 후기 개수
 	 *  @author moonone
@@ -29,5 +30,4 @@ public class LessonReviewController {
 		int cnt = lrservice.cntReview(tutorId);
 		return new ResponseEntity<>(cnt, HttpStatus.OK);
 	}
-
 }

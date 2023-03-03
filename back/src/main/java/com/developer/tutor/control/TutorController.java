@@ -29,6 +29,7 @@ public class TutorController {
 	@Autowired
 	private TutorService tservice;
 
+
 	/**
 	 * 튜터 등록 및 수정
 	 * 
@@ -63,6 +64,5 @@ public class TutorController {
 		List<TutorDTO.selectTutorDetailDTO> list = tservice.selectTutorDetail(tutorId);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-
 
 }

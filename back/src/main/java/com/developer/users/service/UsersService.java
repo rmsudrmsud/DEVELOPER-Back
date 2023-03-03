@@ -33,7 +33,7 @@ public class UsersService {
 	
 	
 	/**
-	 * 회원 추가.
+	 * 사용자 추가.
 	 * @author Jin
 	 * @param usersDTO
 	 * @throws AddException
@@ -45,17 +45,17 @@ public class UsersService {
 	}
 	
 	/**
-	 * user 상세정보 조회.
+	 * 사용자 상세정보 조회.
 	 * @author Jin
 	 * @param userId
 	 * @return usersDTO
 	 * @throws FindException
 	 */
-	public UsersDTO getUser(String userId) throws FindException{
+	public UsersDTO.UsersDetailDTO getUser(String userId) throws FindException{
 		Optional<Users> optU = uRepository.findById(userId);
 		if(optU.isPresent()) {
 			Users users = optU.get();
-			UsersDTO usersDTO = modelMapper.map(users, UsersDTO.class);
+			UsersDTO.UsersDetailDTO usersDTO = modelMapper.map(users, UsersDTO.UsersDetailDTO.class);
 			
 			return usersDTO;
 		}else {
@@ -97,9 +97,7 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public void deleteUser(String userId) throws FindException{
-		UsersDTO usersDTO = this.getUser(userId);
-
-    	ModelMapper modelMapper = new ModelMapper();
+		UsersDTO.UsersDetailDTO usersDTO = this.getUser(userId);
     	usersDTO.setRole(3);
 		Users usersEntity = new Users();
 		
@@ -176,20 +174,6 @@ public class UsersService {
 	
 
 	/**
-	 * 튜터로 승인한다.
-	 * @author SR
-	 * @param userId
-	 * @throws FindException
-	 */
-	public void tutorApply(String userId) throws FindException {
-		UsersDTO usersDTO = this.selectUsers(userId);
-		usersDTO.setRole(1);
-		Users EntityU = modelMapper.map(usersDTO, Users.class);
-		uRepository.save(EntityU);
-	}
-	
-	
-	/**
 	 * 튜터 미승인 목록을 출력한다.
 	 * @author SR
 	 * @return
@@ -240,7 +224,7 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public List<UsersDTO> getUserById(String userId) throws FindException{
-		List<Object[]> list = uRepository.selectALLUsers();
+		List<Object[]> list = uRepository.selectUserById(userId);
 		List<UsersDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
@@ -254,4 +238,26 @@ public class UsersService {
 		}
 		return dto;
 	}
+	
+	/**
+	 * 회원 1명의 상세정보를 출력한다
+	 * @author DS
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public UsersDTO selectUserDetail(String userId) throws FindException {
+		Users u = uRepository.getUserdetail(userId);
+		UsersDTO dto = new UsersDTO();
+		dto.setUserId(u.getUserId());
+		dto.setAddr(u.getAddr());
+		dto.setEmail(u.getEmail());
+		dto.setName(u.getName());
+		dto.setNickname(u.getNickname());
+		dto.setPwd(u.getPwd());
+		dto.setTel(u.getTel());
+		return dto;
+	}
+	
+	
 }

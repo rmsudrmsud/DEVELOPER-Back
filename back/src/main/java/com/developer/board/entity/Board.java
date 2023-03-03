@@ -1,6 +1,7 @@
 package com.developer.board.entity;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -65,6 +66,7 @@ public class Board {
 	@Column(name="img_path")
 	private String imgPath;
 	
+	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 	@Column(name="c_date")
 	@ColumnDefault(value="SYSDATE")
 	private Date cDate;
@@ -82,10 +84,10 @@ public class Board {
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
 	private List<BoardRep> boardRep;
 	
-	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
 	private List<Recommend> Recommend;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable=false)
 	private Users users;

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.admin.AdminDTO;
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.exception.FindException;
 import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
@@ -49,12 +50,12 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-    public List<LessonDTO.GetLessonByUser> getLessonByUser1(String tutorId) throws FindException{
+    public List<LessonDTO.GetLessonByUser1> getLessonByUser1(String tutorId) throws FindException{
     	List<Object[]> Llist = lRepository.getLessonByUser1(tutorId);
-    	List<LessonDTO.GetLessonByUser> dto = new ArrayList<>();
+    	List<LessonDTO.GetLessonByUser1> dto = new ArrayList<>();
     	for(int i=0; i<Llist.size(); i++) {
     		TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
-    		LessonDTO.GetLessonByUser lDTO = new LessonDTO.GetLessonByUser();
+    		LessonDTO.GetLessonByUser1 lDTO = new LessonDTO.GetLessonByUser1();
     		UsersDTO uDTO = new UsersDTO();
     		lDTO.setLessonName((String)Llist.get(i)[0]);
     		tDTO.setTutorId((String)tutorId);
@@ -74,12 +75,12 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-    public List<LessonDTO.GetLessonByUser> getLessonByUser2(String tutorId) throws FindException{
+    public List<LessonDTO.GetLessonByUser2> getLessonByUser2(String tutorId) throws FindException{
     	List<Object[]> Llist = lRepository.getLessonByUser2(tutorId);
-    	List<LessonDTO.GetLessonByUser> dto = new ArrayList<>();
+    	List<LessonDTO.GetLessonByUser2> dto = new ArrayList<>();
     	for(int i=0; i<Llist.size(); i++) {
     		TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
-    		LessonDTO.GetLessonByUser lDTO = new LessonDTO.GetLessonByUser();
+    		LessonDTO.GetLessonByUser2 lDTO = new LessonDTO.GetLessonByUser2();
     		UsersDTO uDTO = new UsersDTO();
     		lDTO.setLessonName((String)Llist.get(i)[0]);
     		tDTO.setTutorId((String)tutorId);
@@ -99,12 +100,12 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-    public List<LessonDTO.GetLessonByUser> getLessonByUser3(String tutorId) throws FindException{
+    public List<LessonDTO.GetLessonByUser3> getLessonByUser3(String tutorId) throws FindException{
     	List<Object[]> Llist = lRepository.getLessonByUser3(tutorId);
-    	List<LessonDTO.GetLessonByUser> dto = new ArrayList<>();
+    	List<LessonDTO.GetLessonByUser3> dto = new ArrayList<>();
     	for(int i=0; i<Llist.size(); i++) {
     		TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
-    		LessonDTO.GetLessonByUser lDTO = new LessonDTO.GetLessonByUser();
+    		LessonDTO.GetLessonByUser3 lDTO = new LessonDTO.GetLessonByUser3();
     		UsersDTO uDTO = new UsersDTO();
     		lDTO.setLessonName((String)Llist.get(i)[0]);
     		tDTO.setTutorId((String)tutorId);
@@ -124,12 +125,12 @@ public class LessonService {
      * @return
      * @throws FindException
      */
-	public List<LessonDTO.applyLessonBytutee> getApplyLesson(String userId) throws FindException{
+	public List<LessonDTO.notYetLessonBytutee> getApplyLesson(String userId) throws FindException{
 		List<Object[]> Llist = lRepository.getApplyLesson(userId);
-		List<LessonDTO.applyLessonBytutee> dto = new ArrayList<>();
+		List<LessonDTO.notYetLessonBytutee> dto = new ArrayList<>();
 		for(int i=0; i<Llist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
-			LessonDTO.applyLessonBytutee lDTO = new LessonDTO.applyLessonBytutee();
+			LessonDTO.notYetLessonBytutee lDTO = new LessonDTO.notYetLessonBytutee();
 			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
 			uDTO.setUserId((String)userId);
 			lDTO.setLessonName((String)Llist.get(i)[0]);
@@ -444,10 +445,12 @@ public class LessonService {
 		List<Object[]> list = lRepository.selectClassList5();
 		List<LessonDTO.LessonList5DTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
+			
 			LessonDTO.LessonList5DTO llDTO = new LessonDTO.LessonList5DTO();
 			llDTO.setLessonName((String)list.get(i)[0]);
 			llDTO.setCategory(Integer.parseInt(String.valueOf(list.get(i)[1])));
 			llDTO.setPeople(Integer.parseInt(String.valueOf(list.get(i)[2])));
+			
 			dto.add(llDTO);
 			
 		}

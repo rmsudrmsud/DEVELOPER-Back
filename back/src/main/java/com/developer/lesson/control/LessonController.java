@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("lesson/*")
 @RequiredArgsConstructor
 public class LessonController {
+
 	private final LessonService lservice;
 	private final AppliedLessonService alService;
 	private final FavoritesLessonService flService;
@@ -151,5 +153,4 @@ public class LessonController {
 		flService.delFavLesson(favLesSeq);
 		return new ResponseEntity<>("즐겨찾기 삭제됨", HttpStatus.OK);
 	}
-
 }

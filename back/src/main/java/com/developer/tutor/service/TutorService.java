@@ -20,7 +20,6 @@ import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -71,10 +70,10 @@ public class TutorService {
 	public List<TutorDTO.selectTutorDetailDTO> selectTutorDetail(String tutorId) throws FindException {
 		List<TutorDTO.selectTutorDetailDTO> tResult = new ArrayList<>();
 		TutorDTO.selectTutorDetailDTO tDTO = new TutorDTO.selectTutorDetailDTO();
-		
+
 		List<Object[]> list = tRepository.selectTutorDetail(tutorId);
 
-		if(list.size() == 0) {
+		if (list.size() == 0) {
 			Optional<Tutor> t = tRepository.findById(tutorId);
 			tDTO.setInfo(t.get().getInfo());
 			tDTO.setImgPath(t.get().getImgPath());
@@ -83,13 +82,13 @@ public class TutorService {
 			tDTO.setLesson(null);
 		} else {
 			Optional<Users> u = uRepository.findById(tutorId);
-			
+
 			List<LessonDTO.onlyLessonDTO> lResult = new ArrayList<>();
 			tDTO.setInfo((String) list.get(0)[12]);
 			tDTO.setImgPath((String) list.get(0)[13]);
 			tDTO.setStarAvg(((BigDecimal) list.get(0)[14]).doubleValue());
 			tDTO.setName(u.get().getName());
-			
+
 			for (int i = 0; i < list.size(); i++) {
 				LessonDTO.onlyLessonDTO lDTO = new LessonDTO.onlyLessonDTO();
 				lDTO.setLessonSeq(((BigDecimal) list.get(i)[0]).longValue());
@@ -105,13 +104,31 @@ public class TutorService {
 				lDTO.setEndDate(((Date) list.get(i)[10]));
 				lDTO.setLocation((String) list.get(i)[11]);
 				lDTO.setPayLesson(((BigDecimal) list.get(i)[16]).intValue());
-				
+
 				lResult.add(lDTO);
 			}
 			tDTO.setLesson(lResult);
 		}
 		tResult.add(tDTO);
 		return tResult;
+	}
+
+	/**
+	 * 튜터로 승인한다.
+	 * 
+	 * @author SR
+	 * @param userId
+	 * @throws FindException
+	 */
+	public void tutorApply(String tutorId) throws FindException {
+		Optional<Tutor> optT = tRepository.findById(tutorId);
+		if (optT.isPresent()) {
+			Tutor entityT = optT.get();
+			entityT.setApplyOk(1);
+			tRepository.save(entityT);
+		} else {
+			throw new FindException("해당 ID가 존재하지 않습니다.");
+		}
 	}
 
 	/**
@@ -130,5 +147,4 @@ public class TutorService {
 			throw new RemoveException("해당 유저가 존재하지 않습니다.");
 		}
 	}
-
 }
