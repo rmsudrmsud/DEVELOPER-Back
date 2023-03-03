@@ -100,7 +100,7 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void openOc(Long srSeq) throws FindException {
+	public void openOc(long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(0);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
@@ -113,7 +113,7 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void closeOc(Long srSeq) throws FindException {
+	public void closeOc(long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(1);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);

@@ -39,15 +39,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 		public List<Object[]> selectReservation(@Param("resSeq")long resSeq);
 		
 		//[DS}룸시퀀스와 예약날짜로 찾기
-		@Query(value = "select r.room_seq, r.start_time, r.end_time, r.using_date, ro.price, sr.open_time,sr.end_time AS srEndTime, r.user_id\r\n"
-				+ "from reservation r, room_info ro, studyroom sr\r\n"
-				+ "where r.room_seq = ro.room_seq \r\n"
-				+ "AND r.room_seq= :roomSeq \r\n"
-				+ "AND r.using_date BETWEEN TO_DATE(:usingDate, 'YYYY-MM-DD') AND TO_DATE(:usingDate, 'YYYY-MM-DD') + 1\r\n"
-				+ "AND sr.sr_seq = ro.sr_seq ", nativeQuery = true)
-		public List<Object[]> findAllByUsingDate(@Param("roomSeq") Long roomSeq, @Param("usingDate") String usingDate);
+				@Query(value = "select r.room_seq, r.start_time, r.end_time, r.using_date, ro.price, sr.open_time,sr.end_time AS srEndTime, r.user_id\r\n"
+						+ "from reservation r, room_info ro, studyroom sr\r\n"
+						+ "where r.room_seq = ro.room_seq \r\n"
+						+ "AND r.room_seq= :roomSeq \r\n"
+						+ "AND r.using_date BETWEEN TO_DATE(:usingDate, 'YYYY-MM-DD') AND TO_DATE(:usingDate, 'YYYY-MM-DD') + 1\r\n"
+						+ "AND sr.sr_seq = ro.sr_seq ", nativeQuery = true)
+				public List<Object[]> findAllByUsingDate(@Param("roomSeq") Long roomSeq, @Param("usingDate") String usingDate);
 		
-		//[DS]유저 아이디로 예약내역 찾기O
+				//[DS]유저 아이디로 예약내역 찾기O
 		@Query(value="SELECT r. res_seq, s.name AS sName, rif.name AS rifName, r.using_date, r.start_time, r.end_time\r\n"
 				+ "FROM studyroom s, room_info rif, reservation r\r\n"
 				+ "WHERE s.sr_seq = rif.sr_seq\r\n"

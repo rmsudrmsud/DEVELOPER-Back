@@ -174,20 +174,6 @@ public class UsersService {
 	}
 
 	/**
-	 * 튜터로 승인한다.
-	 * @author SR
-	 * @param userId
-	 * @throws FindException
-	 */
-	public void tutorApply(String userId) throws FindException {
-		UsersDTO usersDTO = this.selectUsers(userId);
-		usersDTO.setRole(1);
-		Users EntityU = modelMapper.map(usersDTO, Users.class);
-		uRepository.save(EntityU);
-	}
-	
-	
-	/**
 	 * 튜터 미승인 목록을 출력한다.
 	 * @author SR
 	 * @return
