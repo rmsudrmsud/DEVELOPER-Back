@@ -1,15 +1,12 @@
 package com.developer.reservation.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.entity.Reservation;
-import com.developer.studyroom.entity.Studyroom;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 	//[SR] 스터디카페 예약내역 목록 출력

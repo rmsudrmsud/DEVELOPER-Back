@@ -1,11 +1,17 @@
 package com.developer.board.control;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.developer.board.dto.BoardDTO;
 import com.developer.board.entity.Board;
@@ -26,19 +33,19 @@ import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
 import com.developer.recommend.entity.Recommend;
 import com.developer.recommend.service.RecommendService;
+import com.developer.util.Attach;
 
 import lombok.RequiredArgsConstructor;
-
-
+import net.coobird.thumbnailator.Thumbnailator;
 
 @RestController
 @RequestMapping("board/*")
 @RequiredArgsConstructor
 public class BoardController {
 
-	
 	private final BoardService bService;
 	private final RecommendService rService;
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 게시판 글 작성
@@ -49,15 +56,54 @@ public class BoardController {
 	 */
 
 	@PostMapping(value = "*")
-	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session) throws AddException {
+	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session,  MultipartFile f) throws AddException {
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
 			throw new AddException("로그인하세요");
 		}
-		bService.addBoard(saveBoardDTO, logined);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
+		File saveDirFile = new File(savdDirectory);
+		String fileName;
+		if(f != null && f.getSize()>0 ) {
+			long fSize = f.getSize();
+			String fOrigin = f.getOriginalFilename();
+			System.out.println("---파일---");
+			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
+			
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
+			
+			fileName = fName;
+			File file = new File(saveDirFile, fileName);
+			try {
+				Attach.upload(f.getBytes(), file);
 
+				// 섬네일파일 만들기 (비율맞춰서된다!)
+				int width = 300;
+				int height = 300;
+				
+				String thumbFileName = "t_" + fileName; // 섬네일파일명
+				File thumbFile = new File(saveDirFile, thumbFileName);
+				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);
+				InputStream thumbnailIS = f.getInputStream();
+				
+				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
+				
+				saveBoardDTO.setImgPath(fileName);
+				bService.addBoard(saveBoardDTO, logined);
+				logger.info("파일업로드 성공");
+				
+				return new ResponseEntity<>(HttpStatus.OK);
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("파일업로드 에러");
+				throw new AddException(e.getMessage());
+			}
+		}
+		return new ResponseEntity<>("글작성 실패", HttpStatus.BAD_REQUEST);
+	}
+	
+	
 	/**
 	 * 글 수정폼
 	 * 
@@ -122,8 +168,59 @@ public class BoardController {
 	 * @throws FindException
 	 */
 	@PutMapping(value = "edit/{postSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq)
+	public ResponseEntity<?> editBoard(BoardDTO.saveBoardDTO saveBoardDTO, @PathVariable Long postSeq, MultipartFile f)
 			throws ModifyException {
+		
+		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
+		File saveDirFile = new File(savdDirectory);
+		String fileName;
+		//System.out.println("테스트: "+saveBoardDTO.getImgPath());
+		
+		if(f != null && f.getSize() > 0) {
+			long fSize = f.getSize();
+			String fOrigin = f.getOriginalFilename();
+			System.out.println("---파일---");
+			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
+			
+		    if(!saveBoardDTO.getImgPath().equals("")) {
+		       
+		        String oldFileName = saveBoardDTO.getImgPath();
+		        File oldFile = new File(saveDirFile, oldFileName);
+		        
+		        if(oldFile.exists()) {
+		            oldFile.delete();
+		        }
+		    }
+
+		    UUID uuid = UUID.randomUUID();
+		    String fName = uuid.toString() + "_" + fOrigin;
+		    
+		    fileName = fName;
+		    File file = new File(saveDirFile, fileName);
+		    try {
+
+				Attach.upload(f.getBytes(), file);
+		    	// 섬네일파일 만들기 (비율맞춰서된다!)
+				int width = 300;
+				int height = 300;
+				
+				String thumbFileName = "t_" + fileName; // 섬네일파일명
+				File thumbFile = new File(saveDirFile, thumbFileName);
+				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);
+				InputStream thumbnailIS = f.getInputStream();
+				
+				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
+				
+		    } catch(IOException e) {
+		        e.printStackTrace();
+		        logger.error("파일업로드 에러");
+		        throw new ModifyException(e.getMessage());
+		    }
+		} else {
+		    // 이미지 파일이 첨부되지 않았다면
+		    fileName = saveBoardDTO.getImgPath();
+		}
+		
 		bService.editBoard(saveBoardDTO, postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -174,9 +271,10 @@ public class BoardController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 
 	}
-	
+
 	/**
-	 * 추천수 증가 
+	 * 추천수 증가
+	 * 
 	 * @author choigeunhyeong
 	 * @param recommend
 	 * @param postSeq
@@ -184,25 +282,27 @@ public class BoardController {
 	 * @return
 	 * @throws AddException
 	 */
-	@PostMapping(value="detail/{postSeq}")
-	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session) throws AddException {
+	@PostMapping(value = "detail/{postSeq}")
+	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session)
+			throws AddException {
 		String logined = (String) session.getAttribute("logined");
-		if(logined == null) {
+		if (logined == null) {
 			throw new AddException("로그인하세요");
 		}
 		rService.addRecommend(recommend, postSeq, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 추천수 감소
+	 * 
 	 * @author choigeunhyeong
 	 * @param recSeq
 	 * @return
 	 * @throws RemoveException
 	 */
-	@DeleteMapping(value="detail/{recSeq}")
-	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException{
+	@DeleteMapping(value = "detail/{recSeq}")
+	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException {
 		rService.delRecommend(recSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
