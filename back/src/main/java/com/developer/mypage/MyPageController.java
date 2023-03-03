@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.service.AppliedLessonService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
@@ -21,6 +22,8 @@ import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.favoriteslesson.service.FavoritesLessonService;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.favoritesstudyroom.service.FavoritesStudyroomService;
+import com.developer.lesson.dto.LessonDTO;
+import com.developer.lesson.service.LessonService;
 import com.developer.lessonreview.dto.LessonReviewDTO;
 import com.developer.lessonreview.service.LessonReviewService;
 import com.developer.reservation.dto.ReservationDTO;
@@ -46,7 +49,7 @@ public class MyPageController {
 	   private final RoomReviewService rrservice;
 	   private final AppliedLessonService alService;
 	   private final UserReviewService urService;
-
+	   private final LessonService lService;
 	
 	/**
 	 * [FavoritesStudyroom] 나의 스터디카페 즐겨찾기 목록
@@ -193,6 +196,74 @@ public class MyPageController {
       List<LessonReviewDTO.listLRListDTO> list = lrservice.lReviewList(logined);
       return new ResponseEntity<>(list, HttpStatus.OK);
    }
+   
+   /**
+	 * [Lesson] 진행 완료된 수업 이름출력
+	 * @author choigeunhyeong
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "tutor/completed" )
+	public ResponseEntity<?> getLessonByUser3(HttpSession session) throws FindException{
+		String logined = (String) session.getAttribute("logined");
+		if (logined != null) {
+		List<LessonDTO.GetLessonByUser> list = lService.getLessonByUser3(logined);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+  /**
+   * [AppliedLesson] 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록
+   * 
+   * @author choigeunhyeong
+   * @param lessonSeq
+   * @return
+   * @throws FindException
+   */
+  @GetMapping(value = "tutor/completed/addreview/{lessonSeq}")
+  public ResponseEntity<?> selectClassAndTutee(@PathVariable Long lessonSeq) throws FindException {
+     List<UsersDTO.getNameDTO> list = alService.selectClassAndTutee(lessonSeq);
+     return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
+  /**
+   * [Userreview] 튜티가 튜터에게 받은 수업 후기 작성
+   * @author choigeunhyeong
+   * @param addReviewDTO
+   * @param applySeqRv
+   * @return
+   * @throws AddException
+   */
+  @PostMapping(value = "tutor/completed/addreview/{applySeqRv}")
+  public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv)
+        throws AddException {
+     urService.addUserReview(addReviewDTO, applySeqRv);
+     return new ResponseEntity<>(HttpStatus.OK);
+  }
+  
+  /**
+   * [Lesson, appliedLesson] 튜터 진행완료된수업 상세페이지 
+   * @author choigeunhyeong
+   * @param lessonSeq
+   * @return
+   * @throws FindException
+   */
+  @GetMapping(value = "tutor/completed/detail/{lessonSeq}")
+  public ResponseEntity<?> tutorCompletedDetail(@PathVariable Long lessonSeq) throws FindException{
+	   MyPageDTO.tutorCompletedDetailDTO dto = new MyPageDTO.tutorCompletedDetailDTO();
+	   
+	   List<AppliedLessonDTO.UserByAppliedLessonDTO> Userlist = alService.getLessonApplyUser(lessonSeq);
+	   List<LessonDTO.selectLessonDTO> Lessonlist = lService.getLessonDetail(lessonSeq);
+	   List<UsersDTO.getCompletedClassDTO> reviewList = alService.selectCompletedClassList(lessonSeq);
+	   
+	   dto.setSelectLessonDTO(Lessonlist);
+	   dto.setUserAppliedLessonDTO(Userlist);
+	   dto.setCompletedlessonReviewDTO(reviewList);
+	   return new ResponseEntity<>(dto, HttpStatus.OK); 
+  }
 
 }
 

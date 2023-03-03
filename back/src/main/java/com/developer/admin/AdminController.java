@@ -20,8 +20,10 @@ import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.service.HostUserService;
 import com.developer.lesson.dto.LessonDTO;
 import com.developer.lesson.service.LessonService;
+import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.service.RoomInfoService;
 import com.developer.studyroom.dto.StudyroomDTO;
+import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.service.StudyroomService;
 import com.developer.tutor.service.TutorService;
 import com.developer.users.dto.UsersDTO;
@@ -237,6 +239,56 @@ public class AdminController {
 		hService.deleteHost(hostId);
 		return new ResponseEntity<>(HttpStatus.OK);
 
+	}
+	
+	/**
+	 * 관리자 스터디카페 전체목록 출력
+	 * 
+	 * @author choigeunhyeong
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "studyroom")
+	public ResponseEntity<?> getAllStudyroom() throws FindException {
+		List<StudyroomDTO.getAllStudyroomDTO> list = sService.getAllStudyroom();
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
+	/**
+	 * 관리자페이지 방상세정보+ 방에 해당하는 예약내역
+	 * 
+	 * @author choigeunhyeong
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "studyroom/detail/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> MypageStudyroomDetail(@PathVariable Long srSeq) throws FindException {
+
+		AdminDTO.adminStudyroomDetailDTO dto = new AdminDTO.adminStudyroomDetailDTO();
+
+		Studyroom s = sService.detailStudyroom(srSeq);
+		List<RoomInfoDTO.getReservationDTO> lList = riService.getReservation(srSeq);
+
+		dto.setS(s);
+		dto.setReservationDTO(lList);
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	/**
+	 * 호스트유저 1개의 전체정보 출력
+	 * 
+	 * @author choigeunhyeong
+	 * @param hostId
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "host/detail/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> infoHost(@PathVariable String hostId, HttpSession session) throws FindException {
+		HostUserDTO hostDTO = hService.selectHost(hostId);
+		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
 	}
 
 }
