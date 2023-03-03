@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("tutor/*")
 @RequiredArgsConstructor
 public class TutorController {
-	@Autowired
-	private TutorService tservice;
 
+	private final TutorService tservice;
 
 	/**
 	 * 튜터 등록 및 수정
@@ -40,13 +38,14 @@ public class TutorController {
 	 * @throws FindException
 	 */
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session) throws AddException, FindException {
+	public ResponseEntity<?> save(@RequestBody TutorDTO.saveTutorDTO tDTO, HttpSession session)
+			throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
-		if(logined != null) {
-			tservice.saveTutor(tDTO, logined);			
+		if (logined != null) {
+			tservice.saveTutor(tDTO, logined);
 			return new ResponseEntity<>("등록 성공", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);			
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
 		}
 	}
 

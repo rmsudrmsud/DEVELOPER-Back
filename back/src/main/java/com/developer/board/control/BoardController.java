@@ -37,14 +37,11 @@ import com.developer.util.Attach;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 
-
-
 @RestController
 @RequestMapping("board/*")
 @RequiredArgsConstructor
 public class BoardController {
 
-	
 	private final BoardService bService;
 	private final RecommendService rService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -200,6 +197,7 @@ public class BoardController {
 		    String fName = logined + "_" + fOrigin;
 		    fileName = fName;
 		    
+		    
 		    File file = new File(saveDirFile, fileName);
 		    try {
 
@@ -275,9 +273,10 @@ public class BoardController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 
 	}
-	
+
 	/**
-	 * 추천수 증가 
+	 * 추천수 증가
+	 * 
 	 * @author choigeunhyeong
 	 * @param recommend
 	 * @param postSeq
@@ -285,25 +284,27 @@ public class BoardController {
 	 * @return
 	 * @throws AddException
 	 */
-	@PostMapping(value="detail/{postSeq}")
-	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session) throws AddException {
+	@PostMapping(value = "detail/{postSeq}")
+	public ResponseEntity<?> addRecommend(Recommend recommend, @PathVariable Long postSeq, HttpSession session)
+			throws AddException {
 		String logined = (String) session.getAttribute("logined");
-		if(logined == null) {
+		if (logined == null) {
 			throw new AddException("로그인하세요");
 		}
 		rService.addRecommend(recommend, postSeq, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 추천수 감소
+	 * 
 	 * @author choigeunhyeong
 	 * @param recSeq
 	 * @return
 	 * @throws RemoveException
 	 */
-	@DeleteMapping(value="detail/{recSeq}")
-	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException{
+	@DeleteMapping(value = "detail/{recSeq}")
+	public ResponseEntity<?> delRecommend(@PathVariable Long recSeq) throws RemoveException {
 		rService.delRecommend(recSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

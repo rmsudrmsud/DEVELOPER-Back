@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +17,15 @@ import com.developer.recommend.repository.RecommendRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RecommendService {
-	@Autowired
-	BoardRepository bRepository;
-	@Autowired
-	RecommendRepository rRepository;
-	@Autowired
-	UsersRepository uRepository;
+	
+	private final BoardRepository bRepository;
+	private final RecommendRepository rRepository;
+	private final UsersRepository uRepository;
 	
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
