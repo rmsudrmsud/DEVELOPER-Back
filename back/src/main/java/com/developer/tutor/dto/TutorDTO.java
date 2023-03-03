@@ -1,6 +1,5 @@
 package com.developer.tutor.dto;
 
-
 import java.util.List;
 
 import com.developer.lesson.dto.LessonDTO;
@@ -13,73 +12,72 @@ import lombok.NoArgsConstructor;
 public class TutorDTO {
 	@Data
 	@NoArgsConstructor
-	public static class tDTO{
+	public static class tDTO {
 		private String tutorId;
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
-		
+
 		private UsersDTO.uNameDTO uDTO;
 		private List<LessonDTO> lDTO;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class selectDetailDTO{
+	public static class selectDetailDTO {
 		private String tutorId;
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
 	}
-	
-	//[JH]
+
+	// [JH]
 	@Data
-	public static class tutorDTO{
+	public static class tutorDTO {
 		private String tutorId;
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
-		
+
 		private LessonDTO ldto;
 		private UsersDTO udto;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class saveTutorDTO{
+	public static class saveTutorDTO {
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class saveTutorResDTO{
+	public static class saveTutorResDTO {
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private Integer applyOk;
 		private Users users;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
 	@NoArgsConstructor
-	public static class selectTutorDetailDTO{
+	public static class selectTutorDetailDTO {
 		private String info;
 		private String imgPath;
 		private Double starAvg;
 		private String name;
-		
+
 		private List<LessonDTO.onlyLessonDTO> lesson;
 	}
-	
-	
+
 }

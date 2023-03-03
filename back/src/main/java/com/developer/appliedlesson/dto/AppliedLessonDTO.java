@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 public class AppliedLessonDTO {
 	
 	// [JH]
@@ -50,7 +49,6 @@ public class AppliedLessonDTO {
 		private UsersDTO usersDTO;
 	}
 	
-	
 	// [JH]
 	@Data @NoArgsConstructor
 	public static class getTutteAppliedLessonDTO{
@@ -73,13 +71,12 @@ public class AppliedLessonDTO {
 		private UsersDTO usersDTO;
 	}
 
-	
-
 	// [JW]
 	@Data
 	@NoArgsConstructor
 	public static class alDTO {
 		private Long applySeq;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date cdate;
 		private Integer applyOk;
 		private String tuteeId;
@@ -103,9 +100,9 @@ public class AppliedLessonDTO {
 	@NoArgsConstructor
 	public static class alAddRequestDTO {
 		private Long applySeq;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date cdate;
 		private Integer applyOk;
 	}
 	
-	//adff
 }

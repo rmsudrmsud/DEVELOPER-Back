@@ -14,26 +14,27 @@ public class FavoritesStudyroomDTO {
 	private long favSeq;
 	private Users userId;
 	private Studyroom studyroom;
-	
+
 	private Integer cnt;
-	//ds
+
+	// ds
 	@Data
 	@NoArgsConstructor
-	public static class favoritesStudyroomUserIdDTO{
+	public static class favoritesStudyroomUserIdDTO {
 		private UsersDTO.UserIdDTO userIdDTO;
-		
+
 	}
-	
-	//ds
+
+	// ds
 	@Data
 	@NoArgsConstructor
-	public static class fvInsertDTO{
+	public static class fvInsertDTO {
 		private Long srSeq;
 	}
-	
+
 	@Data
 	@NoArgsConstructor
-	public static class favStudyroomListDTO{
+	public static class favStudyroomListDTO {
 		private long srSeq;
 		private StudyroomDTO.selectAllFavStudyroomDTO studyroom;
 	}

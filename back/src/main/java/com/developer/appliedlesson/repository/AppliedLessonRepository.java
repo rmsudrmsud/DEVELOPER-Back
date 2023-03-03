@@ -1,7 +1,7 @@
 package com.developer.appliedlesson.repository;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.developer.appliedlesson.entity.AppliedLesson;
 
 public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Long> {
-	//단위테스트용
-	public Optional<AppliedLesson> findByApplySeq(Long applySeq);
 
 	/**
 	 * 미승인 튜티 리스트
@@ -63,6 +61,7 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
  			+ "ON a.al_user_id = u.user_id "
  			+ "WHERE a.al_lesson_seq = :lesson_seq ", nativeQuery= true)
  	public List<Object[]> selectCompletedClassList(@Param("lesson_seq") Long lessonSeq);
+ 	
 	//[JW]
 	@Query(nativeQuery =  true,
 				value = "select * from applied_lesson al\n"

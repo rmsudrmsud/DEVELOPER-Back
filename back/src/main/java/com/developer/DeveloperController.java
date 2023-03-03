@@ -31,21 +31,22 @@ public class DeveloperController {
 
 	/**
 	 * [메인페이지] 커뮤니티 + 수업 출력
+	 * 
 	 * @author SR
 	 * @return
 	 * @throws FindException
 	 */
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> mainPageList() throws FindException {
-		
+
 		DeveloperDTO.MainPageDTO dto = new DeveloperDTO.MainPageDTO();
-		
+
 		List<BoardDTO.selectAllBydateBoardDTO> bList = bService.listByDate();
 		List<LessonDTO.selectAllBydateLessonDTO> lList = lservice.selectAllByDateLesson();
-		
+
 		dto.setListBoard(bList);
 		dto.setListLesson(lList);
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
-	}	
+	}
 }

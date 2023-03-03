@@ -512,8 +512,10 @@ public class HostUserController {
 		logger.info("호스트로그인성공시 hostsessionid : " + session.getId());
 		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
 	}
-	 /**
+
+	/**
 	 * 호스트 로그아웃
+	 * 
 	 * @author choigeunhyeong
 	 * @param session
 	 * @return
@@ -524,22 +526,22 @@ public class HostUserController {
 		session.invalidate();
 		return "";
 	}
-	
+
 	/**
-	 * 로그인 체크 
+	 * 로그인 체크
+	 * 
 	 * @author choigeunhyeong
 	 * @param session
 	 * @return
 	 */
-	@GetMapping(value="checklogined", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "checklogined", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> checklogined(HttpSession session) {
-		String logined = (String)session.getAttribute("hostLogined");
-		if(logined != null) {
+		String logined = (String) session.getAttribute("hostLogined");
+		if (logined != null) {
 			return new ResponseEntity<>(HttpStatus.OK);
-		}else {
+		} else {
 			return new ResponseEntity<>("호스트로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 
 }

@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
@@ -19,17 +18,17 @@ import com.developer.lessonreview.repository.LessonReviewRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
-@Service
-public class LessonReviewService {
-	private Logger logger = LoggerFactory.getLogger(getClass()); 
-	
-	@Autowired
-	LessonReviewRepository lrRepository; 
-	@Autowired
-	AppliedLessonRepository alRepository;
-	@Autowired
-	UsersRepository uRepository;
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
+public class LessonReviewService {
+	
+	private final LessonReviewRepository lrRepository; 
+	private final AppliedLessonRepository alRepository;
+	private final UsersRepository uRepository;	
+	
+	private Logger logger = LoggerFactory.getLogger(getClass()); 
 
 	/**
 	 *  튜터의 수업에 대한 후기 추가 및 수정

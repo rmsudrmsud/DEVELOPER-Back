@@ -7,32 +7,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 public class FavoritesLessonDTO {
-	
-	 //[JW]
+
+	// [JW]
 	@Data
-	@AllArgsConstructor @NoArgsConstructor
-	public static class flListDTO{
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class flListDTO {
 		private Long favLesSeq;
 		private String tuteeId;
 		private String lessonName;
 	}
 
-
-	
-	 //[JW]
+	// [JW]
 	@Data
-	@AllArgsConstructor @NoArgsConstructor
-	public static class favoritesLessonDTO{
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class favoritesLessonDTO {
 		private Long favLesSeq;
 		private String tuteeId;
-		
+
 		private LessonDTO.onlyLessonDTO ldto;
 	}
-	
-	//[JW]
+
+	// [JW]
 	@Data
-	@AllArgsConstructor @NoArgsConstructor
-	public static class selectDetailDTO{
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class selectDetailDTO {
 		private Long favLesSeq;
 		private String tuteeId;
 	}
