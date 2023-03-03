@@ -21,32 +21,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="FAVORITES_LESSON")
-@DynamicInsert @DynamicUpdate
+@Table(name = "FAVORITES_LESSON")
+@DynamicInsert
+@DynamicUpdate
 
-@Setter@Getter 
-@NoArgsConstructor 
-@SequenceGenerator(
-		name ="favLesSeq", 
-		sequenceName ="fav_les_seq", 
-		initialValue = 1, allocationSize = 1 
-		)
+@Setter
+@Getter
+@NoArgsConstructor
+@SequenceGenerator(name = "favLesSeq", sequenceName = "fav_les_seq", initialValue = 1, allocationSize = 1)
 public class FavoritesLesson {
 	@Id
-	@Column(name="fav_les_seq")
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE, 
-			generator ="favLesSeq"  
-		)
+	@Column(name = "fav_les_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favLesSeq")
 	private Long favLesSeq;
-	
+
 	
 	
 	@ManyToOne
-	@JoinColumn(name="tutee_id")
+	@JoinColumn(name = "tutee_id")
 	private Users users;
-	
+
 	@ManyToOne
-	@JoinColumn(name="lesson_seq")
+	@JoinColumn(name = "lesson_seq")
 	private Lesson lesson;
 }

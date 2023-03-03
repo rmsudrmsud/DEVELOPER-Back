@@ -28,19 +28,19 @@ import lombok.Setter;
 @Table(name = "FAVORITES_STUDYROOM")
 
 @SequenceGenerator(name = "FAV_SEQ_GENERATOR", // 사용할 sequence 이름
-      sequenceName = "fav_seq", // 실제 데이터베이스 sequence 이름
-      initialValue = 1, allocationSize = 1)
+		sequenceName = "fav_seq", // 실제 데이터베이스 sequence 이름
+		initialValue = 1, allocationSize = 1)
 public class FavoritesStudyroom {
-   @Id
-   @Column(name = "fav_seq")
-   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAV_SEQ_GENERATOR")
-   private Long favSeq;
+	@Id
+	@Column(name = "fav_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FAV_SEQ_GENERATOR")
+	private Long favSeq;
 
-   @ManyToOne
-   @JoinColumn(name = "user_id")
-   private Users users;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users users;
 
-   @ManyToOne(cascade = {CascadeType.MERGE })
-   @JoinColumn(name = "sr_seq")
-   private Studyroom studyroom;
+	@ManyToOne(cascade = { CascadeType.MERGE })
+	@JoinColumn(name = "sr_seq")
+	private Studyroom studyroom;
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
@@ -20,34 +19,34 @@ import com.developer.studyroom.repository.StudyroomRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FavoritesStudyroomService {
-	@Autowired
-	private FavoritesStudyroomRepository fsRepository;
 
-	@Autowired
-	private StudyroomRepository sRepository;
+	private final FavoritesStudyroomRepository fsRepository;
+	private final StudyroomRepository sRepository;
+	private final UsersRepository uRepository;
 
-	@Autowired
-	private UsersRepository uRepository;
+	/**
+	 * [스터디카페 상세페이지]즐겨찾기 추가기능
+	 * 
+	 * @author ds
+	 * @param fvDTO
+	 * @throws AddException
+	 */
 
-	 /**
-	    * [스터디카페 상세페이지]즐겨찾기 추가기능
-	    * @author ds
-	    * @param fvDTO
-	    * @throws AddException
-	    */
-	   
-	   public void insertFVstudyroom(Long srSeq , String logined)throws AddException{
-	      FavoritesStudyroom fs = new FavoritesStudyroom ();
-	      Optional<Users> optU= uRepository.findById(logined);
-	      Users u = optU.get();
-	      fs.setUsers(u);
-	      Optional<Studyroom> optS = sRepository.findById(srSeq);
-	      Studyroom s = optS.get();
-	      fs.setStudyroom(s);
-	      fsRepository.save(fs);
-	   }
+	public void insertFVstudyroom(Long srSeq, String logined) throws AddException {
+		FavoritesStudyroom fs = new FavoritesStudyroom();
+		Optional<Users> optU = uRepository.findById(logined);
+		Users u = optU.get();
+		fs.setUsers(u);
+		Optional<Studyroom> optS = sRepository.findById(srSeq);
+		Studyroom s = optS.get();
+		fs.setStudyroom(s);
+		fsRepository.save(fs);
+	}
 
 	/**
 	 * [스터디카페 상세페이지]즐겨찾기 추가기능
@@ -64,8 +63,7 @@ public class FavoritesStudyroomService {
 			throw new RemoveException("해당 시퀀스가 없습니다.");
 		}
 	}
-	
-	
+
 	/**
 	 * [마이페이지] 즐겨찾기 스터디카페 목록
 	 * 

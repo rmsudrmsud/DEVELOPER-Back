@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
@@ -22,14 +21,14 @@ import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.repository.StudyroomRepository;
 import com.developer.users.dto.UsersDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RoomInfoService {
-	@Autowired
-	private RoomInfoRepository riRepository;
 
-	@Autowired
-	private StudyroomRepository sRepository;
-
+	private final RoomInfoRepository riRepository;
+	private final StudyroomRepository sRepository;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	ModelMapper modelMapper = new ModelMapper();
@@ -140,62 +139,63 @@ public class RoomInfoService {
 		return rListDto;
 
 	}
-	
+
 	/**
 	 * 스터디룸번호로 해당하는 예약내역 출력
+	 * 
 	 * @author choigeunhyeong
 	 * @param srSeq
 	 * @return
 	 * @throws FindException
 	 */
-	public List<RoomInfoDTO.getReservationDTO> getReservation(Long srSeq) throws FindException{
+	public List<RoomInfoDTO.getReservationDTO> getReservation(Long srSeq) throws FindException {
 		List<Object[]> RList = riRepository.getReservation(srSeq);
-		 List<RoomInfoDTO.getReservationDTO> dto = new ArrayList<>();
-		 for(int i = 0; i < RList.size(); i++) {
-			 RoomInfoDTO.getReservationDTO roomInfoDTO = new RoomInfoDTO.getReservationDTO();
-			 ReservationDTO.getReservationDTO resDTO = new  ReservationDTO.getReservationDTO();
-			 BigDecimal res_seq = (BigDecimal) RList.get(i)[0];
-			 Long resultres_seq = res_seq.longValue();
-			 resDTO.setResSeq(resultres_seq);
-			 resDTO.setUsingDate((Date) RList.get(i)[4]);
-			 resDTO.setStartTime((String) RList.get(i)[5]);
-			 resDTO.setEndTime((String) RList.get(i)[6]);
-			 UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
-			 uDTO.setUserId((String) RList.get(i)[2]);
-			 uDTO.setNickname((String) RList.get(i)[3]);
-			 roomInfoDTO.setName((String) RList.get(i)[1]);
-			 roomInfoDTO.setReservation(resDTO);
-			 roomInfoDTO.setUsers(uDTO);
-			 dto.add(roomInfoDTO);
-		 }
-		 return dto;
+		List<RoomInfoDTO.getReservationDTO> dto = new ArrayList<>();
+		for (int i = 0; i < RList.size(); i++) {
+			RoomInfoDTO.getReservationDTO roomInfoDTO = new RoomInfoDTO.getReservationDTO();
+			ReservationDTO.getReservationDTO resDTO = new ReservationDTO.getReservationDTO();
+			BigDecimal res_seq = (BigDecimal) RList.get(i)[0];
+			Long resultres_seq = res_seq.longValue();
+			resDTO.setResSeq(resultres_seq);
+			resDTO.setUsingDate((Date) RList.get(i)[4]);
+			resDTO.setStartTime((String) RList.get(i)[5]);
+			resDTO.setEndTime((String) RList.get(i)[6]);
+			UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
+			uDTO.setUserId((String) RList.get(i)[2]);
+			uDTO.setNickname((String) RList.get(i)[3]);
+			roomInfoDTO.setName((String) RList.get(i)[1]);
+			roomInfoDTO.setReservation(resDTO);
+			roomInfoDTO.setUsers(uDTO);
+			dto.add(roomInfoDTO);
+		}
+		return dto;
 	}
+
 	/**
 	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
+	 * 
 	 * @author ds
-	 * @param srSeq 스터디카페 시퀀스(장소번호) 
+	 * @param srSeq 스터디카페 시퀀스(장소번호)
 	 * @return 특정스터디카페 전체정보들(방여러개)
-	 * @throws 전체정보 출력시  FindException예외발생한다
+	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
-	public List<RoomInfoDTO> selectAll(Long srSeq) throws FindException{
+	public List<RoomInfoDTO> selectAll(Long srSeq) throws FindException {
 		List<Object[]> list = riRepository.selectAll(srSeq);
 		List<RoomInfoDTO> dto = new ArrayList<>();
-		for(int i=0; i<list.size();i++) {
+		for (int i = 0; i < list.size(); i++) {
 			RoomInfoDTO riDTO = new RoomInfoDTO();
-			BigDecimal room_seq= (BigDecimal)list.get(i)[0];
+			BigDecimal room_seq = (BigDecimal) list.get(i)[0];
 			Long resultRoomSeq = room_seq.longValue();
 			riDTO.setRoomSeq(resultRoomSeq);
 			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
-			riDTO.setImgPath((String)list.get(i)[1]);
-			riDTO.setInfo((String)list.get(i)[2]);
-			riDTO.setName((String)list.get(i)[3]);
+			riDTO.setImgPath((String) list.get(i)[1]);
+			riDTO.setInfo((String) list.get(i)[2]);
+			riDTO.setName((String) list.get(i)[3]);
 			riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
-			
-		    dto.add(riDTO);
+
+			dto.add(riDTO);
 		}
 		return dto;
 	}
 }
-
-
