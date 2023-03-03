@@ -23,60 +23,56 @@ import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.entity.RoomReview;
 import com.developer.users.entity.Users;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter @Getter @NoArgsConstructor 
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "RESERVATION")
 @DynamicInsert
 @DynamicUpdate
 
-@SequenceGenerator(
-name =
-"RES_SEQ_GENERATOR", // 사용할 sequence 이름
-sequenceName =
-"res_seq", // 실제 데이터베이스 sequence 이름
-initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "RES_SEQ_GENERATOR", // 사용할 sequence 이름
+		sequenceName = "res_seq", // 실제 데이터베이스 sequence 이름
+		initialValue = 1, allocationSize = 1)
 public class Reservation {
 	@Id
 	@Column(name = "res_seq")
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator =
-			"RES_SEQ_GENERATOR") 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RES_SEQ_GENERATOR")
 	private Long resSeq;
 
 	@NotNull
 	@Column(name = "start_time")
 	private String startTime;
-	
+
 	@NotNull
 	@Column(name = "end_time")
 	private String endTime;
-	
+
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	@Column(name = "using_date")
 	private Date usingDate;
+
 	
 	
-	
-	@OneToOne(mappedBy = "reservation",fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+	@OneToOne(mappedBy = "reservation", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.MERGE })
 	private RoomReview roomReview;
-	
+
 	@ManyToOne
-	@JoinColumn(name="user_id")
+	@JoinColumn(name = "user_id")
 	private Users users;
-	
-	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="host_id")
-	private HostUser hostUser; 
-	
-	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name ="room_seq")
+
+	@ManyToOne // (cascade= {CascadeType.MERGE})
+	@JoinColumn(name = "host_id")
+	private HostUser hostUser;
+
+	@ManyToOne // (cascade= {CascadeType.MERGE})
+	@JoinColumn(name = "room_seq")
 	private RoomInfo roominfo;
 
 }
-
