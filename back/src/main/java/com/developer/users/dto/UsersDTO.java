@@ -1,12 +1,5 @@
 package com.developer.users.dto;
 
-import com.developer.appliedlesson.dto.AppliedLessonDTO;
-import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
-import com.developer.reservation.dto.ReservationDTO;
-import com.developer.tutor.dto.TutorDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 import java.util.List;
 
 
@@ -51,6 +44,21 @@ public class UsersDTO {
 		private List<Reservation> reservation;
 		private List<FavoritesStudyroom> favStudyroom;
 	
+	//[JH]
+	@Data
+	@NoArgsConstructor
+	public static class UsersDetailDTO{
+		private String userId;
+		private String pwd;
+		private Integer role;
+		private String nickname;
+		private String name;
+		private String email;
+		private String tel;
+		private String addr;
+	}
+		
+		
 	//[JW]
 	@Data
 	@NoArgsConstructor
@@ -146,7 +154,7 @@ public class UsersDTO {
 	@Data
 	@NoArgsConstructor
 	public static class UserIdDTO{
-		private Integer userId; //count함수
+		private Integer fvCNT; //count함수
 	}
 	
 	//ds

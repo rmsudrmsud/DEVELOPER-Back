@@ -25,10 +25,10 @@ import com.developer.users.dto.UsersDTO;
 @Service
 public class RoomInfoService {
 	@Autowired
-	private RoomInfoRepository roomInfoRepository;
+	private RoomInfoRepository riRepository;
 
 	@Autowired
-	private StudyroomRepository studyroomRepository;
+	private StudyroomRepository sRepository;
 
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -43,7 +43,7 @@ public class RoomInfoService {
 	 * @throws FindException
 	 */
 	public RoomInfoDTO selectRoom(long roomSeq) throws FindException {
-		Optional<RoomInfo> optRoom = roomInfoRepository.findById(roomSeq);
+		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
 			RoomInfoDTO roomDTO = modelMapper.map(roomEntity, RoomInfoDTO.class);
@@ -62,11 +62,11 @@ public class RoomInfoService {
 	 * @throws AddException
 	 */
 	public void insertRoom(RoomInfoDTO roomInfoDTO, long srSeq) {
-		Optional<Studyroom> optCafe = studyroomRepository.findById(srSeq);
+		Optional<Studyroom> optCafe = sRepository.findById(srSeq);
 		Studyroom cafeEntity = optCafe.get();
 		roomInfoDTO.setStudyroom(cafeEntity);
 		RoomInfo roomEntity = modelMapper.map(roomInfoDTO, RoomInfo.class);
-		roomInfoRepository.save(roomEntity);
+		riRepository.save(roomEntity);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class RoomInfoService {
 	 * @throws FindException
 	 */
 	public void updateRoom(long roomSeq, RoomInfoDTO roomInfoDTO) throws FindException {
-		Optional<RoomInfo> optRoom = roomInfoRepository.findById(roomSeq);
+		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
 			roomEntity.setName(roomInfoDTO.getName());
@@ -87,7 +87,7 @@ public class RoomInfoService {
 			roomEntity.setImgPath(roomInfoDTO.getImgPath());
 			roomEntity.setPerson(roomInfoDTO.getPerson());
 			roomEntity.setPrice(roomInfoDTO.getPrice());
-			roomInfoRepository.save(roomEntity);
+			riRepository.save(roomEntity);
 		} else {
 			throw new FindException("해당 방이 존재하지 않습니다.");
 		}
@@ -105,7 +105,7 @@ public class RoomInfoService {
 		RoomInfoDTO roomInfoDTO = this.selectRoom(roomSeq);
 		roomInfoDTO.setStatus(1);
 		RoomInfo roomEntity = modelMapper.map(roomInfoDTO, RoomInfo.class);
-		roomInfoRepository.save(roomEntity);
+		riRepository.save(roomEntity);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class RoomInfoService {
 	 * @throws FindException
 	 */
 	public List<RoomInfoDTO.selectAllRoomDTO> selectAllRoom(long srSeq) throws FindException {
-		List<Object[]> rList = roomInfoRepository.selectAllRoom(srSeq);
+		List<Object[]> rList = riRepository.selectAllRoom(srSeq);
 
 		List<RoomInfoDTO.selectAllRoomDTO> rListDto = new ArrayList<>();
 		for (int i = 0; i < rList.size(); i++) {
@@ -149,7 +149,7 @@ public class RoomInfoService {
 	 * @throws FindException
 	 */
 	public List<RoomInfoDTO.getReservationDTO> getReservation(Long srSeq) throws FindException{
-		List<Object[]> RList = roomInfoRepository.getReservation(srSeq);
+		List<Object[]> RList = riRepository.getReservation(srSeq);
 		 List<RoomInfoDTO.getReservationDTO> dto = new ArrayList<>();
 		 for(int i = 0; i < RList.size(); i++) {
 			 RoomInfoDTO.getReservationDTO roomInfoDTO = new RoomInfoDTO.getReservationDTO();
@@ -178,7 +178,7 @@ public class RoomInfoService {
 	 * @throws 전체정보 출력시  FindException예외발생한다
 	 */
 	public List<RoomInfoDTO> selectAll(Long srSeq) throws FindException{
-		List<Object[]> list = roomInfoRepository.selectAll(srSeq);
+		List<Object[]> list = riRepository.selectAll(srSeq);
 		List<RoomInfoDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
 			RoomInfoDTO riDTO = new RoomInfoDTO();

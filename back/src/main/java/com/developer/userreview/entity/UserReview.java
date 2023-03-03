@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import com.developer.appliedlesson.entity.AppliedLesson;
@@ -27,10 +29,12 @@ public class UserReview {
 	@Column(name = "apply_seq_rv")
 	private Long applySeqRv;
 	
-	@Column(nullable = false)
+	@Column(name = "star")
+	@NotNull
 	private Integer star;
 	
-	@Column(nullable = false)
+	@Column(name = "review")
+	@NotNull
 	private String review;
 	
 	

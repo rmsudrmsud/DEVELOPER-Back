@@ -1,7 +1,10 @@
 package com.developer.lesson.entity;
 
 
-import java.time.LocalDate;
+
+
+
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -34,7 +37,7 @@ import lombok.Setter;
 @Table(name="LESSON")
 @DynamicInsert @DynamicUpdate
 @Setter @Getter @NoArgsConstructor
-@JsonFormat(timezone = "Asia/Seoul", pattern ="yy-MM-dd")
+@JsonFormat(timezone = "Asia/Seoul", pattern ="yyyy-MM-dd")
 @SequenceGenerator(
 		name ="lessonSeq", 
 		sequenceName ="lesson_seq", 
@@ -71,11 +74,11 @@ public class Lesson {
 	
 	@NotNull
 	@Column(name="start_cdate")
-	private LocalDate startCdate;
+	private Date startCdate;
 	
 	@NotNull
 	@Column(name="end_cdate")
-	private LocalDate endCdate;
+	private Date endCdate;
 	
 	@NotNull
 	@Column(name="price")
@@ -83,11 +86,11 @@ public class Lesson {
 	
 	@NotNull
 	@Column(name="start_date")
-	private LocalDate startDate;
+	private Date startDate;
 	
 	@NotNull
 	@Column(name="end_date")
-	private LocalDate endDate;
+	private Date endDate;
 	
 	@ColumnDefault(value = "2")
 	@Column(name="pay_lesson")

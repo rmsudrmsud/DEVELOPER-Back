@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.admin.AdminDTO;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
@@ -31,9 +32,9 @@ import com.developer.users.dto.UsersDTO;
 public class StudyroomService {
 
 	@Autowired
-	private StudyroomRepository studyroomRepository;
+	private StudyroomRepository sRepository;
 	@Autowired
-	private HostUserRepository hostUserRepository;
+	private HostUserRepository hRepository;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -46,7 +47,7 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public List<StudyroomDTO.getAllStudyroomDTO> getAllStudyroom() throws FindException{
-		List<Object[]> Slist = studyroomRepository.getAllStudyroom();
+		List<Object[]> Slist = sRepository.getAllStudyroom();
 		List<StudyroomDTO.getAllStudyroomDTO> dtoList = new ArrayList<>();
 		for(int i = 0; i <Slist.size(); i ++) {
 			StudyroomDTO.getAllStudyroomDTO srDTO = new StudyroomDTO.getAllStudyroomDTO();
@@ -70,7 +71,7 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public Studyroom detailStudyroom(Long srSeq) throws FindException{
-		Optional<Studyroom> optS = studyroomRepository.findById(srSeq);
+		Optional<Studyroom> optS = sRepository.findById(srSeq);
 		Studyroom s = optS.get();
 		return s;	
 	}
@@ -84,7 +85,7 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public StudyroomDTO selectStudyroom(long srSeq) throws FindException {
-		Optional<Studyroom> optStudyroom = studyroomRepository.findById(srSeq);
+		Optional<Studyroom> optStudyroom = sRepository.findById(srSeq);
 		if (optStudyroom.isPresent()) {
 			Studyroom StudyroomEntity = optStudyroom.get();
 			StudyroomDTO studyroomDTO = modelMapper.map(StudyroomEntity, StudyroomDTO.class);
@@ -100,11 +101,11 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void openOc(Long srSeq) throws FindException {
+	public void openOc(long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(0);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
-		studyroomRepository.save(studyroomEntity);
+		sRepository.save(studyroomEntity);
 	}
 
 	/**
@@ -113,11 +114,11 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void closeOc(Long srSeq) throws FindException {
+	public void closeOc(long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(1);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
-		studyroomRepository.save(studyroomEntity);
+		sRepository.save(studyroomEntity);
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public StudyroomDTO.getHostAndStudyroomDTO getHostAndStudyroom(String hostId) throws FindException {
-		Optional<Studyroom> optS = studyroomRepository.getHostAndStudyroom(hostId);
+		Optional<Studyroom> optS = sRepository.getHostAndStudyroom(hostId);
 
 		StudyroomDTO.getHostAndStudyroomDTO sDto = new StudyroomDTO.getHostAndStudyroomDTO();
 		sDto.setSrSeq(optS.get().getSrSeq());
@@ -162,11 +163,11 @@ public class StudyroomService {
 	 * @throws AddException
 	 */
 	public void insertCafe(StudyroomDTO studyroomDTO, String hostId) throws AddException {
-		Optional<HostUser> hostUser = hostUserRepository.findById(hostId);
+		Optional<HostUser> hostUser = hRepository.findById(hostId);
 		HostUser hostUserEntity = hostUser.get();
 		studyroomDTO.setHostUser(hostUserEntity);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
-		studyroomRepository.save(studyroomEntity);
+		sRepository.save(studyroomEntity);
 	}
 	
 	/**
@@ -178,14 +179,14 @@ public class StudyroomService {
 	 */
 	public void updateCafe(long srSeq, StudyroomDTO studyroomDTO) throws FindException {
 
-		Optional<Studyroom> optCafe = studyroomRepository.findById(srSeq);
+		Optional<Studyroom> optCafe = sRepository.findById(srSeq);
 		if (optCafe.isPresent()) {
 			Studyroom cafeEntity = optCafe.get();
 			cafeEntity.setInfo(studyroomDTO.getInfo());
 			cafeEntity.setImgPath(studyroomDTO.getImgPath());
 			cafeEntity.setOpenTime(studyroomDTO.getOpenTime());
 			cafeEntity.setEndTime(studyroomDTO.getEndTime());
-			studyroomRepository.save(cafeEntity);
+			sRepository.save(cafeEntity);
 		} else {
 			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
 		}
@@ -258,7 +259,30 @@ public class StudyroomService {
 			sDTO.setRoomInfoPriceAndPersonDTO(ripDTO);
 			FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favStudyroomDTO = new FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO();
 			UsersDTO.UserIdDTO uIDTO = new UsersDTO.UserIdDTO();
-			uIDTO.setUserId(Integer.parseInt(String.valueOf(list.get(i)[5])));
+			uIDTO.setFvCNT(Integer.parseInt(String.valueOf(list.get(i)[5])));
+			favStudyroomDTO.setUserIdDTO(uIDTO);
+			sDTO.setFavoritesStudyroomUserIdDTO(favStudyroomDTO);
+			dto.add(sDTO);
+			//순서 			name, addr, imgpath, person, price, fav_cnt
+		}
+		return dto;
+	}
+	
+	public List<StudyroomDTO.StudyroomSelectBySearchDTO> selectListALL() throws FindException{
+		List<Object[]> list = sRepository.getListAll();
+		List<StudyroomDTO.StudyroomSelectBySearchDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size();i++) {
+			StudyroomDTO.StudyroomSelectBySearchDTO sDTO = new StudyroomDTO.StudyroomSelectBySearchDTO();
+			sDTO.setName((String)list.get(i)[0]);
+			sDTO.setAddr((String)list.get(i)[1]);
+			sDTO.setImgPath((String)list.get(i)[2]);
+			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
+			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
+			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
+			sDTO.setRoomInfoPriceAndPersonDTO(ripDTO);
+			FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favStudyroomDTO = new FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO();
+			UsersDTO.UserIdDTO uIDTO = new UsersDTO.UserIdDTO();
+			uIDTO.setFvCNT(Integer.parseInt(String.valueOf(list.get(i)[5])));
 			favStudyroomDTO.setUserIdDTO(uIDTO);
 			sDTO.setFavoritesStudyroomUserIdDTO(favStudyroomDTO);
 			dto.add(sDTO);
@@ -272,11 +296,12 @@ public class StudyroomService {
 	 * @return 스터디카페 최신 순 5개 리스트
 	 * @throws FindException
 	 */
-	public List<StudyroomDTO.studyroomList5DTO> selectList5()throws FindException{
-		List<Object[]> list= studyroomRepository.getList5();
-		List<StudyroomDTO.studyroomList5DTO> dto = new ArrayList<>();
+	public List<StudyroomDTO.StudyroomList5DTO> selectList5()throws FindException{
+		List<Object[]> list= sRepository.getList5();
+		List<StudyroomDTO.StudyroomList5DTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
-			StudyroomDTO.studyroomList5DTO slDTO = new StudyroomDTO.studyroomList5DTO();
+			AdminDTO.getList5DTO adDTO = new AdminDTO.getList5DTO();
+			StudyroomDTO.StudyroomList5DTO slDTO = new StudyroomDTO.StudyroomList5DTO();
 			BigDecimal sr_seq = (BigDecimal) list.get(i)[0];
 			Long resultSrSeq = sr_seq.longValue();
 			slDTO.setSrSeq(resultSrSeq);
@@ -289,6 +314,23 @@ public class StudyroomService {
 		}
 		return dto;
 	}
-	
+	/**
+	 * 스터디카페 1개의 상세정보 출력.
+	 * @author DS
+	 * @param srSeq
+	 * @return StudyroomDTO
+	 * @throws FindException
+	 */
+	public StudyroomDTO getStudyroomDetail(long srSeq) throws FindException {
+		Optional<Studyroom> optStudyroom = sRepository.findById(srSeq);
+		if (optStudyroom.isPresent()) {
+			Studyroom StudyroomEntity = optStudyroom.get();
+			StudyroomDTO studyroomDTO = modelMapper.map(StudyroomEntity, StudyroomDTO.class);
+			return studyroomDTO;
+		} else {
+			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
+		}
+	}
+
 	
 }

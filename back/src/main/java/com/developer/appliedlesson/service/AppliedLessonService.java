@@ -114,12 +114,12 @@ public class AppliedLessonService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<AppliedLessonDTO.UserByAppliedLessonDTO> getLessonNotApplyUser(Long lessonSeq) throws FindException{
+	public List<AppliedLessonDTO.NotYetUserByAppliedLessonDTO> getLessonNotApplyUser(Long lessonSeq) throws FindException{
 		List<Object[]> Alist = alRepository.getLessonNotApplyUser(lessonSeq);
-		List<AppliedLessonDTO.UserByAppliedLessonDTO> dto = new ArrayList<>();
+		List<AppliedLessonDTO.NotYetUserByAppliedLessonDTO> dto = new ArrayList<>();
 		for(int i=0; i<Alist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
-			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			AppliedLessonDTO.NotYetUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.NotYetUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String)Alist.get(i)[0]);
 			aDTO.setApplyOk(0);
@@ -139,12 +139,12 @@ public class AppliedLessonService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<AppliedLessonDTO.UserByAppliedLessonDTO> getLessonApplyUser(Long lessonSeq) throws FindException{
+	public List<AppliedLessonDTO.ApproveUserByAppliedLessonDTO> getLessonApplyUser(Long lessonSeq) throws FindException{
 		List<Object[]> Alist = alRepository.getLessonApplyUser(lessonSeq);
-		List<AppliedLessonDTO.UserByAppliedLessonDTO> dto = new ArrayList<>();
+		List<AppliedLessonDTO.ApproveUserByAppliedLessonDTO> dto = new ArrayList<>();
 		for(int i=0; i<Alist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
-			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			AppliedLessonDTO.ApproveUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.ApproveUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String)Alist.get(i)[0]);
 //			aDTO.setApplyOk(1);
@@ -158,6 +158,13 @@ public class AppliedLessonService {
 	}
 	
 	
+	/**
+	 * 진행완료된 수업 수업명, 튜티목록
+	 * @author choigeunhyeong
+	 * @param lessonSeq
+	 * @return
+	 * @throws FindException
+	 */
 	public List<UsersDTO.getNameDTO> selectClassAndTutee(Long lessonSeq) throws FindException{
 		List<Object[]> list = alRepository.selectClassAndTutee(lessonSeq);
 		List<UsersDTO.getNameDTO> dtoList = new ArrayList<>();
@@ -179,21 +186,21 @@ public class AppliedLessonService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<UsersDTO.getCompletedClassDTO> selectCompletedClassList(String userId) throws FindException{
-		List<Object[]> list = alRepository.selectCompletedClassList(userId);
+	public List<UsersDTO.getCompletedClassDTO> selectCompletedClassList(Long lessonSeq) throws FindException{
+		List<Object[]> list = alRepository.selectCompletedClassList(lessonSeq);
 		List<UsersDTO.getCompletedClassDTO> dtoList = new ArrayList<>();
 		for(int i = 0; i<list.size(); i++) {
-			UsersDTO.getCompletedClassDTO gDTO = new UsersDTO.getCompletedClassDTO();
-			gDTO.setUsername((String) list.get(i)[0]);
 			LessonReviewDTO.getReviewList lDTO = new LessonReviewDTO.getReviewList();
-			lDTO.setReview((String) list.get(i)[1]);
-			
-			BigDecimal star = (BigDecimal)list.get(i)[2];
+			lDTO.setReview((String) list.get(i)[0]);
+			BigDecimal star = (BigDecimal)list.get(i)[1];
 			int resultstar = star.intValue();
 			lDTO.setStar(resultstar);
+			UsersDTO.getCompletedClassDTO gDTO = new UsersDTO.getCompletedClassDTO();
+			gDTO.setUsername((String) list.get(i)[2]);
 			gDTO.setReview(lDTO);
 			dtoList.add(gDTO);
 		}
 		return dtoList;
 	}
+
 }

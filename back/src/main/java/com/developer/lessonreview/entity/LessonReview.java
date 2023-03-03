@@ -10,14 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,17 +29,20 @@ import lombok.Setter;
 @DynamicInsert @DynamicUpdate
 
 @Setter@Getter
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 public class LessonReview {
 	@Id
 	@Column(name="apply_seq")
 	private Long applySeq;
-	@Column(name="cdate", columnDefinition = "DATE DEFAULT SYSDATE")
+	@ColumnDefault(value="sysdate")
+	@Column(name="cdate")
 	private Date cDate;
-	@Column(name="review", nullable = false)
+	@NotNull
+	@Column(name="review")
 	private String review;
-	@Column(name="star", nullable = false)
+	@NotNull
+	@Column(name="star")
 	private Integer star;	
 	
 	@MapsId("applySeq")

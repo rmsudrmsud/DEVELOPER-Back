@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.entity.Board;
 import com.developer.boardrep.entity.BoardRep;
-import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.recommend.entity.Recommend;
 import com.developer.reservation.entity.Reservation;
@@ -28,63 +27,67 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @DynamicInsert
 @DynamicUpdate
-public class Users{	
+public class Users {
 	@Id
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id")
 	private String userId;
-	
-	@ColumnDefault(value="2")
-	private Integer role;//1튜터 2튜티 3탈퇴 9관리
-	
-	@Column(nullable = false)
+
+	@Column(name = "role")
+	@ColumnDefault(value = "2")
+	private Integer role; // 1튜터 2튜티 3탈퇴 9관리
+
+	@NotNull
+	@Column(name = "pwd")
 	private String pwd;
-	
-	@Column(nullable = false)
+
+	@NotNull
+	@Column(name = "nickname")
 	private String nickname;
-	
-	@Column(nullable = false)
+
+	@NotNull
+	@Column(name = "name")
 	private String name;
-	
-	@Column(nullable = false)
+
+	@NotNull
+	@Column(name = "email")
 	private String email;
 
-	@Column(name="tel", nullable = false)
+	@NotNull
+	@Column(name = "tel")
 	private String tel;
-	@Column(name="addr", nullable = false)
-	private String addr;	
-	
-	@OneToOne(mappedBy = "users",
-			cascade = CascadeType.REMOVE)
+
+	@NotNull
+	@Column(name = "addr")
+	private String addr;
+
+	@OneToOne(mappedBy = "users", cascade = CascadeType.REMOVE)
 	private Tutor tutor;
-	
+
 	@OneToMany(mappedBy = "users")
 	private List<AppliedLesson> appliedLesson;
 
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
 	private List<Board> board;
-	
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
 	private List<BoardRep> boardRep;
-	
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy="users")
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
 	private List<Recommend> recommend;
-	
-	@OneToMany(mappedBy = "users")
-	private List<FavoritesLesson> favoritesLesson;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy="userId")
-   private List<Reservation> reservation;
-   
-   @OneToMany(cascade=CascadeType.REMOVE, mappedBy = "userId")
-   private List<FavoritesStudyroom> favStudyroom;
-   
-   @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
-   private List<FavoritesStudyroom> favoritesStudyroom;
-     
- }
+
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+	private List<Reservation> reservation;
+
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "users")
+	private List<FavoritesStudyroom> favoritesStudyroom;
+
+	@OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+	private List<FavoritesStudyroom> favStudyroom;
+}
