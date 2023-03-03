@@ -74,6 +74,11 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
 	public List<AppliedLesson> findByAlLessonSeq(@Param("lessonSeq") Long lessonSeq);
 
 	//[JW]	
-	public AppliedLesson findByTuteeId(String tuteeId);
+	@Query(nativeQuery =  true,
+			value = "select * from applied_lesson al\n"
+					+ "WHERE al.al_lesson_seq = :lessonSeq "
+					+ "AND al.tutee_id = :tuteeId")
+	public AppliedLesson delAppliedTutee(@Param("tuteeId") String tuteeId, 
+																	@Param("lessonSeq") Long lessonSeq);
 
 }

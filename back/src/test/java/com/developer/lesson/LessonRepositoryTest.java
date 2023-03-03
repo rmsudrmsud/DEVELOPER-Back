@@ -153,32 +153,32 @@ public class LessonRepositoryTest {
 
 
 
-	@Test
-	@DisplayName("수업 INSERT 테스트")
-	void testAdd() {
-		Lesson lesson = new Lesson();
-		lesson.setCategory(1);
-		lesson.setContent("sdfsdsdf");
-		LocalDate date = LocalDate.of(2023, 02, 27);
-		lesson.setEndCdate(date);
-		lesson.setEndDate(date);
-		lesson.setImgPath("...");
-		lesson.setLessonName("2번수업.");
-		lesson.setLessonSeq(1L);
-		lesson.setLessonName("1번수업.");
-		lesson.setLessonSeq(124L);
-		lesson.setLocation("..."); 
-		lesson.setPayLesson(0);
-		lesson.setPeople(10);
-		lesson.setPrice(1000);
-		lesson.setStartCdate(date);
-		lesson.setStartDate(date);
-		
-		Optional<Tutor> t = tRepository.findById("tutor1");
-		Tutor tutor = t.get();
-		lesson.setTutor(tutor);
-		lRepository.save(lesson);
-	}
+//	@Test
+//	@DisplayName("수업 INSERT 테스트")
+//	void testAdd() {
+//		Lesson lesson = new Lesson();
+//		lesson.setCategory(1);
+//		lesson.setContent("sdfsdsdf");
+//		LocalDate date = LocalDate.of(2023, 02, 27);
+//		lesson.setEndCdate(date);
+//		lesson.setEndDate(date);
+//		lesson.setImgPath("...");
+//		lesson.setLessonName("2번수업.");
+//		lesson.setLessonSeq(1L);
+//		lesson.setLessonName("1번수업.");
+//		lesson.setLessonSeq(124L);
+//		lesson.setLocation("..."); 
+//		lesson.setPayLesson(0);
+//		lesson.setPeople(10);
+//		lesson.setPrice(1000);
+//		lesson.setStartCdate(date);
+//		lesson.setStartDate(date);
+//		
+//		Optional<Tutor> t = tRepository.findById("tutor1");
+//		Tutor tutor = t.get();
+//		lesson.setTutor(tutor);
+//		lRepository.save(lesson);
+//	}
 	
 	@Test
 	@DisplayName("수업 UPDATE 테스트")

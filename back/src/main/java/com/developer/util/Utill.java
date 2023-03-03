@@ -1,4 +1,4 @@
-package com.developer;
+package com.developer.util;
 
 import javax.servlet.http.HttpSession;
 
