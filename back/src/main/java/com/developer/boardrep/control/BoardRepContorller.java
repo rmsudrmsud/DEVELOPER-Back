@@ -25,55 +25,5 @@ import com.developer.exception.RemoveException;
 @RequestMapping("boardRep/*")
 public class BoardRepContorller {
 
-	@Autowired
-	private BoardRepSerivce BoardRepservice;
 	
-	ModelMapper modelMapper = new ModelMapper();
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	/**
-	 * 댓글 작성
-	 * @author choigeunhyeong
-	 * @param boardRepDTO
-	 * @param session
-	 * @return
-	 * @throws AddException
-	 */
-	@PostMapping(value = "add/{postSeq}")
-	public ResponseEntity<?> addBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postSeq, HttpSession session) throws AddException {
-		String logined = (String) session.getAttribute("logined");
-		if(logined == null) { //로그인 안한 경우
-			throw new AddException("로그인하세요");
-		}
-		BoardRepservice.addBoardRep(boardRepDTO , postSeq, logined);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	/**
-	 * 댓글 수정
-	 * @author choigeunhyeong
-	 * @param boardRepDTO
-	 * @param postRepSeq
-	 * @return
-	 * @throws ModifyException
-	 */
-	@PutMapping(value = "{postRepSeq}")
-	public ResponseEntity<?> editBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postRepSeq) throws ModifyException {
-		
-		BoardRepservice.editBoardRep(boardRepDTO , postRepSeq);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	/**
-	 * 댓글 삭제 
-	 * @author choigeunhyeong
-	 * @param postRepSeq
-	 * @return
-	 * @throws RemoveException
-	 */
-	@DeleteMapping(value = "{postRepSeq}")
-	public ResponseEntity<?> deleteBoardRep(@PathVariable Long postRepSeq) throws RemoveException{
-		BoardRepservice.deleteBoardRep(postRepSeq);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 }

@@ -238,7 +238,7 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public List<UsersDTO> getUserById(String userId) throws FindException{
-		List<Object[]> list = uRepository.selectALLUsers();
+		List<Object[]> list = uRepository.selectUserById(userId);
 		List<UsersDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
@@ -252,4 +252,26 @@ public class UsersService {
 		}
 		return dto;
 	}
+	
+	/**
+	 * 회원 1명의 상세정보를 출력한다
+	 * @author DS
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public UsersDTO selectUserDetail(String userId) throws FindException {
+		Users u = uRepository.getUserdetail(userId);
+		UsersDTO dto = new UsersDTO();
+		dto.setUserId(u.getUserId());
+		dto.setAddr(u.getAddr());
+		dto.setEmail(u.getEmail());
+		dto.setName(u.getName());
+		dto.setNickname(u.getNickname());
+		dto.setPwd(u.getPwd());
+		dto.setTel(u.getTel());
+		return dto;
+	}
+	
+	
 }

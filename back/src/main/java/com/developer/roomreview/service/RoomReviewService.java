@@ -118,56 +118,29 @@ public class RoomReviewService {
  * @return RoomReviewDTO.selectMyRmRvDetailDTO 유저의 작성한 이용후기 상세정보
  */
 	public  List<RoomReviewDTO.selectMyRmRvDetailDTO> selectRmRvDetail(Long resSeq)throws FindException{
-		List<Object[]> list= rrRepository.findByResSeq(resSeq);
-		List<RoomReviewDTO.selectMyRmRvDetailDTO> dto  = new ArrayList();
-		System.out.println("사이즈길이는: " +list.size());
-		for(int i=0; i<list.size();i++) {
-			RoomReviewDTO.selectMyRmRvDetailDTO rdto = new RoomReviewDTO.selectMyRmRvDetailDTO(); 
-			rdto.setCdate((Date)list.get(i)[3]);
-			rdto.setStar(Integer.parseInt(String.valueOf(list.get(i)[4])));
-			rdto.setContent((String)list.get(i)[5]);
-			ReservationDTO.RoomReviewSelectMyRmRvDetailDTO rDTO = new ReservationDTO.RoomReviewSelectMyRmRvDetailDTO();
-			rDTO.setUsingDate((Date)list.get(i)[2]);
+		List<Object[]> list= rrRepository.getByResSeq(resSeq);
+		System.out.println("리스트사이즈는"+list.size());
+		
+		List<RoomReviewDTO.selectMyRmRvDetailDTO> dto = new ArrayList<>(); 
+		
+			RoomReviewDTO.selectMyRmRvDetailDTO rrDTO= new RoomReviewDTO.selectMyRmRvDetailDTO();
+			ReservationDTO.RoomReviewSelectMyRmRvDetailDTO resDTO = new ReservationDTO.RoomReviewSelectMyRmRvDetailDTO();
 			RoomInfoDTO.RoomInfoNameDTO rinDTO = new RoomInfoDTO.RoomInfoNameDTO();
-			rinDTO.setName((String)list.get(i)[1]);
 			StudyroomDTO.StudyroomNameDTO snDTO = new StudyroomDTO.StudyroomNameDTO();
-			snDTO.setName((String)list.get(i)[0]);
+			rrDTO.setCdate((Date)list.get(0)[3]);
+			rrDTO.setStar(Integer.parseInt(String.valueOf(list.get(0)[4])));
+			rrDTO.setContent((String)list.get(0)[5]);
+			resDTO.setUsingDate((Date)list.get(0)[2]);
+			rinDTO.setName((String)list.get(0)[1]);
+			snDTO.setName((String)list.get(0)[0]);
 			rinDTO.setStudyroomNameDTO(snDTO);
-			rDTO.setRoomInfoNameDTO(rinDTO);
-			rdto.setRrsaDTO(rDTO);
-			dto.add(rdto);
-		}
+			resDTO.setRoomInfoNameDTO(rinDTO);
+			rrDTO.setRrsaDTO(resDTO);
+			dto.add(rrDTO);
+		
 		
 		return dto;
 		
 	}
-
-
-
-//	//특정 스터디룸 후기 리스트 전체출력
-//	public List<Object[]> selectAll(Long srSeq) throws FindException{
-//		List<Object[]> obj= rrr.findBySrSeq(srSeq);
-//		return obj;
-//	}
-//	
-//	//유저의 작성된 이용후기 목록 출력
-//	public List<Object[]> selectMyRmRv(String userId) throws FindException{
-//		List<Object[]> obj=rrr.findByUserId(userId);
-//		return obj;
-//	}
-//	
-//	//유저의 작성하지 않은 후기 리스트들을 전체출력
-//	public List<Object[]> selectMyReqRmRv(String userId) throws FindException{
-//		List<Object[]> obj= rrr.fUserId(userId);
-//		return obj;
-//	}
-//	
-//	//예약시퀀스로 예약상세 출력
-//	public  Object selectRmRvDetail(Long ResSeq)throws FindException{
-//		Object rr = rrr.findByResSeq(ResSeq);
-//		return rr;
-//	}
-	
-
 	
 }

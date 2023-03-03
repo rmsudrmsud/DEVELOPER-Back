@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.admin.AdminDTO;
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.exception.FindException;
 import com.developer.lesson.dto.LessonDTO;
@@ -431,10 +432,12 @@ public class LessonService {
 		List<Object[]> list = lRepository.selectClassList5();
 		List<LessonDTO.LessonList5DTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
+			
 			LessonDTO.LessonList5DTO llDTO = new LessonDTO.LessonList5DTO();
 			llDTO.setLessonName((String)list.get(i)[0]);
 			llDTO.setCategory(Integer.parseInt(String.valueOf(list.get(i)[1])));
 			llDTO.setPeople(Integer.parseInt(String.valueOf(list.get(i)[2])));
+			
 			dto.add(llDTO);
 			
 		}

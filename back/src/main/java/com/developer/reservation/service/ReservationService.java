@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,10 +139,10 @@ public class ReservationService {
 	 * @author ds
 	 * @throws 전체정보 출력시  FindException예외발생한다
 	 */
-	public void insertRv(ReservationDTO.insertRvDTO rvDTO) throws AddException {
+	public void insertRv(ReservationDTO.insertRvDTO rvDTO, String logined) throws AddException {
 		
 		Reservation r = new Reservation();
-		Optional<Users> optU = uRepository.findById(rvDTO.getUserId());
+		Optional<Users> optU = uRepository.findById(logined);
 		Users u = optU.get();
 		r.setUsers(u);
 	   Optional<HostUser> optH = hRepository.findById(rvDTO.getHostId());
@@ -170,8 +172,7 @@ public class ReservationService {
 	 * @throws 전체정보 출력시  FindException, ParseException예외발생한다
 	 */
 	public List<ReservationDTO.selectAllByUsingDateDTO> selectAllByUsingDate(Long roomSeq, String usingDate) throws FindException, ParseException{
-//		 SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-//		 Date date=formatter.parse(usingDate);
+
 		List<Object[]> list= rRepository.findAllByUsingDate(roomSeq, usingDate);
 		List<ReservationDTO.selectAllByUsingDateDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
@@ -205,8 +206,8 @@ public class ReservationService {
 	 * @return List<ReservationDTO.selectMyResHistoryDTO> 유저의 전체 예약 내역(최신순) 
 	 * @throws 전체정보 출력시  FindException예외발생한다
 	 */
-	public List<ReservationDTO.selectMyResHistoryDTO> selectMyResHistory(String userId)throws FindException{
-		List<Object[]> list = rRepository.findByUserId(userId);
+	public List<ReservationDTO.selectMyResHistoryDTO> selectMyResHistory(String logined)throws FindException{
+		List<Object[]> list = rRepository.findByUserId(logined);
 		List<ReservationDTO.selectMyResHistoryDTO> rDTO = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
 			ReservationDTO.selectMyResHistoryDTO dto = new ReservationDTO.selectMyResHistoryDTO();
@@ -237,8 +238,8 @@ public class ReservationService {
 	 * @param userId
 	 * @return List<ReservationDTO.selectRmRvDTO> 유저의 작성한 이용후기 리스트
 	 */
-	public List<ReservationDTO.selectRmRvDTO> selectMyReqRmRv(String userId) throws FindException{
-		List<Object[]> rlist= rRepository.selectReqRmRv(userId);
+	public List<ReservationDTO.selectRmRvDTO> selectMyReqRmRv(String logined) throws FindException{
+		List<Object[]> rlist= rRepository.selectReqRmRv(logined);
 		List<ReservationDTO.selectRmRvDTO> dto = new ArrayList<>();
 		for(int i=0; i<rlist.size(); i++) {
 			

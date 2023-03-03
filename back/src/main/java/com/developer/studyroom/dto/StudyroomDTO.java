@@ -1,11 +1,14 @@
 package com.developer.studyroom.dto;
 
+import java.util.List;
+
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.entity.RoomInfo;
+import com.developer.roomreview.dto.RoomReviewDTO;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -132,9 +135,18 @@ public class StudyroomDTO {
 		//ds
 		@Data
 		@NoArgsConstructor
-		public static class studyroomList5DTO{
+		public static class StudyroomList5DTO{
 			private Long srSeq;
 			private String name;
 			private HostUserDTO.HostIdDTO hostIdDTO;
+		}
+		
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class StudyroomRoomInfoPageDTO{
+			private List<RoomInfoDTO> roominfoDTO;
+			private List<RoomReviewDTO.RoomReviewSelectAllDTO> roomReviewSelectAllDTO;
+			private StudyroomDTO studyroomDTO;
 		}
 }
