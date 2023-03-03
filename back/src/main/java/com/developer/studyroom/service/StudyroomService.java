@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.admin.AdminDTO;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
@@ -258,7 +259,30 @@ public class StudyroomService {
 			sDTO.setRoomInfoPriceAndPersonDTO(ripDTO);
 			FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favStudyroomDTO = new FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO();
 			UsersDTO.UserIdDTO uIDTO = new UsersDTO.UserIdDTO();
-			uIDTO.setUserId(Integer.parseInt(String.valueOf(list.get(i)[5])));
+			uIDTO.setFvCNT(Integer.parseInt(String.valueOf(list.get(i)[5])));
+			favStudyroomDTO.setUserIdDTO(uIDTO);
+			sDTO.setFavoritesStudyroomUserIdDTO(favStudyroomDTO);
+			dto.add(sDTO);
+			//순서 			name, addr, imgpath, person, price, fav_cnt
+		}
+		return dto;
+	}
+	
+	public List<StudyroomDTO.StudyroomSelectBySearchDTO> selectListALL() throws FindException{
+		List<Object[]> list = sRepository.getListAll();
+		List<StudyroomDTO.StudyroomSelectBySearchDTO> dto = new ArrayList<>();
+		for(int i=0; i<list.size();i++) {
+			StudyroomDTO.StudyroomSelectBySearchDTO sDTO = new StudyroomDTO.StudyroomSelectBySearchDTO();
+			sDTO.setName((String)list.get(i)[0]);
+			sDTO.setAddr((String)list.get(i)[1]);
+			sDTO.setImgPath((String)list.get(i)[2]);
+			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
+			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
+			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
+			sDTO.setRoomInfoPriceAndPersonDTO(ripDTO);
+			FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favStudyroomDTO = new FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO();
+			UsersDTO.UserIdDTO uIDTO = new UsersDTO.UserIdDTO();
+			uIDTO.setFvCNT(Integer.parseInt(String.valueOf(list.get(i)[5])));
 			favStudyroomDTO.setUserIdDTO(uIDTO);
 			sDTO.setFavoritesStudyroomUserIdDTO(favStudyroomDTO);
 			dto.add(sDTO);
@@ -272,11 +296,12 @@ public class StudyroomService {
 	 * @return 스터디카페 최신 순 5개 리스트
 	 * @throws FindException
 	 */
-	public List<StudyroomDTO.studyroomList5DTO> selectList5()throws FindException{
+	public List<StudyroomDTO.StudyroomList5DTO> selectList5()throws FindException{
 		List<Object[]> list= sRepository.getList5();
-		List<StudyroomDTO.studyroomList5DTO> dto = new ArrayList<>();
+		List<StudyroomDTO.StudyroomList5DTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
-			StudyroomDTO.studyroomList5DTO slDTO = new StudyroomDTO.studyroomList5DTO();
+			AdminDTO.getList5DTO adDTO = new AdminDTO.getList5DTO();
+			StudyroomDTO.StudyroomList5DTO slDTO = new StudyroomDTO.StudyroomList5DTO();
 			BigDecimal sr_seq = (BigDecimal) list.get(i)[0];
 			Long resultSrSeq = sr_seq.longValue();
 			slDTO.setSrSeq(resultSrSeq);
@@ -289,6 +314,23 @@ public class StudyroomService {
 		}
 		return dto;
 	}
-	
+	/**
+	 * 스터디카페 1개의 상세정보 출력.
+	 * @author DS
+	 * @param srSeq
+	 * @return StudyroomDTO
+	 * @throws FindException
+	 */
+	public StudyroomDTO getStudyroomDetail(long srSeq) throws FindException {
+		Optional<Studyroom> optStudyroom = sRepository.findById(srSeq);
+		if (optStudyroom.isPresent()) {
+			Studyroom StudyroomEntity = optStudyroom.get();
+			StudyroomDTO studyroomDTO = modelMapper.map(StudyroomEntity, StudyroomDTO.class);
+			return studyroomDTO;
+		} else {
+			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
+		}
+	}
+
 	
 }

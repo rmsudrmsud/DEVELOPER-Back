@@ -82,6 +82,7 @@ public class Board {
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE},  mappedBy="board")
 	private List<BoardRep> boardRep;
 	
+	@JsonIgnore
 	@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, mappedBy="board")
 	private List<Recommend> Recommend;
 	

@@ -8,31 +8,28 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.appliedlesson.repository.AppliedLessonRepository;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.exception.RemoveException;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UsersService {
 
-
-	private ModelMapper mapper = new ModelMapper();
+	private final UsersRepository uRepository;
+	private final AppliedLessonRepository alRepository;
 	
-	@Autowired
-	private UsersRepository uRepository;
-	
-
-	private AppliedLessonRepository alRepository;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
 	ModelMapper modelMapper = new ModelMapper();
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	
 	/**
@@ -42,8 +39,8 @@ public class UsersService {
 	 * @throws AddException
 	 */
 	public void addUsers(UsersDTO usersDTO) throws AddException{
-		Optional<Users> u = uRepository.findById(usersDTO.getUserId());
-		Users usersEntity = mapper.map(usersDTO, Users.class);
+//		Optional<Users> u = uRepository.findById(usersDTO.getUserId());
+		Users usersEntity = modelMapper.map(usersDTO, Users.class);
 		uRepository.save(usersEntity);
 	}
 	
@@ -58,7 +55,7 @@ public class UsersService {
 		Optional<Users> optU = uRepository.findById(userId);
 		if(optU.isPresent()) {
 			Users users = optU.get();
-			UsersDTO usersDTO = mapper.map(users, UsersDTO.class);
+			UsersDTO usersDTO = modelMapper.map(users, UsersDTO.class);
 			
 			return usersDTO;
 		}else {
@@ -67,7 +64,6 @@ public class UsersService {
 	}
 
 
-	
 	/**
 	 * 유저 로그인 
 	 * @author choigeunhyeong
@@ -167,11 +163,17 @@ public class UsersService {
 	 * [관리자] 수업을 예약한 튜티 삭제
 	 * @author moonone
 	 * @param tuteeId 튜티아이디
+	 * @throws RemoveException 
 	 */
-	public void deleteTutee(String tuteeId) {
-		AppliedLesson al = alRepository.findByTuteeId(tuteeId);
-		alRepository.delete(al);
+	public void deleteTutee(String tuteeId, Long lessonSeq) throws RemoveException {
+		AppliedLesson al = alRepository.delAppliedTutee(tuteeId, lessonSeq);
+		if(al.getApplySeq() != null) {
+			alRepository.deleteById(al.getApplySeq());			
+		} else {
+			throw new RemoveException("삭제가 되지 않았습니다.");
+		}
 	}
+	
 
 	/**
 	 * 튜터 미승인 목록을 출력한다.
@@ -224,7 +226,7 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public List<UsersDTO> getUserById(String userId) throws FindException{
-		List<Object[]> list = uRepository.selectALLUsers();
+		List<Object[]> list = uRepository.selectUserById(userId);
 		List<UsersDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
@@ -238,4 +240,26 @@ public class UsersService {
 		}
 		return dto;
 	}
+	
+	/**
+	 * 회원 1명의 상세정보를 출력한다
+	 * @author DS
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public UsersDTO selectUserDetail(String userId) throws FindException {
+		Users u = uRepository.getUserdetail(userId);
+		UsersDTO dto = new UsersDTO();
+		dto.setUserId(u.getUserId());
+		dto.setAddr(u.getAddr());
+		dto.setEmail(u.getEmail());
+		dto.setName(u.getName());
+		dto.setNickname(u.getNickname());
+		dto.setPwd(u.getPwd());
+		dto.setTel(u.getTel());
+		return dto;
+	}
+	
+	
 }
