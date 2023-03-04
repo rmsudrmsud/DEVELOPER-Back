@@ -34,21 +34,6 @@ public class StudyroomDTO {
 	private HostUser hostUser;
 	@JsonIgnore
 	private FavoritesStudyroom favoritesStudyroom; // 원래 List<>
-
-
-	//sr: 카페등록때 필요한 생성자
-	public StudyroomDTO(long srSeq, String name, String addr, String info, String openTime, String endTime,
-			String imgPath, Integer oc) {
-		super();
-		this.srSeq = srSeq;
-		this.name = name;
-		this.addr = addr;
-		this.info = info;
-		this.openTime = openTime;
-		this.endTime = endTime;
-		this.imgPath = imgPath;
-		this.oc = oc;
-	}
 	
 	//근형
 	@Data
@@ -92,6 +77,17 @@ public class StudyroomDTO {
 		private Integer oc;
 		private HostUserDTO.getHostDTO hostUserDTO;
 	}
+	
+	// SR: 즐겨찾기목록용
+		@Data
+		@NoArgsConstructor
+		@AllArgsConstructor
+		public static class selectAllFavStudyroomDTO {
+			private String name;
+			private String addr;
+		}
+	
+	
 	//ds
 		@Data
 		@NoArgsConstructor
