@@ -1,7 +1,7 @@
 package com.developer.hostuser.service;
 
-
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
@@ -20,19 +19,17 @@ import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
 
-import lombok.extern.slf4j.Slf4j;
-@Slf4j
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class HostUserService {
-
 	
-	private ModelMapper mapper = new ModelMapper();
+	private final HostUserRepository hRepository;
 	
-	@Autowired
-	private HostUserRepository hRepository;
-
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
 	/**
 	 * HostUser 객체 1개를 가져온다.
 	 * 
@@ -59,7 +56,7 @@ public class HostUserService {
 	 * @throws AddException
 	 */
 	public void addHost(HostUserDTO hostUserDTO) throws AddException{ 
-		HostUser hostUserEntity = mapper.map(hostUserDTO, HostUser.class);
+		HostUser hostUserEntity = modelMapper.map(hostUserDTO, HostUser.class);
 		hRepository.save(hostUserEntity);
 	}
 	
@@ -82,6 +79,7 @@ public class HostUserService {
 	 * @throws FindException
 	 */
 	public void outHost(String hostId) throws FindException {
+		
 		Optional<HostUser> optHost = hRepository.findById(hostId);
 		if (optHost.isPresent()) {
 			HostUser hostEntity = optHost.get();
