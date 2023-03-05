@@ -137,6 +137,29 @@ public class LessonService {
 		}
 		return dto;
 	}
+	
+	/**
+	 * 승인 거절된 수업(튜티기준)
+	 * @author moonone
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public List<LessonDTO.notYetLessonBytutee> rejectApply(String userId) throws FindException {
+		List<Object[]> Llist = lRepository.rejectLesson(userId);
+		List<LessonDTO.notYetLessonBytutee> dto = new ArrayList<>();
+		for (int i = 0; i < Llist.size(); i++) {
+			UsersDTO uDTO = new UsersDTO();
+			LessonDTO.notYetLessonBytutee lDTO = new LessonDTO.notYetLessonBytutee();
+			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
+			uDTO.setUserId((String) userId);
+			lDTO.setLessonName((String) Llist.get(i)[0]);
+			aDTO.setUsersDTO(uDTO);
+			lDTO.setAlDTO(aDTO);
+			dto.add(lDTO);
+		}
+		return dto;
+	}
 
 	/**
 	 * 진행예정 클래스(튜티기준)
@@ -172,6 +195,29 @@ public class LessonService {
 	 */
 	public List<LessonDTO.applyLessonBytutee> onGoingLesson(String userId) throws FindException {
 		List<Object[]> Llist = lRepository.onGoingLesson(userId);
+		List<LessonDTO.applyLessonBytutee> dto = new ArrayList<>();
+		for (int i = 0; i < Llist.size(); i++) {
+			UsersDTO uDTO = new UsersDTO();
+			LessonDTO.applyLessonBytutee lDTO = new LessonDTO.applyLessonBytutee();
+			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
+			uDTO.setUserId((String) userId);
+			lDTO.setLessonName((String) Llist.get(i)[0]);
+			aDTO.setUsersDTO(uDTO);
+			lDTO.setAlDTO(aDTO);
+			dto.add(lDTO);
+		}
+		return dto;
+	}
+	
+	/**
+	 * 진행 완료된 수업 (튜티기준)
+	 * @author moonone
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public List<LessonDTO.applyLessonBytutee> lastApplyLesson(String userId) throws FindException {
+		List<Object[]> Llist = lRepository.lastApplyLesson(userId);
 		List<LessonDTO.applyLessonBytutee> dto = new ArrayList<>();
 		for (int i = 0; i < Llist.size(); i++) {
 			UsersDTO uDTO = new UsersDTO();
@@ -410,6 +456,8 @@ public class LessonService {
 		}
 		return lesson;
 	}
+	
+	
 
 	/**
 	 * [메인페이지] 신청종료날짜 임박순으로 list를 출력한다.

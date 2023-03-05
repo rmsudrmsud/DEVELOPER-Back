@@ -127,6 +127,27 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	public List<Object[]> onGoingLesson(@Param("userId") String userId);
 	
 	//[JW]
+	@Query(value=" SELECT l.lesson_name"
+			+ " from LESSON l, USERS u, APPLIED_LESSON a"
+			+ " where u.user_id = a.tutee_id"
+			+ " and l.lesson_seq = a.al_lesson_seq"
+			+ " and  l.end_cdate < TO_CHAR(SYSDATE, 'yyyy-mm-dd')"
+			+ " and a.apply_ok=1"
+			+ " and u.user_id = :userId"
+			+ " order by l.lesson_seq desc", nativeQuery= true)
+	public List<Object[]> lastApplyLesson(@Param("userId") String userId);
+	
+	//[JW]
+	@Query(value=" SELECT l.lesson_name"
+			+ " from LESSON l, USERS u, APPLIED_LESSON a"
+			+ " where u.user_id = a.tutee_id"
+			+ " and l.lesson_seq = a.al_lesson_seq"
+			+ " and a.apply_ok=2"
+			+ " and u.user_id = :userId"
+			+ " order by l.lesson_seq desc", nativeQuery= true)
+	public List<Object[]> rejectLesson(@Param("userId") String userId);
+	
+	//[JW]
 	public List<Object> findByLessonNameContaining(String searchKeyword);
 
 	//[SR]메인페이지 - 신청종료일 임박순으로 list 출력
