@@ -2,6 +2,10 @@ package com.developer.users.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.dto.BoardDTO;
 import com.developer.boardrep.dto.BoardRepDTO;

@@ -70,6 +70,28 @@ public class HostUserService {
 		List<HostUser> list = hRepository.selectAll();
 		return list;
 	}
+	
+	/**
+	 * 호스트유저 아이디 중복체크
+	 * @author Jin
+	 * @param hostId
+	 * @return
+	 * @throws FindException
+	 */
+	public boolean existsByHostId(String hostId) throws FindException{
+		return hRepository.existsByHostId(hostId);
+	}
+	
+	/**
+	 * 호스트유저 이메일 중복체크
+	 * @author Jin
+	 * @param email
+	 * @return
+	 * @throws FindException
+	 */
+	public boolean existsByHostEmail(String email) throws FindException{
+		return hRepository.existsByEmail(email);
+	}
 		
 	/**
 	 * HostUser 상태값을 변환한다(탈퇴기능 ready=2).

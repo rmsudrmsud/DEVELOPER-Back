@@ -62,6 +62,21 @@ public class UsersService {
 			throw new FindException("존재하지 않는 유저입니다.");
 		}
 	}
+	
+	/**
+	 * 사용자 아이디 중복체크
+	 * @author Jin
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public boolean existsByUserId(String userId) throws FindException{
+		return uRepository.existsByUserId(userId);
+	}
+	
+	public boolean existsByEmail(String email) throws FindException{
+		return uRepository.existsByEmail(email);
+	}
 
 	/**
 	 * 유저 로그인
