@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -33,6 +34,7 @@ public class Tutor {
 	@Id
 	@Column(name = "tutor_id")
 	private String tutorId;
+	@Lob
 	@Column(name = "info")
 	private String info;
 	@Column(name = "img_path")

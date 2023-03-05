@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -61,6 +62,7 @@ public class Lesson {
 	private Integer category; //0:프로그래밍언어, 1:웹개발, 2:앱개발, 3:보안/네트워크, 4:데이터
 	
 	@NotNull
+	@Lob
 	@Column(name="content")
 	private String content;
 	
