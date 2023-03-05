@@ -131,10 +131,14 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endCdate;
 		private Integer price;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endDate;
 		private Integer payLesson;
 		private String location;
@@ -150,11 +154,15 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private LocalDate startCdate;
-		private LocalDate endCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endCdate;
 		private Integer price;
-		private LocalDate startDate;
-		private LocalDate endDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endDate;
 		private Integer payLesson;
 		private String location;
 
@@ -205,7 +213,9 @@ public class LessonDTO {
 		private String lessonName;
 		private Integer category;
 		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endCdate;
 		private Integer price;
 	}
