@@ -94,7 +94,7 @@ public class Lesson {
 	
 	@ColumnDefault(value = "2")
 	@Column(name="pay_lesson")
-	private Integer payLesson; //0무료 1유료 2결제대기
+	private Integer payLesson; //0무료 1유료 2결제대기 3수업삭제
 	
 	@NotNull
 	@Column(name="location")

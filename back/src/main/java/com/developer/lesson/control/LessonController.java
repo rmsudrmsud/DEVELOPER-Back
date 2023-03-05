@@ -57,7 +57,6 @@ public class LessonController {
 		String userId = (String) session.getAttribute("logined");
 		lservice.addLessonDTO(dto, userId);
 		return new ResponseEntity<>(HttpStatus.OK);
-
 	}
 
 	/**

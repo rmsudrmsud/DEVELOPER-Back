@@ -72,7 +72,7 @@ public class JoinController {
 
 
 	/**
-	 * 사용자 아이디 중복체크(수정예정)
+	 * 사용자 아이디 중복체크 (true중복, false사용가능)
 	 * @author Jin
 	 * @param userId
 	 * @param session
@@ -80,17 +80,47 @@ public class JoinController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "users/check/{userId}")
-	public boolean checkUser(@PathVariable String userId, HttpSession session) throws FindException {
-		UsersDTO.UsersDetailDTO usersDTO;
-		boolean flag = true;
-		usersDTO = uService.getUser(userId);
-		String check = usersDTO.getUserId();
-		if (check == null) {
-			flag = true;
-		} else if (check != null) {
-			flag = false;
-		}
-		return flag;
+	public ResponseEntity<?> checkUserId(@PathVariable String userId, HttpSession session) throws FindException {
+		return ResponseEntity.ok(uService.existsByUserId(userId));
+	}
+	
+	/**
+	 * 사용자 이메일 중복체크 (true중복, false사용가능)
+	 * @author Jin
+	 * @param email
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "users/checkemail/{email}")
+	public ResponseEntity<?> checkEmail(@PathVariable String email, HttpSession session) throws FindException{
+		return ResponseEntity.ok(uService.existsByEmail(email));
+	}
+	
+	/**
+	 * 호스트 아이디 중복체크 (true중복, false사용가능)
+	 * @author Jin
+	 * @param hostId
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "hostuser/check/{hostId}")
+	public ResponseEntity<?> checkHostId(@PathVariable String hostId, HttpSession session) throws FindException{
+		return ResponseEntity.ok(hService.existsByHostId(hostId));
+	}
+	
+	/**
+	 * 호스트 이메일 중복체크 (true중복, false사용가능)
+	 * @author Jin
+	 * @param email
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "hostuser/checkemail/{email}")
+	public ResponseEntity<?> checkHostEmail(@PathVariable String email, HttpSession session) throws FindException{
+		return ResponseEntity.ok(hService.existsByHostEmail(email));
 	}
 
 	/**

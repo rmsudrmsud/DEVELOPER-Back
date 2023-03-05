@@ -267,7 +267,7 @@ public class LessonService {
 	public void deleteLesson(Long lessonSeq) throws FindException {
 		LessonDTO.selectLessonDTO lessonDTO = this.selectLesson(lessonSeq);
 		ModelMapper modelMapper = new ModelMapper();
-		lessonDTO.setPayLesson(2);
+		lessonDTO.setPayLesson(3);
 		Lesson lessonEntity = new Lesson();
 
 		modelMapper.map(lessonDTO, lessonEntity);

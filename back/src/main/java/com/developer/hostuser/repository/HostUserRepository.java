@@ -14,6 +14,12 @@ public interface HostUserRepository extends CrudRepository<HostUser, String> {
 			+ " FROM HOST_USER" 
 			+ " order by name", nativeQuery = true)
 	public List<HostUser> selectAll();
+	
+	//[JH]
+	public boolean existsByHostId(String hostId);
+	
+	//[JH]
+	public boolean existsByEmail(String email);
 
 	// [SR] 미승인 호스트유저 목록
 	@Query(value = "SELECT host_id, num, name, tel, email " 

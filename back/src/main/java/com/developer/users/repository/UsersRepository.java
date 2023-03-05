@@ -58,4 +58,10 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 		
 	@Query(value="select* from users where user_id = :userId",nativeQuery= true)
 	public Users getUserdetail(@Param("userId") String userId);
+	
+	//[JH]
+	public boolean existsByUserId(String userId);
+	
+	//[JH]
+	public boolean existsByEmail(String email);
 }
