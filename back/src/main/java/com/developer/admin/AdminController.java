@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -195,19 +197,18 @@ public class AdminController {
 	}
 
 	/**
-	 * [Tutor] 튜터 승인거절
+	 * [Tutor] 튜터 승인거절(삭제 및 거절메일 포함)
 	 * 
 	 * @author SR
 	 * @param userId
 	 * @return
-	 * @throws RemoveException
+	 * @throws Exception 
 	 */
 
-	@DeleteMapping(value = "users/tutor/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorReject(@PathVariable String userId) throws RemoveException {
-
-		tService.deleteTutor(userId);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@PostMapping(value = "users/tutor/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tutorReject(@PathVariable String userId) throws FindException, Exception {
+			tService.deleteTutor(userId);
+			return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	/**
@@ -244,15 +245,16 @@ public class AdminController {
 	}
 
 	/**
-	 * [HostUser] 호스트 승인을 거절한다(삭제)
+	 * [HostUser] 호스트 승인을 거절한다(삭제 및 거절메일 포함)
 	 * 
 	 * @author SR
 	 * @param hostId
 	 * @return
-	 * @throws RemoveException
+	 * @throws Exception 
+	 * @throws FindException 
 	 */
-	@DeleteMapping(value = "host/unapprove/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> hostReject(@PathVariable String hostId) throws RemoveException {
+	@PostMapping(value = "host/unapprove/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> hostReject(@PathVariable String hostId) throws FindException, Exception {
 
 		hService.deleteHost(hostId);
 		return new ResponseEntity<>(HttpStatus.OK);
