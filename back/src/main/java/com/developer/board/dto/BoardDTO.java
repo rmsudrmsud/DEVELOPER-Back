@@ -2,6 +2,11 @@ package com.developer.board.dto;
 
 import java.util.Date;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.domain.Page;
+
 import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.recommend.dto.RecommendDTO;
 import com.developer.users.dto.UsersDTO;
@@ -11,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@DynamicInsert
+@DynamicUpdate
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -69,13 +76,14 @@ public class BoardDTO {
 	// 근형
 	@Data
 	@NoArgsConstructor
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@AllArgsConstructor
 	public static class getBoardByBoardTypeDTO {
 		private Long postSeq;
 		private Integer category;
 		private String title;
 		private String content;
 		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
@@ -85,7 +93,6 @@ public class BoardDTO {
 	// 근형
 	@Data
 	@NoArgsConstructor
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	public static class saveBoardDTO {
 		private Long postSeq;
 		private Integer category;
@@ -99,5 +106,25 @@ public class BoardDTO {
 		private Integer cnt;
 		private UsersDTO.selectAllBydateBoardDTO usersDTO;
 	}
+	
+	// 근형
+		@Data
+		@NoArgsConstructor
+		public static class editBoardDTO {
+			private String title;
+			private String content;
+			private String imgPath;
+			@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+			@ColumnDefault(value = "SYSDATE")
+			private Date cDate;
+		}
+	
+//	@Data
+//	@NoArgsConstructor
+//	public static class PagebeanDTO{
+//		private int startPage;
+//		private int endPage;
+//		private Page<BoardDTO.getBoardByBoardTypeDTO> list;
+//	}
 
 }

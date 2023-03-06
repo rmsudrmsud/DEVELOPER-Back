@@ -2,6 +2,8 @@ package com.developer.board.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,16 +14,15 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	/**
 	 * 게시글 하나 상세페이지
-	 * 
 	 * @author choigeunhyeong
 	 * @param postSeq
 	 * @return
 	 */
-	@Query(value = "select users.nickname, board.post_seq, board.category, board.title, board.content,"
+	@Query(value="select users.nickname, board.post_seq, board.category, board.title, board.content,"
 			+ "		board.img_path, board.c_date, board.recommend, board.cnt"
 			+ "		from users inner join board on users.user_id = board.user_id"
 			+ "		where post_seq=:postSeq", nativeQuery = true)
-	public Object[] detailBoard(@Param("postSeq") Long postSeq);
+	public List<Object[]> detailBoard(@Param("postSeq") Long postSeq);
 
 	/**
 	 * 제목으로 검색
@@ -51,14 +52,28 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * 게시글목록 작성일 순으로 정렬해서 출력
 	 * 
 	 * @author choigeunhyeong
+	 * @param pageable 
 	 * @return
 	 */
 
-	@Query(value = "select users.nickname, board.post_seq, board.category, board.title, board.content,"
-			+ "		board.img_path, board.c_date, board.recommend, board.cnt" + "		from users"
-			+ "		inner join board" + "		on users.user_id = board.user_id"
-			+ "		order by c_date desc", nativeQuery = true)
-	public List<Object[]> getBoardByC_date();
+	@Query(value = "SELECT * \n"
+			+ "FROM ( SELECT rownum rn, a. *\n"
+			+ "		FROM (\n"
+			+ "            SELECT  users.nickname, board.post_seq, board.category, board.title, board.content,\n"
+			+ "    board.img_path, board.c_date, board.recommend, board.cnt\n"
+			+ "            FROM users inner join board on users.user_id = board.user_id\n"
+			+ "            ORDER BY c_date  desc\n"
+			+ "      ) a)\n"
+			+ "	WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
+	public List<Object[]> listBoard(@Param("startRow") int startRow, @Param("endRow") int endRow);
+	
+//	@Query(value = "select u.nickname, b.post_seq, b.category, b.title, b.content,"
+//			+ "		b.img_path, b.c_date, b.recommend, b.cnt" + "		from board b"
+//			+ "		inner join users u" + " on u.user_id = b.user_id",
+//			countQuery = "SELECT COUNT(*) FROM board", nativeQuery = true)
+//	public Page<Object[]> getBoardByC_date(Pageable pageable);
+	
+	
 
 	/**
 	 * 게시글목록 조회수높은 순으로 정렬해서 출력
