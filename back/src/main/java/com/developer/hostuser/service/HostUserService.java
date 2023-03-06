@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.developer.email.EmailService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 
@@ -18,6 +19,7 @@ import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
+import com.developer.users.entity.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class HostUserService {
 	
 	private final HostUserRepository hRepository;
+	private final EmailService emailService;
 	
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -156,12 +159,18 @@ public class HostUserService {
 	 * 
 	 * @author SR
 	 * @param hostId
-	 * @throws RemoveException
+	 * @throws Exception 
+	 * @throws FindException 
 	 */
-	public void deleteHost(String hostId) throws RemoveException {
+	public void deleteHost(String hostId) throws FindException, Exception {
 		Optional<HostUser> optH = hRepository.findById(hostId);
-		HostUser entityH = optH.get();
-		hRepository.delete(entityH);
+		if(optH.isPresent()) {
+			HostUser entityH = optH.get();
+			emailService.hostReject(entityH.getEmail());
+			hRepository.delete(entityH);
+		} else {
+			throw new FindException("존재하지 않는 호스트 유저입니다.");
+		}
 	}
 	
 	/**
@@ -205,4 +214,24 @@ public class HostUserService {
 		throw new FindException("아이디에 해당하는 고객이 없습니다");
 	}
 
+	/**
+	 * Email을 통해 해당 email로 가입된 정보가 있는지 확인. 
+	 * 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴하면서 임시비밀번호로 변경 및 메일발송
+	 * @param email
+	 * @param hostId
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean hostPwdAndEmailCheck(String email, String hostId) throws Exception {
+		HostUser host = hRepository.hostPwdAndEmailCheck(email);
+        if(host!=null && host.getHostId().equals(hostId)) {
+        	String temporaryPwd = emailService.updatePwd(email);
+        	host.setPwd(temporaryPwd);
+        	hRepository.save(host);
+        	return true;
+        }
+        else {
+            return false;
+        }
+	}
 }

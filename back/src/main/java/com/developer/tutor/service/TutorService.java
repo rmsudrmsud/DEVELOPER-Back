@@ -9,15 +9,17 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.developer.email.EmailService;
 import com.developer.exception.FindException;
-import com.developer.exception.RemoveException;
 import com.developer.lesson.dto.LessonDTO;
 import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
 import com.developer.tutor.repository.TutorRepository;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,7 +28,8 @@ public class TutorService {
 
 	private final TutorRepository tRepository;
 	private final UsersRepository uRepository;
-	
+	private final EmailService emailService;
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
@@ -128,19 +131,20 @@ public class TutorService {
 	}
 
 	/**
-	 * 튜터승인거절
+	 * 튜터승인거절(삭제 및 거절메일 포함)
 	 * 
 	 * @author SR
 	 * @param userId
-	 * @throws RemoveException
+	 * @throws Exception
 	 */
-	public void deleteTutor(String userId) throws RemoveException {
+	public void deleteTutor(String userId) throws FindException, Exception {
 		Optional<Tutor> optT = tRepository.findById(userId);
 		if (optT.isPresent()) {
 			Tutor entityT = optT.get();
+			emailService.tutorReject(entityT.getUsers().getEmail());
 			tRepository.delete(entityT);
 		} else {
-			throw new RemoveException("해당 유저가 존재하지 않습니다.");
+			throw new FindException("해당 유저가 존재하지 않습니다.");
 		}
 	}
 }

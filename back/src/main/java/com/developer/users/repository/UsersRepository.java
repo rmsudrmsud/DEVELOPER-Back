@@ -56,6 +56,11 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 			+ "ORDER BY name", nativeQuery = true)
 	public List<Object[]> selectUserById(@Param("userId") String userId);
 		
-	@Query(value="select* from users where user_id = :userId",nativeQuery= true)
+	@Query(value="select * from users where user_id = :userId",nativeQuery= true)
 	public Users getUserdetail(@Param("userId") String userId);
+	
+	//[SR] 비밀번호찾기용
+	@Query(value="select * from users where email = :email",nativeQuery= true)
+	public Users userPwdAndEmailCheck(@Param("email") String email);
+	
 }

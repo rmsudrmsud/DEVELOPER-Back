@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,5 +78,19 @@ public class UsersController {
 		session.invalidate();
 		return "";
 	}
-
+	
+	
+	/**
+	 * [USERS] 비밀번호 찾기(비밀번호변경) - 메일포함 
+	 * @author SR
+	 * @param email
+	 * @param userId
+	 * @return 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴
+	 * @throws Exception
+	 */
+	@PostMapping(value="searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean userUpdatePwd(String email, String userId) throws Exception { 
+		boolean check = uService.userPwdAndEmailCheck(email, userId);
+		return check;
+	}
 }

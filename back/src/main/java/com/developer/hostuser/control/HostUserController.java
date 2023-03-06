@@ -544,4 +544,18 @@ public class HostUserController {
 		}
 	}
 
+	
+	/**
+	 * [HostUser] 비밀번호 찾기(비밀번호변경) - 메일포함 
+	 * @author SR
+	 * @param email
+	 * @param hostId
+	 * @return 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴
+	 * @throws Exception
+	 */
+	@PostMapping(value="searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean hostUpdatePwd(String email, String hostId) throws Exception {
+		boolean check = hService.hostPwdAndEmailCheck(email, hostId);
+		return check;
+	}
 }
