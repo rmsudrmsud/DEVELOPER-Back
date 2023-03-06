@@ -33,10 +33,10 @@ public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
 		
 		//ds
 		@Query(value = "select * from studyroom where SR_Seq= :srSeq", nativeQuery = true)
-		public Studyroom getById(@Param("srSeq") Long srSeq);
+		public Studyroom getBySRSEQ(@Param("srSeq") Long srSeq);
 			
 		//ds
-		@Query(value= "SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON, MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT\r\n"
+		@Query(value= "SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON, MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT, S.SR_SEQ\r\n"
 				+ "FROM STUDYROOM S\r\n"
 				+ "join\r\n"
 				+ " ROOM_INFO R\r\n"
@@ -44,7 +44,7 @@ public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {
 				+ "left outer join  \r\n"
 				+ "FAVORITES_STUDYROOM F\r\n"
 				+ "ON F.SR_SEQ = S.SR_SEQ\r\n"
-				+ "GROUP BY S.NAME , S.ADDR , S.IMG_PATH \r\n"
+				+ "GROUP BY S.NAME , S.ADDR , S.IMG_PATH, S.SR_SEQ \r\n"
 				+ "ORDER BY PRICE ASC", nativeQuery = true)
 		public List<Object[]> getListAll();
 }

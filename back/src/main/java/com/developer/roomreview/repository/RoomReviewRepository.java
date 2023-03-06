@@ -2,9 +2,9 @@ package com.developer.roomreview.repository;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.developer.roomreview.entity.RoomReview;
 
@@ -26,7 +26,7 @@ public interface RoomReviewRepository extends JpaRepository<RoomReview, Long> {
 			+ "		and s.sr_seq = r.sr_seq\r\n"
 			+ "		and s.sr_seq= :srSeq\r\n"
 			+ "		order by rev.cdate DESC", nativeQuery = true)
-	public List<Object[]> findBySrSeq(@Param("srSeq") Long srSeq);
+	public List<Object[]> findBySrSeq1(@Param("srSeq") String srSeq);
 	
 	/**
 	 * [마이페이지 스터디카페 후기페이지] 유저 아이디로 작성한 이용후기 목록을 출력한다

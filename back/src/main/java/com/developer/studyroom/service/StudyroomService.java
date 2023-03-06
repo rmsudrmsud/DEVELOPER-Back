@@ -203,7 +203,7 @@ public class StudyroomService {
 	 
 	public List<StudyroomDTO.StudyroomSelectBySearchDTO> selectBySearch(String srNameAddrName, Integer searchBy, Integer person, Integer orderBy) throws FindException{
 		String jpql1 = "	SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON,\r\n"
-				+ "		MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT\r\n"
+				+ "		MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT, S.SR_SEQ\r\n"
 				+ "		FROM STUDYROOM S\r\n"
 				+ "		join\r\n"
 				+ "		ROOM_INFO R\r\n"
@@ -231,7 +231,7 @@ public class StudyroomService {
 		jpql2 += person;
 		
 		String jpql3 = 
-				"   GROUP BY S.NAME , S.ADDR , S.IMG_PATH\r\n"
+				"   GROUP BY S.NAME , S.ADDR , S.IMG_PATH, S.SR_SEQ\r\n"
 				+ "	ORDER BY ";
 		String choose2 = "";
 		if(orderBy==1) {
@@ -253,6 +253,9 @@ public class StudyroomService {
 			sDTO.setName((String)list.get(i)[0]);
 			sDTO.setAddr((String)list.get(i)[1]);
 			sDTO.setImgPath((String)list.get(i)[2]);
+			BigDecimal srSeq = (BigDecimal) list.get(i)[6];
+			long StudyroomSeq = srSeq.longValue();
+			sDTO.setSrSeq(StudyroomSeq);
 			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
 			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
@@ -276,6 +279,9 @@ public class StudyroomService {
 			sDTO.setName((String)list.get(i)[0]);
 			sDTO.setAddr((String)list.get(i)[1]);
 			sDTO.setImgPath((String)list.get(i)[2]);
+			BigDecimal srSeq = (BigDecimal) list.get(i)[6];
+			long StudyroomSeq = srSeq.longValue();
+			sDTO.setSrSeq(StudyroomSeq);
 			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
 			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
@@ -322,14 +328,20 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public StudyroomDTO getStudyroomDetail(long srSeq) throws FindException {
-		Optional<Studyroom> optStudyroom = sRepository.findById(srSeq);
-		if (optStudyroom.isPresent()) {
-			Studyroom StudyroomEntity = optStudyroom.get();
-			StudyroomDTO studyroomDTO = modelMapper.map(StudyroomEntity, StudyroomDTO.class);
-			return studyroomDTO;
-		} else {
-			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
-		}
+		Studyroom s = sRepository.getBySRSEQ(srSeq);
+		StudyroomDTO dto = new StudyroomDTO();
+		dto.setSrSeq(s.getSrSeq());
+		dto.setAddr(s.getAddr());
+		dto.setEndTime(s.getEndTime());
+		dto.setImgPath(s.getImgPath());
+		dto.setInfo(s.getInfo());
+		dto.setName(s.getName());
+		dto.setOc(s.getOc());
+		dto.setOpenTime(s.getOpenTime());
+		dto.setHostUser(s.getHostUser());
+		return dto;
+		
+		
 	}
 
 	

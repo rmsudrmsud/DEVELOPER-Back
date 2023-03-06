@@ -56,7 +56,13 @@ public class RoomReviewService {
 	 */
 
 	public List<RoomReviewDTO.RoomReviewSelectAllDTO> selectAll(Long srSeq) throws FindException{
-		List<Object[]> list= rrRepository.findBySrSeq(srSeq);
+//		Optional<RoomReview> optRoomReview = rrRepository.findById(srSeq);
+//		if(optRoomReview.isPresent()) {
+//			RoomReview review = optRoomReview.get();
+//		}
+		System.out.println("in service: srSeq=" + srSeq);
+		List<Object[]> list= rrRepository.findBySrSeq1(String.valueOf(srSeq));
+		
 		List<RoomReviewDTO.RoomReviewSelectAllDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
 			RoomReviewDTO.RoomReviewSelectAllDTO rrDTO = new RoomReviewDTO.RoomReviewSelectAllDTO();
@@ -127,17 +133,21 @@ public class RoomReviewService {
 			ReservationDTO.RoomReviewSelectMyRmRvDetailDTO resDTO = new ReservationDTO.RoomReviewSelectMyRmRvDetailDTO();
 			RoomInfoDTO.RoomInfoNameDTO rinDTO = new RoomInfoDTO.RoomInfoNameDTO();
 			StudyroomDTO.StudyroomNameDTO snDTO = new StudyroomDTO.StudyroomNameDTO();
-			rrDTO.setCdate((Date)list.get(0)[3]);
-			rrDTO.setStar(Integer.parseInt(String.valueOf(list.get(0)[4])));
-			rrDTO.setContent((String)list.get(0)[5]);
-			resDTO.setUsingDate((Date)list.get(0)[2]);
-			rinDTO.setName((String)list.get(0)[1]);
-			snDTO.setName((String)list.get(0)[0]);
-			rinDTO.setStudyroomNameDTO(snDTO);
-			resDTO.setRoomInfoNameDTO(rinDTO);
-			rrDTO.setRrsaDTO(resDTO);
-			dto.add(rrDTO);
-		
+			
+			for(int i=0; i<list.size();i++) {
+				
+				rrDTO.setCdate((Date)list.get(i)[3]);
+				rrDTO.setStar(Integer.parseInt(String.valueOf(list.get(i)[4])));
+				rrDTO.setContent((String)list.get(i)[5]);
+				resDTO.setUsingDate((Date)list.get(i)[2]);
+				rinDTO.setName((String)list.get(i)[1]);
+				snDTO.setName(String.valueOf(list.get(i)[0]));
+				rinDTO.setStudyroomNameDTO(snDTO);
+				resDTO.setRoomInfoNameDTO(rinDTO);
+				rrDTO.setRrsaDTO(resDTO);
+				dto.add(rrDTO);
+				
+			}
 		
 		return dto;
 		

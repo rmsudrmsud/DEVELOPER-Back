@@ -49,7 +49,7 @@ public class StudyroomController {
 	 * @param srNameAddrName, searchBy, person, orderBy
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
-	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getListBySearch(@RequestParam String srNameAddrName, @RequestParam Integer searchBy,
 			@RequestParam Integer person, @RequestParam Integer orderBy) throws FindException {
 
@@ -65,7 +65,7 @@ public class StudyroomController {
 	}
 
 	/**
-	 * 스터디룸 패키지로 들어가야됨 url 시작이 studyroom [Reservation] 예약정보를 예약테이블에 넣어 예약내역에 insert
+	 * [Reservation] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * 
 	 * @author ds
 	 * @throws 전체정보 출력시 AddException예외발생한다
@@ -102,20 +102,22 @@ public class StudyroomController {
 	}
 
 	/**
-	 * Controller 3개 합친거 [RoomInfo] 스터디룸 시퀀스를 받아 스터디카페의 스터디룸 리스트를 출력한다
-	 * [RoomReview]특정 스터디룸 후기 리스트 전체출력 [Studyroom] Studyroom 객체 1개의 상세정보 출력.
+	 * Controller 3개 합친거 
+	 * [RoomInfo] 스터디룸 시퀀스를 받아 스터디카페의 스터디룸 리스트를 출력한다
+	 * [RoomReview]특정 스터디카페 후기 리스트 전체출력 
+	 * [Studyroom] Studyroom 객체 1개의 상세정보 출력.
 	 * 
 	 * @author ds
 	 * @param srSeq 스터디카페 시퀀스(장소번호)
-	 * @return List<RoomInfoVO> 특정스터디카페 전체정보들(방여러개)
+	 * @return 스터디룸 리스트, 스터디카페 후기리스트, 스터디카페 정보
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
 	@GetMapping(value = "roominfo/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll(@PathVariable Long srSeq) throws FindException {
 		StudyroomDTO.StudyroomRoomInfoPageDTO dto = new StudyroomDTO.StudyroomRoomInfoPageDTO();
 
-		StudyroomDTO object = sService.selectStudyroom(srSeq);
-		List<RoomInfoDTO> list1 = riService.selectAll(srSeq);
+		StudyroomDTO object = sService.getStudyroomDetail(srSeq);
+		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> list1 = riService.selectAll(srSeq);
 		List<RoomReviewDTO.RoomReviewSelectAllDTO> list2 = rrservice.selectAll(srSeq);
 		dto.setStudyroomDTO(object);
 		dto.setRoominfoDTO(list1);

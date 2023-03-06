@@ -90,4 +90,18 @@ public class RoomInfoDTO {
 	public static class RoomInfoRoomSeqDTO {
 		private Long roomSeq;
 	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class RoomInfoRoomDetailListDTO{
+		private long roomSeq;
+		private String name;
+		private String info;
+		private String imgPath;
+		private Integer person;
+		private Integer price;
+		private Integer status;
+		private StudyroomDTO.StudyroomHostIdDTO studyroomDTO;
+	}
 }

@@ -105,6 +105,7 @@ public class StudyroomDTO {
 		@Data
 		@NoArgsConstructor
 		public static class StudyroomSelectBySearchDTO{
+			private Long srSeq;
 			private String name;
 			private String addr;
 			private String imgPath;
@@ -141,8 +142,15 @@ public class StudyroomDTO {
 		@Data
 		@NoArgsConstructor
 		public static class StudyroomRoomInfoPageDTO{
-			private List<RoomInfoDTO> roominfoDTO;
+			private List<RoomInfoDTO.RoomInfoRoomDetailListDTO> roominfoDTO;
 			private List<RoomReviewDTO.RoomReviewSelectAllDTO> roomReviewSelectAllDTO;
 			private StudyroomDTO studyroomDTO;
+		}
+		
+		//ds
+		@Data
+		@NoArgsConstructor
+		public static class StudyroomHostIdDTO{
+			private HostUserDTO.HostIdDTO hostIdDTO;
 		}
 }
