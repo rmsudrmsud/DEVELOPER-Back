@@ -1,6 +1,6 @@
 package com.developer.lesson;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,14 +111,14 @@ public class LessonRepositoryTest {
 //	@DisplayName("수업 INSERT 테스트")
 //	void testAdd() {
 //		Lesson lesson = new Lesson();
-//		lesson.setCategory(1);
+//		lesson.setCategory(2);
 //		lesson.setContent("sdfsdsdf");
 //		Date date = new Date(2023, 3, 5);
 //		lesson.setEndCdate(date);
 //		lesson.setEndDate(date);
 //		lesson.setImgPath("...");
-//		lesson.setLessonName("2번수업.");
-//		lesson.setLessonSeq(124L);
+//		lesson.setLessonName("3번수업.");
+//		lesson.setLessonSeq(125L);
 //		lesson.setLocation("..."); 
 //		lesson.setPayLesson(0);
 //		lesson.setPeople(10);

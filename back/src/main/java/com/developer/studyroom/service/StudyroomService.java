@@ -343,6 +343,30 @@ public class StudyroomService {
 		
 		
 	}
+	
+	/**
+	 * 스터디카페 예약일 조회시 예약 내역이 없을 경우 예약을 위한 룸정보(오픈시간, 마감시간, 가격) 출력
+	 * @author DS
+	 * @param roomSeq
+	 * @return StudyroomDTO.StudyroomAndRoomInfoDTO
+	 * @throws FindException
+	 */
+	public List<StudyroomDTO.StudyroomAndRoomInfoDTO> getStudyroomAndRoomInfo (long roomSeq)throws FindException{
+		List<Object[]> list =sRepository.getInfoOne(roomSeq);
+		List<StudyroomDTO.StudyroomAndRoomInfoDTO> dto = new ArrayList<>();
+		
+		for(int i=0; i<list.size();i++) {
+			StudyroomDTO.StudyroomAndRoomInfoDTO sDTO = new StudyroomDTO.StudyroomAndRoomInfoDTO();
+			RoomInfoDTO.RoomInfoPriceOnlyDTO rDTO = new RoomInfoDTO.RoomInfoPriceOnlyDTO();
+			sDTO.setOpenTime((String)list.get(i)[1]);
+			sDTO.setEndTime((String)list.get(i)[2]);
+			rDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[0])));
+			sDTO.setRoomInfoPriceDTO(rDTO);
+			dto.add(sDTO);
+			
+		}
+		return dto;
+	}
 
 	
 }

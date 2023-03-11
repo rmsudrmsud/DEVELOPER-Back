@@ -34,8 +34,8 @@ public interface RoomReviewRepository extends JpaRepository<RoomReview, Long> {
 	 * @param userId 유저아이디 
 	 * @return List<Object[]> 유저의 작성한 이용후기 전체목록
 	 */
-	@Query(value="SELECT s.name AS srName, rif.name AS riName, rr.cdate,\r\n"
-			+ "		rr.star\r\n"
+	@Query(value="SELECT s.name AS srName, rif.name AS riName, rr.cdate, \r\n"
+			+ "		rr.star, rr.content\r\n"
 			+ "		FROM studyroom s, room_info rif, reservation r, room_review rr\r\n"
 			+ "		WHERE s.sr_seq = rif.sr_seq\r\n"
 			+ "		AND rif.room_seq = r.room_seq\r\n"

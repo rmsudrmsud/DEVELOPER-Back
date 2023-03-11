@@ -40,7 +40,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 				+ "from reservation r, room_info ro, studyroom sr\r\n"
 				+ "where r.room_seq = ro.room_seq \r\n"
 				+ "AND r.room_seq= :roomSeq \r\n"
-				+ "AND r.using_date BETWEEN TO_DATE(:usingDate, 'YYYY-MM-DD') AND TO_DATE(:usingDate, 'YYYY-MM-DD') + 1\r\n"
+				+ "AND TO_DATE(TO_CHAR(r.using_date, 'YY/MM/DD')) BETWEEN TO_DATE(:usingDate, 'YY/MM/DD') AND TO_DATE(:usingDate, 'YY/MM/DD')\r\n"
 				+ "AND sr.sr_seq = ro.sr_seq ", nativeQuery = true)
 		public List<Object[]> findAllByUsingDate(@Param("roomSeq") Long roomSeq, @Param("usingDate") String usingDate);
 		
@@ -50,7 +50,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 				+ "WHERE s.sr_seq = rif.sr_seq\r\n"
 				+ "AND rif.room_seq = r.room_seq\r\n"
 				+ "AND r.user_id = :userId\r\n"
-				+ "ORDER BY res_seq DESC", nativeQuery = true)
+				+ "ORDER BY r.using_date DESC", nativeQuery = true)
 		public List<Object[]> findByUserId(@Param("userId")String userId);
 		
 		
@@ -60,7 +60,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 				+ "WHERE s.sr_seq = rif.sr_seq\r\n"
 				+ "AND rif.room_seq = r.room_seq\r\n"
 				+ "AND r.user_id = :userId\r\n"
-				+ "AND TO_DATE(SYSDATE,'DD-MM-YYYY') > TO_DATE(r.using_date, 'DD-MM-YYYY')\r\n"
+				+ "AND TO_DATE(SYSDATE,'yyyy-mm-dd') > TO_DATE(r.using_date, 'yyyy-mm-dd')\r\n"
 				+ "MINUS\r\n"
 				+ "SELECT r.res_seq, s.name AS sName, rif.name AS rifName, r.using_date, r.start_time, r.end_time\r\n"
 				+ "FROM studyroom s, room_info rif, reservation r, room_review rr\r\n"

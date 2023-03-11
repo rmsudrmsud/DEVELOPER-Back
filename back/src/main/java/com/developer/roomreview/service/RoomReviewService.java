@@ -99,6 +99,7 @@ public class RoomReviewService {
 		List<RoomReviewDTO.selectMyRmRvDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
 			RoomReviewDTO.selectMyRmRvDTO smDTO = new RoomReviewDTO.selectMyRmRvDTO();
+			smDTO.setContent((String)list.get(i)[4]);
 			smDTO.setCdate((Date)list.get(i)[2]);
 			smDTO.setStar(Integer.parseInt(String.valueOf(list.get(i)[3])));
 			ReservationDTO.RoomReviewSelectMyRmRvDTO resDTO = new ReservationDTO.RoomReviewSelectMyRmRvDTO();

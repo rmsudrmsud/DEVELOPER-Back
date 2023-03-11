@@ -49,19 +49,14 @@ public class FavoritesStudyroomService {
 	}
 
 	/**
-	 * [스터디카페 상세페이지]즐겨찾기 추가기능
+	 * [스터디카페 상세페이지]즐겨찾기 삭제기능
 	 * 
 	 * @author ds
-	 * @param fvDTO
+	 * @param fvSeq
 	 * @throws AddException
 	 */
-	public void deleteFvstudyroom(Long favSeq) throws RemoveException {
-		Optional<FavoritesStudyroom> optF = fsRepository.findById(favSeq);
-		if (optF.isPresent()) {
-			fsRepository.deleteById(favSeq);
-		} else {
-			throw new RemoveException("해당 시퀀스가 없습니다.");
-		}
+	public void deleteFvstudyroom(Long srSeq, String userId) throws RemoveException {
+		fsRepository.deleteFvstudyroom(srSeq, userId);
 	}
 
 	/**
@@ -92,4 +87,34 @@ public class FavoritesStudyroomService {
 		}
 		return favListDto;
 	}
+	/**
+	 * [스터디카페 상세페이지]즐겨찾기 추가 또는 삭제시 이미 db에 있는지 체크
+	 * @author DS
+	 * @param logined
+	 * @return srSeq
+	 * @throws FindException
+	 * 객체 한개만 반환하지만 에러때문에 리스트로 받음
+	 */
+	
+	public List<FavoritesStudyroomDTO.favStudyroomSrSeqDTO> getSrSeqAndFavSeq(String userId) throws FindException{
+		List<Object[]> list=fsRepository.getfvInfo(userId);
+		
+		List<FavoritesStudyroomDTO.favStudyroomSrSeqDTO> dto = new ArrayList<>();
+		FavoritesStudyroomDTO.favStudyroomSrSeqDTO fDTO = new FavoritesStudyroomDTO.favStudyroomSrSeqDTO();
+		for(int i=0; i<list.size(); i++) {
+		BigDecimal fav_seq = (BigDecimal) list.get(i)[1];
+		Long resultFavSeq = fav_seq.longValue();
+		fDTO.setFavSeq(resultFavSeq);
+		BigDecimal sr_seq = (BigDecimal) list.get(i)[0];
+		Long resultSrSeq = sr_seq.longValue();
+		StudyroomDTO.StudyroomSrSeqDTO sDTO = new StudyroomDTO.StudyroomSrSeqDTO();	
+		sDTO.setSrSeq(resultSrSeq);
+		fDTO.setSrseqDTO(sDTO);
+		dto.add(fDTO);
+		}
+		return dto;
+		
+	}
+	
+	
 }

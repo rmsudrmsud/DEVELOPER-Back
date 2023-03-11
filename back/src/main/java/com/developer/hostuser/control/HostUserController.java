@@ -390,9 +390,10 @@ public class HostUserController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "roominfo/list/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> listRoom(@PathVariable long srSeq) throws FindException {
-		List<RoomInfoDTO.selectAllRoomDTO> list = riService.selectAllRoom(srSeq);
+	@GetMapping(value = "roominfo/list", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> listRoom(String hostId, HttpSession session) throws FindException {
+		hostId = (String) session.getAttribute("hostLogined");
+		List<RoomInfoDTO.selectAllRoomDTO> list = riService.selectAllRoom(hostId);
 		if (list.isEmpty()) {
 			return new ResponseEntity<>("추가한 방이 없습니다.", HttpStatus.BAD_REQUEST);
 		} else {

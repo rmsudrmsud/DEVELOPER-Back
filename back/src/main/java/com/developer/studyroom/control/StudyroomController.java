@@ -57,7 +57,13 @@ public class StudyroomController {
 				orderBy);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-
+	/**
+	 * [스터디카페 메인] 스터디카페 리스트를 출력한다
+	 * 
+	 * @author ds
+	 * @param List<StudyroomDTO.StudyroomSelectBySearchDTO> 
+	 * @throws 전체정보 출력시 FindException예외발생한다
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getListALL() throws FindException {
 		List<StudyroomDTO.StudyroomSelectBySearchDTO> list = sService.selectListALL();
@@ -70,10 +76,14 @@ public class StudyroomController {
 	 * @author ds
 	 * @throws 전체정보 출력시 AddException예외발생한다
 	 */
-	@PostMapping(value = "roominfo/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "roominfo/reservation")
 	public ResponseEntity<?> reserve(@RequestBody ReservationDTO.insertRvDTO rDTO, HttpSession session)
 			throws AddException {
+		
+		
 		String logined = (String) session.getAttribute("logined");
+		
+		System.out.println("세션아이디는:"+logined);
 		if (logined != null) {
 			rService.insertRv(rDTO, logined);
 			return new ResponseEntity<>(rDTO, HttpStatus.OK);
@@ -86,7 +96,7 @@ public class StudyroomController {
 
 	/**
 	 * [Reservation] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
-	 * 
+	 * [Studyroom] 스터디카페 예약일 조회시 예약 내역이 없을 경우 예약을 위한 룸정보(오픈시간, 마감시간, 가격) 출력
 	 * @author ds
 	 * @param roomSeq   스터디룸 시퀀스
 	 * @param usingDate 예약일
@@ -97,8 +107,11 @@ public class StudyroomController {
 	@GetMapping(value = "roominfo/reservation/{roomSeq}")
 	public ResponseEntity<?> getReservablity(@PathVariable Long roomSeq, String usingDate)
 			throws FindException, ParseException {
+		
 		List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
-		return new ResponseEntity<>(list, HttpStatus.OK);
+		
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		
 	}
 
 	/**
