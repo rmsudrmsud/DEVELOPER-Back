@@ -109,7 +109,6 @@ public class LessonService {
 			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
 			LessonDTO.GetLessonByUser3 lDTO = new LessonDTO.GetLessonByUser3();
 			UsersDTO uDTO = new UsersDTO();
-			
 			lDTO.setLessonName((String) Llist.get(i)[0]);
 			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
 			Long resultLessonSeq = lessonSeq.longValue();
@@ -533,4 +532,6 @@ public class LessonService {
 		return dto;
 	}
 
+
 }
+

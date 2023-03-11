@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FavoritesStudyroomDTO {
-	private long favSeq;
+	private Long favSeq;
 	private Users userId;
 	private Studyroom studyroom;
 
@@ -31,11 +31,20 @@ public class FavoritesStudyroomDTO {
 	public static class fvInsertDTO {
 		private Long srSeq;
 	}
-
+	
 	@Data
 	@NoArgsConstructor
 	public static class favStudyroomListDTO {
-		private long srSeq;
+		private Long srSeq;
 		private StudyroomDTO.selectAllFavStudyroomDTO studyroom;
 	}
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class favStudyroomSrSeqDTO{
+		
+		private Long favSeq;
+		private StudyroomDTO.StudyroomSrSeqDTO srseqDTO;
+	}
+	
 }

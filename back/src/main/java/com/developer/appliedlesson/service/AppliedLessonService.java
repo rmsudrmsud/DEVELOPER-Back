@@ -168,22 +168,29 @@ public class AppliedLessonService {
 	}
 
 	/**
-	 * 진행완료된 수업 수업명, 튜티목록
+	 * 진행완료된 수업 수업명, 튜티목록(후기가없는사람)
 	 * 
 	 * @author choigeunhyeong
 	 * @param lessonSeq
 	 * @return
 	 * @throws FindException
 	 */
-	public List<UsersDTO.getNameDTO> selectClassAndTutee(Long lessonSeq) throws FindException {
-		List<Object[]> list = alRepository.selectClassAndTutee(lessonSeq);
+	public List<UsersDTO.getNameDTO> noReviewTutee(Long lessonSeq) throws FindException {
+		List<Object[]> list = alRepository.noReviewTutee(lessonSeq);
 		List<UsersDTO.getNameDTO> dtoList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			UsersDTO.getNameDTO uDTO = new UsersDTO.getNameDTO();
-			uDTO.setUsername((String) list.get(i)[1]);
+			uDTO.setUsername((String) list.get(i)[0]);
+			
 			LessonDTO.getLessonNameDTO lDTO = new LessonDTO.getLessonNameDTO();
-			lDTO.setLessonName((String) list.get(i)[0]);
+			lDTO.setLessonName((String) list.get(i)[1]);
 			uDTO.setLessonName(lDTO);
+			
+			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			BigDecimal seq = (BigDecimal) list.get(i)[2];
+			Long applySeq = seq.longValue();
+			aDTO.setApplySeq(applySeq);
+			uDTO.setApplySeq(aDTO);
 			dtoList.add(uDTO);
 		}
 		return dtoList;

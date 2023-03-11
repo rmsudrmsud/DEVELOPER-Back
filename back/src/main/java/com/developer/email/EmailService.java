@@ -14,4 +14,12 @@ public interface EmailService {
 
 	//[SR] 임시비밀번호
 	String updatePwd(String to) throws Exception;
+
+	// [SR] 튜터 승인
+	void tutorOk(String to) throws Exception;
+
+	// [SR] 호스트 승인
+	void hostOk(String to) throws Exception;
+
+
 }

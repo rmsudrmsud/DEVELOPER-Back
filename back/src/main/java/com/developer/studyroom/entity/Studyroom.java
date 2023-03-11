@@ -46,7 +46,7 @@ public class Studyroom {
 	@Column(name = "sr_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SR_SEQ_GENERATOR" // 위의 sequence 이름
 	)
-	private long srSeq;
+	private Long srSeq;
 
 	@NotNull
 	@Column(name = "name")

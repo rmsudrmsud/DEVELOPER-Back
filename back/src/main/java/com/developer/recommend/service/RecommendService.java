@@ -30,6 +30,14 @@ public class RecommendService {
 	ModelMapper modelMapper = new ModelMapper();
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
+	/**
+	 * 추천수 증가 !
+	 * @author choigeunhyeong
+	 * @param recommend
+	 * @param postSeq
+	 * @param logined
+	 * @throws AddException
+	 */
 	@Transactional
 	public void addRecommend(Recommend recommend, Long postSeq, String logined) throws AddException{
 		Optional<Board> optB = bRepository.findById(postSeq);
@@ -41,6 +49,12 @@ public class RecommendService {
 		recommend = rRepository.save(recommend);
 	}
 	
+	/**
+	 * 추천수 감소 
+	 * @author choigeunhyeong
+	 * @param recSeq
+	 * @throws RemoveException
+	 */
 	public void delRecommend(Long recSeq) throws RemoveException{
 		rRepository.deleteById(recSeq);
 	}

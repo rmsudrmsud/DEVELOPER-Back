@@ -1,6 +1,7 @@
 package com.developer.favoritesstudyroom.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,4 +19,15 @@ public interface FavoritesStudyroomRepository extends CrudRepository<FavoritesSt
 				+ "AND h.ready != 2 "
 				+ "AND fav_s.user_id = :userId", nativeQuery = true)
 	public List<Object[]> selectAllFavStudyroom(@Param("userId") String userId);
+	
+	//DS
+	@Query(value="select sr_seq, fav_seq from favorites_studyroom where user_id= :userId", nativeQuery = true)
+	public List<Object[]> getfvInfo(@Param("userId") String userId);
+	
+	//DS
+	@Query(value="delete from favorites_studyroom where sr_seq= :srSeq And user_id = :userId", nativeQuery = true)
+	public void deleteFvstudyroom(@Param("srSeq") Long srSeq, @Param("userId") String userId);
+	
+	
+	
 }
