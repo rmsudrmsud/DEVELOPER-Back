@@ -18,6 +18,7 @@ import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
+import com.developer.users.dto.UsersDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -203,6 +204,25 @@ public class HostUserService {
 			return optH.get();
 		}
 		throw new FindException("아이디에 해당하는 고객이 없습니다");
+	}
+	
+	/**
+	 * 호스트 아이디 찾기
+	 * @author choigeunhyeong
+	 * @param Num 사업자 번호
+	 * @return
+	 * @throws FindException
+	 */
+	public HostUserDTO findHostId(String num) throws FindException{
+		Optional<HostUser> optH = hRepository.findByNum(num);
+		if(optH.isPresent()) {
+			HostUser host = optH.get();
+			HostUserDTO hostDTO = modelMapper.map(host, HostUserDTO.class);
+			if(hostDTO.getNum().equals(num)) {
+				return hostDTO;
+			}
+		}
+		throw new FindException("사업자번호가 일치하는 회원이 없습니다.");
 	}
 
 }

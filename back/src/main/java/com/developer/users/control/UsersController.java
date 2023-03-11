@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.exception.FindException;
 import com.developer.users.dto.UsersDTO;
+import com.developer.users.entity.Users;
 import com.developer.users.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,10 @@ public class UsersController {
 	 * @return
 	 */
 	@GetMapping(value = "checklogined", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> checklogined(HttpSession session) {
+	public ResponseEntity<String> checklogined(HttpSession session) {
 		String logined = (String) session.getAttribute("logined");
 		if (logined != null) {
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(logined, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -77,5 +78,17 @@ public class UsersController {
 		session.invalidate();
 		return "";
 	}
-
+	
+	/**
+	 * 아이디 찾기
+	 * @author choigeunhyeong
+	 * @param email
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "findId",produces = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<?> findId(String email) throws FindException{
+		UsersDTO.uDTO usersDTO= uService.findId(email);
+		return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+	}
 }

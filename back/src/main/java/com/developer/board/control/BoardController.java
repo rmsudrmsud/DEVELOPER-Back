@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.criteria.Expression;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,21 +61,21 @@ public class BoardController {
 	 * @throws AddException
 	 */
 
-	@PostMapping(value = "*")
-	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session,  MultipartFile f) throws AddException {
+	@PostMapping(value = "add")
+	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, 
+			HttpSession session,
+			@RequestPart(value="f", required=false) MultipartFile f)
+					throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
-			throw new AddException("로그인하세요");
+			throw new FindException("로그인하세요");
 		}
 		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
 		File saveDirFile = new File(savdDirectory);
-		String fileName;
+		String fileName = null;
+		
 		if(f != null && f.getSize()>0 ) {
-			long fSize = f.getSize();
 			String fOrigin = f.getOriginalFilename();
-			System.out.println("---파일---");
-			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
-			
 			UUID uuid = UUID.randomUUID();
 			String fName = uuid.toString() + "_" + fOrigin;
 			
@@ -92,19 +94,17 @@ public class BoardController {
 				InputStream thumbnailIS = f.getInputStream();
 				
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
-				
-				saveBoardDTO.setImgPath(fileName);
-				bService.addBoard(saveBoardDTO, logined);
 				logger.info("파일업로드 성공");
+				saveBoardDTO.setImgPath(fileName);
 				
-				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error("파일업로드 에러");
 				throw new AddException(e.getMessage());
 			}
 		}
-		return new ResponseEntity<>("글작성 실패", HttpStatus.BAD_REQUEST);
+		bService.addBoard(saveBoardDTO, logined);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
@@ -116,9 +116,9 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "edit/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
+	@GetMapping(value = "edit" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<?> detailBoard(@PathVariable Long postSeq) throws FindException {
+	public ResponseEntity<?> detailBoard(@RequestParam Long postSeq) throws FindException {
 		BoardDTO.getBoardByBoardTypeDTO detail = bService.detailBoard(postSeq);
 		return new ResponseEntity<>(detail, HttpStatus.OK);
 
@@ -131,9 +131,14 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
+//	@GetMapping("/list")
+//	public ResponseEntity<PageBean> list(int currentPage) throws FindException{
+//		 return new ResponseEntity<>(bService.listBoard(currentPage),HttpStatus.OK);
+//	}
 	@GetMapping("/list")
-	public ResponseEntity<PageBean> list(int currentPage) throws FindException{
-		 return new ResponseEntity<>(bService.listBoard(currentPage),HttpStatus.OK);
+	public ResponseEntity<PageBean> list(String orderby, int currentPage) throws FindException{
+		
+		 return new ResponseEntity<>(bService.listBoard(orderby, currentPage),HttpStatus.OK);
 	}
 
 	/**
@@ -151,10 +156,22 @@ public class BoardController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	/**
+	 * 게시글 수정 !
+	 * @author choigeunhyeong
+	 * @param editBoardDTO
+	 * @param postSeq
+	 * @param f
+	 * @return
+	 * @throws AddException
+	 * @throws FindException
+	 * @throws ModifyException
+	 */
 	@PostMapping(value = "edit/{postSeq}",
 			 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<?> editBoard(@RequestPart BoardDTO.editBoardDTO editBoardDTO,
-			@PathVariable Long postSeq,  @RequestPart(value="f", required=false) MultipartFile f)
+	public ResponseEntity<?> editBoard(BoardDTO.editBoardDTO editBoardDTO,
+			@PathVariable Long postSeq,
+			@RequestPart(value="f", required=false) MultipartFile f)
 			throws AddException, FindException, ModifyException {
 		
 		logger.error("파일확인: "+f.toString());
@@ -166,6 +183,7 @@ public class BoardController {
 			String fOrigin = f.getOriginalFilename();
 			
 			Optional<Board> b = bRepository.findById(postSeq);
+			
 			String oldFileName = b.get().getImgPath();
 		    File oldFile = new File(saveDirFile, oldFileName);
 		        
@@ -218,11 +236,13 @@ public class BoardController {
 			 String fName = uuid.toString() + "_";
 			fileName = fName + f.getOriginalFilename();
 		}
+		
 		editBoardDTO.setImgPath(fileName);
 		
 		bService.editBoard(editBoardDTO, postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 	/**
 	 * 게시판 글 삭제
 	 * 
@@ -247,11 +267,11 @@ public class BoardController {
 	 * @throws FindException
 	 * @throws ModifyException 
 	 */
-	@GetMapping(value = "detail/{postSeq}" // , produces = MediaType.APPLICATION_JSON_VALUE
+	@GetMapping(value = "detail" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<?> selectAllPostSeq(@PathVariable Long postSeq) throws FindException, ModifyException {
+	public ResponseEntity<?> listBoardDetail(@RequestParam Long postSeq) throws FindException, ModifyException {
 		bService.updateCnt(postSeq);
-		List<BoardDTO.BoardAllSelectDTO> list = bService.selectAllPostSeq(postSeq);
+		List<BoardDTO.BoardAllSelectDTO> list = bService.listBoardDetail(postSeq);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -263,13 +283,20 @@ public class BoardController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "search/{title}" // , produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public ResponseEntity<?> searchBoard(@PathVariable String title) throws FindException {
-		List<Board> list = bService.findByTitle("%" + title + "%");
-		return new ResponseEntity<>(list, HttpStatus.OK);
+//	@GetMapping(value = "search" // , produces = MediaType.APPLICATION_JSON_VALUE
+//	)
+//	public ResponseEntity<?> searchBoard(@RequestParam String title) throws FindException {
+//		List<Board> list = bService.findByTitle("%" + title + "%");
+//		return new ResponseEntity<>(list, HttpStatus.OK);
+//
+//	}
+	@GetMapping(value = "search" // , produces = MediaType.APPLICATION_JSON_VALUE
+			)
+			public ResponseEntity<PageBean> searchBoard(@RequestParam String title, int currentPage) throws FindException {
+				
+				return new ResponseEntity<>(bService.findBoardTitle("%" + title + "%", currentPage), HttpStatus.OK);
 
-	}
+			}
 
 	/**
 	 * 추천수 증가

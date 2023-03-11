@@ -2,8 +2,8 @@ package com.developer.board.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import javax.persistence.criteria.Expression;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +31,19 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * @param title
 	 * @return
 	 */
+	
+	@Query(value = "SELECT * "
+			+ "FROM ( SELECT rownum rn, a. * "
+			+ "		FROM ( "
+			+ "            SELECT  users.nickname, board.post_seq, board.category, board.title, board.content, "
+			+ "    board.img_path, board.c_date, board.recommend, board.cnt "
+			+ "            FROM users inner join board on users.user_id = board.user_id "
+			+ " 		   where board.title like %:title% "
+			+ "            ORDER BY c_date  desc"
+			+ "      ) a) "
+			+ "	WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
+	public List<Object[]> findByBoardTitle(@Param("startRow") int startRow, @Param("endRow") int endRow, @Param("title") String title);
+	
 	public List<Board> findByTitleLike(String title);
 
 	/**
@@ -40,12 +53,19 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * @param postSeq
 	 * @return
 	 */
-	@Query(value = "select u.user_id," + "		u.nickname, b.post_seq, b.category, b.title, b.content , b.img_path,"
-			+ "		b.c_date,"
-			+ "		b.recommend, b.cnt, r.content AS rContent, r.cdate, u.role, r.user_id As rUser_id"
-			+ "		from users u" + "		full join board b" + "		on u.user_id = b.user_id"
-			+ "		full join board_rep r" + "		on b.post_seq = r.post_seq"
-			+ "		where b.post_seq= :postSeq", nativeQuery = true)
+	@Query(value = "SELECT b.*, r.* "
+			+ "FROM ("
+			+ "  SELECT b.user_id AS b_user_id, u.nickname AS u_nickname,"
+			+ "       b.post_seq AS board_post_seq, b.category, b.title, b.content AS bContent, b.img_path, b.c_date, b.recommend,  b.cnt "
+			+ "  FROM board b JOIN users u on b.user_id = u.user_id"
+			+ "  WHERE b.post_seq = :postSeq) b "
+			+ "LEFT JOIN ("
+			+ "  SELECT "
+			+ "    r.post_seq AS board_rep_post_seq, r.user_id AS r_user_id, r.content AS rContent, r.cdate, "
+			+ "    ru.nickname AS ru_nickname, r.post_rep_seq"
+			+ "  FROM board_rep r JOIN users ru ON r.user_id = ru.user_id "
+			+ "  WHERE r.post_seq = :postSeq"
+			+ ") r ON b.board_post_seq = r.board_rep_post_seq", nativeQuery = true)
 	public List<Object[]> findPostSeq(@Param("postSeq") Long postSeq);
 
 	/**
@@ -56,16 +76,18 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * @return
 	 */
 
-	@Query(value = "SELECT * \n"
-			+ "FROM ( SELECT rownum rn, a. *\n"
-			+ "		FROM (\n"
-			+ "            SELECT  users.nickname, board.post_seq, board.category, board.title, board.content,\n"
-			+ "    board.img_path, board.c_date, board.recommend, board.cnt\n"
-			+ "            FROM users inner join board on users.user_id = board.user_id\n"
-			+ "            ORDER BY c_date  desc\n"
-			+ "      ) a)\n"
+	@Query(value = "SELECT * "
+			+ "FROM ( SELECT rownum rn, a. * "
+			+ "		FROM ("
+			+ "            SELECT  users.nickname, board.post_seq, board.category, board.title, board.content,"
+			+ "    board.img_path, board.c_date, board.recommend, board.cnt "
+			+ "            FROM users inner join board on users.user_id = board.user_id "
+			+ "            ORDER BY :orderby desc "
+			+ "      ) a) "
 			+ "	WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
-	public List<Object[]> listBoard(@Param("startRow") int startRow, @Param("endRow") int endRow);
+	public List<Object[]> listBoard(@Param("orderby")String orderby, @Param("startRow") int startRow, @Param("endRow") int endRow);
+	
+	
 	
 //	@Query(value = "select u.nickname, b.post_seq, b.category, b.title, b.content,"
 //			+ "		b.img_path, b.c_date, b.recommend, b.cnt" + "		from board b"
@@ -81,6 +103,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * @author choigeunhyeong
 	 * @return
 	 */
+
 	@Query(value = "select users.nickname, board.post_seq, board.category, board.title, board.content,"
 			+ "		board.img_path, board.c_date, board.recommend, board.cnt" + "		from users"
 			+ "		inner join board" + "		on users.user_id = board.user_id"
@@ -107,6 +130,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 */
 	@Query(value = "update board set cnt =" + "		cnt+1 where post_seq= :postSeq", nativeQuery = true)
 	public Board updateCnt(@Param("postSeq") Long postSeq);
+	
 
 	// [SR]메인페이지 - 글작성 최신순으로 list 출력
 	@Query(value = "SELECT *"

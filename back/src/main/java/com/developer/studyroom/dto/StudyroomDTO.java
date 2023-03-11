@@ -40,6 +40,8 @@ public class StudyroomDTO {
 	@NoArgsConstructor
 	public static class getAllStudyroomDTO{
 		private Long srSeq;
+		private String openTime;
+		private String endTime;
 		private String name;
 		private String addr;
 		private HostUserDTO.getAllHostUserDTO hostUser;

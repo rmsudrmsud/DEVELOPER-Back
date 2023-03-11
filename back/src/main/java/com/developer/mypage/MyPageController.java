@@ -207,18 +207,6 @@ public class MyPageController {
 	}
 	
 
-	/**
-	 * 진행완료된 수업 리스트 출력하기(개별페이지)
-	 * @author GH
-	 * @param tutorId
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value = "tutor/completed/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser3(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser3> list = lService.getLessonByUser3(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
-	}
 	
 
 	/**
@@ -502,7 +490,7 @@ public class MyPageController {
 	}
 	
   /**
-   * [AppliedLesson] 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록
+   * [AppliedLesson] 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록(후기가 없는사람)
    * 
    * @author choigeunhyeong
    * @param lessonSeq
@@ -510,8 +498,8 @@ public class MyPageController {
    * @throws FindException
    */
   @GetMapping(value = "tutor/completed/addreview/{lessonSeq}")
-  public ResponseEntity<?> selectClassAndTutee(@PathVariable Long lessonSeq) throws FindException {
-     List<UsersDTO.getNameDTO> list = alService.selectClassAndTutee(lessonSeq);
+  public ResponseEntity<?> noReivewTutee(@PathVariable Long lessonSeq) throws FindException {
+     List<UsersDTO.getNameDTO> list = alService.noReviewTutee(lessonSeq);
      return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
@@ -524,7 +512,7 @@ public class MyPageController {
    * @throws AddException
    */
   @PostMapping(value = "tutor/completed/addreview/{applySeqRv}")
-  public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv)
+  public ResponseEntity<?> addReview(@RequestBody UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv)
         throws AddException {
      urService.addUserReview(addReviewDTO, applySeqRv);
      return new ResponseEntity<>(HttpStatus.OK);

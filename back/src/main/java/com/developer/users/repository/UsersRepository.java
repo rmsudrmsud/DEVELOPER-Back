@@ -34,6 +34,9 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 			+ "	WHERE"
 			+ "	user_id= :userId and pwd= :pwd", nativeQuery = true)
 	public Users usersLogin(@Param("userId")String userId, @Param("pwd") String pwd);
+	
+	//근형
+	public Optional<Users> findByEmail(String email);
 
 
 	// [SR] 미승인 튜터 목록

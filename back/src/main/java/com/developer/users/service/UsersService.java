@@ -88,6 +88,25 @@ public class UsersService {
 			throw new FindException("로그인 실패");
 		}
 	}
+	
+	/**
+	 * 유저 아이디 찾기 !
+	 * @author choigeunhyeong
+	 * @param email
+	 * @return
+	 * @throws FindException
+	 */
+	public UsersDTO.uDTO findId(String email) throws FindException{
+		Optional<Users> optU = uRepository.findByEmail(email);
+		if(optU.isPresent()) {
+			Users users = optU.get();
+			UsersDTO.uDTO usersDTO = modelMapper.map(users, UsersDTO.uDTO.class);
+			if(usersDTO.getEmail().equals(email)) {				
+				return usersDTO;
+			}
+		}
+		throw new FindException("이메일에 해당하는 회원이 없습니다");
+	}
 
 	/**
 	 * 회원 탈퇴(Role 값이 3인 유저는 탈퇴한 것으로 간주)

@@ -1,6 +1,7 @@
 package com.developer.hostuser.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,5 +21,7 @@ public interface HostUserRepository extends CrudRepository<HostUser, String> {
 			+ "FROM host_user " 
 			+ "WHERE ready = 0", nativeQuery = true)
 	public List<Object[]> selectAllUnapproveHost();
-
+	
+	// [GH] 호스트 아이디찾기
+	public Optional<HostUser> findByNum(String num);
 }

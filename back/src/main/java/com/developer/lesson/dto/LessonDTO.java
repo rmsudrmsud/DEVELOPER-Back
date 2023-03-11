@@ -102,7 +102,9 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser3 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
+		
 	}
 
 	// [JH}

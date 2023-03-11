@@ -20,6 +20,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.board.entity.Board;
 import com.developer.users.entity.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,7 @@ public class BoardRep {
 
 	@Column(name = "cdate")
 	@ColumnDefault(value="SYSDATE")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date cDate;
 	
 	

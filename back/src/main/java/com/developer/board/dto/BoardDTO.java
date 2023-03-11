@@ -40,13 +40,13 @@ public class BoardDTO {
 
 	@Data
 	@NoArgsConstructor
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	public static class BoardAllSelectDTO {
 		private Long postSeq;
 		private Integer category;
 		private String title;
 		private String content;
 		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date cDate;
 		private Integer recommend;
 		private Integer cnt;
@@ -115,7 +115,7 @@ public class BoardDTO {
 			private String content;
 			private String imgPath;
 			@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-			@ColumnDefault(value = "SYSDATE")
+//			@ColumnDefault(value = "SYSDATE")
 			private Date cDate;
 		}
 	

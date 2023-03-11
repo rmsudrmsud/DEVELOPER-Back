@@ -30,6 +30,7 @@ import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
+import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.service.HostUserService;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.service.ReservationService;
@@ -542,6 +543,19 @@ public class HostUserController {
 		} else {
 			return new ResponseEntity<>("호스트로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	/**
+	 * 호스트 아이디 찾기
+	 * @author choigeunhyeong
+	 * @param num
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value="findhostid", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findHostId(String num) throws FindException{
+		HostUserDTO hostDTO =  hService.findHostId(num);
+		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.criteria.Expression;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import com.developer.board.dto.BoardDTO.getBoardByBoardTypeDTO;
 import com.developer.board.dto.PageBean;
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
+import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.boardrep.dto.BoardRepDTO.BoardRepSelectDTO;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
@@ -55,46 +58,6 @@ public class BoardService {
 		bRepository.save(board);
 
 	}
-	/**
-	 * 게시글 전체 목록(작성일순)
-	 * @author choigeunhyeong
-	 * @return
-	 * @throws FindException
-	 */
-//	public List<BoardDTO.getBoardByBoardTypeDTO> getBoardByC_date() throws FindException {
-//		List<Object[]> Blist = bRepository.getBoardByC_date();
-//		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
-//		for (int i = 0; i < Blist.size(); i++) {
-//			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
-//			BigDecimal post_seq = (BigDecimal) Blist.get(i)[1];
-//			Long resultPost_seq = post_seq.longValue();
-//			bDTO.setPostSeq(resultPost_seq);
-//
-//			BigDecimal Category = (BigDecimal) Blist.get(i)[2];
-//			int resultCategory = Category.intValue();
-//			bDTO.setCategory(resultCategory);
-//
-//			bDTO.setTitle((String) Blist.get(i)[3]);
-//			bDTO.setContent((String) Blist.get(i)[4]);
-//			bDTO.setImgPath((String) Blist.get(i)[5]);
-//			bDTO.setCDate((Date) Blist.get(i)[6]);
-//
-//			BigDecimal Recommend = (BigDecimal) Blist.get(i)[7];
-//			int resultRec = Recommend.intValue();
-//			bDTO.setRecommend(resultRec);
-//
-//			BigDecimal Cnt = (BigDecimal) Blist.get(i)[8];
-//			int resultCnt = Cnt.intValue();
-//			bDTO.setCnt(resultCnt);
-//
-//			UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
-//			uDTO.setNickname((String) Blist.get(i)[0]);
-//			bDTO.setUsersNameDTO(uDTO);
-//			dtoList.add(bDTO);
-//		}
-//		return dtoList;
-//
-//	}
 	
 	/**
 	 * 게시글 전체 목록(작성일순),페이징처리 
@@ -103,10 +66,10 @@ public class BoardService {
 	 * @throws FindException
 	 *
 	 */
-	public PageBean<BoardDTO> listBoard(int currentPage) throws FindException{
+	public PageBean<BoardDTO> listBoard(String orderby, int currentPage) throws FindException{
 		int startRow = (currentPage-1)*PageBean.CNT_PER_PAGE + 1;
 		int endRow = currentPage*PageBean.CNT_PER_PAGE;
-		List<Object[]> list =  bRepository.listBoard(startRow, endRow);
+		List<Object[]> list =  bRepository.listBoard(orderby, startRow, endRow);
 		List<BoardDTO> boardList = new ArrayList<>();
 		list.forEach(arr ->{
 			BoardDTO dto = new BoardDTO();
@@ -231,7 +194,7 @@ public class BoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<BoardDTO.BoardAllSelectDTO> selectAllPostSeq(Long postSeq) throws FindException {
+	public List<BoardDTO.BoardAllSelectDTO> listBoardDetail(Long postSeq) throws FindException {
 		List<Object[]> Blist = bRepository.findPostSeq(postSeq);
 		List<BoardDTO.BoardAllSelectDTO> dto = new ArrayList<>();
 		for (int i = 0; i < Blist.size(); i++) {
@@ -248,26 +211,32 @@ public class BoardService {
 			bDTO.setContent((String) Blist.get(i)[5]);
 			bDTO.setImgPath((String) Blist.get(i)[6]);
 			bDTO.setCDate((Date) Blist.get(i)[7]);
-
 			BigDecimal Recommend = (BigDecimal) Blist.get(i)[8];
 			int resultRec = Recommend.intValue();
 			bDTO.setRecommend(resultRec);
-
 			BigDecimal Cnt = (BigDecimal) Blist.get(i)[9];
 			int resultCnt = Cnt.intValue();
 			bDTO.setCnt(resultCnt);
-
+			
+			//11 : 댓글 아이디 ,12 : 댓글내용 , 13:댓글 작성일 14:댓글 닉네임
 			UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
 			uDTO.setNickname((String) Blist.get(i)[1]);
-			BigDecimal Role = (BigDecimal) Blist.get(i)[12];
-			int userRole = Role.intValue();
-			uDTO.setRole(userRole);
-			uDTO.setUserId((String) Blist.get(i)[13]);
+			uDTO.setUserId((String) Blist.get(i)[0]);
 
-			BoardRepSelectDTO brsDTO = new BoardRepSelectDTO();
-			brsDTO.setContent((String) Blist.get(i)[10]);
-			brsDTO.setCDate((Date) Blist.get(i)[11]);
-			brsDTO.setUsersNameDTO(uDTO);
+			BoardRepDTO.BoardRepSelectDTO brsDTO = new BoardRepSelectDTO();
+			brsDTO.setContent((String) Blist.get(i)[12]);
+			brsDTO.setCDate((Date) Blist.get(i)[13]);
+			if(Blist.get(i)[15] != null) {
+				BigDecimal post_rep_seq = (BigDecimal) Blist.get(i)[15];
+				Long resultRep_seq = post_rep_seq.longValue();
+				brsDTO.setPostRepSeq(resultRep_seq);
+				}
+			
+			UsersDTO.UsersNameDTO repuserDTO = new UsersDTO.UsersNameDTO();
+			repuserDTO.setUserId((String) Blist.get(i)[11]);
+			repuserDTO.setNickname((String) Blist.get(i)[14]);
+			brsDTO.setUsersNameDTO(repuserDTO);
+			
 			bDTO.setUsersNameDTO(uDTO);
 			bDTO.setBoardRepSelectDTO(brsDTO);
 
@@ -372,6 +341,10 @@ public class BoardService {
 		}
 	}
 
+//	public List<Board> findByTitle(String title) throws FindException {
+//		List<Board> list = bRepository.findByTitleLike(title);
+//		return list;
+//	}
 	/**
 	 * 제목으로 검색
 	 * 
@@ -380,10 +353,44 @@ public class BoardService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<Board> findByTitle(String title) throws FindException {
-		List<Board> list = bRepository.findByTitleLike(title);
-		return list;
+	
+	public PageBean<BoardDTO> findBoardTitle(String title, int currentPage) throws FindException {
+		int startRow = (currentPage-1)*PageBean.CNT_PER_PAGE + 1;
+		int endRow = currentPage*PageBean.CNT_PER_PAGE;
+		List<Object[]> list = bRepository.findByBoardTitle(startRow, endRow, title);
+		List<BoardDTO> boardList = new ArrayList<>();
+		list.forEach(arr ->{
+			BoardDTO dto = new BoardDTO();
+			String nickName = (String) arr[1];
+			BigDecimal post_seq = (BigDecimal)arr[2];
+			BigDecimal category = (BigDecimal)arr[3];
+			String btitle = (String)arr[4];
+			String content = (String)arr[5];
+			String imgPath = (String)arr[6];
+			Date cDate = (Date)arr[7];
+			BigDecimal recommend = (BigDecimal)arr[8];
+			BigDecimal cnt = (BigDecimal)arr[9];
+			
+			UsersDTO users = new UsersDTO();
+			users.setNickname(nickName);
+			dto.setUsersDTO(users);
+			dto.setPostSeq(post_seq.longValue());
+			dto.setCategory((int)(category.longValue()));
+			dto.setTitle(btitle);
+			dto.setContent(content);
+			dto.setImgPath(imgPath);
+			dto.setCDate(cDate);
+			dto.setRecommend((int)(recommend.longValue()));
+			dto.setCnt((int)(cnt.longValue()));
+			
+			boardList.add(dto);
+		});
+		
+		int totalCnt = (int) boardList.size();//총상품수
+		PageBean<BoardDTO> pb = new PageBean(currentPage, boardList, totalCnt);
+		return pb;
 	}
+	
 	
 	/**[메인페이지] 글작성 최신순으로 list를 출력한다.
 	 * @author SR

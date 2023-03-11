@@ -40,7 +40,7 @@ public class StudyroomService {
 	ModelMapper modelMapper = new ModelMapper();
 
 	/**
-	 * 관리자 스터디카페 전체목록 출력(일단은 방번호, 방이름, 주소, 등록한id) 추후수정
+	 * 관리자 스터디카페 전체목록 출력(방번호, 방이름, , 등록한id) 추후수정
 	 * 
 	 * @author choigeunhyeong
 	 * @return
@@ -54,6 +54,8 @@ public class StudyroomService {
 			BigDecimal sr_seq = (BigDecimal) Slist.get(i)[0];
 			Long resultsr_seq = sr_seq.longValue();
 			srDTO.setSrSeq(resultsr_seq);
+			srDTO.setEndTime((String) Slist.get(i)[2]);
+			srDTO.setOpenTime((String) Slist.get(i)[7]);
 			srDTO.setName((String) Slist.get(i)[5]);
 			srDTO.setAddr((String) Slist.get(i)[1]);
 			HostUserDTO.getAllHostUserDTO hDTO = new HostUserDTO.getAllHostUserDTO();
