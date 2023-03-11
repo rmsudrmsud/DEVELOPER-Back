@@ -1,4 +1,4 @@
-package com.developer;
+package com.developer.main;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/*")
+@RequestMapping("main/*")
 public class DeveloperController {
 
 	private final BoardService bService;

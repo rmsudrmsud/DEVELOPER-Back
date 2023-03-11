@@ -7,7 +7,9 @@ import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class TutorDTO {
 	@Data
@@ -22,6 +24,13 @@ public class TutorDTO {
 		private UsersDTO.uNameDTO uDTO;
 		private List<LessonDTO> lDTO;
 	}
+	
+	// [JH]
+	@Data
+	@NoArgsConstructor
+	public static class tutorOrderDTO{
+		private String tutorId;
+	}
 
 	// [JW]
 	@Data
@@ -35,7 +44,7 @@ public class TutorDTO {
 	}
 
 	// [JH]
-	@Data
+	@Data @Setter @Getter @NoArgsConstructor
 	public static class tutorDTO {
 		private String tutorId;
 		private String info;

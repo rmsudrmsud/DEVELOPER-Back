@@ -22,6 +22,7 @@ public class MyPageDTO {
 		private List<LessonDTO.GetLessonByUser1> list;
 		private List<LessonDTO.GetLessonByUser2> list2;
 		private List<LessonDTO.GetLessonByUser3> list3;
+		private List<LessonDTO.UnpaidLessonByUser> list4;
 	}
 
 	// [JH] 튜터의 진행예정 수업 상세

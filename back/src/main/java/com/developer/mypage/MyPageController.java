@@ -1,19 +1,30 @@
 package com.developer.mypage;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.service.AppliedLessonService;
@@ -35,9 +46,12 @@ import com.developer.roomreview.service.RoomReviewService;
 import com.developer.userreview.dto.UserReviewDTO;
 import com.developer.userreview.service.UserReviewService;
 import com.developer.users.dto.UsersDTO;
+import com.developer.users.entity.Users;
 import com.developer.users.service.UsersService;
+import com.developer.util.Attach;
 
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @RestController
 @RequestMapping("mypage/*")
@@ -53,6 +67,7 @@ public class MyPageController {
 	private final LessonReviewService lrservice;
 	private final ReservationService rService;
 	private final RoomReviewService rrservice;
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	
 	/**
@@ -62,18 +77,24 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutor/{tutorId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorMain(@PathVariable String tutorId) throws FindException{
+	@GetMapping(value = "tutor", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tutorMain(HttpSession session) throws FindException{
 		MyPageDTO.TutorMainDTO dto = new MyPageDTO.TutorMainDTO();
-		
-		List<LessonDTO.GetLessonByUser1> lList = lService.getLessonByUser1(tutorId);
-		List<LessonDTO.GetLessonByUser2> lList2 = lService.getLessonByUser2(tutorId);
-		List<LessonDTO.GetLessonByUser3> lList3 = lService.getLessonByUser3(tutorId);
-		dto.setList(lList);
-		dto.setList2(lList2);
-		dto.setList3(lList3);
-		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		String logined = (String) session.getAttribute("logined");
+		logger.info("마이페이지 로그인성공시 sessionid : " + session.getId());
+		if (logined != null) {
+			List<LessonDTO.GetLessonByUser1> lList = lService.getLessonByUser1(logined);
+			List<LessonDTO.GetLessonByUser2> lList2 = lService.getLessonByUser2(logined);
+			List<LessonDTO.GetLessonByUser3> lList3 = lService.getLessonByUser3(logined);
+			List<LessonDTO.UnpaidLessonByUser> lList4 = lService.unpaidLessonByUser(logined);
+			dto.setList(lList);
+			dto.setList2(lList2);
+			dto.setList3(lList3);
+			dto.setList4(lList4);
+			return new ResponseEntity<>(dto, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	
@@ -126,16 +147,21 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutee/upcoming/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tuteeUpcoming(@PathVariable String userId) throws FindException{
+	@GetMapping(value = "tutee/upcoming", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tuteeUpcoming(HttpSession session) throws FindException{
 		MyPageDTO.TuteeUpcomingDTO dto = new MyPageDTO.TuteeUpcomingDTO();
+		String logined = (String) session.getAttribute("logined");
 		
-		List<LessonDTO.applyLessonBytutee> applyList = lService.upComingLesson(userId);
-		List<LessonDTO.notYetLessonBytutee> notYetList = lService.getApplyLesson(userId);
-		dto.setApplyList(applyList);
-		dto.setNotYetlist(notYetList);
-		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		if (logined != null) {
+			List<LessonDTO.applyLessonBytutee> applyList = lService.upComingLesson(logined);
+			List<LessonDTO.notYetLessonBytutee> notYetList = lService.getApplyLesson(logined);
+			dto.setApplyList(applyList);
+			dto.setNotYetlist(notYetList);
+			
+			return new ResponseEntity<>(dto, HttpStatus.OK);			
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	
@@ -147,9 +173,9 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "tutor/upcoming/detail/apply/{applySeq}")
+	@PutMapping(value = "tutor/upcoming/detail/apply/{applySeq}")
 	public ResponseEntity<?> updateApplyLesson(@PathVariable Long applySeq, HttpSession session) throws FindException {
-		applySeq = 1L;
+		
 		if(applySeq == null) {
 			return new ResponseEntity<>("수업 신청 내역이 없습니다.", HttpStatus.BAD_REQUEST);
 		} else {
@@ -167,9 +193,9 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = {"tutor/upcoming/detail/notapply/{applySeq}"})
+	@PutMapping(value = {"tutor/upcoming/detail/notapply/{applySeq}"})
 	public ResponseEntity<?> updateNotApplyLesson(@PathVariable Long applySeq, HttpSession session) throws FindException {
-		applySeq = 1L;
+
 		if(applySeq == null) {
 			return new ResponseEntity<>("수업 신청 내역이 없습니다.", HttpStatus.BAD_REQUEST);
 		} else {
@@ -180,16 +206,39 @@ public class MyPageController {
 	}
 	
 	/**
+	 * 튜터의 결제가 필요한 수업 리스트
+	 * @author Jin
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "tutor/unpaid")
+	public ResponseEntity<?> unpaidLessonByUser(HttpSession session) throws FindException{
+		String logined = (String) session.getAttribute("logined");
+		if (logined != null) {
+			List<LessonDTO.UnpaidLessonByUser> list = lService.unpaidLessonByUser(logined);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/**
 	 * 튜터의 진행예정 수업 리스트 출력하기(개별페이지)
 	 * @author Jin
 	 * @param tutorId
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutor/upcoming/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser1(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser1> list = lService.getLessonByUser1(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
+	@GetMapping(value = "tutor/upcoming" )
+	public ResponseEntity<?> getLessonByUser1(HttpSession session) throws FindException{
+		String logined = (String) session.getAttribute("logined");
+		if (logined != null) {
+			List<LessonDTO.GetLessonByUser1> list = lService.getLessonByUser1(logined);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 
@@ -200,43 +249,108 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutor/ongoing/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser2(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser2> list = lService.getLessonByUser2(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
+	@GetMapping(value = "tutor/ongoing" )
+	public ResponseEntity<?> getLessonByUser2(HttpSession session) throws FindException{
+		String logined = (String) session.getAttribute("logined");
+		if (logined != null) {
+			List<LessonDTO.GetLessonByUser2> list = lService.getLessonByUser2(logined);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 
+//	/**
+//	 * 튜터의 나의 수업 수정하기
+//	 * @author Jin
+//	 * @param lessonSeq
+//	 * @param lDTO
+//	 * @param session
+//	 * @return
+//	 * @throws FindException
+//	 */
+//	@PatchMapping(value = "tutor/upcoming/detail/update/{lessonSeq}")
+//	public ResponseEntity<?> updateLesson(@PathVariable Long lessonSeq,@RequestBody LessonDTO.selectLessonDTO lDTO, HttpSession session) throws FindException {
+//		lService.updates(lDTO);
+//		return new ResponseEntity<>(HttpStatus.OK);	
+//	}
+	
 	/**
-	 * 진행완료된 수업 리스트 출력하기(개별페이지)
-	 * @author GH
-	 * @param tutorId
-	 * @return
+	 * 수업 수정(마이페이지에서 수정하려고 지원님꺼 가져왔습니다.)
+	 * 
+	 * @author moonone
+	 * @param dto    사용자가 입력한 등록 및 수정 정보값
+	 * @param userId 사용자 아이디
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutor/completed/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser3(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser3> list = lService.getLessonByUser3(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
+	@PostMapping(value = "tutor/upcoming/detail/update/{lessonSeq}", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+	public ResponseEntity<?> add(LessonDTO.selectDetailDTO dto, 
+																		HttpSession session,
+																		MultipartFile f)
+			throws AddException, FindException {
+		
+		String userId = (String) session.getAttribute("logined");
+		String saveDirectory = "C:\\dev\\lesson"; // 각자 주소로!
+		File saveDirFile = new File(saveDirectory);
+		
+		String fileName;
+		if(f != null && f.getSize()>0) {
+			long fSize = f.getSize();
+			String fOrigin = f.getOriginalFilename();
+			System.out.println("---파일---");
+			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
+			
+			//저장될 파일명에 tutorId값 더하기
+			String fName = "lesson_" + userId + "_" + fOrigin;
+			
+			//파일저장
+			fileName = fName;
+			File file = new File(saveDirFile, fileName);
+			
+			try {
+				Attach.upload(f.getBytes(), file);
+				
+				int width = 300;
+				int height = 300;
+				
+				// 원래 첨부파일과 구분짓기 위해
+				String thumbFileName = "t_" + fileName;
+				File thumbFile = new File(saveDirFile, thumbFileName);
+				FileOutputStream thumbnailOs = new FileOutputStream(thumbFile);
+				InputStream thumbnailsS = f.getInputStream();
+				
+				Thumbnailator.createThumbnail(thumbnailsS, thumbnailOs, width, height);
+				
+				dto.setImgPath(fileName);
+				lService.addLessonDTO(dto, userId);
+				return new ResponseEntity<>(HttpStatus.OK);				
+			} catch (IOException e) {
+				throw new AddException(e.getMessage());
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
-
 	/**
-	 * 튜터의 나의 수업 수정하기
+	 * 결제한 강의의 payLesson을 1로 세팅한다. 
 	 * @author Jin
 	 * @param lessonSeq
-	 * @param lDTO
 	 * @param session
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "tutor/upcoming/detail/update/{lessonSeq}")
-	public ResponseEntity<?> updateLesson(@PathVariable Long lessonSeq,@RequestBody LessonDTO.selectLessonDTO lDTO, HttpSession session) throws FindException {
-		lService.updates(lDTO);
-		return new ResponseEntity<>(HttpStatus.OK);	
+	@PutMapping(value = "tutor/pay/{lessonSeq}")
+	public ResponseEntity<?> updatePayLesson(@PathVariable Long lessonSeq, HttpSession session) throws FindException {
+		
+		if(lessonSeq == null) {
+			return new ResponseEntity<>("수업 신청 내역이 없습니다.", HttpStatus.BAD_REQUEST);
+		} else {
+			lService.updatePayLesson(lessonSeq);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}	
 	}
 	
-
 	/**
 	 * 튜터의 나의 수업 삭제하기
 	 * @author Jin
@@ -245,7 +359,7 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "tutor/upcoming/detail/delete/{lessonSeq}")
+	@PutMapping(value = "tutor/upcoming/detail/delete/{lessonSeq}")
 	public ResponseEntity<?> deleteLesson(@PathVariable Long lessonSeq, HttpSession session) throws FindException{
 		if(lessonSeq == null) {
 			return new ResponseEntity<>("수업 내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -291,12 +405,13 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "{userId}")
-	public ResponseEntity<?> getUser(@PathVariable String userId) throws FindException{
-		if(userId == null) {
-			return new ResponseEntity<>("존재하지 않는 회원입니다.",HttpStatus.BAD_REQUEST);
+	@GetMapping(value = "main")
+	public ResponseEntity<?> getUser(HttpSession session) throws FindException{
+		String logined = (String) session.getAttribute("logined");
+		if(logined == null) {
+			return new ResponseEntity<>("로그인하세요",HttpStatus.BAD_REQUEST);
 		} else {
-			UsersDTO.UsersDetailDTO usersDTO = uService.getUser(userId);
+			UsersDTO.UsersDetailDTO usersDTO = uService.getUser(logined);
 			return new ResponseEntity<>(usersDTO, HttpStatus.OK);
 		}
 	}
@@ -311,9 +426,24 @@ public class MyPageController {
 	 * @throws FindException
 	 * @throws AddException
 	 */
-	@PatchMapping(value = "update/{userId}")
-	public ResponseEntity<?> updateLesson(@PathVariable String userId, @RequestBody UsersDTO uDTO) throws FindException, AddException{
+	@PutMapping(value = "update/{userId}")
+	public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody UsersDTO uDTO) throws FindException, AddException{
 		uService.addUsers(uDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	 * 사용자 정보 수정하기(변경 예정..)
+	 * @author Jin
+	 * @param userId
+	 * @param uDTO
+	 * @return
+	 * @throws FindException
+	 * @throws AddException
+	 */
+	@PutMapping(value = "update/{userId}")
+	public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody Users u) throws FindException, AddException{
+		uService.updateUser(u);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -326,7 +456,7 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "delete/{userId}")
+	@PutMapping(value = "delete/{userId}")
 	public ResponseEntity<?> deleteUser(@PathVariable String userId, HttpSession session) throws FindException{
 		if(userId == null) {
 			return new ResponseEntity<>("수업 내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
@@ -550,6 +680,57 @@ public class MyPageController {
 	   dto.setCompletedlessonReviewDTO(reviewList);
 	   return new ResponseEntity<>(dto, HttpStatus.OK); 
   }
+  
+  @GetMapping("lesson")
+	public ResponseEntity<?> download(String imgPath, int type, String opt) throws FindException {
+
+		String saveDirectory = "C:\\dev\\lesson";
+
+		String fileName = "";
+		if (type == 2) {
+			fileName = "t_";
+		}
+		fileName += imgPath; 
+		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
+		File file = null;
+
+		for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
+
+			String fn = f.getName();
+			//int lastIndex = fn.lastIndexOf(".");
+			//if (fn.substring(0, lastIndex).equals(fileName)) {
+			if (fn.equals(fileName)) {
+				file = f;
+				fileName = f.getName();
+				break;
+			}
+		}
+		if (file == null) {
+			throw new FindException(fileName + "으로 된 파일이 없습니다");
+		}
+
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			String contentType = Files.probeContentType(file.toPath()); // 파일의 형식
+			headers.add(HttpHeaders.CONTENT_TYPE, contentType);// 응답형식
+			headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length()); // 응답크기
+
+			if ("attachment".equals(opt)) {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+			} else {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+			}
+
+			byte[] bArr = FileCopyUtils.copyToByteArray(file);
+			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+			System.out.println(bArr);
+			return re;
+		} catch (Exception e) {
+			throw new FindException(e.getMessage());
+		}
+	}
 
 }
 

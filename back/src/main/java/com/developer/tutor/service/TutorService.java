@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class TutorService {
 	private final UsersRepository uRepository;
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	ModelMapper modelMapper = new ModelMapper();
 
 	/**
 	 * 튜터 등록 및 수정
@@ -143,4 +145,18 @@ public class TutorService {
 			throw new RemoveException("해당 유저가 존재하지 않습니다.");
 		}
 	}
+	
+//	/**
+//	 * 튜터 조회
+//	 * @author Jin
+//	 * @param tutorId
+//	 * @return
+//	 * @throws FindException
+//	 */
+//	public TutorDTO.tutorDTO getTutor(String tutorId) throws FindException{
+//		Optional<Tutor> optT = tRepository.findById(tutorId);
+//		Tutor tutor = optT.get();
+//		TutorDTO.tutorDTO tutorDTO = modelMapper.map(tutor, TutorDTO.tutorDTO.class);
+//		return tutorDTO;
+//	}
 }
