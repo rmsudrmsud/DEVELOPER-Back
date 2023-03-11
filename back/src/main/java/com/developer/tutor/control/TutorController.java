@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,45 +44,43 @@ public class TutorController {
 	 * @throws FindException
 	 */
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> save(TutorDTO.saveTutorDTO tDTO, 
-														HttpSession session,
-														MultipartFile f)
+	public ResponseEntity<?> save(TutorDTO.saveTutorDTO tDTO, HttpSession session, MultipartFile f)
 			throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
 		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
-		if(f != null && f.getSize()>0) {
+		if (f != null && f.getSize() > 0) {
 			long fSize = f.getSize();
 			String fOrigin = f.getOriginalFilename();
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
-			
-			//저장될 파일명에 tutorId값 더하기
+
+			// 저장될 파일명에 tutorId값 더하기
 			String fName = "tutor_" + logined + "_" + fOrigin;
-			
-			//파일저장
+
+			// 파일저장
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
-			
+
 			try {
 				Attach.upload(f.getBytes(), file);
-				
+
 				int width = 300;
 				int height = 300;
-				
+
 				// 원래 첨부파일과 구분짓기 위해
 				String thumbFileName = "t_" + fileName;
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOs = new FileOutputStream(thumbFile);
 				InputStream thumbnailsS = f.getInputStream();
-				
+
 				Thumbnailator.createThumbnail(thumbnailsS, thumbnailOs, width, height);
-				
+
 				tDTO.setImgPath(fileName);
 				System.out.println("컨트롤단: " + logined);
 				tservice.saveTutor(tDTO, logined);
-				return new ResponseEntity<>("등록 성공", HttpStatus.OK);				
+				return new ResponseEntity<>("등록 성공", HttpStatus.OK);
 			} catch (IOException e) {
 				throw new AddException(e.getMessage());
 			}

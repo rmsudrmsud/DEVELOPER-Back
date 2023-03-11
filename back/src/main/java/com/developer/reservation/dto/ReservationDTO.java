@@ -34,7 +34,7 @@ public class ReservationDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class selectAllReservationDTO {
-		private long resSeq;
+		private Long resSeq;
 		private String startTime;
 		private String endTime;
 		@Temporal(TemporalType.DATE)
@@ -63,6 +63,8 @@ public class ReservationDTO {
 		private Long resSeq;
 		private String startTime;
 		private String endTime;
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date usingDate;
 		private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
 	}
@@ -74,6 +76,8 @@ public class ReservationDTO {
 		private Long roomSeq;
 		private String startTime;
 		private String endTime;
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date usingDate;
 		private RoomInfoDTO.RoomInfoPriceDTO roomInfoPriceDTO;
 	}
@@ -83,6 +87,8 @@ public class ReservationDTO {
 	@NoArgsConstructor
 	public static class selectMyResHistoryDTO {
 		private Long resSeq;
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date usingDate;
 		private String startTime;
 		private String endTime;
@@ -124,6 +130,8 @@ public class ReservationDTO {
 	@Data
 	@NoArgsConstructor
 	public static class RoomReviewSelectMyRmRvDetailDTO {
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date usingDate;
 		private RoomInfoDTO.RoomInfoNameDTO roomInfoNameDTO;
 

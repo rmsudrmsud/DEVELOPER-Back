@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roominfo.repository.RoomInfoRepository;
+import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.repository.StudyroomRepository;
 import com.developer.users.dto.UsersDTO;
@@ -41,12 +43,30 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public RoomInfoDTO selectRoom(long roomSeq) throws FindException {
+	public RoomInfoDTO selectRoom(Long roomSeq) throws FindException {
 		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
 			RoomInfoDTO roomDTO = modelMapper.map(roomEntity, RoomInfoDTO.class);
 			return roomDTO;
+		} else {
+			throw new FindException("해당 방이 존재하지 않습니다.");
+		}
+	}
+
+	/**
+	 * 룸 1개정보를 출력한다(엔티티로)
+	 * 
+	 * @author SR
+	 * @param roomSeq
+	 * @return
+	 * @throws FindException
+	 */
+	public RoomInfo selectRoomEntity(Long roomSeq) throws FindException {
+		Optional<RoomInfo> optRi = riRepository.findById(roomSeq);
+		if (optRi.isPresent()) {
+			RoomInfo ri = optRi.get();
+			return ri;
 		} else {
 			throw new FindException("해당 방이 존재하지 않습니다.");
 		}
@@ -60,7 +80,7 @@ public class RoomInfoService {
 	 * @param srSeq
 	 * @throws AddException
 	 */
-	public void insertRoom(RoomInfoDTO roomInfoDTO, long srSeq) {
+	public void insertRoom(RoomInfoDTO roomInfoDTO, Long srSeq) {
 		Optional<Studyroom> optCafe = sRepository.findById(srSeq);
 		Studyroom cafeEntity = optCafe.get();
 		roomInfoDTO.setStudyroom(cafeEntity);
@@ -77,7 +97,7 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public void updateRoom(long roomSeq, RoomInfoDTO roomInfoDTO) throws FindException {
+	public void updateRoom(Long roomSeq, RoomInfoDTO roomInfoDTO) throws FindException {
 		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
@@ -100,7 +120,7 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public void deleteRoom(long roomSeq) throws FindException {
+	public void deleteRoom(Long roomSeq) throws FindException {
 		RoomInfoDTO roomInfoDTO = this.selectRoom(roomSeq);
 		roomInfoDTO.setStatus(1);
 		RoomInfo roomEntity = modelMapper.map(roomInfoDTO, RoomInfo.class);
@@ -115,14 +135,14 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<RoomInfoDTO.selectAllRoomDTO> selectAllRoom(long srSeq) throws FindException {
-		List<Object[]> rList = riRepository.selectAllRoom(srSeq);
+	public List<RoomInfoDTO.selectAllRoomDTO> selectAllRoom(String hostId) throws FindException {
+		List<Object[]> rList = riRepository.selectAllRoom(hostId);
 
 		List<RoomInfoDTO.selectAllRoomDTO> rListDto = new ArrayList<>();
 		for (int i = 0; i < rList.size(); i++) {
 			RoomInfoDTO.selectAllRoomDTO rDto = new RoomInfoDTO.selectAllRoomDTO();
 			BigDecimal roomSeq = (BigDecimal) rList.get(i)[0];
-			long convertRoomSeq = roomSeq.longValue();
+			Long convertRoomSeq = roomSeq.longValue();
 			rDto.setRoomSeq(convertRoomSeq);
 			rDto.setName((String) rList.get(i)[1]);
 			rDto.setInfo((String) rList.get(i)[2]);
@@ -133,6 +153,10 @@ public class RoomInfoService {
 			BigDecimal price = (BigDecimal) rList.get(i)[5];
 			int convertPrice = price.intValue();
 			rDto.setPrice(convertPrice);
+			StudyroomDTO.StudyroomTimeDTO sDTO = new StudyroomDTO.StudyroomTimeDTO();
+			sDTO.setOpenTime((String) rList.get(i)[6]);
+			sDTO.setEndTime((String) rList.get(i)[7]);
+			rDto.setStudyroomTimeDTO(sDTO);
 
 			rListDto.add(rDto);
 		}
@@ -179,11 +203,13 @@ public class RoomInfoService {
 	 * @return 특정스터디카페 전체정보들(방여러개)
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
-	public List<RoomInfoDTO> selectAll(Long srSeq) throws FindException {
+	public List<RoomInfoDTO.RoomInfoRoomDetailListDTO> selectAll(Long srSeq) throws FindException {
 		List<Object[]> list = riRepository.selectAll(srSeq);
-		List<RoomInfoDTO> dto = new ArrayList<>();
+		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> dto = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
-			RoomInfoDTO riDTO = new RoomInfoDTO();
+			RoomInfoDTO.RoomInfoRoomDetailListDTO riDTO = new RoomInfoDTO.RoomInfoRoomDetailListDTO();
+			StudyroomDTO.StudyroomHostIdDTO shDTO = new StudyroomDTO.StudyroomHostIdDTO();
+			HostUserDTO.HostIdDTO hhDTO = new HostUserDTO.HostIdDTO();
 			BigDecimal room_seq = (BigDecimal) list.get(i)[0];
 			Long resultRoomSeq = room_seq.longValue();
 			riDTO.setRoomSeq(resultRoomSeq);
@@ -194,6 +220,11 @@ public class RoomInfoService {
 			riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
 
+			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
+			hhDTO.setHostId((String) list.get(i)[8]);
+
+			shDTO.setHostIdDTO(hhDTO);
+			riDTO.setStudyroomDTO(shDTO);
 			dto.add(riDTO);
 		}
 		return dto;

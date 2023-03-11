@@ -35,12 +35,11 @@ public class StudyroomService {
 
 	private final StudyroomRepository sRepository;
 	private final HostUserRepository hRepository;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
 	ModelMapper modelMapper = new ModelMapper();
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
-	 * 관리자 스터디카페 전체목록 출력(일단은 방번호, 방이름, 주소, 등록한id) 추후수정
+	 * 관리자 스터디카페 목록 출력
 	 * 
 	 * @author choigeunhyeong
 	 * @return
@@ -54,6 +53,8 @@ public class StudyroomService {
 			BigDecimal sr_seq = (BigDecimal) Slist.get(i)[0];
 			Long resultsr_seq = sr_seq.longValue();
 			srDTO.setSrSeq(resultsr_seq);
+			srDTO.setEndTime((String) Slist.get(i)[2]);
+			srDTO.setOpenTime((String) Slist.get(i)[7]);
 			srDTO.setName((String) Slist.get(i)[5]);
 			srDTO.setAddr((String) Slist.get(i)[1]);
 			HostUserDTO.getAllHostUserDTO hDTO = new HostUserDTO.getAllHostUserDTO();
@@ -104,7 +105,7 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void openOc(long srSeq) throws FindException {
+	public void openOc(Long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(0);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
@@ -118,7 +119,7 @@ public class StudyroomService {
 	 * @param srSeq
 	 * @throws FindException
 	 */
-	public void closeOc(long srSeq) throws FindException {
+	public void closeOc(Long srSeq) throws FindException {
 		StudyroomDTO studyroomDTO = this.selectStudyroom(srSeq);
 		studyroomDTO.setOc(1);
 		Studyroom studyroomEntity = modelMapper.map(studyroomDTO, Studyroom.class);
@@ -211,7 +212,7 @@ public class StudyroomService {
 	public List<StudyroomDTO.StudyroomSelectBySearchDTO> selectBySearch(String srNameAddrName, Integer searchBy,
 			Integer person, Integer orderBy) throws FindException {
 		String jpql1 = "	SELECT S.NAME, S.ADDR, S.IMG_PATH, MAX(R.PERSON) AS PERSON,\r\n"
-				+ "		MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT\r\n"
+				+ "		MIN(R.PRICE) AS PRICE, COUNT(distinct(F.USER_ID)) AS FAV_CNT, S.SR_SEQ\r\n"
 				+ "		FROM STUDYROOM S\r\n" + "		join\r\n" + "		ROOM_INFO R\r\n"
 				+ "		ON s.sr_seq = r.sr_seq\r\n" + "		left outer join\r\n" + "		FAVORITES_STUDYROOM F\r\n"
 				+ "		ON F.SR_SEQ = S.SR_SEQ\r\n" + "		where ";
@@ -230,7 +231,7 @@ public class StudyroomService {
 
 		jpql2 += person;
 
-		String jpql3 = "   GROUP BY S.NAME , S.ADDR , S.IMG_PATH\r\n" + "	ORDER BY ";
+		String jpql3 = "   GROUP BY S.NAME , S.ADDR , S.IMG_PATH, S.SR_SEQ\r\n" + "	ORDER BY ";
 		String choose2 = "";
 		if (orderBy == 1) {
 			choose2 = "PRICE ASC";
@@ -251,6 +252,9 @@ public class StudyroomService {
 			sDTO.setName((String) list.get(i)[0]);
 			sDTO.setAddr((String) list.get(i)[1]);
 			sDTO.setImgPath((String) list.get(i)[2]);
+			BigDecimal srSeq = (BigDecimal) list.get(i)[6];
+			long StudyroomSeq = srSeq.longValue();
+			sDTO.setSrSeq(StudyroomSeq);
 			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
 			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
@@ -274,6 +278,9 @@ public class StudyroomService {
 			sDTO.setName((String) list.get(i)[0]);
 			sDTO.setAddr((String) list.get(i)[1]);
 			sDTO.setImgPath((String) list.get(i)[2]);
+			BigDecimal srSeq = (BigDecimal) list.get(i)[6];
+			long StudyroomSeq = srSeq.longValue();
+			sDTO.setSrSeq(StudyroomSeq);
 			RoomInfoDTO.RoomInfoPriceAndPersonDTO ripDTO = new RoomInfoDTO.RoomInfoPriceAndPersonDTO();
 			ripDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			ripDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[3])));
@@ -324,14 +331,44 @@ public class StudyroomService {
 	 * @throws FindException
 	 */
 	public StudyroomDTO getStudyroomDetail(long srSeq) throws FindException {
-		Optional<Studyroom> optStudyroom = sRepository.findById(srSeq);
-		if (optStudyroom.isPresent()) {
-			Studyroom StudyroomEntity = optStudyroom.get();
-			StudyroomDTO studyroomDTO = modelMapper.map(StudyroomEntity, StudyroomDTO.class);
-			return studyroomDTO;
-		} else {
-			throw new FindException("해당 스터디카페가 존재하지 않습니다.");
+		Studyroom s = sRepository.getBySRSEQ(srSeq);
+		StudyroomDTO dto = new StudyroomDTO();
+		dto.setSrSeq(s.getSrSeq());
+		dto.setAddr(s.getAddr());
+		dto.setEndTime(s.getEndTime());
+		dto.setImgPath(s.getImgPath());
+		dto.setInfo(s.getInfo());
+		dto.setName(s.getName());
+		dto.setOc(s.getOc());
+		dto.setOpenTime(s.getOpenTime());
+		dto.setHostUser(s.getHostUser());
+		return dto;
+
+	}
+
+	/**
+	 * 스터디카페 예약일 조회시 예약 내역이 없을 경우 예약을 위한 룸정보(오픈시간, 마감시간, 가격) 출력
+	 * 
+	 * @author DS
+	 * @param roomSeq
+	 * @return StudyroomDTO.StudyroomAndRoomInfoDTO
+	 * @throws FindException
+	 */
+	public List<StudyroomDTO.StudyroomAndRoomInfoDTO> getStudyroomAndRoomInfo(long roomSeq) throws FindException {
+		List<Object[]> list = sRepository.getInfoOne(roomSeq);
+		List<StudyroomDTO.StudyroomAndRoomInfoDTO> dto = new ArrayList<>();
+
+		for (int i = 0; i < list.size(); i++) {
+			StudyroomDTO.StudyroomAndRoomInfoDTO sDTO = new StudyroomDTO.StudyroomAndRoomInfoDTO();
+			RoomInfoDTO.RoomInfoPriceOnlyDTO rDTO = new RoomInfoDTO.RoomInfoPriceOnlyDTO();
+			sDTO.setOpenTime((String) list.get(i)[1]);
+			sDTO.setEndTime((String) list.get(i)[2]);
+			rDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[0])));
+			sDTO.setRoomInfoPriceDTO(rDTO);
+			dto.add(sDTO);
+
 		}
+		return dto;
 	}
 
 }

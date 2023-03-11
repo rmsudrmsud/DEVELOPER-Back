@@ -1,12 +1,12 @@
 package com.developer.tutor.entity;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
+import com.developer.orders.entity.Orders;
 import com.developer.users.entity.Users;
 
 import lombok.Getter;
@@ -43,6 +44,8 @@ public class Tutor {
 	@Column(name = "apply_ok")
 	private Integer applyOk;
 
+	
+	
 	@MapsId("tutorId")
 	@OneToOne(optional = true, cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "tutor_id", nullable = true)
@@ -50,4 +53,7 @@ public class Tutor {
 
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
+	
+	@OneToMany(mappedBy = "tutor")
+	private List<Orders> orders;
 }

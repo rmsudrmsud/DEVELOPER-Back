@@ -2,6 +2,7 @@ package com.developer.users.dto;
 
 import java.util.List;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.dto.BoardDTO;
 import com.developer.boardrep.dto.BoardRepDTO;
@@ -139,6 +140,7 @@ public class UsersDTO {
 	public static class getNameDTO {
 		private String username;
 		private LessonDTO.getLessonNameDTO lessonName;
+		private AppliedLessonDTO.UserByAppliedLessonDTO applySeq;
 	}
 
 	// 근형

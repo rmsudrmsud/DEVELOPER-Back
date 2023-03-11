@@ -21,7 +21,13 @@ import lombok.NoArgsConstructor;
 
 @DynamicUpdate
 public class LessonDTO {
-
+	
+	@Data
+	@NoArgsConstructor
+	public static class lessonOrderDTO{
+		private String lessonName;
+	}
+	
 	// [JH]
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Data
@@ -92,6 +98,7 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser1 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
 	}
 
@@ -100,6 +107,7 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser2 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
 	}
 
@@ -108,13 +116,25 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser3 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
+	}
+	
+	//[JH]
+	@Data
+	@NoArgsConstructor
+	public static class UnpaidLessonByUser {
+		private String lessonName;
+		private Long lessonSeq;
+		private TutorDTO.tutorDTO tDTO;
+		
 	}
 
 	// [JH}
 	@Data
 	@NoArgsConstructor
 	public static class applyLessonBytutee {
+		private Long lessonSeq;
 		private String lessonName;
 		private AppliedLessonDTO.selectAppliedLessonDTO alDTO;
 	}
@@ -123,9 +143,11 @@ public class LessonDTO {
 	@Data
 	@NoArgsConstructor
 	public static class notYetLessonBytutee {
+		private Long lessonSeq;
 		private String lessonName;
 		private AppliedLessonDTO.selectAppliedLessonDTO alDTO;
 	}
+
 
 	// [JW]
 	@Data
@@ -149,6 +171,7 @@ public class LessonDTO {
 		private Integer payLesson;
 		private String location;
 	}
+
 
 	// [JW]
 	@Data
@@ -174,6 +197,7 @@ public class LessonDTO {
 
 		private TutorDTO tDTO;
 	}
+
 
 	// [JW]
 	@Data
@@ -238,8 +262,6 @@ public class LessonDTO {
 	public static class searchName {
 		private String lessonName;
 	}
-	
-	
 
 	// SR
 	@Data

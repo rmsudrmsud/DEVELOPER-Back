@@ -10,9 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -23,6 +23,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
+import com.developer.orders.entity.Orders;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -38,7 +39,7 @@ import lombok.Setter;
 @SequenceGenerator(
 		name ="lessonSeq", 
 		sequenceName ="lesson_seq", 
-		initialValue = 11, allocationSize = 1 
+		initialValue = 1, allocationSize = 1 
 		)
 public class Lesson {
 	@Id
@@ -91,7 +92,8 @@ public class Lesson {
 	
 	@ColumnDefault(value = "2")
 	@Column(name="pay_lesson")
-	private Integer payLesson; //0무료 1유료 2결제대기
+	private Integer payLesson; //0무료 1유료 2결제대기 3수업삭제
+
 	
 	@NotNull
 	@Column(name="location")
@@ -108,6 +110,9 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
+		
+	@OneToOne(mappedBy = "lesson")
+	private Orders order;
 }
 
 

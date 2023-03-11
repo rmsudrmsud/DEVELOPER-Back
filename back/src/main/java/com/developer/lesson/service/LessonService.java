@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.exception.FindException;
@@ -45,16 +44,19 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-	public List<LessonDTO.GetLessonByUser1> getLessonByUser1(String tutorId) throws FindException {
-		List<Object[]> Llist = lRepository.getLessonByUser1(tutorId);
+	public List<LessonDTO.GetLessonByUser1> getLessonByUser1(String logined) throws FindException {
+		List<Object[]> Llist = lRepository.getLessonByUser1(logined);
 		List<LessonDTO.GetLessonByUser1> dto = new ArrayList<>();
 		for (int i = 0; i < Llist.size(); i++) {
 			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
 			LessonDTO.GetLessonByUser1 lDTO = new LessonDTO.GetLessonByUser1();
 			UsersDTO uDTO = new UsersDTO();
 			lDTO.setLessonName((String) Llist.get(i)[0]);
-			tDTO.setTutorId((String) tutorId);
-			uDTO.setUserId((String) tutorId);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
+			tDTO.setTutorId((String) logined);
+			uDTO.setUserId((String) logined);
 			tDTO.setUdto(uDTO);
 			lDTO.setTDTO(tDTO);
 			dto.add(lDTO);
@@ -71,16 +73,19 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-	public List<LessonDTO.GetLessonByUser2> getLessonByUser2(String tutorId) throws FindException {
-		List<Object[]> Llist = lRepository.getLessonByUser2(tutorId);
+	public List<LessonDTO.GetLessonByUser2> getLessonByUser2(String logined) throws FindException {
+		List<Object[]> Llist = lRepository.getLessonByUser2(logined);
 		List<LessonDTO.GetLessonByUser2> dto = new ArrayList<>();
 		for (int i = 0; i < Llist.size(); i++) {
 			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
 			LessonDTO.GetLessonByUser2 lDTO = new LessonDTO.GetLessonByUser2();
 			UsersDTO uDTO = new UsersDTO();
 			lDTO.setLessonName((String) Llist.get(i)[0]);
-			tDTO.setTutorId((String) tutorId);
-			uDTO.setUserId((String) tutorId);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
+			tDTO.setTutorId((String) logined);
+			uDTO.setUserId((String) logined);
 			tDTO.setUdto(uDTO);
 			lDTO.setTDTO(tDTO);
 			dto.add(lDTO);
@@ -97,16 +102,49 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-	public List<LessonDTO.GetLessonByUser3> getLessonByUser3(String tutorId) throws FindException {
-		List<Object[]> Llist = lRepository.getLessonByUser3(tutorId);
+	public List<LessonDTO.GetLessonByUser3> getLessonByUser3(String logined) throws FindException {
+		List<Object[]> Llist = lRepository.getLessonByUser3(logined);
 		List<LessonDTO.GetLessonByUser3> dto = new ArrayList<>();
 		for (int i = 0; i < Llist.size(); i++) {
 			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
 			LessonDTO.GetLessonByUser3 lDTO = new LessonDTO.GetLessonByUser3();
 			UsersDTO uDTO = new UsersDTO();
 			lDTO.setLessonName((String) Llist.get(i)[0]);
-			tDTO.setTutorId((String) tutorId);
-			uDTO.setUserId((String) tutorId);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
+			tDTO.setTutorId((String) logined);
+			uDTO.setUserId((String) logined);
+			tDTO.setUdto(uDTO);
+			lDTO.setTDTO(tDTO);
+			dto.add(lDTO);
+
+		}
+		return dto;
+	}
+
+	/**
+	 * 결제가 필요한 수업 리스트
+	 * 
+	 * @author Jin
+	 * @param tutorId
+	 * @return
+	 * @throws FindException
+	 */
+	public List<LessonDTO.UnpaidLessonByUser> unpaidLessonByUser(String logined) throws FindException {
+		List<Object[]> Llist = lRepository.unpaidLessonByUser(logined);
+		List<LessonDTO.UnpaidLessonByUser> dto = new ArrayList<>();
+		for (int i = 0; i < Llist.size(); i++) {
+			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
+			LessonDTO.UnpaidLessonByUser lDTO = new LessonDTO.UnpaidLessonByUser();
+			UsersDTO uDTO = new UsersDTO();
+			lDTO.setLessonName((String) Llist.get(i)[0]);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
+
+			tDTO.setTutorId((String) logined);
+			uDTO.setUserId((String) logined);
 			tDTO.setUdto(uDTO);
 			lDTO.setTDTO(tDTO);
 			dto.add(lDTO);
@@ -132,29 +170,9 @@ public class LessonService {
 			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
 			uDTO.setUserId((String) userId);
 			lDTO.setLessonName((String) Llist.get(i)[0]);
-			aDTO.setUsersDTO(uDTO);
-			lDTO.setAlDTO(aDTO);
-			dto.add(lDTO);
-		}
-		return dto;
-	}
-	
-	/**
-	 * 승인 거절된 수업(튜티기준)
-	 * @author moonone
-	 * @param userId
-	 * @return
-	 * @throws FindException
-	 */
-	public List<LessonDTO.notYetLessonBytutee> rejectApply(String userId) throws FindException {
-		List<Object[]> Llist = lRepository.rejectLesson(userId);
-		List<LessonDTO.notYetLessonBytutee> dto = new ArrayList<>();
-		for (int i = 0; i < Llist.size(); i++) {
-			UsersDTO uDTO = new UsersDTO();
-			LessonDTO.notYetLessonBytutee lDTO = new LessonDTO.notYetLessonBytutee();
-			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
-			uDTO.setUserId((String) userId);
-			lDTO.setLessonName((String) Llist.get(i)[0]);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
 			aDTO.setUsersDTO(uDTO);
 			lDTO.setAlDTO(aDTO);
 			dto.add(lDTO);
@@ -179,6 +197,9 @@ public class LessonService {
 			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
 			uDTO.setUserId((String) userId);
 			lDTO.setLessonName((String) Llist.get(i)[0]);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
 			aDTO.setUsersDTO(uDTO);
 			lDTO.setAlDTO(aDTO);
 			dto.add(lDTO);
@@ -203,15 +224,19 @@ public class LessonService {
 			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
 			uDTO.setUserId((String) userId);
 			lDTO.setLessonName((String) Llist.get(i)[0]);
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
 			aDTO.setUsersDTO(uDTO);
 			lDTO.setAlDTO(aDTO);
 			dto.add(lDTO);
 		}
 		return dto;
 	}
-	
+
 	/**
 	 * 진행 완료된 수업 (튜티기준)
+	 * 
 	 * @author moonone
 	 * @param userId
 	 * @return
@@ -260,6 +285,7 @@ public class LessonService {
 
 		lDTO.setCategory(categoryToInt);
 		lDTO.setPeople(peopleToInt);
+		lDTO.setLessonSeq(lessonSeq);
 		uDTO.setName((String) Llist.get(0)[7]);
 		tDTO.setUdto(uDTO);
 		lDTO.setTDTO(tDTO);
@@ -297,7 +323,6 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public void updates(LessonDTO.selectLessonDTO lDTO) throws FindException {
-		Optional<Lesson> l = lRepository.findById(lDTO.getLessonSeq());
 		Lesson lEntity = new Lesson();
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.map(lDTO, lEntity);
@@ -312,13 +337,29 @@ public class LessonService {
 	 * @throws FindException
 	 */
 	public void deleteLesson(Long lessonSeq) throws FindException {
-		LessonDTO.selectLessonDTO lessonDTO = this.selectLesson(lessonSeq);
-		ModelMapper modelMapper = new ModelMapper();
-		lessonDTO.setPayLesson(2);
-		Lesson lessonEntity = new Lesson();
 
-		modelMapper.map(lessonDTO, lessonEntity);
-		lRepository.save(lessonEntity);
+		Optional<Lesson> optLesson = lRepository.findById(lessonSeq);
+		if (optLesson.isPresent()) {
+			Lesson lessonEntity = optLesson.get();
+			lessonEntity.setPayLesson(2);
+			lRepository.save(lessonEntity);
+		}
+	}
+
+	/**
+	 * 결제한 수업의 payLesson을 1로 세팅한다.
+	 * 
+	 * @author Jin
+	 * @param lessonSeq
+	 * @throws FindException
+	 */
+	public void updatePayLesson(Long lessonSeq) throws FindException {
+		Optional<Lesson> optLesson = lRepository.findById(lessonSeq);
+		if (optLesson.isPresent()) {
+			Lesson lessonEntity = optLesson.get();
+			lessonEntity.setPayLesson(1);
+			lRepository.save(lessonEntity);
+		}
 	}
 
 	/**
@@ -331,16 +372,16 @@ public class LessonService {
 	 */
 	public LessonDTO.selectDetailDTO selectDetail(Long lessonSeq) throws FindException {
 		Optional<Lesson> optL = lRepository.findById(lessonSeq);
-				
+
 		LessonDTO.selectDetailDTO lDTO = modelMapper.map(optL.get(), LessonDTO.selectDetailDTO.class);
 		TutorDTO.selectDetailDTO tDTO = modelMapper.map(optL.get().getTutor(), TutorDTO.selectDetailDTO.class);
 		UsersDTO.UsersDetailDTO uDTO = modelMapper.map(optL.get().getTutor().getUsers(), UsersDTO.UsersDetailDTO.class);
-		
+
 		List<FavoritesLessonDTO.selectDetailDTO> flList = new ArrayList<>();
 		for (int i = 0; i < optL.get().getFlList().size(); i++) {
 			FavoritesLessonDTO.selectDetailDTO flDTO = new FavoritesLessonDTO.selectDetailDTO();
 			flDTO.setFavLesSeq(optL.get().getFlList().get(i).getFavLesSeq());
-			flDTO.setTuteeId(optL.get().getFlList().get(i).getUsers().getUserId());	
+			flDTO.setTuteeId(optL.get().getFlList().get(i).getUsers().getUserId());
 			flList.add(flDTO);
 		}
 		List<AppliedLessonDTO.alAddRequestDTO> alList = new ArrayList<>();
@@ -349,7 +390,7 @@ public class LessonService {
 			alDTO.setApplySeq(optL.get().getAlList().get(i).getApplySeq());
 			alDTO.setApplyOk(optL.get().getAlList().get(i).getApplyOk());
 			alDTO.setCdate(optL.get().getAlList().get(i).getCdate());
-			alDTO.setTuteeId(optL.get().getAlList().get(i).getTuteeId()	);
+			alDTO.setTuteeId(optL.get().getAlList().get(i).getTuteeId());
 			alList.add(alDTO);
 		}
 
@@ -370,13 +411,13 @@ public class LessonService {
 	 */
 	public void addLessonDTO(LessonDTO.selectDetailDTO dto, String userId) throws FindException {
 		Optional<Tutor> optT = tRepository.findById(userId);
-		Tutor tutor = optT.get();		
+		Tutor tutor = optT.get();
 		Lesson lesson = new Lesson();
-		if(dto.getPayLesson() == 0) {
+		if (dto.getPayLesson() == 0) {
 			dto.setPrice(0);
 		}
 		lesson.setTutor(tutor);
-				
+
 		modelMapper.map(dto, lesson);
 		lRepository.save(lesson);
 	}
@@ -447,10 +488,10 @@ public class LessonService {
 		}
 		return lesson;
 	}
-	
-	
+
 	/**
 	 * 신청날짜가 지나지 않은 수업 전체 목록 (가나다순)
+	 * 
 	 * @author moonone
 	 * @return 수업목록
 	 */
@@ -462,18 +503,16 @@ public class LessonService {
 			dto.setLessonSeq(((BigDecimal) list.get(i)[0]).longValue());
 			dto.setLessonName((String) list.get(i)[2]);
 			dto.setCategory(((BigDecimal) list.get(i)[3]).intValue());
-			dto.setApplyStartDate((Date)list.get(i)[10]);	
-			dto.setApplyEndDate((Date)list.get(i)[11]);	
-			dto.setStartDate((Date)list.get(i)[7]);	
-			dto.setEndDate((Date)list.get(i)[8]);	
-			dto.setImgPath((String)list.get(i)[6]);
+			dto.setApplyStartDate((Date) list.get(i)[10]);
+			dto.setApplyEndDate((Date) list.get(i)[11]);
+			dto.setStartDate((Date) list.get(i)[7]);
+			dto.setEndDate((Date) list.get(i)[8]);
+			dto.setImgPath((String) list.get(i)[6]);
 			dto.setPrice(((BigDecimal) list.get(i)[9]).intValue());
 			lesson.add(dto);
 		}
 		return lesson;
 	}
-	
-	
 
 	/**
 	 * 수업 이름 검색
@@ -492,8 +531,30 @@ public class LessonService {
 		}
 		return lesson;
 	}
-	
-	
+
+	/**
+	 * 승인 거절된 수업(튜티기준)
+	 * 
+	 * @author moonone
+	 * @param userId
+	 * @return
+	 * @throws FindException
+	 */
+	public List<LessonDTO.notYetLessonBytutee> rejectApply(String userId) throws FindException {
+		List<Object[]> Llist = lRepository.rejectLesson(userId);
+		List<LessonDTO.notYetLessonBytutee> dto = new ArrayList<>();
+		for (int i = 0; i < Llist.size(); i++) {
+			UsersDTO uDTO = new UsersDTO();
+			LessonDTO.notYetLessonBytutee lDTO = new LessonDTO.notYetLessonBytutee();
+			AppliedLessonDTO.selectAppliedLessonDTO aDTO = new AppliedLessonDTO.selectAppliedLessonDTO();
+			uDTO.setUserId((String) userId);
+			lDTO.setLessonName((String) Llist.get(i)[0]);
+			aDTO.setUsersDTO(uDTO);
+			lDTO.setAlDTO(aDTO);
+			dto.add(lDTO);
+		}
+		return dto;
+	}
 
 	/**
 	 * [메인페이지] 신청종료날짜 임박순으로 list를 출력한다.
