@@ -2,9 +2,9 @@ package com.developer.roomreview.repository;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.developer.roomreview.entity.RoomReview;
 
@@ -26,7 +26,7 @@ public interface RoomReviewRepository extends JpaRepository<RoomReview, Long> {
 			+ "		and s.sr_seq = r.sr_seq\r\n"
 			+ "		and s.sr_seq= :srSeq\r\n"
 			+ "		order by rev.cdate DESC", nativeQuery = true)
-	public List<Object[]> findBySrSeq(@Param("srSeq") Long srSeq);
+	public List<Object[]> findBySrSeq1(@Param("srSeq") String srSeq);
 	
 	/**
 	 * [마이페이지 스터디카페 후기페이지] 유저 아이디로 작성한 이용후기 목록을 출력한다
@@ -34,8 +34,8 @@ public interface RoomReviewRepository extends JpaRepository<RoomReview, Long> {
 	 * @param userId 유저아이디 
 	 * @return List<Object[]> 유저의 작성한 이용후기 전체목록
 	 */
-	@Query(value="SELECT s.name AS srName, rif.name AS riName, rr.cdate,\r\n"
-			+ "		rr.star\r\n"
+	@Query(value="SELECT s.name AS srName, rif.name AS riName, rr.cdate, \r\n"
+			+ "		rr.star, rr.content\r\n"
 			+ "		FROM studyroom s, room_info rif, reservation r, room_review rr\r\n"
 			+ "		WHERE s.sr_seq = rif.sr_seq\r\n"
 			+ "		AND rif.room_seq = r.room_seq\r\n"

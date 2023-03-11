@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.UUID;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,9 +51,9 @@ public class JoinController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-
 	/**
 	 * 호스트 회원가입
+	 * 
 	 * @author Jin
 	 * @param hostDTO
 	 * @return
@@ -65,6 +67,7 @@ public class JoinController {
 
 	/**
 	 * 사용자 회원가입
+	 * 
 	 * @author Jin
 	 * @param usersDTO
 	 * @return
@@ -76,9 +79,13 @@ public class JoinController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-
 	/**
+<<<<<<< HEAD
 	 * 통합아이디 중복체크 (true중복, false사용가능)
+=======
+	 * 사용자 아이디 중복체크(수정예정)
+	 * 
+>>>>>>> a9ab2b216d12e2b1216b131b808c9035aea6bd6e
 	 * @author Jin
 	 * @param userId
 	 * @param session
@@ -155,7 +162,7 @@ public class JoinController {
 	 */
 	@PostMapping(value = "studyroom")
 	public ResponseEntity<?> addCafe(StudyroomDTO studyroomDTO, // 파일이랑 리퀘스트바디랑 같이 못씀
-			HttpSession session, MultipartFile f) throws AddException {
+			HttpSession session, @RequestPart MultipartFile f) throws AddException {
 
 		// TODO 시간 정규표현식 설정해보기..프론트단이든...뭐든..
 		String hostId = (String) session.getAttribute("hostLogined");
@@ -171,8 +178,9 @@ public class JoinController {
 
 			logger.error("값:" + hostId);
 
-			// 결합
-			String fName = hostId + "_" + fOrigin;
+			// imgPath 결합
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
 
 			// 파일저장
 			fileName = fName;
@@ -251,9 +259,5 @@ public class JoinController {
 	         return map;
 	      }
 	   }
-	
-	
-	
-	
 
 }

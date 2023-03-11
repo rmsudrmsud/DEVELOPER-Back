@@ -121,6 +121,7 @@ public class LessonDTO {
 		private String lessonName;
 		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
+		
 	}
 
 	// [JH}
@@ -264,5 +265,6 @@ public class LessonDTO {
 		private Integer category;
 		private Integer people;
 	}
+
 
 }
