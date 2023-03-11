@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.exception.FindException;
 import com.developer.users.dto.UsersDTO;
-import com.developer.users.entity.Users;
 import com.developer.users.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
@@ -79,6 +78,7 @@ public class UsersController {
 		return "";
 	}
 	
+
 	/**
 	 * 아이디 찾기
 	 * @author choigeunhyeong
@@ -90,5 +90,20 @@ public class UsersController {
 	public ResponseEntity<?> findId(String email) throws FindException{
 		UsersDTO.uDTO usersDTO= uService.findId(email);
 		return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+	}
+	
+	/**
+	 * [USERS] 비밀번호 찾기(비밀번호변경) - 메일포함 
+	 * @author SR
+	 * @param email
+	 * @param userId
+	 * @return 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴
+	 * @throws Exception
+	 */
+	@PostMapping(value="searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean userUpdatePwd(String email, String userId) throws Exception { 
+		boolean check = uService.userPwdAndEmailCheck(email, userId);
+		return check;
+
 	}
 }

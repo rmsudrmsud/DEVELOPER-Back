@@ -49,7 +49,7 @@ public class StudyroomController {
 	 * @param srNameAddrName, searchBy, person, orderBy
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
-	@GetMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getListBySearch(@RequestParam String srNameAddrName, @RequestParam Integer searchBy,
 			@RequestParam Integer person, @RequestParam Integer orderBy) throws FindException {
 
@@ -57,7 +57,13 @@ public class StudyroomController {
 				orderBy);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-
+	/**
+	 * [스터디카페 메인] 스터디카페 리스트를 출력한다
+	 * 
+	 * @author ds
+	 * @param List<StudyroomDTO.StudyroomSelectBySearchDTO> 
+	 * @throws 전체정보 출력시 FindException예외발생한다
+	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getListALL() throws FindException {
 		List<StudyroomDTO.StudyroomSelectBySearchDTO> list = sService.selectListALL();
@@ -65,15 +71,19 @@ public class StudyroomController {
 	}
 
 	/**
-	 * 스터디룸 패키지로 들어가야됨 url 시작이 studyroom [Reservation] 예약정보를 예약테이블에 넣어 예약내역에 insert
+	 * [Reservation] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * 
 	 * @author ds
 	 * @throws 전체정보 출력시 AddException예외발생한다
 	 */
-	@PostMapping(value = "roominfo/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "roominfo/reservation")
 	public ResponseEntity<?> reserve(@RequestBody ReservationDTO.insertRvDTO rDTO, HttpSession session)
 			throws AddException {
+		
+		
 		String logined = (String) session.getAttribute("logined");
+		
+		System.out.println("세션아이디는:"+logined);
 		if (logined != null) {
 			rService.insertRv(rDTO, logined);
 			return new ResponseEntity<>(rDTO, HttpStatus.OK);
@@ -86,7 +96,7 @@ public class StudyroomController {
 
 	/**
 	 * [Reservation] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
-	 * 
+	 * [Studyroom] 스터디카페 예약일 조회시 예약 내역이 없을 경우 예약을 위한 룸정보(오픈시간, 마감시간, 가격) 출력
 	 * @author ds
 	 * @param roomSeq   스터디룸 시퀀스
 	 * @param usingDate 예약일
@@ -97,25 +107,30 @@ public class StudyroomController {
 	@GetMapping(value = "roominfo/reservation/{roomSeq}")
 	public ResponseEntity<?> getReservablity(@PathVariable Long roomSeq, String usingDate)
 			throws FindException, ParseException {
+		
 		List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
-		return new ResponseEntity<>(list, HttpStatus.OK);
+		
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		
 	}
 
 	/**
-	 * Controller 3개 합친거 [RoomInfo] 스터디룸 시퀀스를 받아 스터디카페의 스터디룸 리스트를 출력한다
-	 * [RoomReview]특정 스터디룸 후기 리스트 전체출력 [Studyroom] Studyroom 객체 1개의 상세정보 출력.
+	 * Controller 3개 합친거 
+	 * [RoomInfo] 스터디룸 시퀀스를 받아 스터디카페의 스터디룸 리스트를 출력한다
+	 * [RoomReview]특정 스터디카페 후기 리스트 전체출력 
+	 * [Studyroom] Studyroom 객체 1개의 상세정보 출력.
 	 * 
 	 * @author ds
 	 * @param srSeq 스터디카페 시퀀스(장소번호)
-	 * @return List<RoomInfoVO> 특정스터디카페 전체정보들(방여러개)
+	 * @return 스터디룸 리스트, 스터디카페 후기리스트, 스터디카페 정보
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
 	@GetMapping(value = "roominfo/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getAll(@PathVariable Long srSeq) throws FindException {
 		StudyroomDTO.StudyroomRoomInfoPageDTO dto = new StudyroomDTO.StudyroomRoomInfoPageDTO();
 
-		StudyroomDTO object = sService.selectStudyroom(srSeq);
-		List<RoomInfoDTO> list1 = riService.selectAll(srSeq);
+		StudyroomDTO object = sService.getStudyroomDetail(srSeq);
+		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> list1 = riService.selectAll(srSeq);
 		List<RoomReviewDTO.RoomReviewSelectAllDTO> list2 = rrservice.selectAll(srSeq);
 		dto.setStudyroomDTO(object);
 		dto.setRoominfoDTO(list1);

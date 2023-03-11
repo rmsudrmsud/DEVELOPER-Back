@@ -162,4 +162,5 @@ public class LessonController {
 		flService.delFavLesson(favLesSeq);
 		return new ResponseEntity<>("즐겨찾기 삭제됨", HttpStatus.OK);
 	}
+
 }

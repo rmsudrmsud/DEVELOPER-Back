@@ -43,7 +43,7 @@ public class RoomInfo {
 	@Column(name = "room_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROOM_SEQ_GENERATOR" // 위의 sequence 이름
 	)
-	private long roomSeq;
+	private Long roomSeq;
 
 	@NotNull
 	@Column(name = "name")
