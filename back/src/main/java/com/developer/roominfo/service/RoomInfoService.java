@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.entity.RoomInfo;
@@ -202,11 +203,13 @@ public class RoomInfoService {
 	 * @return 특정스터디카페 전체정보들(방여러개)
 	 * @throws 전체정보 출력시 FindException예외발생한다
 	 */
-	public List<RoomInfoDTO> selectAll(Long srSeq) throws FindException {
+	public List<RoomInfoDTO.RoomInfoRoomDetailListDTO> selectAll(Long srSeq) throws FindException {
 		List<Object[]> list = riRepository.selectAll(srSeq);
-		List<RoomInfoDTO> dto = new ArrayList<>();
+		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> dto = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
-			RoomInfoDTO riDTO = new RoomInfoDTO();
+			RoomInfoDTO.RoomInfoRoomDetailListDTO riDTO = new RoomInfoDTO.RoomInfoRoomDetailListDTO();
+			StudyroomDTO.StudyroomHostIdDTO shDTO = new StudyroomDTO.StudyroomHostIdDTO();
+			HostUserDTO.HostIdDTO hhDTO = new HostUserDTO.HostIdDTO();
 			BigDecimal room_seq = (BigDecimal) list.get(i)[0];
 			Long resultRoomSeq = room_seq.longValue();
 			riDTO.setRoomSeq(resultRoomSeq);
@@ -216,7 +219,12 @@ public class RoomInfoService {
 			riDTO.setName((String) list.get(i)[3]);
 			riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
-
+			
+			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
+			hhDTO.setHostId((String)list.get(i)[8]);
+			
+			shDTO.setHostIdDTO(hhDTO);
+			riDTO.setStudyroomDTO(shDTO);
 			dto.add(riDTO);
 		}
 		return dto;

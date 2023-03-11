@@ -135,7 +135,7 @@ public class ReservationService {
 	}
 
 	/**
-	 * 포스트맨 성공 [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
+	 * [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
 	 * 
 	 * @author ds
 	 * @throws 전체정보 출력시 FindException예외발생한다
@@ -190,7 +190,7 @@ public class ReservationService {
 	}
 
 	/**
-	 * 포스트맨 성공 [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
+	 * [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
 	 * 
 	 * @author ds
 	 * @param roomSeq   스터디룸 시퀀스
@@ -258,8 +258,7 @@ public class ReservationService {
 	}
 
 	/**
-	 * 후기관련이지만 쿼리상 reservation 테이블이 메인 [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를
-	 * 출력한다
+	 * [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를 출력한다
 	 * 
 	 * @author ds
 	 * @param userId
