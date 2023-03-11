@@ -196,37 +196,37 @@ public class RoomInfoService {
 	}
 
 	/**
-	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
-	 * 
-	 * @author ds
-	 * @param srSeq 스터디카페 시퀀스(장소번호)
-	 * @return 특정스터디카페 전체정보들(방여러개)
-	 * @throws 전체정보 출력시 FindException예외발생한다
-	 */
-	public List<RoomInfoDTO.RoomInfoRoomDetailListDTO> selectAll(Long srSeq) throws FindException {
-		List<Object[]> list = riRepository.selectAll(srSeq);
-		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> dto = new ArrayList<>();
-		for (int i = 0; i < list.size(); i++) {
-			RoomInfoDTO.RoomInfoRoomDetailListDTO riDTO = new RoomInfoDTO.RoomInfoRoomDetailListDTO();
-			StudyroomDTO.StudyroomHostIdDTO shDTO = new StudyroomDTO.StudyroomHostIdDTO();
-			HostUserDTO.HostIdDTO hhDTO = new HostUserDTO.HostIdDTO();
-			BigDecimal room_seq = (BigDecimal) list.get(i)[0];
-			Long resultRoomSeq = room_seq.longValue();
-			riDTO.setRoomSeq(resultRoomSeq);
-			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
-			riDTO.setImgPath((String) list.get(i)[1]);
-			riDTO.setInfo((String) list.get(i)[2]);
-			riDTO.setName((String) list.get(i)[3]);
-			riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
-			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
-			
-			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
-			hhDTO.setHostId((String)list.get(i)[8]);
-			
-			shDTO.setHostIdDTO(hhDTO);
-			riDTO.setStudyroomDTO(shDTO);
-			dto.add(riDTO);
-		}
-		return dto;
-	}
+	    * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
+	    * 
+	    * @author ds
+	    * @param srSeq 스터디카페 시퀀스(장소번호)
+	    * @return 특정스터디카페 전체정보들(방여러개)
+	    * @throws 전체정보 출력시 FindException예외발생한다
+	    */
+	   public List<RoomInfoDTO.RoomInfoRoomDetailListDTO> selectAll(Long srSeq) throws FindException {
+	      List<Object[]> list = riRepository.selectAll(srSeq);
+	      List<RoomInfoDTO.RoomInfoRoomDetailListDTO> dto = new ArrayList<>();
+	      for (int i = 0; i < list.size(); i++) {
+	         RoomInfoDTO.RoomInfoRoomDetailListDTO riDTO = new RoomInfoDTO.RoomInfoRoomDetailListDTO();
+	         StudyroomDTO.StudyroomHostIdDTO shDTO = new StudyroomDTO.StudyroomHostIdDTO();
+	         HostUserDTO.HostIdDTO hhDTO = new HostUserDTO.HostIdDTO();
+	         BigDecimal room_seq = (BigDecimal) list.get(i)[0];
+	         Long resultRoomSeq = room_seq.longValue();
+	         riDTO.setRoomSeq(resultRoomSeq);
+	         riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
+	         riDTO.setImgPath((String) list.get(i)[1]);
+	         riDTO.setInfo((String) list.get(i)[2]);
+	         riDTO.setName((String) list.get(i)[3]);
+	         riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
+	         riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
+	         
+	         riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
+	         hhDTO.setHostId((String)list.get(i)[8]);
+	         
+	         shDTO.setHostIdDTO(hhDTO);
+	         riDTO.setStudyroomDTO(shDTO);
+	         dto.add(riDTO);
+	      }
+	      return dto;
+	   }
 }
