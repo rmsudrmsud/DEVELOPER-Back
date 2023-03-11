@@ -64,7 +64,7 @@ public class FavoritesLessonService {
 	 * @param lessonSeq 수업번호
 	 * @throws AddException
 	 */
-	public void addFavLesson(FavoritesLessonDTO.favoritesLessonDTO flDTO, Long lessonSeq, String userId)
+	public void addFavLesson(Long lessonSeq, String userId)
 			throws AddException {
 		Optional<Lesson> l = lRepository.findById(lessonSeq);
 		Optional<Users> u = uRepository.findByUserId(userId);

@@ -131,10 +131,10 @@ public class LessonController {
 		LessonDTO.lessonDetailDTO result = new lessonDetailDTO();
 
 		selectDetailDTO lessonDto = lservice.selectDetail(lessonSeq);
-				
+
 		Integer cnt = lrservice.cntReview(lessonDto.getTDTO().getTutorId());
 		result.setCnt(cnt);
-		
+
 		result.setLessonDto(lessonDto);
 		return new ResponseEntity<LessonDTO.lessonDetailDTO>(result, HttpStatus.OK);
 	}
@@ -176,7 +176,8 @@ public class LessonController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "apply/{lessonSeq}")
-	public ResponseEntity<?> applyLesson(HttpSession session, @PathVariable Long lessonSeq) throws AddException, FindException {
+	public ResponseEntity<?> applyLesson(HttpSession session, @PathVariable Long lessonSeq)
+			throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
 		alService.applyLesson(lessonSeq, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -191,16 +192,13 @@ public class LessonController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "favoriteslesson/{lessonSeq}", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<?> add(@RequestBody FavoritesLessonDTO.favoritesLessonDTO flDTO, HttpSession session,
-			@PathVariable Long lessonSeq)
+	public ResponseEntity<?> add(HttpSession session, @PathVariable Long lessonSeq)
 			throws AddException, FindException, JsonMappingException, JsonProcessingException {
 		String userId = (String) session.getAttribute("logined");
-		if (userId != null) {
-			flService.addFavLesson(flDTO, lessonSeq, userId);
-			return new ResponseEntity<>("즐겨찾기 추가 완료", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("로그인하세요", HttpStatus.OK);
-		}
+
+		flService.addFavLesson(lessonSeq, userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 
 	/**
