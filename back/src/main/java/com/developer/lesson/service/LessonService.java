@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,16 +98,21 @@ public class LessonService {
 	 * @return LessonDTO List형태로 반환
 	 * @throws FindException
 	 */
-	public List<LessonDTO.GetLessonByUser3> getLessonByUser3(String tutorId) throws FindException {
-		List<Object[]> Llist = lRepository.getLessonByUser3(tutorId);
+	public List<LessonDTO.GetLessonByUser3> getLessonByUser3(String logined) throws FindException {
+		List<Object[]> Llist = lRepository.getLessonByUser3(logined);
 		List<LessonDTO.GetLessonByUser3> dto = new ArrayList<>();
 		for (int i = 0; i < Llist.size(); i++) {
 			TutorDTO.tutorDTO tDTO = new TutorDTO.tutorDTO();
 			LessonDTO.GetLessonByUser3 lDTO = new LessonDTO.GetLessonByUser3();
 			UsersDTO uDTO = new UsersDTO();
 			lDTO.setLessonName((String) Llist.get(i)[0]);
-			tDTO.setTutorId((String) tutorId);
-			uDTO.setUserId((String) tutorId);
+			
+			BigDecimal lessonSeq = (BigDecimal) Llist.get(i)[1];
+			Long resultLessonSeq = lessonSeq.longValue();
+			lDTO.setLessonSeq(resultLessonSeq);
+			
+			tDTO.setTutorId((String) logined);
+			uDTO.setUserId((String) logined);
 			tDTO.setUdto(uDTO);
 			lDTO.setTDTO(tDTO);
 			dto.add(lDTO);
@@ -461,4 +468,6 @@ public class LessonService {
 		return dto;
 	}
 
+
 }
+

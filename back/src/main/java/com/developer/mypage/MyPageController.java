@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.service.AppliedLessonService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
+import com.developer.exception.RemoveException;
 import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.favoriteslesson.service.FavoritesLessonService;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
@@ -207,18 +209,6 @@ public class MyPageController {
 	}
 	
 
-	/**
-	 * 진행완료된 수업 리스트 출력하기(개별페이지)
-	 * @author GH
-	 * @param tutorId
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value = "tutor/completed/{tutorId}" )
-	public ResponseEntity<?> getLessonByUser3(@PathVariable String tutorId) throws FindException{
-		List<LessonDTO.GetLessonByUser3> list = lService.getLessonByUser3(tutorId);
-		return new ResponseEntity<>(list, HttpStatus.OK);		
-	}
 	
 
 	/**
@@ -364,6 +354,7 @@ public class MyPageController {
    @GetMapping(value = "studyroom", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
    public ResponseEntity<?> getMyResHistoery(HttpSession session) throws FindException {
 	   String logined = (String) session.getAttribute("logined");
+	   System.out.println("세션아이디는: "+logined);
 	   if(logined!=null) {
 		   
 		   List<ReservationDTO.selectMyResHistoryDTO> list = rService.selectMyResHistory(logined);
@@ -502,7 +493,7 @@ public class MyPageController {
 	}
 	
   /**
-   * [AppliedLesson] 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록
+   * [AppliedLesson] 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록(후기가 없는사람)
    * 
    * @author choigeunhyeong
    * @param lessonSeq
@@ -510,8 +501,8 @@ public class MyPageController {
    * @throws FindException
    */
   @GetMapping(value = "tutor/completed/addreview/{lessonSeq}")
-  public ResponseEntity<?> selectClassAndTutee(@PathVariable Long lessonSeq) throws FindException {
-     List<UsersDTO.getNameDTO> list = alService.selectClassAndTutee(lessonSeq);
+  public ResponseEntity<?> noReivewTutee(@PathVariable Long lessonSeq) throws FindException {
+     List<UsersDTO.getNameDTO> list = alService.noReviewTutee(lessonSeq);
      return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
@@ -524,7 +515,7 @@ public class MyPageController {
    * @throws AddException
    */
   @PostMapping(value = "tutor/completed/addreview/{applySeqRv}")
-  public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv)
+  public ResponseEntity<?> addReview(@RequestBody UserReviewDTO.addReviewDTO addReviewDTO, @PathVariable Long applySeqRv)
         throws AddException {
      urService.addUserReview(addReviewDTO, applySeqRv);
      return new ResponseEntity<>(HttpStatus.OK);
@@ -550,6 +541,18 @@ public class MyPageController {
 	   dto.setCompletedlessonReviewDTO(reviewList);
 	   return new ResponseEntity<>(dto, HttpStatus.OK); 
   }
-
+	/**
+	 * [Reservation] 예약내역 1건을 삭제한다.
+	 * 
+	 * @author DS
+	 * @param resSeq
+	 * @param session
+	 * @return
+	 * @throws RemoveException
+	 */
+	@DeleteMapping(value = "studyroom/{resSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> ListReservation(@PathVariable long resSeq) throws RemoveException {
+		rService.deleteReservation(resSeq);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
-
