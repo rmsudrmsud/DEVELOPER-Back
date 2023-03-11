@@ -19,8 +19,7 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     JavaMailSender emailSender;
  
-   // public static final String ePw = createKey();
- 
+    //본인 인증(user)
     private MimeMessage createMessage(String to)throws Exception{
     	String ePw = createKey();
     	System.out.println("보내는 대상 : "+ to);
@@ -55,6 +54,44 @@ public class EmailServiceImpl implements EmailService{
     }
     
     
+  //튜터 승인 
+    private MimeMessage tutorOkMessage(String to)throws Exception{
+    	System.out.println("보내는 대상 : "+ to);
+        MimeMessage  message = emailSender.createMimeMessage();
+ 
+        message.addRecipients(RecipientType.TO, to);//보내는 대상
+        message.setSubject("[DEVELOPER] 튜터 승인 결과 알림");//제목
+ 
+        String msgg="";
+        msgg+= "<div style='margin:100px;'>";
+        msgg+= "<div style='text-align: center;'><h1> 당신의 가치를 높이는 곳, [DEVELOPER]입니다. </h1></div>";
+        msgg+= "<div style='text-align: center;'><h1> 먼저, DEVELOPER에 많은 관심을 가져 주셔서 감사합니다. </h1></div>";
+        msgg+= "<br>";
+        msgg+= "<div style='text-align: center;'><p>아래의 승인 결과를 확인해주세요.</p>";
+        msgg+= "</div>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; background-color: #FFFACD; font-family:verdana';>";
+        msgg+= "<h3 style='color:blue;'> [DEVELOPER] 튜터 승인 신청 결과 </h3>";
+        msgg+= "<div style='font-size:130%; text-align: center;'>";
+        msgg+= "<p>심사가 진행되는 동안 기다려주셔서 감사합니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>귀하께서 작성해주신 내용을 검토한 결과,</p>";
+        msgg+= "<p>튜터심사가 <strong>승인</strong>되었음을 알려드립니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>앞으로도 변함없는 관심과 성원을 부탁드리며, 귀하와 성공적인 파트너 관계를 유지할 수 있기를 바랍니다.</p>";
+        msgg+= "<p>감사합니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>DEVELOPER 고객센터 올림</p>";
+        msgg+= "<div style='text-align: center; font-size:70%;'><p>고객센터 TEL: 031-000-0000</p>";
+        msgg+= "<br>";
+        msgg+= "</div>";
+       
+        message.setText(msgg, "utf-8", "html");//내용
+        message.setFrom(new InternetAddress("developer.kosta@gmail.com","DEVELOPER"));//보내는 사람
+        return message;
+    }
+    
+    //튜터 승인 거절
     private MimeMessage tutorRejectMessage(String to)throws Exception{
     	System.out.println("보내는 대상 : "+ to);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -74,7 +111,7 @@ public class EmailServiceImpl implements EmailService{
         msgg+= "<h3 style='color:blue;'> [DEVELOPER] 튜터 승인 신청 결과 </h3>";
         msgg+= "<div style='font-size:130%; text-align: center;'>";
         msgg+= "<p>귀하께서 작성해주신 내용을 검토한 결과,</p>";
-        msgg+= "<p>저희 모집요건에 부합하지 않아 튜터 승인심사가 반려되었음을 알려드립니다.</p>";
+        msgg+= "<p>저희 모집요건에 부합하지 않아 튜터 승인심사가 <strong>반려</strong>되었음을 알려드립니다.</p>";
         msgg+= "<p>자세한 사유는 고객센터에 문의바랍니다. </p>";
         msgg+= "<p>앞으로도 변함없는 관심과 성원을 부탁드리며, 언제든지 재신청이 가능한 점 알려드립니다. </p>";
         msgg+= "<br>";
@@ -88,7 +125,7 @@ public class EmailServiceImpl implements EmailService{
         return message;
     }
     
-    
+    //비밀번호찾기
     private MimeMessage updatePwdMessage(String to)throws Exception{
     	String ePw = createKey();
     	System.out.println("보내는 대상 : "+ to);
@@ -126,6 +163,46 @@ public class EmailServiceImpl implements EmailService{
 
     }
  
+    
+  //호스트 승인 
+    private MimeMessage hostOkMessage(String to)throws Exception{
+    	System.out.println("보내는 대상 : "+ to);
+        MimeMessage  message = emailSender.createMimeMessage();
+ 
+        message.addRecipients(RecipientType.TO, to);//보내는 대상
+        message.setSubject("[DEVELOPER] 호스트 승인 결과 알림");//제목
+ 
+        String msgg="";
+        msgg+= "<div style='margin:100px;'>";
+        msgg+= "<div style='text-align: center;'><h1> 당신의 가치를 높이는 곳, [DEVELOPER]입니다. </h1></div>";
+        msgg+= "<div style='text-align: center;'><h1> 먼저, DEVELOPER에 많은 관심을 가져 주셔서 감사합니다. </h1></div>";
+        msgg+= "<br>";
+        msgg+= "<div style='text-align: center;'><p>아래의 승인 결과를 확인해주세요.</p>";
+        msgg+= "</div>";
+        msgg+= "<br>";
+        msgg+= "<div align='center' style='border:1px solid black; background-color: #FFFACD; font-family:verdana';>";
+        msgg+= "<h3 style='color:blue;'> [DEVELOPER] 호스트 승인 신청 결과 </h3>";
+        msgg+= "<div style='font-size:130%; text-align: center;'>";
+        msgg+= "<p>심사가 진행되는 동안 기다려주셔서 감사합니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>귀하께서 작성해주신 내용을 검토한 결과,</p>";
+        msgg+= "<p>호스트회원 심사가 <strong>승인</strong>되었음을 알려드립니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>앞으로도 변함없는 관심과 성원을 부탁드리며, 귀하와 성공적인 파트너 관계를 유지할 수 있기를 바랍니다.</p>";
+        msgg+= "<p>감사합니다.</p>";
+        msgg+= "<br>";
+        msgg+= "<p>DEVELOPER 고객센터 올림</p>";
+        msgg+= "<div style='text-align: center; font-size:70%;'><p>고객센터 TEL: 031-000-0000</p>";
+        msgg+= "<br>";
+        msgg+= "</div>";
+       
+        message.setText(msgg, "utf-8", "html");//내용
+        message.setFrom(new InternetAddress("developer.kosta@gmail.com","DEVELOPER"));//보내는 사람
+        return message;
+    }
+    
+    
+    //호스트 승인 거절
     private MimeMessage hostRejectMessage(String to)throws Exception{
     	System.out.println("보내는 대상 : "+ to);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -145,7 +222,7 @@ public class EmailServiceImpl implements EmailService{
         msgg+= "<h3 style='color:blue;'> [DEVELOPER] 호스트 승인 신청 결과 </h3>";
         msgg+= "<div style='font-size:130%; text-align: center;'>";
         msgg+= "<p>귀하께서 작성해주신 내용을 검토한 결과,</p>";
-        msgg+= "<p>저희 모집요건에 부합하지 않아 호스트 승인심사가 반려되었음을 알려드립니다.</p>";
+        msgg+= "<p>저희 모집요건에 부합하지 않아 호스트회원 승인심사가 <strong>반려</strong>되었음을 알려드립니다.</p>";
         msgg+= "<p>자세한 사유는 고객센터에 문의바랍니다. </p>";
         msgg+= "<p>앞으로도 변함없는 관심과 성원을 부탁드리며, 언제든지 재신청이 가능한 점 알려드립니다. </p>";
         msgg+= "<br>";
@@ -191,8 +268,21 @@ public class EmailServiceImpl implements EmailService{
        try {// 예외처리
           emailSender.send(message);
           String msg = (String) message.getDescription();
-          System.out.println("서비스단 msg:" + msg);
+          //System.out.println("서비스단 키:" + msg);
           return msg;
+       } catch (MailException es) {
+          es.printStackTrace();
+          throw new IllegalArgumentException();
+       }
+    }
+    
+    
+  //튜터 승인 메일
+    @Override
+    public void tutorOk(String to) throws Exception {
+       MimeMessage message = tutorOkMessage(to);
+       try {// 예외처리
+          emailSender.send(message);
        } catch (MailException es) {
           es.printStackTrace();
           throw new IllegalArgumentException();
@@ -210,6 +300,19 @@ public class EmailServiceImpl implements EmailService{
           throw new IllegalArgumentException();
        }
     }
+    
+  //호스트 승인 메일
+    @Override
+    public void hostOk(String to) throws Exception {
+       MimeMessage message = hostOkMessage(to);
+       try {// 예외처리
+          emailSender.send(message);
+       } catch (MailException es) {
+          es.printStackTrace();
+          throw new IllegalArgumentException();
+       }
+    }
+    
     
   //호스트 승인 거절 메일
     @Override

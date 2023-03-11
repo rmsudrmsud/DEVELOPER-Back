@@ -141,16 +141,17 @@ public class HostUserService {
 	}
 
 	/**
-	 * 호스트 가입을 승인한다.
+	 * 호스트 가입을 승인한다. (메일 포함)
 	 * 
 	 * @author SR
 	 * @param hostId
-	 * @throws FindException
+	 * @throws FindException, Exception 
 	 */
-	public void readyOk(String hostId) throws FindException {
+	public void readyOk(String hostId) throws FindException, Exception {
 		Optional<HostUser> optHost = hRepository.findById(hostId);
 		HostUser hostEntity = optHost.get();
 		hostEntity.setReady(1);
+		emailService.hostOk(hostEntity.getEmail());
 		hRepository.save(hostEntity);
 	}
 
@@ -223,7 +224,7 @@ public class HostUserService {
 	 * @throws Exception
 	 */
 	public boolean hostPwdAndEmailCheck(String email, String hostId) throws Exception {
-		HostUser host = hRepository.hostPwdAndEmailCheck(email);
+		HostUser host = hRepository.hostEmailCheck(email);
         if(host!=null && host.getHostId().equals(hostId)) {
         	String temporaryPwd = emailService.updatePwd(email);
         	host.setPwd(temporaryPwd);
@@ -234,4 +235,22 @@ public class HostUserService {
             return false;
         }
 	}
+	
+	
+	/**
+	 * 본인인증 이메일 체크(가입여부확인)
+	 * @author SR
+	 * @param email
+	 * @return true: 신규가입가능 false: 신규가입불가
+	 */
+	public boolean hostEmailCheck(String email){
+		HostUser host = hRepository.hostEmailCheck(email);
+        if(host==null) {
+        	return true; //가입된 정보가 없음
+        }
+        else{
+            return false; //가입된 정보가 있음
+        }
+	}
+	
 }

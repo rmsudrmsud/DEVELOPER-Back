@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -182,16 +182,15 @@ public class AdminController {
 	}
 
 	/**
-	 * [Tutor] 튜터로 승인한다.
+	 * [Tutor]튜터로 승인한다.(승인메일 포함)
 	 * 
 	 * @author SR
 	 * @param userId
 	 * @return
-	 * @throws FindException
+	 * @throws FindException, Exception 
 	 */
-	@PatchMapping(value = "users/tutor/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> tutorApply(@PathVariable String userId) throws FindException {
-
+	@PutMapping(value = "users/tutor/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> tutorApply(@PathVariable String userId) throws FindException, Exception {
 		tService.tutorApply(userId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -230,16 +229,15 @@ public class AdminController {
 	}
 
 	/**
-	 * [HostUser] 미승인 호스트를 승인한다.
+	 * [HostUser] 미승인 호스트를 승인한다. (메일 포함)
 	 * 
 	 * @author SR
 	 * @param hostId
 	 * @return
-	 * @throws FindException
+	 * @throws FindException, Exception 
 	 */
-	@PatchMapping(value = "host/unapprove/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> hostOk(@PathVariable String hostId) throws FindException {
-
+	@PutMapping(value = "host/unapprove/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> hostOk(@PathVariable String hostId) throws FindException, Exception {
 		hService.readyOk(hostId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -255,7 +253,6 @@ public class AdminController {
 	 */
 	@PostMapping(value = "host/unapprove/{hostId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> hostReject(@PathVariable String hostId) throws FindException, Exception {
-
 		hService.deleteHost(hostId);
 		return new ResponseEntity<>(HttpStatus.OK);
 

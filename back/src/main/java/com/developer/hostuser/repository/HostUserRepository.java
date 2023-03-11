@@ -25,6 +25,6 @@ public interface HostUserRepository extends CrudRepository<HostUser, String> {
 	
 	//[SR] 호스트 비밀번호찾기용
 		@Query(value="select * from host_user where email = :email",nativeQuery= true)
-		public HostUser hostPwdAndEmailCheck(@Param("email") String email);
+		public HostUser hostEmailCheck(@Param("email") String email);
 
 }

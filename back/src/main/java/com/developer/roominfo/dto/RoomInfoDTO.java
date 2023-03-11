@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomInfoDTO {
-	private long roomSeq;
+	private Long roomSeq;
 	private String name;
 	private String info;
 	private String imgPath;
@@ -44,13 +44,15 @@ public class RoomInfoDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class selectAllRoomDTO {
-		private long roomSeq;
+		private Long roomSeq;
 		private String name;
 		private String info;
 		private String imgPath;
 		private Integer person;
 		private Integer price;
+		private StudyroomDTO.StudyroomTimeDTO studyroomTimeDTO;
 	}
+	
 
 	// SR: 예약목록/상세 출력용
 	@Data
