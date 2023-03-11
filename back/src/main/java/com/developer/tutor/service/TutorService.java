@@ -113,16 +113,17 @@ public class TutorService {
 	}
 
 	/**
-	 * 튜터로 승인한다.
+	 * 튜터로 승인한다.(승인메일 포함)
 	 * 
 	 * @author SR
 	 * @param userId
-	 * @throws FindException
+	 * @throws FindException, Exception 
 	 */
-	public void tutorApply(String tutorId) throws FindException {
+	public void tutorApply(String tutorId) throws FindException, Exception {
 		Optional<Tutor> optT = tRepository.findById(tutorId);
 		if (optT.isPresent()) {
 			Tutor entityT = optT.get();
+			emailService.tutorOk(entityT.getUsers().getEmail());
 			entityT.setApplyOk(1);
 			tRepository.save(entityT);
 		} else {

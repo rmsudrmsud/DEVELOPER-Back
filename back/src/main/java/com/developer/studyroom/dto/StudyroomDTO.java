@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyroomDTO {
-	private long srSeq;
+	private Long srSeq;
 	private String name;
 	private String addr;
 	private String info;
@@ -52,7 +52,7 @@ public class StudyroomDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class InsertStudyroomDTO {
-		private long srSeq;
+		private Long srSeq;
 		private String name;
 		private String addr;
 		private String info;
@@ -67,7 +67,7 @@ public class StudyroomDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class getHostAndStudyroomDTO {
-		private long srSeq;
+		private Long srSeq;
 		private String name;
 		private String addr;
 		private String info;

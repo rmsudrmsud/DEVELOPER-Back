@@ -34,7 +34,7 @@ public class ReservationDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class selectAllReservationDTO {
-		private long resSeq;
+		private Long resSeq;
 		private String startTime;
 		private String endTime;
 		@Temporal(TemporalType.DATE)

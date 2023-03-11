@@ -136,7 +136,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 			+ "                WHERE pay_lesson != 2"
 			+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD')"
 			+ "                ORDER BY end_date ASC)"
-			+ "WHERE rownum BETWEEN 1 AND 4", nativeQuery = true)
+			+ "WHERE rownum BETWEEN 1 AND 6", nativeQuery = true)
 	public List<Object[]> selectAllBydateLesson();
 	
 	//[DS]

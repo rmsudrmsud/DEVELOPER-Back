@@ -279,7 +279,7 @@ public class UsersService {
 	 * @throws Exception 
 	 */
 	public boolean userPwdAndEmailCheck(String email, String userId) throws Exception {
-		Users users = uRepository.userPwdAndEmailCheck(email);
+		Users users = uRepository.userEmailCheck(email);
         if(users!=null && users.getUserId().equals(userId)) {
         	String temporaryPwd = emailService.updatePwd(email);
 			users.setPwd(temporaryPwd);
@@ -292,5 +292,19 @@ public class UsersService {
 	}
 	
 	
-
+	/**
+	 * 본인인증 이메일 체크(가입여부확인)
+	 * @author SR
+	 * @param email
+	 * @return true: 신규가입가능 false: 신규가입불가
+	 */
+	public boolean userEmailCheck(String email){
+		Users users = uRepository.userEmailCheck(email);
+        if(users==null) {
+        	return true; //가입된 정보가 없음
+        }
+        else{
+            return false; //가입된 정보가 있음
+        }
+	}
 }

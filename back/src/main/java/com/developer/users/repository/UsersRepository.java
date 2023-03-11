@@ -38,9 +38,9 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 
 	// [SR] 미승인 튜터 목록
 	@Query(value = "SELECT u.user_id, u.name, u.nickname, u.email, u.tel "
-					+ "	FROM users u, tutor t "
-					+ "	WHERE u.user_id = t.user_id " 
-					+ "	AND apply_ok = 0", nativeQuery = true)
+			+ "FROM users u, tutor t "
+			+ "WHERE u.user_id = t.tutor_id "
+			+ "AND apply_ok = 0 ", nativeQuery = true)
 	public List<Object[]> selectAllUnapproveTutor();
 	
 	//ds
@@ -61,6 +61,6 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 	
 	//[SR] 비밀번호찾기용
 	@Query(value="select * from users where email = :email",nativeQuery= true)
-	public Users userPwdAndEmailCheck(@Param("email") String email);
+	public Users userEmailCheck(@Param("email") String email);
 	
 }
