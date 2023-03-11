@@ -258,6 +258,7 @@ public class UsersService {
 		Users u = uRepository.getUserdetail(userId);
 		UsersDTO dto = new UsersDTO();
 		dto.setUserId(u.getUserId());
+		dto.setRole(u.getRole());
 		dto.setAddr(u.getAddr());
 		dto.setEmail(u.getEmail());
 		dto.setName(u.getName());
@@ -266,5 +267,4 @@ public class UsersService {
 		dto.setTel(u.getTel());
 		return dto;
 	}
-
 }

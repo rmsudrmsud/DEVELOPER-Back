@@ -25,12 +25,11 @@ import com.developer.users.dto.UsersDTO;
 public class RoomReviewService {
 	@Autowired
 	private RoomReviewRepository rrRepository;
-	
 	@Autowired
 	private ReservationRepository rRepository;
 	
 	
-	/**포스트맨 성공
+	/**
 	 *  [마이페이지 스터디카페 후기페이지] 후기작성한다
 	 * @author ds
 	 * @param resSeq, content, star
@@ -46,9 +45,7 @@ public class RoomReviewService {
 		rrRepository.save(rr);
 	}
 
-
-
-	/**포스트맨 성공
+	/**
 	 *  [마이페이지 스터디카페 후기페이지]특정 스터디룸 후기 리스트 전체출력
 	 * @author ds
 	 * @param srSeq 스터디카페 시퀀스
@@ -56,7 +53,8 @@ public class RoomReviewService {
 	 */
 
 	public List<RoomReviewDTO.RoomReviewSelectAllDTO> selectAll(Long srSeq) throws FindException{
-		List<Object[]> list= rrRepository.findBySrSeq(srSeq);
+		List<Object[]> list= rrRepository.findBySrSeq1(String.valueOf(srSeq));
+		
 		List<RoomReviewDTO.RoomReviewSelectAllDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
 			RoomReviewDTO.RoomReviewSelectAllDTO rrDTO = new RoomReviewDTO.RoomReviewSelectAllDTO();
@@ -82,7 +80,7 @@ public class RoomReviewService {
 	}
 	
 
-	/**포스트맨 성공
+	/**
 	 * [마이페이지 스터디카페 후기페이지] 유저 아이디로 작성한 이용후기 목록을 출력한다
 	 * @author ds
 	 * @param userId 유저아이디 
@@ -93,6 +91,7 @@ public class RoomReviewService {
 		List<RoomReviewDTO.selectMyRmRvDTO> dto = new ArrayList<>();
 		for(int i=0; i<list.size();i++) {
 			RoomReviewDTO.selectMyRmRvDTO smDTO = new RoomReviewDTO.selectMyRmRvDTO();
+			smDTO.setContent((String)list.get(i)[4]);
 			smDTO.setCdate((Date)list.get(i)[2]);
 			smDTO.setStar(Integer.parseInt(String.valueOf(list.get(i)[3])));
 			ReservationDTO.RoomReviewSelectMyRmRvDTO resDTO = new ReservationDTO.RoomReviewSelectMyRmRvDTO();
@@ -108,15 +107,12 @@ public class RoomReviewService {
 		return dto;
 	}
 
-			
-			
-	
-/**
- * [마이페이지 스터디카페 후기페이지] 예약시퀀스를 받아 해당 후기상세출력한다
- * @author ds
- * @param resSeq 예약 시퀀스
- * @return RoomReviewDTO.selectMyRmRvDetailDTO 유저의 작성한 이용후기 상세정보
- */
+	/**
+	 * [마이페이지 스터디카페 후기페이지] 예약시퀀스를 받아 해당 후기상세출력한다
+	 * @author ds
+	 * @param resSeq 예약 시퀀스
+	 * @return RoomReviewDTO.selectMyRmRvDetailDTO 유저의 작성한 이용후기 상세정보
+	 */
 	public  List<RoomReviewDTO.selectMyRmRvDetailDTO> selectRmRvDetail(Long resSeq)throws FindException{
 		List<Object[]> list= rrRepository.getByResSeq(resSeq);
 		System.out.println("리스트사이즈는"+list.size());
@@ -127,17 +123,21 @@ public class RoomReviewService {
 			ReservationDTO.RoomReviewSelectMyRmRvDetailDTO resDTO = new ReservationDTO.RoomReviewSelectMyRmRvDetailDTO();
 			RoomInfoDTO.RoomInfoNameDTO rinDTO = new RoomInfoDTO.RoomInfoNameDTO();
 			StudyroomDTO.StudyroomNameDTO snDTO = new StudyroomDTO.StudyroomNameDTO();
-			rrDTO.setCdate((Date)list.get(0)[3]);
-			rrDTO.setStar(Integer.parseInt(String.valueOf(list.get(0)[4])));
-			rrDTO.setContent((String)list.get(0)[5]);
-			resDTO.setUsingDate((Date)list.get(0)[2]);
-			rinDTO.setName((String)list.get(0)[1]);
-			snDTO.setName((String)list.get(0)[0]);
-			rinDTO.setStudyroomNameDTO(snDTO);
-			resDTO.setRoomInfoNameDTO(rinDTO);
-			rrDTO.setRrsaDTO(resDTO);
-			dto.add(rrDTO);
-		
+			
+			for(int i=0; i<list.size();i++) {
+				
+				rrDTO.setCdate((Date)list.get(i)[3]);
+				rrDTO.setStar(Integer.parseInt(String.valueOf(list.get(i)[4])));
+				rrDTO.setContent((String)list.get(i)[5]);
+				resDTO.setUsingDate((Date)list.get(i)[2]);
+				rinDTO.setName((String)list.get(i)[1]);
+				snDTO.setName(String.valueOf(list.get(i)[0]));
+				rinDTO.setStudyroomNameDTO(snDTO);
+				resDTO.setRoomInfoNameDTO(rinDTO);
+				rrDTO.setRrsaDTO(resDTO);
+				dto.add(rrDTO);
+				
+			}
 		
 		return dto;
 		
