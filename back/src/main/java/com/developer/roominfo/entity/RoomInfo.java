@@ -34,53 +34,45 @@ import lombok.Setter;
 @DynamicInsert
 @DynamicUpdate
 
-@SequenceGenerator(
-name =
-"ROOM_SEQ_GENERATOR", // 사용할 sequence 이름
-sequenceName =
-"ROOM_SEQ", // 실제 데이터베이스 sequence 이름
-initialValue = 1, allocationSize = 1
-)
+@SequenceGenerator(name = "ROOM_SEQ_GENERATOR", // 사용할 sequence 이름
+		sequenceName = "ROOM_SEQ", // 실제 데이터베이스 sequence 이름
+		initialValue = 1, allocationSize = 1)
 public class RoomInfo {
 
 	@Id
-	@Column(name="room_seq")
-	@GeneratedValue(
-			strategy = GenerationType.SEQUENCE,
-			generator = "ROOM_SEQ_GENERATOR" // 위의 sequence 이름
-			)
+	@Column(name = "room_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ROOM_SEQ_GENERATOR" // 위의 sequence 이름
+	)
 	private long roomSeq;
-	
+
 	@NotNull
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
-	
+
 	@NotNull
-	@Column(name="info")
+	@Column(name = "info")
 	private String info;
-	
+
 	@NotNull
-	@Column(name="img_path")
+	@Column(name = "img_path")
 	private String imgPath;
-	
+
 	@NotNull
-	@Column(name="person")
+	@Column(name = "person")
 	private Integer person;
-	
+
 	@NotNull
-	@Column(name="price")
+	@Column(name = "price")
 	private Integer price;
 
-	@Column(name="status")
-	@ColumnDefault(value = "0") //0: 활성화, 1: 비활성화(삭제)
+	@Column(name = "status")
+	@ColumnDefault(value = "0") // 0: 활성화, 1: 비활성화(삭제)
 	private Integer status;
 
-	
-	
-	@ManyToOne//(cascade= {CascadeType.MERGE})
-	@JoinColumn(name="sr_seq", nullable = false)
+	@ManyToOne // (cascade= {CascadeType.MERGE})
+	@JoinColumn(name = "sr_seq", nullable = false)
 	private Studyroom studyroom;
-	
+
 	@OneToMany(mappedBy = "roominfo")
 	private List<Reservation> reservation;
 }

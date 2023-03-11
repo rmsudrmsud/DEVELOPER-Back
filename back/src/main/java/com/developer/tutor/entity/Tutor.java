@@ -22,30 +22,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="TUTOR")
-@DynamicInsert @DynamicUpdate
+@Table(name = "TUTOR")
+@DynamicInsert
+@DynamicUpdate
 
-@Getter @Setter
-@NoArgsConstructor 
+@Getter
+@Setter
+@NoArgsConstructor
 public class Tutor {
 	@Id
-	@Column(name="tutor_id")
+	@Column(name = "tutor_id")
 	private String tutorId;
-	@Column(name="info")
+	@Column(name = "info")
 	private String info;
-	@Column(name="img_path")
+	@Column(name = "img_path")
 	private String imgPath;
-	@Column(name="star_avg")
+	@Column(name = "star_avg")
 	private Double starAvg;
-	@Column(name="apply_ok")
+	@Column(name = "apply_ok")
 	private Integer applyOk;
-	
-	
-	
+
 	@MapsId("tutorId")
-	@OneToOne(optional = true, 
-						cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinColumn(name="tutor_id", nullable = true)
+	@OneToOne(optional = true, cascade = { CascadeType.MERGE })
+	@JoinColumn(name = "tutor_id", nullable = true)
 	private Users users;
 
 	@OneToMany(mappedBy = "tutor")

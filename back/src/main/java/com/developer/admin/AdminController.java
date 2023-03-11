@@ -171,7 +171,6 @@ public class AdminController {
 	 */
 	@GetMapping(value = "users/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> tutorUnapproveList() throws FindException {
-
 		List<UsersDTO.unapproveTutorDTO> list = uService.selectAllUnapproveTutor();
 		if (list.isEmpty()) {
 			return new ResponseEntity<>("미승인한 튜터가 없습니다", HttpStatus.BAD_REQUEST);

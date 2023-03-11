@@ -2,7 +2,6 @@ package com.developer.boardrep.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +15,18 @@ import com.developer.exception.ModifyException;
 import com.developer.exception.RemoveException;
 import com.developer.users.entity.Users;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BoardRepSerivce {
-	@Autowired
-	BoardRepRepository BoardRepRepository;
-	@Autowired
-	BoardRepository BoardRepository;
-	
+
+	private final BoardRepRepository BoardRepRepository;
+	private final BoardRepository BoardRepository;
+
 	/**
 	 * 게시판 댓글 작성
+	 * 
 	 * @author choigeunhyeong
 	 * @param boardRepDTO
 	 * @param postSeq
@@ -32,7 +34,7 @@ public class BoardRepSerivce {
 	 * @throws AddException
 	 */
 	@Transactional
-	public void addBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, Long postSeq, String logined) throws AddException{
+	public void addBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, Long postSeq, String logined) throws AddException {
 		BoardRep boardRep = new BoardRep();
 		Users writer = new Users();
 		Optional<Board> optB = BoardRepository.findById(postSeq);
@@ -42,39 +44,41 @@ public class BoardRepSerivce {
 		boardRep.setUsers(writer);
 		BoardRepRepository.save(boardRep);
 	}
-	
+
 	/**
 	 * 게시판 댓글 수정
+	 * 
 	 * @author choigeunhyeong
 	 * @param boardRepDTO
 	 * @param postRepSeq
 	 * @throws ModifyException
 	 */
 	@Transactional
-	public void editBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, Long postRepSeq) throws ModifyException{
-		
+	public void editBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, Long postRepSeq) throws ModifyException {
+
 		Optional<BoardRep> optBR = BoardRepRepository.findById(postRepSeq);
-		if(optBR.isPresent()) {
+		if (optBR.isPresent()) {
 			BoardRep br = optBR.get();
 			br.setContent(boardRepDTO.getContent());
 			BoardRepRepository.save(br);
-		}else {
+		} else {
 			throw new ModifyException("정상적인 수정이 되지 않았습니다.");
 		}
 	}
-	
+
 	/**
 	 * 게시판 댓글 삭제
+	 * 
 	 * @author choigeunhyeong
 	 * @param postRepSeq
 	 * @throws RemoveException
 	 */
-	public void deleteBoardRep(Long postRepSeq) throws RemoveException{
+	public void deleteBoardRep(Long postRepSeq) throws RemoveException {
 		Optional<BoardRep> optBR = BoardRepRepository.findById(postRepSeq);
-		if(optBR.isPresent()) {
+		if (optBR.isPresent()) {
 			BoardRepRepository.deleteById(postRepSeq);
-		}else {
-			 throw new RemoveException("정상적인 삭제가 되지 않았습니다.");
+		} else {
+			throw new RemoveException("정상적인 삭제가 되지 않았습니다.");
 		}
 	}
 }
