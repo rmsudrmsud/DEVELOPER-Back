@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.developer.email.EmailService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.hostuser.dto.HostUserDTO;
@@ -40,6 +45,7 @@ public class JoinController {
 	private final UsersService uService;
 	private final HostUserService hService;
 	private final StudyroomService sService;
+	private final EmailService emailService;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -72,7 +78,7 @@ public class JoinController {
 
 
 	/**
-	 * 사용자 아이디 중복체크 (true중복, false사용가능)
+	 * 통합아이디 중복체크 (true중복, false사용가능)
 	 * @author Jin
 	 * @param userId
 	 * @param session
@@ -80,8 +86,22 @@ public class JoinController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "users/check/{userId}")
-	public ResponseEntity<?> checkUserId(@PathVariable String userId, HttpSession session) throws FindException {
-		return ResponseEntity.ok(uService.existsByUserId(userId));
+	public boolean checkUserId(@PathVariable String userId, HttpSession session) throws FindException {
+		boolean check = false;
+		boolean check1 = false;
+		check1 = uService.existsByUserId(userId);
+		System.out.println("check1결과는"+check1);
+		boolean check2 = false;
+		String hostId = userId;
+		check2 = hService.existsByHostId(hostId);
+		System.out.println("check2결과는"+check2);
+		if(check1 == check2) {
+			check = false;
+		} else {
+			check = true;
+		}
+		return check;
+		
 	}
 	
 	/**
@@ -98,19 +118,6 @@ public class JoinController {
 	}
 	
 	/**
-	 * 호스트 아이디 중복체크 (true중복, false사용가능)
-	 * @author Jin
-	 * @param hostId
-	 * @param session
-	 * @return
-	 * @throws FindException
-	 */
-	@GetMapping(value = "hostuser/check/{hostId}")
-	public ResponseEntity<?> checkHostId(@PathVariable String hostId, HttpSession session) throws FindException{
-		return ResponseEntity.ok(hService.existsByHostId(hostId));
-	}
-	
-	/**
 	 * 호스트 이메일 중복체크 (true중복, false사용가능)
 	 * @author Jin
 	 * @param email
@@ -121,6 +128,19 @@ public class JoinController {
 	@GetMapping(value = "hostuser/checkemail/{email}")
 	public ResponseEntity<?> checkHostEmail(@PathVariable String email, HttpSession session) throws FindException{
 		return ResponseEntity.ok(hService.existsByHostEmail(email));
+	}
+	
+	/**
+	 * 호스트 사업자 번호 중복체크(true중복, false 사용가능)
+	 * @author Jin
+	 * @param num
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "hostuser/checknum/{num}")
+	public ResponseEntity<?> checkHostNum(@PathVariable String num, HttpSession session) throws FindException{
+		return ResponseEntity.ok(hService.existsByNum(num));
 	}
 
 	/**
@@ -186,5 +206,54 @@ public class JoinController {
 		}
 		return new ResponseEntity<>("오류", HttpStatus.BAD_REQUEST);
 	}
+	
+	
+	/**
+	    * [Email&Users] 본인인증 메일 : front에 반환한 인증 코드와 서버 터미널에 찍힌 인증 코드가 같은지 확인 필요함
+	    * 
+	    * @author SR
+	    * @param email
+	    * @return 난수값
+	    * @throws Exception
+	    */
+	   @PostMapping(value = "users/emailcheck") // get방식으로되는지 체크
+	   @ResponseBody
+	   public Map<String, Object> userEmailConfirm(@RequestParam String email) throws Exception {
+	      Map<String, Object> map = new HashMap<>();
+	      boolean check = uService.userEmailCheck(email);
+	      System.out.println("이메일존재여부: " + check);
+	      if (check == true) { // 기존의 가입된 정보가 없음(가입가능)
+	         String confirm = emailService.sendSimpleMessage(email);
+	         // System.out.println("컨트롤러 키:" + confirm);
+	         map.put("key", confirm);
+	         return map;
+	      } else {
+	         Object msg = "이미 가입된 이메일입니다.";
+	         map.put("error", msg);
+	         return map;
+	      }
+	   }
+
+	   @PostMapping(value = "host/emailcheck")
+	   @ResponseBody
+	   public Map<String, Object> emailConfirm(@RequestParam String email) throws Exception {
+	      Map<String, Object> map = new HashMap<>();
+	      boolean check = hService.hostEmailCheck(email);
+	      System.out.println("이메일존재여부: " + check);
+	      if (check == true) { // 기존의 가입된 정보가 없음(가입가능)
+	         String confirm = emailService.sendSimpleMessage(email);
+	         // System.out.println("컨트롤러 키:" + confirm);
+	         map.put("key", confirm);
+	         return map;
+	      } else {
+	         Object msg = "이미 가입된 이메일입니다.";
+	         map.put("error", msg);
+	         return map;
+	      }
+	   }
+	
+	
+	
+	
 
 }

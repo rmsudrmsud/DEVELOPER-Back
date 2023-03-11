@@ -16,7 +16,7 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
 	 * @param userId
 	 * @return
 	 */
-   @Query(value = " SELECT u.name"
+   @Query(value = " SELECT u.name, a.apply_seq"
    +" FROM USERS u, APPLIED_LESSON a, LESSON l"
    +" WHERE a.tutee_id = u.user_id"
    +" and a.apply_ok = 0"
@@ -31,7 +31,7 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
     * @param userId
     * @return
     */
-   @Query(value = " SELECT u.name"
+   @Query(value = " SELECT u.name, a.apply_seq"
    +" FROM USERS u, APPLIED_LESSON a, LESSON l"
    +" WHERE a.tutee_id = u.user_id"
    +" and a.apply_ok = 1"

@@ -1,6 +1,7 @@
 package com.developer.tutor.entity;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.lesson.entity.Lesson;
+import com.developer.orders.entity.Orders;
 import com.developer.users.entity.Users;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,4 +52,8 @@ public class Tutor {
 
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
+	
+	
+	@OneToMany(mappedBy = "tutor")
+	private List<Orders> orders;
 }

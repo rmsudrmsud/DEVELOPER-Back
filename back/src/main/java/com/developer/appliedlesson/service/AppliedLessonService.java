@@ -61,12 +61,12 @@ public class AppliedLessonService {
 	 * @throws FindException
 	 */
 	public void updateApplyLesson(Long applySeq) throws FindException {
-		AppliedLessonDTO.selectAppliedLessonDTO appliedLessonDTO = this.selectAppliedLesson(applySeq);
-		ModelMapper modelMapper = new ModelMapper();
-		appliedLessonDTO.setApplyOk(1);
-		AppliedLesson appliedLessonEntity = new AppliedLesson();
-		modelMapper.map(appliedLessonDTO, appliedLessonEntity);
-		alRepository.save(appliedLessonEntity);
+		Optional<AppliedLesson> optAl = alRepository.findById(applySeq);
+		if (optAl.isPresent()) {
+			AppliedLesson appliedLessonEntity = optAl.get();
+			appliedLessonEntity.setApplyOk(1);
+			alRepository.save(appliedLessonEntity);
+		}
 	}
 
 	/**
@@ -77,12 +77,12 @@ public class AppliedLessonService {
 	 * @throws FindException
 	 */
 	public void updateNotApplyLesson(Long applySeq) throws FindException {
-		AppliedLessonDTO.selectAppliedLessonDTO appliedLessonDTO = this.selectAppliedLesson(applySeq);
-		ModelMapper modelMapper = new ModelMapper();
-		appliedLessonDTO.setApplyOk(2);
-		AppliedLesson appliedLessonEntity = new AppliedLesson();
-		modelMapper.map(appliedLessonDTO, appliedLessonEntity);
-		alRepository.save(appliedLessonEntity);
+		Optional<AppliedLesson> optAl = alRepository.findById(applySeq);
+		if (optAl.isPresent()) {
+			AppliedLesson appliedLessonEntity = optAl.get();
+			appliedLessonEntity.setApplyOk(2);
+			alRepository.save(appliedLessonEntity);
+		}
 	}
 
 	/**
@@ -125,6 +125,9 @@ public class AppliedLessonService {
 			AppliedLessonDTO.NotYetUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.NotYetUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String) Alist.get(i)[0]);
+			BigDecimal applySeq = (BigDecimal) Alist.get(i)[1];
+			Long resultApplySeq = applySeq.longValue();
+			aDTO.setApplySeq(resultApplySeq);
 			aDTO.setApplyOk(0);
 			aDTO.setTuteeId((String) uDTO.getUserId());
 			lDTO.setLessonSeq(lessonSeq);
@@ -152,7 +155,9 @@ public class AppliedLessonService {
 			AppliedLessonDTO.ApproveUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.ApproveUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String) Alist.get(i)[0]);
-//			aDTO.setApplyOk(1);
+			BigDecimal applySeq = (BigDecimal) Alist.get(i)[1];
+			Long resultApplySeq = applySeq.longValue();
+			aDTO.setApplySeq(resultApplySeq);
 			aDTO.setTuteeId((String) uDTO.getUserId());
 			lDTO.setLessonSeq(lessonSeq);
 			aDTO.setUsersDTO(uDTO);

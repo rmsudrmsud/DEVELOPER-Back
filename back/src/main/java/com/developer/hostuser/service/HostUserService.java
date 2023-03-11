@@ -1,19 +1,16 @@
 package com.developer.hostuser.service;
 
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
-
 import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
@@ -92,7 +89,18 @@ public class HostUserService {
 	public boolean existsByHostEmail(String email) throws FindException{
 		return hRepository.existsByEmail(email);
 	}
-		
+	
+	/**
+	 * 호스트유저 사업자번호 중복체크
+	 * @author Jin
+	 * @param num
+	 * @return
+	 * @throws FindException
+	 */
+	public boolean existsByNum(String num) throws FindException{
+		return hRepository.existsByNum(num);
+	}
+	
 	/**
 	 * HostUser 상태값을 변환한다(탈퇴기능 ready=2).
 	 * 
@@ -226,5 +234,21 @@ public class HostUserService {
 		}
 		throw new FindException("아이디에 해당하는 고객이 없습니다");
 	}
+	
+   /**
+    * 본인인증 이메일 체크(가입여부확인)
+    * @author SR
+    * @param email
+    * @return true: 신규가입가능 false: 신규가입불가
+    */
+   public boolean hostEmailCheck(String email){
+      HostUser host = hRepository.hostEmailCheck(email);
+        if(host==null) {
+           return true; //가입된 정보가 없음
+        }
+        else{
+            return false; //가입된 정보가 있음
+        }
+   }
 
 }

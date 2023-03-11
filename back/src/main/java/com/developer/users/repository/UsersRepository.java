@@ -64,4 +64,8 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 	
 	//[JH]
 	public boolean existsByEmail(String email);
+	
+	//[SR] 비밀번호찾기용
+	@Query(value="select * from users where email = :email",nativeQuery= true)
+	public Users userEmailCheck(@Param("email") String email);
 }

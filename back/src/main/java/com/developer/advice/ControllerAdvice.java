@@ -60,7 +60,7 @@ public class ControllerAdvice {
 		
 		//xml의 cors설정은 컨트롤러관련된 설정!즉 컨트롤러만 적용! Advice는 적용이 안됨
 		//advice에서 설정은 추가해줘야 함.
-		headers.add("Access-Control-Allow-Origin", "http://192.168.0.20:5500"); //본인 IP적어줘야함
+		headers.add("Access-Control-Allow-Origin", "http://192.168.0.9:5500"); //본인 IP적어줘야함
 		headers.add("Access-Control-Allow-Credentials", "true");
 		return new ResponseEntity<>("파일크기가 초과되었습니다", headers, HttpStatus.BAD_REQUEST);
 	}

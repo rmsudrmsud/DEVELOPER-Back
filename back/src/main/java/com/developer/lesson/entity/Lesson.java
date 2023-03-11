@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -26,8 +27,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.favoriteslesson.entity.FavoritesLesson;
+import com.developer.orders.entity.Orders;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -111,6 +114,10 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
+	
+	
+	@OneToOne(mappedBy = "lesson")
+	private Orders order;
 }
 
 

@@ -52,7 +52,7 @@ public class AdminController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "host")
-	private ResponseEntity<?> selectAllHostUser() throws FindException {
+	public ResponseEntity<?> selectAllHostUser() throws FindException {
 		List<HostUser> list = hService.selectAll();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}

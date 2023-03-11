@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.developer.lesson.dto.LessonDTO;
 import com.developer.lesson.entity.Lesson;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
@@ -48,44 +49,54 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 			nativeQuery = true)
 	public List<Object[]> selectTutorDetail(@Param("userId") String userId);
 
+	//[JH]
+	@Query(value="SELECT l.lesson_name, l.lesson_seq"
+			+ " from LESSON l, TUTOR t, USERS u"
+			+ " where l.tutor_id = t.tutor_id"
+			+ " and t.tutor_id = u.user_id"
+			+ " and l.pay_lesson = 2"
+			+ " and TO_CHAR(SYSDATE,'yyyymmdd')<=l.end_date"
+			+ " and t.tutor_id = :logined"
+			+ " order by l.lesson_seq desc", nativeQuery = true)
+	public List<Object[]> unpaidLessonByUser(@Param("logined") String logined);
 	
 	//[JH]
-	@Query(value="	SELECT l.lesson_name"
+	@Query(value="	SELECT l.lesson_name, l.lesson_seq"
 			+ "	from LESSON l, TUTOR t, USERS u"
 			+ "	where l.tutor_id = t.tutor_id"
 			+ "	and t.tutor_id = u.user_id"
-			+ "	and u.user_id = :tutorId"
+			+ "	and u.user_id = :logined"
 			+ "	and TO_CHAR(SYSDATE,'yyyymmdd')<l.start_cdate"
 			+ "	order by l.lesson_seq desc",
 			nativeQuery = true)
-	public List<Object[]> getLessonByUser1(@Param("tutorId") String tutorId);
+	public List<Object[]> getLessonByUser1(@Param("logined") String logined);
 	
 	//[JH]
-	@Query(value="	SELECT l.lesson_name"
+	@Query(value="	SELECT l.lesson_name, l.lesson_seq"
 			+ "	from LESSON l, TUTOR t, USERS u"
 			+ "	where l.tutor_id = t.tutor_id"
 			+ "	and t.tutor_id = u.user_id"
-			+ "	and u.user_id = :tutorId"
+			+ "	and u.user_id = :logined"
 			+ "	and l.start_cdate<=TO_CHAR(SYSDATE,'yyyymmdd')"
 			+ " and TO_CHAR(SYSDATE,'yyyymmdd')<=l.end_cdate"
 			+ "	order by l.lesson_seq desc",
 			nativeQuery = true)
-	public List<Object[]> getLessonByUser2(@Param("tutorId") String tutorId);
+	public List<Object[]> getLessonByUser2(@Param("logined") String logined);
 	
 	//[JH]
-	@Query(value="	SELECT l.lesson_name"
+	@Query(value="	SELECT l.lesson_name, l.lesson_seq"
 			+ "	from LESSON l, TUTOR t, USERS u"
 			+ "	where l.tutor_id = t.tutor_id"
 			+ "	and t.tutor_id = u.user_id"
-			+ "	and u.user_id = :tutorId"
+			+ "	and u.user_id = :logined"
 			+ "	and TO_CHAR(SYSDATE,'yyyymmdd')>l.end_cdate"
 			+ "	order by l.lesson_seq desc",
 			nativeQuery = true)
-	public List<Object[]> getLessonByUser3(@Param("tutorId") String tutorId);
+	public List<Object[]> getLessonByUser3(@Param("logined") String logined);
 	
 	//[JH]
 	@Query(value= "	SELECT l.lesson_name, l.img_path, l.location, l.start_cdate, l.end_cdate,"
-			+ "	        l.category, l.people, u.name"
+			+ "	        l.category, l.people, u.name, l.lesson_seq"
 			+ "	FROM TUTOR t, LESSON l, USERS u"
 			+ "	WHERE u.user_id = t.tutor_id"
 			+ "	and t.tutor_id = l.tutor_id"
@@ -93,7 +104,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	public List<Object[]> getLessonDetail(@Param("lessonSeq") Long lessonSeq);
 	
 	//[JH]
-	@Query(value=" SELECT l.lesson_name"
+	@Query(value=" SELECT l.lesson_name, l.lesson_seq, a.apply_seq"
 			+ " from LESSON l, USERS u, APPLIED_LESSON a"
 			+ " where u.user_id = a.tutee_id"
 			+ " and l.lesson_seq = a.al_lesson_seq"
@@ -104,7 +115,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	public List<Object[]> getApplyLesson(@Param("userId") String userId);
 	
 	//[JH]
-	@Query(value=" SELECT l.lesson_name"
+	@Query(value=" SELECT l.lesson_name, l.lesson_seq, a.apply_seq"
 			+ " from LESSON l, USERS u, APPLIED_LESSON a"
 			+ " where u.user_id = a.tutee_id"
 			+ " and l.lesson_seq = a.al_lesson_seq"
@@ -115,7 +126,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	public List<Object[]> upComingLesson(@Param("userId") String userId);
 	
 	//[JH]
-	@Query(value=" SELECT l.lesson_name"
+	@Query(value=" SELECT l.lesson_name, l.lesson_seq"
 			+ " from LESSON l, USERS u, APPLIED_LESSON a"
 			+ " where u.user_id = a.tutee_id"
 			+ " and l.lesson_seq = a.al_lesson_seq"
@@ -144,4 +155,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 				+ "FROM (SELECT lesson_name, category, people FROM lesson ORDER BY lesson_seq DESC)\r\n"
 				+ "WHERE rownum BETWEEN 1 AND 5",nativeQuery = true)
 		public List<Object[]> selectClassList5();
+
 }

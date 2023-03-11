@@ -1,5 +1,9 @@
 package com.developer.lesson.control;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.service.AppliedLessonService;
@@ -28,10 +33,12 @@ import com.developer.lesson.dto.LessonDTO.lessonDetailDTO;
 import com.developer.lesson.dto.LessonDTO.selectDetailDTO;
 import com.developer.lesson.service.LessonService;
 import com.developer.lessonreview.service.LessonReviewService;
+import com.developer.util.Attach;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @RestController
 @RequestMapping("lesson/*")
@@ -52,11 +59,53 @@ public class LessonController {
 	 * @throws FindException
 	 */
 	@PostMapping(produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<LessonDTO> add(LessonDTO.selectDetailDTO dto, HttpSession session)
+	public ResponseEntity<?> add(LessonDTO.selectDetailDTO dto, 
+																		HttpSession session,
+																		MultipartFile f)
 			throws AddException, FindException {
+		
 		String userId = (String) session.getAttribute("logined");
-		lservice.addLessonDTO(dto, userId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		String saveDirectory = "C:\\dev\\lesson"; // 각자 주소로!
+		File saveDirFile = new File(saveDirectory);
+		System.out.println("userid는~~~"+userId);
+		
+		String fileName;
+		if(f != null && f.getSize()>0) {
+			long fSize = f.getSize();
+			String fOrigin = f.getOriginalFilename();
+			System.out.println("---파일---");
+			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
+			
+			//저장될 파일명에 tutorId값 더하기
+			String fName = "lesson_" + userId + "_" + fOrigin;
+			
+			//파일저장
+			fileName = fName;
+			File file = new File(saveDirFile, fileName);
+			
+			try {
+				Attach.upload(f.getBytes(), file);
+				
+				int width = 300;
+				int height = 300;
+				
+				// 원래 첨부파일과 구분짓기 위해
+				String thumbFileName = "t_" + fileName;
+				File thumbFile = new File(saveDirFile, thumbFileName);
+				FileOutputStream thumbnailOs = new FileOutputStream(thumbFile);
+				InputStream thumbnailsS = f.getInputStream();
+				
+				Thumbnailator.createThumbnail(thumbnailsS, thumbnailOs, width, height);
+				
+				dto.setImgPath(fileName);
+				System.out.println("dto는~~~"+dto.getContent());
+				lservice.addLessonDTO(dto, userId);
+				return new ResponseEntity<>(HttpStatus.OK);				
+			} catch (IOException e) {
+				throw new AddException(e.getMessage());
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	/**
