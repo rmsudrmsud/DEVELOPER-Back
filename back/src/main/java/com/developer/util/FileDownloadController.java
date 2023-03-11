@@ -21,12 +21,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("download/*")
 public class FileDownloadController {
 
-	
 	/**
+	 * 수업 파일 다운로드
+	 * 
 	 * @author SR
 	 * @param imgPath
-	 * @param type 첨부파일인 경우 1, 섬네일파일인 경우 2
-	 * @param opt 다운로드 방식: 무조건 다운로드인 경우 "attachment", 실행경우 "inline"
+	 * @param type    첨부파일인 경우 1, 섬네일파일인 경우 2
+	 * @param opt     다운로드 방식: 무조건 다운로드인 경우 "attachment", 실행경우 "inline"
 	 * @return
 	 * @throws FindException
 	 */
@@ -39,15 +40,15 @@ public class FileDownloadController {
 		if (type == 2) {
 			fileName = "t_";
 		}
-		fileName += imgPath; 
+		fileName += imgPath;
 		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
 		File file = null;
 
 		for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
 
 			String fn = f.getName();
-			//int lastIndex = fn.lastIndexOf(".");
-			//if (fn.substring(0, lastIndex).equals(fileName)) {
+			// int lastIndex = fn.lastIndexOf(".");
+			// if (fn.substring(0, lastIndex).equals(fileName)) {
 			if (fn.equals(fileName)) {
 				file = f;
 				fileName = f.getName();
@@ -79,9 +80,17 @@ public class FileDownloadController {
 			throw new FindException(e.getMessage());
 		}
 	}
-	
-	
-	//스터디룸 폴더에서 파일 꺼내오기
+
+	/**
+	 * 스터디룸 파일 다운로드
+	 * 
+	 * @author SR
+	 * @param imgPath
+	 * @param type
+	 * @param opt
+	 * @return
+	 * @throws FindException
+	 */
 	@GetMapping("studyroom")
 	public ResponseEntity<?> downloadCafe(String imgPath, int type, String opt) throws FindException {
 
@@ -91,14 +100,14 @@ public class FileDownloadController {
 		if (type == 2) {
 			fileName = "t_";
 		}
-		fileName += imgPath; 
+		fileName += imgPath;
 		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
 		File file = null;
 
 		for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
 
 			String fn = f.getName();
-			
+
 			if (fn.equals(fileName)) {
 				file = f;
 				fileName = f.getName();
@@ -130,55 +139,63 @@ public class FileDownloadController {
 			throw new FindException(e.getMessage());
 		}
 	}
-	
-	
-	//룸인포 폴더에서 파일 꺼내오기
-		@GetMapping("roominfo")
-		public ResponseEntity<?> downloadRoom(String imgPath, int type, String opt) throws FindException {
 
-			String saveDirectory = "C:\\dev\\roominfo";
+	/**
+	 * 룸인포폴더에서 파일 다운로드
+	 * 
+	 * @author tpfks
+	 * @param imgPath
+	 * @param type
+	 * @param opt
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping("roominfo")
+	public ResponseEntity<?> downloadRoom(String imgPath, int type, String opt) throws FindException {
 
-			String fileName = "";
-			if (type == 2) {
-				fileName = "t_";
-			}
-			fileName += imgPath; 
-			File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
-			File file = null;
+		String saveDirectory = "C:\\dev\\roominfo";
 
-			for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
+		String fileName = "";
+		if (type == 2) {
+			fileName = "t_";
+		}
+		fileName += imgPath;
+		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
+		File file = null;
 
-				String fn = f.getName();
-				
-				if (fn.equals(fileName)) {
-					file = f;
-					fileName = f.getName();
-					break;
-				}
-			}
-			if (file == null) {
-				throw new FindException(fileName + "으로 된 파일이 없습니다");
-			}
+		for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
 
-			try {
-				HttpHeaders headers = new HttpHeaders();
-				String contentType = Files.probeContentType(file.toPath()); // 파일의 형식
-				headers.add(HttpHeaders.CONTENT_TYPE, contentType);// 응답형식
-				headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length()); // 응답크기
+			String fn = f.getName();
 
-				if ("attachment".equals(opt)) {
-					headers.add(HttpHeaders.CONTENT_DISPOSITION,
-							"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
-				} else {
-					headers.add(HttpHeaders.CONTENT_DISPOSITION,
-							"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
-				}
-
-				byte[] bArr = FileCopyUtils.copyToByteArray(file);
-				ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
-				return re;
-			} catch (Exception e) {
-				throw new FindException(e.getMessage());
+			if (fn.equals(fileName)) {
+				file = f;
+				fileName = f.getName();
+				break;
 			}
 		}
+		if (file == null) {
+			throw new FindException(fileName + "으로 된 파일이 없습니다");
+		}
+
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			String contentType = Files.probeContentType(file.toPath()); // 파일의 형식
+			headers.add(HttpHeaders.CONTENT_TYPE, contentType);// 응답형식
+			headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length()); // 응답크기
+
+			if ("attachment".equals(opt)) {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+			} else {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+			}
+
+			byte[] bArr = FileCopyUtils.copyToByteArray(file);
+			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			throw new FindException(e.getMessage());
+		}
+	}
 }

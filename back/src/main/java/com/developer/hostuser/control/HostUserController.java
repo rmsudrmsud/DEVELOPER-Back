@@ -437,6 +437,7 @@ public class HostUserController {
 		}
 	}
 
+
 	/**
 	 * [Reservation] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
 	 * 

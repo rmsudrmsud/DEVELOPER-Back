@@ -30,7 +30,7 @@ class RoomInfoRepositoryTest {
 	@Test
 	@DisplayName("roominfo insert() 테스트")
 	void testSave() {
-		Optional<Studyroom>optS =srr.findById(1L);
+		Optional<Studyroom>optS =srr.findById(24L);
 		assertTrue(optS.isPresent());
 		Studyroom s = optS.get();
 		RoomInfo r = new RoomInfo();

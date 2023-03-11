@@ -188,6 +188,7 @@ public class HostUserService {
 		if(optH.isPresent()) {
 			HostUser hostuser = optH.get();			
 			HostUserDTO.HostLoginDTO hostLoginDTO = modelMapper.map(hostuser, HostUserDTO.HostLoginDTO.class);
+			System.out.println("호스트아이디는 "+HostId+"비밀번호는"+pwd);
 			if(hostLoginDTO.getPwd().equals(pwd) && !hostLoginDTO.getReady().equals(2)) {
 				hostLoginDTO.setPwd("");
 				return hostLoginDTO;
