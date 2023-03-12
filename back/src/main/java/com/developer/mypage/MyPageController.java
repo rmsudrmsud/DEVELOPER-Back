@@ -48,7 +48,6 @@ import com.developer.roomreview.service.RoomReviewService;
 import com.developer.userreview.dto.UserReviewDTO;
 import com.developer.userreview.service.UserReviewService;
 import com.developer.users.dto.UsersDTO;
-import com.developer.users.entity.Users;
 import com.developer.users.service.UsersService;
 import com.developer.util.Attach;
 
@@ -433,21 +432,6 @@ public class MyPageController {
 		uService.addUsers(uDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-//	/**
-//	 * 사용자 정보 수정하기(변경 예정..)
-//	 * @author Jin
-//	 * @param userId
-//	 * @param uDTO
-//	 * @return
-//	 * @throws FindException
-//	 * @throws AddException
-//	 */
-//	@PutMapping(value = "update/{userId}")
-//	public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody Users u) throws FindException, AddException{
-//		uService.updateUser(u);
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
 	
 
 	/**
