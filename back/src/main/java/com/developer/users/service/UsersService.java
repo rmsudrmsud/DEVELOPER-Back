@@ -51,7 +51,8 @@ public class UsersService {
 	 * @param users
 	 * @throws AddException
 	 */
-	public void updateUser(Users users) throws AddException{
+	public void updateUser(Users users, String userId) throws AddException{
+		uRepository.findById(userId);
 		uRepository.save(users);
 	}
 
