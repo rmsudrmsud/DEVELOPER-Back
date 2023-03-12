@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,9 +42,10 @@ public class BoardRepContorller {
 	 * @return
 	 * @throws AddException
 	 */
-	@PostMapping(value = "{postSeq}")
-	public ResponseEntity<?> addBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postSeq,
+	@PostMapping(value = "add/{postSeq}")
+	public ResponseEntity<?> addBoardRep(@PathVariable Long postSeq, @RequestBody BoardRepDTO.saveBoardRepDTO boardRepDTO,
 			HttpSession session) throws AddException {
+		System.out.println("postSeq:" + postSeq);
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
 			throw new AddException("로그인하세요");
@@ -62,7 +64,7 @@ public class BoardRepContorller {
 	 * @throws ModifyException
 	 */
 	@PutMapping(value = "{postRepSeq}")
-	public ResponseEntity<?> editBoardRep(BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postRepSeq)
+	public ResponseEntity<?> editBoardRep(@RequestBody BoardRepDTO.saveBoardRepDTO boardRepDTO, @PathVariable Long postRepSeq)
 			throws ModifyException {
 
 		BoardRepservice.editBoardRep(boardRepDTO, postRepSeq);

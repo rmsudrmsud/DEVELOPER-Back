@@ -2,8 +2,6 @@ package com.developer.studyroom.dto;
 
 import java.util.List;
 
-import javax.persistence.Temporal;
-
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.dto.HostUserDTO;
@@ -23,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyroomDTO {
-	private long srSeq;
+	private Long srSeq;
 	private String name;
 	private String addr;
 	private String info;
@@ -37,25 +35,25 @@ public class StudyroomDTO {
 	private HostUser hostUser;
 	@JsonIgnore
 	private FavoritesStudyroom favoritesStudyroom; // 원래 List<>
-	
-	//근형
+
+	// 근형
 	@Data
 	@NoArgsConstructor
-	public static class getAllStudyroomDTO{
+	public static class getAllStudyroomDTO {
 		private Long srSeq;
+		private String openTime;
+		private String endTime;
 		private String name;
 		private String addr;
 		private HostUserDTO.getAllHostUserDTO hostUser;
 	}
-	
-
 
 	// sr: 카페등록때 필요한 생성자
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class InsertStudyroomDTO {
-		private long srSeq;
+		private Long srSeq;
 		private String name;
 		private String addr;
 		private String info;
@@ -70,7 +68,7 @@ public class StudyroomDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class getHostAndStudyroomDTO {
-		private long srSeq;
+		private Long srSeq;
 		private String name;
 		private String addr;
 		private String info;
@@ -80,91 +78,93 @@ public class StudyroomDTO {
 		private Integer oc;
 		private HostUserDTO.getHostDTO hostUserDTO;
 	}
-	
+
 	// SR: 즐겨찾기목록용
-		@Data
-		@NoArgsConstructor
-		@AllArgsConstructor
-		public static class selectAllFavStudyroomDTO {
-			private String name;
-			private String addr;
-		}
-	
-	
-	//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomNameDTO{
-			private String name;
-		}
-		//ds
-		@Data
-		@NoArgsConstructor
-		public	static class StudyroomTimeDTO{
-			private String openTime;
-			private String endTime;
-		}
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomSelectBySearchDTO{
-			private Long srSeq;
-			private String name;
-			private String addr;
-			private String imgPath;
-			private Integer person;
-			private RoomInfoDTO.RoomInfoPriceAndPersonDTO roomInfoPriceAndPersonDTO;
-			private FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favoritesStudyroomUserIdDTO;
-			
-		}
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomNameAndUserDTO{
-			private String name;
-			private UsersDTO.UserNickNameDTO userNickNameDTO;
-		}
-		
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomSrSeqDTO{
-			private Long srSeq;
-		}
-		
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomList5DTO{
-			private Long srSeq;
-			private String name;
-			private HostUserDTO.HostIdDTO hostIdDTO;
-		}
-		
-		//ds
-		@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomRoomInfoPageDTO{
-			private List<RoomInfoDTO.RoomInfoRoomDetailListDTO> roominfoDTO;
-			private List<RoomReviewDTO.RoomReviewSelectAllDTO> roomReviewSelectAllDTO;
-			private StudyroomDTO studyroomDTO;
-		}
-		
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomHostIdDTO{
-			private HostUserDTO.HostIdDTO hostIdDTO;
-		}
-		
-		//ds
-		@Data
-		@NoArgsConstructor
-		public static class StudyroomAndRoomInfoDTO{
-			private String openTime;
-			private String endTime;
-			private RoomInfoDTO.RoomInfoPriceOnlyDTO roomInfoPriceDTO;
-			
-		}
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class selectAllFavStudyroomDTO {
+		private String name;
+		private String addr;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomNameDTO {
+		private String name;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomTimeDTO {
+		private String openTime;
+		private String endTime;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomSelectBySearchDTO {
+		private Long srSeq;
+		private String name;
+		private String addr;
+		private String imgPath;
+		private Integer person;
+		private RoomInfoDTO.RoomInfoPriceAndPersonDTO roomInfoPriceAndPersonDTO;
+		private FavoritesStudyroomDTO.favoritesStudyroomUserIdDTO favoritesStudyroomUserIdDTO;
+
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomNameAndUserDTO {
+		private String name;
+		private UsersDTO.UserNickNameDTO userNickNameDTO;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomSrSeqDTO {
+		private Long srSeq;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomList5DTO {
+		private Long srSeq;
+		private String name;
+		private HostUserDTO.HostIdDTO hostIdDTO;
+	}
+
+	// ds
+	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomRoomInfoPageDTO {
+		private List<RoomInfoDTO.RoomInfoRoomDetailListDTO> roominfoDTO;
+		private List<RoomReviewDTO.RoomReviewSelectAllDTO> roomReviewSelectAllDTO;
+		private StudyroomDTO studyroomDTO;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomHostIdDTO {
+		private HostUserDTO.HostIdDTO hostIdDTO;
+	}
+
+	// ds
+	@Data
+	@NoArgsConstructor
+	public static class StudyroomAndRoomInfoDTO {
+		private String openTime;
+		private String endTime;
+		private RoomInfoDTO.RoomInfoPriceOnlyDTO roomInfoPriceDTO;
+
+	}
 }

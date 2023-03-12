@@ -25,13 +25,15 @@ public interface RoomInfoRepository extends CrudRepository<RoomInfo, Long> {
 
 	// [SR]호스트마이페이지 - 가지고 있는 방 목록 출력
 	@Query(value = "SELECT rif.room_seq, rif.name, rif.info, rif.img_path, rif.person, rif.price, s.open_time, s.end_time "
-	         + "FROM studyroom s, room_info rif "
-	         + "where s.sr_seq = rif.sr_seq "
-	         + "AND s.host_id = :hostId "
-	         + "AND rif.status = 0 "
-	         + "ORDER BY rif.room_seq ASC", nativeQuery = true)
-	   public List<Object[]> selectAllRoom(@Param("hostId") String hostId);
+			+ "FROM studyroom s, room_info rif "
+			+ "where s.sr_seq = rif.sr_seq "
+			+ "AND s.host_id = :hostId "
+			+ "AND rif.status = 0 "
+			+ "ORDER BY rif.room_seq ASC", nativeQuery = true)
+	public List<Object[]> selectAllRoom(@Param("hostId") String hostId);
 
+
+	
 	/**
 	 * [스터디카페 정보 출력페이지] 스터디룸 시퀀스를 받아 스터디룸의 전체정보를 출력한다
 	 * 

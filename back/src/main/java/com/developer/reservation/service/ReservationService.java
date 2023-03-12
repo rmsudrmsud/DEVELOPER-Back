@@ -54,7 +54,7 @@ public class ReservationService {
 		for (int i = 0; i < rList.size(); i++) {
 			ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
 			BigDecimal resSeq = (BigDecimal) rList.get(i)[0];
-			long convertResSeq = resSeq.longValue();
+			Long convertResSeq = resSeq.longValue();
 			rDto.setResSeq(convertResSeq);
 			rDto.setUserId((String) rList.get(i)[2]);
 			rDto.setHostId((String) rList.get(i)[4]);
@@ -86,7 +86,7 @@ public class ReservationService {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<ReservationDTO.selectAllReservationDTO> infoReservation(long resSeq) throws FindException {
+	public List<ReservationDTO.selectAllReservationDTO> infoReservation(Long resSeq) throws FindException {
 
 		List<Object[]> rList = rRepository.selectReservation(resSeq);
 		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ReservationService {
 		for (int i = 0; i < rList.size(); i++) {
 			ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
 			BigDecimal resSeq1 = (BigDecimal) rList.get(i)[0];
-			long convertSeq = resSeq1.longValue();
+			Long convertSeq = resSeq1.longValue();
 			rDto.setResSeq(convertSeq);
 			rDto.setUserId((String) rList.get(i)[1]);
 			rDto.setUsingDate((Date) rList.get(i)[5]);
@@ -124,7 +124,7 @@ public class ReservationService {
 	 * @param resSeq
 	 * @throws RemoveException
 	 */
-	public void deleteReservation(long resSeq) throws RemoveException {
+	public void deleteReservation(Long resSeq) throws RemoveException {
 		Optional<Reservation> optR = rRepository.findById(resSeq);
 		if (optR.isPresent()) {
 			Reservation entityR = optR.get();
@@ -135,11 +135,7 @@ public class ReservationService {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
-=======
-	 * 포스트맨 성공 [스터디카페 예약페이지] 예약정보를 예약테이블에 넣어 예약내역에 insert
->>>>>>> 99c7d2952fb3698bfb163c3ecab17b6a739a0998
 	 * 
 	 * @author ds
 	 * @throws 전체정보 출력시 FindException예외발생한다
@@ -193,11 +189,7 @@ public class ReservationService {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
-=======
-	 * 포스트맨 성공 [스터디카페 예약페이지] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
->>>>>>> 99c7d2952fb3698bfb163c3ecab17b6a739a0998
 	 * 
 	 * @author ds
 	 * @param roomSeq   스터디룸 시퀀스
@@ -265,12 +257,7 @@ public class ReservationService {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를
-=======
-	 * 후기관련이지만 쿼리상 reservation 테이블이 메인 [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를
->>>>>>> 99c7d2952fb3698bfb163c3ecab17b6a739a0998
-	 * 출력한다
+	 * [마이페이지 스터디카페 후기페이지] 아이디값으로 후기를 작성하지 않은 예약리스트를 출력한다
 	 * 
 	 * @author ds
 	 * @param userId

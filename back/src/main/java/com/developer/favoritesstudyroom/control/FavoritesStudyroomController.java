@@ -31,8 +31,9 @@ public class FavoritesStudyroomController {
 
 	/**
 	 * [스터디카페 상세페이지]즐겨찾기 추가기능
+	 * 
 	 * @author ds
-	 * @param 
+	 * @param
 	 * @throws AddException
 	 */
 	@PostMapping(value = "add/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,8 +48,9 @@ public class FavoritesStudyroomController {
 
 	/**
 	 * [스터디카페 상세페이지]즐겨찾기 삭제기능
+	 * 
 	 * @author ds
-	 * @param 
+	 * @param
 	 * @throws RemoveException
 	 */
 	@DeleteMapping(value = "{srSeq}")
@@ -59,28 +61,28 @@ public class FavoritesStudyroomController {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
 	/**
 	 * [스터디카페 상세페이지]즐겨찾기 상태여부 확인기능
+	 * 
 	 * @author ds
 	 * @param session
 	 * @return
-	 * @throws FindException
-	 * 객체 1개 받는 컨트롤러/ 에러때문에 리스트로 변환해서 받음.
-	 */ 
-	@GetMapping(value="check")
-	public ResponseEntity<?> checkFavStudyroom(HttpSession session) throws FindException{
+	 * @throws FindException 객체 1개 받는 컨트롤러/ 에러때문에 리스트로 변환해서 받음.
+	 */
+	@GetMapping(value = "check")
+	public ResponseEntity<?> checkFavStudyroom(HttpSession session) throws FindException {
 		String logined = (String) session.getAttribute("logined");
 		if (logined != null) {
-			List<FavoritesStudyroomDTO.favStudyroomSrSeqDTO> list=fsService.getSrSeqAndFavSeq(logined);
-			if(list.size()>0) {
-				
+			List<FavoritesStudyroomDTO.favStudyroomSrSeqDTO> list = fsService.getSrSeqAndFavSeq(logined);
+			if (list.size() > 0) {
+
 				return new ResponseEntity<>(list, HttpStatus.OK);
-			}else {
+			} else {
 				return new ResponseEntity<>(HttpStatus.LENGTH_REQUIRED);
 			}
-					
 
-		}else {
+		} else {
 			return new ResponseEntity<>("로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
