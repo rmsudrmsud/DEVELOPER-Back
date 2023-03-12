@@ -32,6 +32,16 @@ class StudyroomRepositoryTest {
 	@Test
 	@DisplayName("Studyroom insert() 테스트")
 	void testSave() {
+<<<<<<< HEAD
+		Optional<HostUser>optH =hur.findById("아이디1");
+		assertTrue(optH.isPresent());
+		HostUser h = optH.get();
+		Studyroom s = new Studyroom();
+		s.setAddr("주소테스트");
+		s.setEndTime("10:00");
+		s.setOpenTime("01:00");
+		s.setName("스터디카페");
+=======
 		Optional<HostUser>optH =hur.findById("아이디10");
 		assertTrue(optH.isPresent());
 		HostUser h = optH.get();
@@ -40,6 +50,7 @@ class StudyroomRepositoryTest {
 		s.setEndTime("10:00");
 		s.setOpenTime("01:00");
 		s.setName("독고스터디카페");
+>>>>>>> a17bbc4b15abb5fd1a82dbbe90805ae698acaa4f
 		s.setImgPath("3.png");
 		s.setHostUser(h); //**필수설정!
 		srr.save(s);

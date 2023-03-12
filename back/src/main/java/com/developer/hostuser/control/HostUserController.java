@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,7 +31,6 @@ import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.RemoveException;
 import com.developer.hostuser.dto.HostUserDTO;
-import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.service.HostUserService;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.service.ReservationService;
@@ -297,8 +295,6 @@ public class HostUserController {
 
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
 
-				
-				
 				roomInfoDTO.setImgPath(fileName);
 				riService.insertRoom(roomInfoDTO, srSeq);
 				logger.info("파일업로드 성공");
@@ -351,15 +347,14 @@ public class HostUserController {
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
 			// 기존파일 삭제 TODO: 더나은 방법 찾아보기
-						RoomInfo ri = riService.selectRoomEntity(roomSeq);
-						String oldFileName = ri.getImgPath();
-						File oldFile = new File(saveDirFile, oldFileName);
+			RoomInfo ri = riService.selectRoomEntity(roomSeq);
+			String oldFileName = ri.getImgPath();
+			File oldFile = new File(saveDirFile, oldFileName);
 
-						if (oldFile.exists()) {
-							oldFile.delete();
-						}
-			
-			
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+
 			// imgPath 결합
 			UUID uuid = UUID.randomUUID();
 			String fName = uuid.toString() + "_" + fOrigin;
@@ -390,7 +385,7 @@ public class HostUserController {
 				if (oldthumbFile.exists()) {
 					oldthumbFile.delete();
 				}
-				
+
 				roomInfoDTO.setImgPath(fileName);
 				riService.updateRoom(roomSeq, roomInfoDTO);
 				logger.info("파일업로드 성공");
@@ -437,7 +432,6 @@ public class HostUserController {
 			return new ResponseEntity<>(list, HttpStatus.OK);
 		}
 	}
-
 
 	/**
 	 * [Reservation] 룸 시퀀스와 예약일을 받아 이미 예약된 예약정보에 대한 리스트를 출력한다
@@ -582,17 +576,18 @@ public class HostUserController {
 			return new ResponseEntity<>("호스트로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * 호스트 아이디 찾기
+	 * 
 	 * @author choigeunhyeong
 	 * @param num
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value="findhostid", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> findHostId(String num) throws FindException{
-		HostUserDTO hostDTO =  hService.findHostId(num);
+	@GetMapping(value = "findhostid", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findHostId(String num) throws FindException {
+		HostUserDTO hostDTO = hService.findHostId(num);
 		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
 	}
 

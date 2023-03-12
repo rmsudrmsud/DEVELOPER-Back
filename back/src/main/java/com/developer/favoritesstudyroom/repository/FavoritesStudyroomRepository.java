@@ -1,7 +1,6 @@
 package com.developer.favoritesstudyroom.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,7 +26,5 @@ public interface FavoritesStudyroomRepository extends CrudRepository<FavoritesSt
 	//DS
 	@Query(value="delete from favorites_studyroom where sr_seq= :srSeq And user_id = :userId", nativeQuery = true)
 	public void deleteFvstudyroom(@Param("srSeq") Long srSeq, @Param("userId") String userId);
-	
-	
-	
+		
 }

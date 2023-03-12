@@ -106,19 +106,19 @@ public class BoardDTO {
 		private Integer cnt;
 		private UsersDTO.selectAllBydateBoardDTO usersDTO;
 	}
-	
+
 	// 근형
-		@Data
-		@NoArgsConstructor
-		public static class editBoardDTO {
-			private String title;
-			private String content;
-			private String imgPath;
-			@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@Data
+	@NoArgsConstructor
+	public static class editBoardDTO {
+		private String title;
+		private String content;
+		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 //			@ColumnDefault(value = "SYSDATE")
-			private Date cDate;
-		}
-	
+		private Date cDate;
+	}
+
 //	@Data
 //	@NoArgsConstructor
 //	public static class PagebeanDTO{

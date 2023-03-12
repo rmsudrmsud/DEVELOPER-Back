@@ -2,10 +2,6 @@ package com.developer.users.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.board.dto.BoardDTO;
@@ -67,6 +63,7 @@ public class UsersDTO {
 	@NoArgsConstructor
 	public static class uNameDTO {
 		private String name;
+		private String tuteeId;
 	}
 
 	//[JW]

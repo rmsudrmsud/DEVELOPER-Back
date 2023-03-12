@@ -46,7 +46,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 @RequestMapping("board/*")
 @RequiredArgsConstructor
 public class BoardController {
-	
+
 	private final BoardService bService;
 	private final RecommendService rService;
 	private final BoardRepository bRepository;
@@ -61,23 +61,21 @@ public class BoardController {
 	 */
 
 	@PostMapping(value = "add")
-	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, 
-			HttpSession session,
-			@RequestPart(value="f", required=false) MultipartFile f)
-					throws AddException, FindException {
+	public ResponseEntity<?> addBoard(BoardDTO.saveBoardDTO saveBoardDTO, HttpSession session,
+			@RequestPart(value = "f", required = false) MultipartFile f) throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
 			throw new FindException("로그인하세요");
 		}
-		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
+		String savdDirectory = "/Users/choigeunhyeong/Documents/attach";
 		File saveDirFile = new File(savdDirectory);
 		String fileName = null;
-		
-		if(f != null && f.getSize()>0 ) {
+
+		if (f != null && f.getSize() > 0) {
 			String fOrigin = f.getOriginalFilename();
 			UUID uuid = UUID.randomUUID();
 			String fName = uuid.toString() + "_" + fOrigin;
-			
+
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
 			try {
@@ -86,16 +84,16 @@ public class BoardController {
 				// 섬네일파일 만들기 (비율맞춰서된다!)
 				int width = 300;
 				int height = 300;
-				
+
 				String thumbFileName = "t_" + fileName; // 섬네일파일명
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);
 				InputStream thumbnailIS = f.getInputStream();
-				
+
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
 				logger.info("파일업로드 성공");
 				saveBoardDTO.setImgPath(fileName);
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error("파일업로드 에러");
@@ -105,8 +103,7 @@ public class BoardController {
 		bService.addBoard(saveBoardDTO, logined);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
+
 	/**
 	 * 글 수정폼
 	 * 
@@ -135,9 +132,9 @@ public class BoardController {
 //		 return new ResponseEntity<>(bService.listBoard(currentPage),HttpStatus.OK);
 //	}
 	@GetMapping("/list")
-	public ResponseEntity<PageBean> list(String orderby, int currentPage) throws FindException{
-		
-		 return new ResponseEntity<>(bService.listBoard(orderby, currentPage),HttpStatus.OK);
+	public ResponseEntity<PageBean> list(String orderby, int currentPage) throws FindException {
+
+		return new ResponseEntity<>(bService.listBoard(orderby, currentPage), HttpStatus.OK);
 	}
 
 	/**
@@ -157,6 +154,7 @@ public class BoardController {
 
 	/**
 	 * 게시글 수정 !
+	 * 
 	 * @author choigeunhyeong
 	 * @param editBoardDTO
 	 * @param postSeq
@@ -166,82 +164,81 @@ public class BoardController {
 	 * @throws FindException
 	 * @throws ModifyException
 	 */
-	@PostMapping(value = "edit/{postSeq}",
-			 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<?> editBoard(BoardDTO.editBoardDTO editBoardDTO,
-			@PathVariable Long postSeq,
-			@RequestPart(value="f", required=false) MultipartFile f)
+	@PostMapping(value = "edit/{postSeq}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<?> editBoard(BoardDTO.editBoardDTO editBoardDTO, @PathVariable Long postSeq,
+			@RequestPart(value = "f", required = false) MultipartFile f)
 			throws AddException, FindException, ModifyException {
-		
-		logger.error("파일확인: "+f.toString());
-		
-		String savdDirectory = "/Users/choigeunhyeong/Documents/attach"; 
+
+		logger.error("파일확인: " + f.toString());
+
+		String savdDirectory = "/Users/choigeunhyeong/Documents/attach";
 		File saveDirFile = new File(savdDirectory);
 		String fileName = null;
-		if(f != null && f.getSize() > 0) {
+		if (f != null && f.getSize() > 0) {
 			String fOrigin = f.getOriginalFilename();
-			
+
 			Optional<Board> b = bRepository.findById(postSeq);
-			
+
 			String oldFileName = b.get().getImgPath();
-		    File oldFile = new File(saveDirFile, oldFileName);
-		        
-		        if(oldFile.exists()) {
-		            oldFile.delete();
-		        }
-		    
-		    UUID uuid = UUID.randomUUID();
-		    String fName = uuid.toString() + "_" + fOrigin;
-		    
-		    fileName = fName;
-		    File file = new File(saveDirFile, fileName);
-		    try {
+			File oldFile = new File(saveDirFile, oldFileName);
+
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
+
+			fileName = fName;
+			File file = new File(saveDirFile, fileName);
+			try {
 
 				Attach.upload(f.getBytes(), file);
-		    	// 섬네일파일 만들기 (비율맞춰서된다!)
+				// 섬네일파일 만들기 (비율맞춰서된다!)
 				int width = 300;
 				int height = 300;
-				
+
 				String thumbFileName = "t_" + fileName; // 섬네일파일명
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);
 				InputStream thumbnailIS = f.getInputStream();
-				
-				
+
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
-				String oldthumbFileName = "t_" + b.get().getImgPath();;
+				String oldthumbFileName = "t_" + b.get().getImgPath();
+				;
 				File oldthumbFile = new File(saveDirFile, oldthumbFileName);
-			        
-			     if(oldthumbFile.exists()) {
-			    	 oldthumbFile.delete();
-			        }
-				
-		    } catch(IOException e) {
-		        e.printStackTrace();
-		        logger.error("파일업로드 에러");
-		        throw new ModifyException(e.getMessage());
-		    }
+
+				if (oldthumbFile.exists()) {
+					oldthumbFile.delete();
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("파일업로드 에러");
+				throw new ModifyException(e.getMessage());
+			}
 		}
-		
-		//String userId = (String) session.getAttribute("logined");
+
+		// String userId = (String) session.getAttribute("logined");
 		if (editBoardDTO.getImgPath() == null) {
-		    Optional<Board> b = bRepository.findById(postSeq);
-		    fileName = b.get().getImgPath();
+			Optional<Board> b = bRepository.findById(postSeq);
+			fileName = b.get().getImgPath();
 		}
-		
-		if(f.getSize() > 0) {
-			logger.error("f.getName: "+ f.getOriginalFilename());
-			 UUID uuid = UUID.randomUUID();
-			 String fName = uuid.toString() + "_";
+
+		if (f.getSize() > 0) {
+			logger.error("f.getName: " + f.getOriginalFilename());
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_";
 			fileName = fName + f.getOriginalFilename();
 		}
-		
+
 		editBoardDTO.setImgPath(fileName);
-		
+
 		bService.editBoard(editBoardDTO, postSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 게시판 글 삭제
 	 * 
@@ -264,7 +261,7 @@ public class BoardController {
 	 * @param postSeq
 	 * @return
 	 * @throws FindException
-	 * @throws ModifyException 
+	 * @throws ModifyException
 	 */
 	@GetMapping(value = "detail" // , produces = MediaType.APPLICATION_JSON_VALUE
 	)
@@ -290,12 +287,12 @@ public class BoardController {
 //
 //	}
 	@GetMapping(value = "search" // , produces = MediaType.APPLICATION_JSON_VALUE
-			)
-			public ResponseEntity<PageBean> searchBoard(@RequestParam String title, int currentPage) throws FindException {
-				
-				return new ResponseEntity<>(bService.findBoardTitle("%" + title + "%", currentPage), HttpStatus.OK);
+	)
+	public ResponseEntity<PageBean> searchBoard(@RequestParam String title, int currentPage) throws FindException {
 
-			}
+		return new ResponseEntity<>(bService.findBoardTitle("%" + title + "%", currentPage), HttpStatus.OK);
+
+	}
 
 	/**
 	 * 추천수 증가

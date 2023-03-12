@@ -69,8 +69,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 				+ "AND r.res_seq = rr.res_seq\r\n"
 				+ "AND r.user_id = :userId", nativeQuery = true)
 		public List<Object[]> selectReqRmRv(@Param("userId") String userId);
-		
 	
 }
-
 

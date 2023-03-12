@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,18 +16,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.appliedlesson.service.AppliedLessonService;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.exception.RemoveException;
-import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.favoriteslesson.service.FavoritesLessonService;
 import com.developer.lesson.dto.LessonDTO;
 import com.developer.lesson.dto.LessonDTO.lessonDetailDTO;
@@ -59,48 +57,43 @@ public class LessonController {
 	 * @throws FindException
 	 */
 	@PostMapping(produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<?> add(LessonDTO.selectDetailDTO dto, 
-																		HttpSession session,
-																		MultipartFile f)
+	public ResponseEntity<?> add(LessonDTO.selectDetailDTO dto, HttpSession session, MultipartFile f)
 			throws AddException, FindException {
-		
+
 		String userId = (String) session.getAttribute("logined");
-		String saveDirectory = "C:\\dev\\lesson"; // 각자 주소로!
+		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
-		System.out.println("userid는~~~"+userId);
-		
 		String fileName;
-		if(f != null && f.getSize()>0) {
+		if (f != null && f.getSize() > 0) {
 			long fSize = f.getSize();
 			String fOrigin = f.getOriginalFilename();
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
-			
-			//저장될 파일명에 tutorId값 더하기
+
+			// 저장될 파일명에 tutorId값 더하기
 			String fName = "lesson_" + userId + "_" + fOrigin;
-			
-			//파일저장
+
+			// 파일저장
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
-			
+
 			try {
 				Attach.upload(f.getBytes(), file);
-				
+
 				int width = 300;
 				int height = 300;
-				
+
 				// 원래 첨부파일과 구분짓기 위해
 				String thumbFileName = "t_" + fileName;
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOs = new FileOutputStream(thumbFile);
 				InputStream thumbnailsS = f.getInputStream();
-				
+
 				Thumbnailator.createThumbnail(thumbnailsS, thumbnailOs, width, height);
-				
+
 				dto.setImgPath(fileName);
-				System.out.println("dto는~~~"+dto.getContent());
 				lservice.addLessonDTO(dto, userId);
-				return new ResponseEntity<>(HttpStatus.OK);				
+				return new ResponseEntity<>(HttpStatus.OK);
 			} catch (IOException e) {
 				throw new AddException(e.getMessage());
 			}
@@ -116,7 +109,7 @@ public class LessonController {
 	 * @return 후기 목록
 	 * @throws FindException
 	 */
-	@GetMapping(value = { "{lessonSeq}" })
+	@GetMapping(value = "review/{lessonSeq}")
 	public ResponseEntity<?> review(@PathVariable Long lessonSeq) throws FindException {
 		List<LessonDTO.selectAllReviewDTO> list = lservice.selectAllReview(lessonSeq);
 		return new ResponseEntity<>(list, HttpStatus.OK);
@@ -135,9 +128,10 @@ public class LessonController {
 		LessonDTO.lessonDetailDTO result = new lessonDetailDTO();
 
 		selectDetailDTO lessonDto = lservice.selectDetail(lessonSeq);
-		// TODO: NULL 반환 막기 ...
+
 		Integer cnt = lrservice.cntReview(lessonDto.getTDTO().getTutorId());
 		result.setCnt(cnt);
+
 		result.setLessonDto(lessonDto);
 		return new ResponseEntity<LessonDTO.lessonDetailDTO>(result, HttpStatus.OK);
 	}
@@ -149,9 +143,23 @@ public class LessonController {
 	 * @param searchKeyword 검색할 단어
 	 * @return 해당하는 값
 	 */
-	@GetMapping
-	public ResponseEntity<?> searchLesson(@RequestParam String searchWord) throws FindException {
+	@GetMapping("/search")
+	public ResponseEntity<?> searchLesson(@RequestParam Map<String, String> param) throws FindException {
+		String searchWord = param.get("searchWord");
 		List<LessonDTO.searchLessonDTO> list = lservice.findByLessonNameContaining(searchWord);
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
+	/**
+	 * 신청날짜가 지나지 않은 수업 전체 목록 (가나다순)
+	 * 
+	 * @author moonone
+	 * @return 수업 전체 목록
+	 * @throws FindException
+	 */
+	@GetMapping
+	public ResponseEntity<?> userAllLesson() throws FindException {
+		List<LessonDTO.searchLessonDTO> list = lservice.userLessonList();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -159,22 +167,17 @@ public class LessonController {
 	 * 수업 신청
 	 * 
 	 * @author moonone
-	 * @param alDTO
 	 * @param session
 	 * @return
 	 * @throws AddException
 	 * @throws FindException
 	 */
-	@PostMapping(value = "{lessonSeq}")
-	public ResponseEntity<?> applyLesson(@RequestBody AppliedLessonDTO.alAddRequestDTO alDTO, HttpSession session,
-			@PathVariable Long lessonSeq) throws AddException, FindException {
+	@GetMapping(value = "apply/{lessonSeq}")
+	public ResponseEntity<?> applyLesson(HttpSession session, @PathVariable Long lessonSeq)
+			throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
-		if (logined != null) {
-			alService.applyLesson(alDTO, lessonSeq, logined);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("로그인이 안 된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		alService.applyLesson(lessonSeq, logined);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	/**
@@ -186,16 +189,13 @@ public class LessonController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "favoriteslesson/{lessonSeq}", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-	public ResponseEntity<?> add(@RequestBody FavoritesLessonDTO.favoritesLessonDTO flDTO, HttpSession session,
-			@PathVariable Long lessonSeq)
+	public ResponseEntity<?> add(HttpSession session, @PathVariable Long lessonSeq)
 			throws AddException, FindException, JsonMappingException, JsonProcessingException {
 		String userId = (String) session.getAttribute("logined");
-		if (userId != null) {
-			flService.addFavLesson(flDTO, lessonSeq, userId);
-			return new ResponseEntity<>("즐겨찾기 추가 완료", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("로그인하세요", HttpStatus.OK);
-		}
+
+		flService.addFavLesson(lessonSeq, userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 
 	/**
@@ -210,5 +210,4 @@ public class LessonController {
 		flService.delFavLesson(favLesSeq);
 		return new ResponseEntity<>("즐겨찾기 삭제됨", HttpStatus.OK);
 	}
-
 }

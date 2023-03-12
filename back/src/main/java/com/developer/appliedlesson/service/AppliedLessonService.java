@@ -93,17 +93,14 @@ public class AppliedLessonService {
 	 * @param lessonSeq 신청하는 수업번호
 	 * @param logined   사용자아이디
 	 */
-	public void applyLesson(AppliedLessonDTO.alAddRequestDTO dto, Long lessonSeq, String logined) {
-
+	public void applyLesson(Long lessonSeq, String logined) {
 		AppliedLesson alEntity = new AppliedLesson();
-		alEntity.setApplyOk(dto.getApplyOk());
-		alEntity.setApplySeq(dto.getApplySeq());
-		alEntity.setCdate(dto.getCdate());
+		alEntity.setApplyOk(0);
 		alEntity.setTuteeId(logined);
-		Optional<Users> optU = uRepository.findById(logined);
-		alEntity.setUsers(optU.get());
 		Optional<Lesson> optL = lRepository.findById(lessonSeq);
 		alEntity.setLesson(optL.get());
+		Optional<Users> optU = uRepository.findById(logined);
+		alEntity.setUsers(optU.get());
 
 		alRepository.save(alEntity);
 	}

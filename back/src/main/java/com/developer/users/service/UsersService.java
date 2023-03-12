@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.developer.appliedlesson.entity.AppliedLesson;
 import com.developer.appliedlesson.repository.AppliedLessonRepository;
 import com.developer.email.EmailService;
 import com.developer.exception.AddException;
@@ -44,15 +43,15 @@ public class UsersService {
 		Users usersEntity = modelMapper.map(usersDTO, Users.class);
 		uRepository.save(usersEntity);
 	}
-	
+
 	/**
 	 * 사용자 정보 수정(변경 예정..)
+	 * 
 	 * @author Jin
 	 * @param users
 	 * @throws AddException
-	 */
-	public void updateUser(Users users, String userId) throws AddException{
-		uRepository.findById(userId);
+	 */		
+	public void updateUser(Users users) throws AddException {
 		uRepository.save(users);
 	}
 
@@ -75,26 +74,28 @@ public class UsersService {
 			throw new FindException("존재하지 않는 유저입니다.");
 		}
 	}
-	
+
 	/**
 	 * 사용자 아이디 중복체크
+	 * 
 	 * @author Jin
 	 * @param userId
 	 * @return
 	 * @throws FindException
 	 */
-	public boolean existsByUserId(String userId) throws FindException{
+	public boolean existsByUserId(String userId) throws FindException {
 		return uRepository.existsByUserId(userId);
 	}
-	
+
 	/**
 	 * 사용자 이메일 중복체크
+	 * 
 	 * @author Jin
 	 * @param email
 	 * @return
 	 * @throws FindException
 	 */
-	public boolean existsByEmail(String email) throws FindException{
+	public boolean existsByEmail(String email) throws FindException {
 		return uRepository.existsByEmail(email);
 	}
 
@@ -123,20 +124,21 @@ public class UsersService {
 			throw new FindException("로그인 실패");
 		}
 	}
-	
+
 	/**
 	 * 유저 아이디 찾기 !
+	 * 
 	 * @author choigeunhyeong
 	 * @param email
 	 * @return
 	 * @throws FindException
 	 */
-	public UsersDTO.uDTO findId(String email) throws FindException{
+	public UsersDTO.uDTO findId(String email) throws FindException {
 		Optional<Users> optU = uRepository.findByEmail(email);
-		if(optU.isPresent()) {
+		if (optU.isPresent()) {
 			Users users = optU.get();
 			UsersDTO.uDTO usersDTO = modelMapper.map(users, UsersDTO.uDTO.class);
-			if(usersDTO.getEmail().equals(email)) {				
+			if (usersDTO.getEmail().equals(email)) {
 				return usersDTO;
 			}
 		}
@@ -202,14 +204,14 @@ public class UsersService {
 	 * @return 튜티목록
 	 */
 	public List<UsersDTO.uNameDTO> applyTuteeList(Long lessonSeq) {
-		List<Object> list = uRepository.applyTuteeList(lessonSeq);
+		List<Object[]> list = uRepository.applyTuteeList(lessonSeq);
 		List<UsersDTO.uNameDTO> uDTO = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			UsersDTO.uNameDTO dto = new UsersDTO.uNameDTO();
-			dto.setName((String) list.get(i));
+			dto.setName((String) list.get(i)[0]);
+			dto.setTuteeId((String) list.get(i)[1]);
 			uDTO.add(dto);
 		}
-		list.add(uDTO);
 		return uDTO;
 	}
 
@@ -221,12 +223,8 @@ public class UsersService {
 	 * @throws RemoveException
 	 */
 	public void deleteTutee(String tuteeId, Long lessonSeq) throws RemoveException {
-		AppliedLesson al = alRepository.delAppliedTutee(tuteeId, lessonSeq);
-		if (al.getApplySeq() != null) {
-			alRepository.deleteById(al.getApplySeq());
-		} else {
-			throw new RemoveException("삭제가 되지 않았습니다.");
-		}
+		Long applySeq = alRepository.delAppliedTutee(tuteeId, lessonSeq);
+		alRepository.deleteById(applySeq);
 	}
 
 	/**
@@ -320,43 +318,43 @@ public class UsersService {
 		dto.setTel(u.getTel());
 		return dto;
 	}
-	
-	/**
-	    * 본인인증 이메일 체크(가입여부확인)
-	    * @author SR
-	    * @param email
-	    * @return true: 신규가입가능 false: 신규가입불가
-	    */
-	   public boolean userEmailCheck(String email){
-	      Users users = uRepository.userEmailCheck(email);
-	        if(users==null) {
-	           return true; //가입된 정보가 없음
-	        }
-	        else{
-	            return false; //가입된 정보가 있음
-	        }
-	   }
 
 	/**
-	 * Email을 통해 해당 email로 가입된 정보가 있는지 확인. 
-	 * 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴하면서 임시비밀번호로 변경 및 메일발송
+	 * 본인인증 이메일 체크(가입여부확인)
+	 * 
+	 * @author SR
+	 * @param email
+	 * @return true: 신규가입가능 false: 신규가입불가
+	 */
+	public boolean userEmailCheck(String email) {
+		Users users = uRepository.userEmailCheck(email);
+		if (users == null) {
+			return true; // 가입된 정보가 없음
+		} else {
+			return false; // 가입된 정보가 있음
+		}
+	}
+
+	/**
+	 * Email을 통해 해당 email로 가입된 정보가 있는지 확인. 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를
+	 * 리턴하면서 임시비밀번호로 변경 및 메일발송
+	 * 
 	 * @author SR
 	 * @param userEmail
 	 * @param userName
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean userPwdAndEmailCheck(String email, String userId) throws Exception {
 		Users users = uRepository.userEmailCheck(email);
-        if(users!=null && users.getUserId().equals(userId)) {
-        	String temporaryPwd = emailService.updatePwd(email);
+		if (users != null && users.getUserId().equals(userId)) {
+			String temporaryPwd = emailService.updatePwd(email);
 			users.setPwd(temporaryPwd);
 			uRepository.save(users);
-        	return true;
-        }
-        else {
-            return false;
-        }
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

@@ -46,7 +46,9 @@ public class FavoritesLessonService {
 			Long lessonSeq = ((BigDecimal) flList.get(i)[2]).longValue();
 			Optional<Lesson> l = lRepository.findById(lessonSeq);
 			flDTO.setLessonName(l.get().getLessonName());
-
+			flDTO.setCategory(l.get().getCategory());
+			flDTO.setLocation(l.get().getLocation());
+			flDTO.setApplyEndDate(l.get().getEndDate());
 			Long favLesSeq = ((BigDecimal) flList.get(i)[0]).longValue();
 			flDTO.setFavLesSeq(favLesSeq);
 			flDTOList.add(flDTO);
@@ -62,8 +64,7 @@ public class FavoritesLessonService {
 	 * @param lessonSeq 수업번호
 	 * @throws AddException
 	 */
-	public void addFavLesson(FavoritesLessonDTO.favoritesLessonDTO flDTO, Long lessonSeq, String userId)
-			throws AddException {
+	public void addFavLesson(Long lessonSeq, String userId) throws AddException {
 		Optional<Lesson> l = lRepository.findById(lessonSeq);
 		Optional<Users> u = uRepository.findByUserId(userId);
 		FavoritesLesson flEntity = new FavoritesLesson();

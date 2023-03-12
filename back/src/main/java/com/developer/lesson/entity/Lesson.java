@@ -1,9 +1,5 @@
 package com.developer.lesson.entity;
 
-
-
-
-
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +26,6 @@ import com.developer.favoriteslesson.entity.FavoritesLesson;
 import com.developer.orders.entity.Orders;
 import com.developer.tutor.entity.Tutor;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -98,6 +93,7 @@ public class Lesson {
 	@ColumnDefault(value = "2")
 	@Column(name="pay_lesson")
 	private Integer payLesson; //0무료 1유료 2결제대기 3수업삭제
+
 	
 	@NotNull
 	@Column(name="location")
@@ -114,8 +110,7 @@ public class Lesson {
 	
 	@OneToMany(mappedBy = "lesson")	
 	private List<AppliedLesson> alList;
-	
-	
+		
 	@OneToOne(mappedBy = "lesson")
 	private Orders order;
 }

@@ -1,4 +1,5 @@
 package com.developer.main;
+
 import java.io.File;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -53,9 +54,10 @@ public class DeveloperController {
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 첨부파일 다운로드 한다
+	 * 
 	 * @param boardNum 글번호
 	 * @param type     첨부파일인 경우 1, 섬네일파일인 경우 2
 	 * @param opt      다운로드 방식: 무조건 다운로드인 경우 "attachment", 실행경우 "inline"
@@ -64,7 +66,7 @@ public class DeveloperController {
 	 */
 	@GetMapping("download")
 	public ResponseEntity<?> download(String boardNum, int type) throws FindException {
-		
+
 		String saveDirectory = "C:\\dev\\lesson";
 
 		String fileName = "";
@@ -96,10 +98,8 @@ public class DeveloperController {
 			headers.add(HttpHeaders.CONTENT_TYPE, contentType);// 응답형식
 			headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length()); // 응답크기
 
-		
 			headers.add(HttpHeaders.CONTENT_DISPOSITION,
-						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
-		
+					"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
 
 			byte[] bArr = FileCopyUtils.copyToByteArray(file);
 			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
