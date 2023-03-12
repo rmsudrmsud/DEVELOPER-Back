@@ -61,12 +61,12 @@ public class AppliedLessonService {
 	 * @throws FindException
 	 */
 	public void updateApplyLesson(Long applySeq) throws FindException {
-		AppliedLessonDTO.selectAppliedLessonDTO appliedLessonDTO = this.selectAppliedLesson(applySeq);
-		ModelMapper modelMapper = new ModelMapper();
-		appliedLessonDTO.setApplyOk(1);
-		AppliedLesson appliedLessonEntity = new AppliedLesson();
-		modelMapper.map(appliedLessonDTO, appliedLessonEntity);
-		alRepository.save(appliedLessonEntity);
+		Optional<AppliedLesson> optAl = alRepository.findById(applySeq);
+		if (optAl.isPresent()) {
+			AppliedLesson appliedLessonEntity = optAl.get();
+			appliedLessonEntity.setApplyOk(1);
+			alRepository.save(appliedLessonEntity);
+		}
 	}
 
 	/**
@@ -77,12 +77,12 @@ public class AppliedLessonService {
 	 * @throws FindException
 	 */
 	public void updateNotApplyLesson(Long applySeq) throws FindException {
-		AppliedLessonDTO.selectAppliedLessonDTO appliedLessonDTO = this.selectAppliedLesson(applySeq);
-		ModelMapper modelMapper = new ModelMapper();
-		appliedLessonDTO.setApplyOk(2);
-		AppliedLesson appliedLessonEntity = new AppliedLesson();
-		modelMapper.map(appliedLessonDTO, appliedLessonEntity);
-		alRepository.save(appliedLessonEntity);
+		Optional<AppliedLesson> optAl = alRepository.findById(applySeq);
+		if (optAl.isPresent()) {
+			AppliedLesson appliedLessonEntity = optAl.get();
+			appliedLessonEntity.setApplyOk(2);
+			alRepository.save(appliedLessonEntity);
+		}
 	}
 
 	/**
@@ -93,17 +93,14 @@ public class AppliedLessonService {
 	 * @param lessonSeq 신청하는 수업번호
 	 * @param logined   사용자아이디
 	 */
-	public void applyLesson(AppliedLessonDTO.alAddRequestDTO dto, Long lessonSeq, String logined) {
-
+	public void applyLesson(Long lessonSeq, String logined) {
 		AppliedLesson alEntity = new AppliedLesson();
-		alEntity.setApplyOk(dto.getApplyOk());
-		alEntity.setApplySeq(dto.getApplySeq());
-		alEntity.setCdate(dto.getCdate());
+		alEntity.setApplyOk(0);
 		alEntity.setTuteeId(logined);
-		Optional<Users> optU = uRepository.findById(logined);
-		alEntity.setUsers(optU.get());
 		Optional<Lesson> optL = lRepository.findById(lessonSeq);
 		alEntity.setLesson(optL.get());
+		Optional<Users> optU = uRepository.findById(logined);
+		alEntity.setUsers(optU.get());
 
 		alRepository.save(alEntity);
 	}
@@ -125,6 +122,9 @@ public class AppliedLessonService {
 			AppliedLessonDTO.NotYetUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.NotYetUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String) Alist.get(i)[0]);
+			BigDecimal applySeq = (BigDecimal) Alist.get(i)[1];
+			Long resultApplySeq = applySeq.longValue();
+			aDTO.setApplySeq(resultApplySeq);
 			aDTO.setApplyOk(0);
 			aDTO.setTuteeId((String) uDTO.getUserId());
 			lDTO.setLessonSeq(lessonSeq);
@@ -152,7 +152,9 @@ public class AppliedLessonService {
 			AppliedLessonDTO.ApproveUserByAppliedLessonDTO aDTO = new AppliedLessonDTO.ApproveUserByAppliedLessonDTO();
 			LessonDTO.selectDetailDTO lDTO = new LessonDTO.selectDetailDTO();
 			uDTO.setName((String) Alist.get(i)[0]);
-//			aDTO.setApplyOk(1);
+			BigDecimal applySeq = (BigDecimal) Alist.get(i)[1];
+			Long resultApplySeq = applySeq.longValue();
+			aDTO.setApplySeq(resultApplySeq);
 			aDTO.setTuteeId((String) uDTO.getUserId());
 			lDTO.setLessonSeq(lessonSeq);
 			aDTO.setUsersDTO(uDTO);
@@ -163,22 +165,29 @@ public class AppliedLessonService {
 	}
 
 	/**
-	 * 진행완료된 수업 수업명, 튜티목록
+	 * 진행완료된 수업 수업명, 튜티목록(후기가없는사람)
 	 * 
 	 * @author choigeunhyeong
 	 * @param lessonSeq
 	 * @return
 	 * @throws FindException
 	 */
-	public List<UsersDTO.getNameDTO> selectClassAndTutee(Long lessonSeq) throws FindException {
-		List<Object[]> list = alRepository.selectClassAndTutee(lessonSeq);
+	public List<UsersDTO.getNameDTO> noReviewTutee(Long lessonSeq) throws FindException {
+		List<Object[]> list = alRepository.noReviewTutee(lessonSeq);
 		List<UsersDTO.getNameDTO> dtoList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			UsersDTO.getNameDTO uDTO = new UsersDTO.getNameDTO();
-			uDTO.setUsername((String) list.get(i)[1]);
+			uDTO.setUsername((String) list.get(i)[0]);
+			
 			LessonDTO.getLessonNameDTO lDTO = new LessonDTO.getLessonNameDTO();
-			lDTO.setLessonName((String) list.get(i)[0]);
+			lDTO.setLessonName((String) list.get(i)[1]);
 			uDTO.setLessonName(lDTO);
+			
+			AppliedLessonDTO.UserByAppliedLessonDTO aDTO = new AppliedLessonDTO.UserByAppliedLessonDTO();
+			BigDecimal seq = (BigDecimal) list.get(i)[2];
+			Long applySeq = seq.longValue();
+			aDTO.setApplySeq(applySeq);
+			uDTO.setApplySeq(aDTO);
 			dtoList.add(uDTO);
 		}
 		return dtoList;

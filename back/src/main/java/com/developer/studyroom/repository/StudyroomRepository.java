@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.developer.studyroom.dto.StudyroomDTO;
 import com.developer.studyroom.entity.Studyroom;
 
 public interface StudyroomRepository extends CrudRepository<Studyroom, Long> {

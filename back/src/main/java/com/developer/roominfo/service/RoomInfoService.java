@@ -43,12 +43,30 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public RoomInfoDTO selectRoom(long roomSeq) throws FindException {
+	public RoomInfoDTO selectRoom(Long roomSeq) throws FindException {
 		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
 			RoomInfoDTO roomDTO = modelMapper.map(roomEntity, RoomInfoDTO.class);
 			return roomDTO;
+		} else {
+			throw new FindException("해당 방이 존재하지 않습니다.");
+		}
+	}
+
+	/**
+	 * 룸 1개정보를 출력한다(엔티티로)
+	 * 
+	 * @author SR
+	 * @param roomSeq
+	 * @return
+	 * @throws FindException
+	 */
+	public RoomInfo selectRoomEntity(Long roomSeq) throws FindException {
+		Optional<RoomInfo> optRi = riRepository.findById(roomSeq);
+		if (optRi.isPresent()) {
+			RoomInfo ri = optRi.get();
+			return ri;
 		} else {
 			throw new FindException("해당 방이 존재하지 않습니다.");
 		}
@@ -62,7 +80,7 @@ public class RoomInfoService {
 	 * @param srSeq
 	 * @throws AddException
 	 */
-	public void insertRoom(RoomInfoDTO roomInfoDTO, long srSeq) {
+	public void insertRoom(RoomInfoDTO roomInfoDTO, Long srSeq) {
 		Optional<Studyroom> optCafe = sRepository.findById(srSeq);
 		Studyroom cafeEntity = optCafe.get();
 		roomInfoDTO.setStudyroom(cafeEntity);
@@ -79,7 +97,7 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public void updateRoom(long roomSeq, RoomInfoDTO roomInfoDTO) throws FindException {
+	public void updateRoom(Long roomSeq, RoomInfoDTO roomInfoDTO) throws FindException {
 		Optional<RoomInfo> optRoom = riRepository.findById(roomSeq);
 		if (optRoom.isPresent()) {
 			RoomInfo roomEntity = optRoom.get();
@@ -102,7 +120,7 @@ public class RoomInfoService {
 	 * @return
 	 * @throws FindException
 	 */
-	public void deleteRoom(long roomSeq) throws FindException {
+	public void deleteRoom(Long roomSeq) throws FindException {
 		RoomInfoDTO roomInfoDTO = this.selectRoom(roomSeq);
 		roomInfoDTO.setStatus(1);
 		RoomInfo roomEntity = modelMapper.map(roomInfoDTO, RoomInfo.class);
@@ -110,41 +128,41 @@ public class RoomInfoService {
 	}
 
 	/**
-	    * 방 목록을 출력한다.
-	    * 
-	    * @author SR
-	    * @param srSeq
-	    * @return
-	    * @throws FindException
-	    */
-	   public List<RoomInfoDTO.selectAllRoomDTO> selectAllRoom(String hostId) throws FindException {
-	      List<Object[]> rList = riRepository.selectAllRoom(hostId);
+	 * 방 목록을 출력한다.
+	 * 
+	 * @author SR
+	 * @param srSeq
+	 * @return
+	 * @throws FindException
+	 */
+	public List<RoomInfoDTO.selectAllRoomDTO> selectAllRoom(String hostId) throws FindException {
+		List<Object[]> rList = riRepository.selectAllRoom(hostId);
 
-	      List<RoomInfoDTO.selectAllRoomDTO> rListDto = new ArrayList<>();
-	      for (int i = 0; i < rList.size(); i++) {
-	         RoomInfoDTO.selectAllRoomDTO rDto = new RoomInfoDTO.selectAllRoomDTO();
-	         BigDecimal roomSeq = (BigDecimal) rList.get(i)[0];
-	         Long convertRoomSeq = roomSeq.longValue();
-	         rDto.setRoomSeq(convertRoomSeq);
-	         rDto.setName((String) rList.get(i)[1]);
-	         rDto.setInfo((String) rList.get(i)[2]);
-	         rDto.setImgPath((String) rList.get(i)[3]);
-	         BigDecimal person = (BigDecimal) rList.get(i)[4];
-	         int convertPerson = person.intValue();
-	         rDto.setPerson(convertPerson);
-	         BigDecimal price = (BigDecimal) rList.get(i)[5];
-	         int convertPrice = price.intValue();
-	         rDto.setPrice(convertPrice);
-	         StudyroomDTO.StudyroomTimeDTO sDTO = new StudyroomDTO.StudyroomTimeDTO();
-	         sDTO.setOpenTime((String) rList.get(i)[6]);
-	         sDTO.setEndTime((String) rList.get(i)[7]);
-	         rDto.setStudyroomTimeDTO(sDTO);
+		List<RoomInfoDTO.selectAllRoomDTO> rListDto = new ArrayList<>();
+		for (int i = 0; i < rList.size(); i++) {
+			RoomInfoDTO.selectAllRoomDTO rDto = new RoomInfoDTO.selectAllRoomDTO();
+			BigDecimal roomSeq = (BigDecimal) rList.get(i)[0];
+			Long convertRoomSeq = roomSeq.longValue();
+			rDto.setRoomSeq(convertRoomSeq);
+			rDto.setName((String) rList.get(i)[1]);
+			rDto.setInfo((String) rList.get(i)[2]);
+			rDto.setImgPath((String) rList.get(i)[3]);
+			BigDecimal person = (BigDecimal) rList.get(i)[4];
+			int convertPerson = person.intValue();
+			rDto.setPerson(convertPerson);
+			BigDecimal price = (BigDecimal) rList.get(i)[5];
+			int convertPrice = price.intValue();
+			rDto.setPrice(convertPrice);
+			StudyroomDTO.StudyroomTimeDTO sDTO = new StudyroomDTO.StudyroomTimeDTO();
+			sDTO.setOpenTime((String) rList.get(i)[6]);
+			sDTO.setEndTime((String) rList.get(i)[7]);
+			rDto.setStudyroomTimeDTO(sDTO);
 
-	         rListDto.add(rDto);
-	      }
-	      return rListDto;
+			rListDto.add(rDto);
+		}
+		return rListDto;
 
-	   }
+	}
 
 	/**
 	 * 스터디룸번호로 해당하는 예약내역 출력
@@ -201,10 +219,10 @@ public class RoomInfoService {
 			riDTO.setName((String) list.get(i)[3]);
 			riDTO.setPerson(Integer.parseInt(String.valueOf(list.get(i)[4])));
 			riDTO.setPrice(Integer.parseInt(String.valueOf(list.get(i)[5])));
-			
+
 			riDTO.setStatus(Integer.parseInt(String.valueOf(list.get(i)[6])));
-			hhDTO.setHostId((String)list.get(i)[8]);
-			
+			hhDTO.setHostId((String) list.get(i)[8]);
+
 			shDTO.setHostIdDTO(hhDTO);
 			riDTO.setStudyroomDTO(shDTO);
 			dto.add(riDTO);

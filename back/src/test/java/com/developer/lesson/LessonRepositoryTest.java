@@ -1,6 +1,10 @@
 package com.developer.lesson;
 
+<<<<<<< HEAD
+import java.time.LocalDate;
+=======
 import java.util.Date;
+>>>>>>> a17bbc4b15abb5fd1a82dbbe90805ae698acaa4f
 import java.util.List;
 import java.util.Optional;
 
@@ -111,14 +115,23 @@ public class LessonRepositoryTest {
 //	@DisplayName("수업 INSERT 테스트")
 //	void testAdd() {
 //		Lesson lesson = new Lesson();
+<<<<<<< HEAD
+//		lesson.setCategory(1);
+=======
 //		lesson.setCategory(2);
+>>>>>>> a17bbc4b15abb5fd1a82dbbe90805ae698acaa4f
 //		lesson.setContent("sdfsdsdf");
 //		Date date = new Date(2023, 3, 5);
 //		lesson.setEndCdate(date);
 //		lesson.setEndDate(date);
 //		lesson.setImgPath("...");
+<<<<<<< HEAD
+//		lesson.setLessonName("2번수업.");
+//		lesson.setLessonSeq(124L);
+=======
 //		lesson.setLessonName("3번수업.");
 //		lesson.setLessonSeq(125L);
+>>>>>>> a17bbc4b15abb5fd1a82dbbe90805ae698acaa4f
 //		lesson.setLocation("..."); 
 //		lesson.setPayLesson(0);
 //		lesson.setPeople(10);

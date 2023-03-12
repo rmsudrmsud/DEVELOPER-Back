@@ -12,9 +12,9 @@ public class LessonReviewDTO {
 	// [JW]
 	@Data
 	@NoArgsConstructor
-	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 	public static class lrDTO {
 		private Long applySeq;
+		@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 		private Date cDate;
 		private String review;
 		private Integer star;
@@ -23,8 +23,8 @@ public class LessonReviewDTO {
 	// [JW]
 	@Data
 	@NoArgsConstructor
-	@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 	public static class lrALDTO {
+		@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
 		private Date cDate;
 		private String review;
 		private Integer star;
@@ -34,6 +34,7 @@ public class LessonReviewDTO {
 	@Data
 	@NoArgsConstructor
 	public static class listLRListDTO {
+		private String lessonName;
 		private String review;
 		private Integer star;
 		private String name;

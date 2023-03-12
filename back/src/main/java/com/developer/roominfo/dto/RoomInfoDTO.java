@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomInfoDTO {
-	private long roomSeq;
+	private Long roomSeq;
 	private String name;
 	private String info;
 	private String imgPath;
@@ -44,7 +44,7 @@ public class RoomInfoDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class selectAllRoomDTO {
-		private long roomSeq;
+		private Long roomSeq;
 		private String name;
 		private String info;
 		private String imgPath;
@@ -82,7 +82,7 @@ public class RoomInfoDTO {
 	@NoArgsConstructor
 	public static class RoomInfoPriceOnlyDTO {
 		private Integer price;
-		}	
+	}
 
 	// ds
 	@Data
@@ -99,11 +99,10 @@ public class RoomInfoDTO {
 		private Long roomSeq;
 	}
 
-	
-	//ds
+	// ds
 	@Data
 	@NoArgsConstructor
-	public static class RoomInfoRoomDetailListDTO{
+	public static class RoomInfoRoomDetailListDTO {
 		private long roomSeq;
 		private String name;
 		private String info;
@@ -113,6 +112,5 @@ public class RoomInfoDTO {
 		private Integer status;
 		private StudyroomDTO.StudyroomHostIdDTO studyroomDTO;
 	}
-
 
 }

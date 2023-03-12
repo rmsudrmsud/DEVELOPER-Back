@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,13 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +35,10 @@ import com.developer.hostuser.service.HostUserService;
 import com.developer.reservation.dto.ReservationDTO;
 import com.developer.reservation.service.ReservationService;
 import com.developer.roominfo.dto.RoomInfoDTO;
+import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roominfo.service.RoomInfoService;
 import com.developer.studyroom.dto.StudyroomDTO;
+import com.developer.studyroom.entity.Studyroom;
 import com.developer.studyroom.service.StudyroomService;
 import com.developer.util.Attach;
 
@@ -114,7 +117,7 @@ public class HostUserController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "out")
+	@PutMapping(value = "out")
 	public ResponseEntity<?> outHost(HttpSession session) throws FindException {
 
 		String hostId = (String) session.getAttribute("hostLogined");
@@ -135,8 +138,8 @@ public class HostUserController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "open/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> openCafe(@PathVariable long srSeq) throws FindException {
+	@PutMapping(value = "open/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> openCafe(@PathVariable Long srSeq) throws FindException {
 		sService.openOc(srSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -149,8 +152,8 @@ public class HostUserController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "close/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> closeCafe(@PathVariable long srSeq) throws FindException {
+	@PutMapping(value = "close/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> closeCafe(@PathVariable Long srSeq) throws FindException {
 
 		sService.closeOc(srSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -165,7 +168,7 @@ public class HostUserController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "studyroom/{srSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> infoCafe(@PathVariable long srSeq) throws FindException {
+	public ResponseEntity<?> infoCafe(@PathVariable Long srSeq) throws FindException {
 		StudyroomDTO dto = sService.selectStudyroom(srSeq);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -181,11 +184,9 @@ public class HostUserController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "studyroom/{srSeq}")
-	public ResponseEntity<?> editCafe(@PathVariable long srSeq, StudyroomDTO studyroomDTO, HttpSession session,
-			MultipartFile f) throws FindException, AddException {
+	public ResponseEntity<?> editCafe(@PathVariable Long srSeq, StudyroomDTO studyroomDTO, HttpSession session,
+			@RequestPart MultipartFile f) throws FindException, AddException {
 
-		String hostId = (String) session.getAttribute("hostLogined");
-		logger.error("로그인값:" + hostId);
 		String saveDirectory = "C:\\dev\\studyroom"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
@@ -195,8 +196,19 @@ public class HostUserController {
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
-			// 결합
-			String fName = hostId + "_" + fOrigin;
+			// 기존파일 삭제 TODO: 더나은 방법 찾아보기
+			Studyroom s = sService.detailStudyroom(srSeq);
+
+			String oldFileName = s.getImgPath();
+			File oldFile = new File(saveDirFile, oldFileName);
+
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+
+			// imgPath 결합
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
 
 			// 파일저장
 			fileName = fName;
@@ -209,7 +221,6 @@ public class HostUserController {
 				int width = 300;
 				int height = 300;
 
-				// 원래 첨부파일과 구분짓기 위해
 				String thumbFileName = "t_" + fileName; // 섬네일파일명
 				File thumbFile = new File(saveDirFile, thumbFileName);
 				FileOutputStream thumbnailOS = new FileOutputStream(thumbFile);// 출력스트림
@@ -217,9 +228,16 @@ public class HostUserController {
 
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
 
+				// 기존 섬네일파일 삭제
+				String oldthumbFileName = "t_" + oldFileName;
+				File oldthumbFile = new File(saveDirFile, oldthumbFileName);
+
+				if (oldthumbFile.exists()) {
+					oldthumbFile.delete();
+				}
 				studyroomDTO.setImgPath(fileName);
 				sService.updateCafe(srSeq, studyroomDTO);
-				logger.info("파일업로드 성공");
+				logger.info("파일수정 성공");
 				return new ResponseEntity<>(HttpStatus.OK);
 				// 읽기 쓰기
 			} catch (IOException e) {
@@ -228,6 +246,7 @@ public class HostUserController {
 				throw new AddException(e.getMessage());
 			}
 		}
+
 		return new ResponseEntity<>("오류", HttpStatus.BAD_REQUEST);
 	}
 
@@ -244,8 +263,6 @@ public class HostUserController {
 	public ResponseEntity<?> addRoom(RoomInfoDTO roomInfoDTO, HttpSession session, MultipartFile f,
 			@PathVariable long srSeq) throws AddException {
 
-		String hostId = (String) session.getAttribute("hostLogined");
-		logger.error("로그인값:" + hostId);
 		String saveDirectory = "C:\\dev\\roominfo"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
@@ -255,11 +272,11 @@ public class HostUserController {
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
-			// 결합
-			String fName = hostId + "_" + fOrigin;
+			// imgPath 결합
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
 
 			// 파일저장
-			// TODO 문제: 방이 여러개여서 파일명이 겹칠 수 있음
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
 
@@ -301,7 +318,7 @@ public class HostUserController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "roominfo/{roomSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> infoRoom(@PathVariable long roomSeq) throws FindException {
+	public ResponseEntity<?> infoRoom(@PathVariable Long roomSeq) throws FindException {
 		RoomInfoDTO roomDTO = riService.selectRoom(roomSeq);
 		return new ResponseEntity<>(roomDTO, HttpStatus.OK);
 	}
@@ -317,11 +334,9 @@ public class HostUserController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "roominfo/edit/{roomSeq}")
-	public ResponseEntity<?> editRoom(@PathVariable long roomSeq, RoomInfoDTO roomInfoDTO, HttpSession session,
+	public ResponseEntity<?> editRoom(@PathVariable Long roomSeq, RoomInfoDTO roomInfoDTO, HttpSession session,
 			MultipartFile f) throws FindException, AddException {
 
-		String hostId = (String) session.getAttribute("hostLogined");
-		logger.error("로그인값:" + hostId);
 		String saveDirectory = "C:\\dev\\roominfo"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
@@ -331,11 +346,20 @@ public class HostUserController {
 			System.out.println("---파일---");
 			System.out.println("fSize:" + fSize + ", fOrigin:" + fOrigin);
 
-			// 결합
-			String fName = hostId + "_" + fOrigin;
+			// 기존파일 삭제 TODO: 더나은 방법 찾아보기
+			RoomInfo ri = riService.selectRoomEntity(roomSeq);
+			String oldFileName = ri.getImgPath();
+			File oldFile = new File(saveDirFile, oldFileName);
+
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+
+			// imgPath 결합
+			UUID uuid = UUID.randomUUID();
+			String fName = uuid.toString() + "_" + fOrigin;
 
 			// 파일저장
-			// TODO 문제: 방이 여러개여서 파일명이 겹칠 수 있음
 			fileName = fName;
 			File file = new File(saveDirFile, fileName);
 
@@ -353,6 +377,14 @@ public class HostUserController {
 				InputStream thumbnailIS = f.getInputStream(); // 첨부파일 입력스트림
 
 				Thumbnailator.createThumbnail(thumbnailIS, thumbnailOS, width, height);
+
+				// 기존 섬네일파일 삭제
+				String oldthumbFileName = "t_" + oldFileName;
+				File oldthumbFile = new File(saveDirFile, oldthumbFileName);
+
+				if (oldthumbFile.exists()) {
+					oldthumbFile.delete();
+				}
 
 				roomInfoDTO.setImgPath(fileName);
 				riService.updateRoom(roomSeq, roomInfoDTO);
@@ -376,8 +408,8 @@ public class HostUserController {
 	 * @return
 	 * @throws FindException
 	 */
-	@PatchMapping(value = "roominfo/{roomSeq}")
-	public ResponseEntity<?> deleteRoom(@PathVariable long roomSeq) throws FindException {
+	@PutMapping(value = "roominfo/{roomSeq}")
+	public ResponseEntity<?> deleteRoom(@PathVariable Long roomSeq) throws FindException {
 		riService.deleteRoom(roomSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -412,7 +444,7 @@ public class HostUserController {
 	 */
 	// 스터디룸 패키지에 들어가야됨
 	@GetMapping(value = "reservation/{roomSeq}")
-	public ResponseEntity<?> getReservablity(@PathVariable long roomSeq, String usingDate)
+	public ResponseEntity<?> getReservablity(@PathVariable Long roomSeq, String usingDate)
 			throws FindException, ParseException {
 		List<ReservationDTO.selectAllByUsingDateDTO> list = rService.selectAllByUsingDate(roomSeq, usingDate);
 		return new ResponseEntity<>(list, HttpStatus.OK);
@@ -470,7 +502,7 @@ public class HostUserController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "reservation/info/{resSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> InfoReservation(@PathVariable long resSeq) throws FindException {
+	public ResponseEntity<?> InfoReservation(@PathVariable Long resSeq) throws FindException {
 		List<ReservationDTO.selectAllReservationDTO> list = rService.infoReservation(resSeq);
 
 		if (list.isEmpty()) {
@@ -489,7 +521,7 @@ public class HostUserController {
 	 * @throws RemoveException
 	 */
 	@DeleteMapping(value = "reservation/info/{resSeq}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> ListReservation(@PathVariable long resSeq) throws RemoveException {
+	public ResponseEntity<?> ListReservation(@PathVariable Long resSeq) throws RemoveException {
 		rService.deleteReservation(resSeq);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -545,4 +577,32 @@ public class HostUserController {
 		}
 	}
 
+	/**
+	 * 호스트 아이디 찾기
+	 * 
+	 * @author choigeunhyeong
+	 * @param num
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "findhostid", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findHostId(String num) throws FindException {
+		HostUserDTO hostDTO = hService.findHostId(num);
+		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
+	}
+
+	/**
+	 * [HostUser] 비밀번호 찾기(비밀번호변경) - 메일포함
+	 * 
+	 * @author SR
+	 * @param email
+	 * @param hostId
+	 * @return 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴
+	 * @throws Exception
+	 */
+	@PostMapping(value = "searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean hostUpdatePwd(String email, String hostId) throws Exception {
+		boolean check = hService.hostPwdAndEmailCheck(email, hostId);
+		return check;
+	}
 }

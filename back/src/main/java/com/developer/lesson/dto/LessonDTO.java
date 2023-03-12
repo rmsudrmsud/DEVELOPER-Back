@@ -1,6 +1,5 @@
 package com.developer.lesson.dto;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -8,10 +7,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.developer.appliedlesson.dto.AppliedLessonDTO;
 import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.tutor.dto.TutorDTO;
+import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,13 @@ import lombok.NoArgsConstructor;
 
 @DynamicUpdate
 public class LessonDTO {
-
+	
+	@Data
+	@NoArgsConstructor
+	public static class lessonOrderDTO{
+		private String lessonName;
+	}
+	
 	// [JH]
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@Data
@@ -64,18 +71,23 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startCdate;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endCdate;
 		private Integer price;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startDate;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endDate;
 		private Integer payLesson;
 		private String location;
 
+		private UsersDTO.UsersDetailDTO uDTO;
 		private TutorDTO.selectDetailDTO tDTO;
 		private List<FavoritesLessonDTO.selectDetailDTO> flDTO;
 		private List<AppliedLessonDTO.alAddRequestDTO> alDTO;
@@ -86,6 +98,7 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser1 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
 	}
 
@@ -94,6 +107,7 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser2 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
 	}
 
@@ -102,13 +116,25 @@ public class LessonDTO {
 	@NoArgsConstructor
 	public static class GetLessonByUser3 {
 		private String lessonName;
+		private Long lessonSeq;
 		private TutorDTO.tutorDTO tDTO;
+	}
+	
+	//[JH]
+	@Data
+	@NoArgsConstructor
+	public static class UnpaidLessonByUser {
+		private String lessonName;
+		private Long lessonSeq;
+		private TutorDTO.tutorDTO tDTO;
+		
 	}
 
 	// [JH}
 	@Data
 	@NoArgsConstructor
 	public static class applyLessonBytutee {
+		private Long lessonSeq;
 		private String lessonName;
 		private AppliedLessonDTO.selectAppliedLessonDTO alDTO;
 	}
@@ -117,9 +143,11 @@ public class LessonDTO {
 	@Data
 	@NoArgsConstructor
 	public static class notYetLessonBytutee {
+		private Long lessonSeq;
 		private String lessonName;
 		private AppliedLessonDTO.selectAppliedLessonDTO alDTO;
 	}
+
 
 	// [JW]
 	@Data
@@ -131,14 +159,19 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endCdate;
 		private Integer price;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
 		private Date endDate;
 		private Integer payLesson;
 		private String location;
 	}
+
 
 	// [JW]
 	@Data
@@ -150,16 +183,21 @@ public class LessonDTO {
 		private String content;
 		private Integer people;
 		private String imgPath;
-		private LocalDate startCdate;
-		private LocalDate endCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endCdate;
 		private Integer price;
-		private LocalDate startDate;
-		private LocalDate endDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endDate;
 		private Integer payLesson;
 		private String location;
 
 		private TutorDTO tDTO;
 	}
+
 
 	// [JW]
 	@Data
@@ -191,6 +229,7 @@ public class LessonDTO {
 	@Data
 	@NoArgsConstructor
 	public static class allLessonListDTO {
+		private Long lessonSeq;
 		private String lessonName;
 		private Integer category;
 		private Integer payLesson;
@@ -202,12 +241,26 @@ public class LessonDTO {
 	@Data
 	@NoArgsConstructor
 	public static class searchLessonDTO {
+		private Long lessonSeq;
 		private String lessonName;
 		private Integer category;
 		private String imgPath;
-		private Date startCdate;
-		private Date endCdate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date endDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date applyStartDate;
+		@JsonFormat(pattern = "yyyy-MM-dd")
+		private Date applyEndDate;
 		private Integer price;
+	}
+	
+	// [JW]
+	@Data
+	@NoArgsConstructor
+	public static class searchName {
+		private String lessonName;
 	}
 
 	// SR
@@ -236,6 +289,5 @@ public class LessonDTO {
 		private Integer category;
 		private Integer people;
 	}
-
 
 }
