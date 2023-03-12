@@ -160,8 +160,7 @@ public class ReservationService {
 		r.setEndTime(rvDTO.getEndTime());
 		rRepository.save(r);
 	}
-	
-	
+
 	/**
 	 * [호스트마이페이지] 호스트가 예약하는 기능(예약막기용)
 	 * 

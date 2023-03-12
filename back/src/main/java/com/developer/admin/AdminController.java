@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,7 +53,7 @@ public class AdminController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "host")
-	private ResponseEntity<?> selectAllHostUser() throws FindException {
+	public ResponseEntity<?> selectAllHostUser() throws FindException {
 		List<HostUser> list = hService.selectAll();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
@@ -127,13 +126,8 @@ public class AdminController {
 	 */
 	@GetMapping(value = "lesson", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> allLessonList(HttpSession session) throws FindException {
-		int role = (int) session.getAttribute("loginedRole");
-		if (role == 9) {
 			List<LessonDTO.allLessonListDTO> list = lservice.allLessonList();
 			return new ResponseEntity<>(list, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("관리자로 로그인하시오", HttpStatus.BAD_REQUEST);
-		}
 	}
 
 	/**
@@ -179,6 +173,7 @@ public class AdminController {
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
+
 
 	/**
 	 * [Tutor]튜터로 승인한다.(승인메일 포함)
@@ -257,6 +252,7 @@ public class AdminController {
 
 	}
 
+
 	/**
 	 * 관리자 스터디카페 전체목록 출력
 	 * 
@@ -306,5 +302,4 @@ public class AdminController {
 		HostUserDTO hostDTO = hService.selectHost(hostId);
 		return new ResponseEntity<>(hostDTO, HttpStatus.OK);
 	}
-
 }

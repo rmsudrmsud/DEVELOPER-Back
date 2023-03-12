@@ -52,7 +52,6 @@ public class RoomInfoDTO {
 		private Integer price;
 		private StudyroomDTO.StudyroomTimeDTO studyroomTimeDTO;
 	}
-	
 
 	// SR: 예약목록/상세 출력용
 	@Data
@@ -83,7 +82,7 @@ public class RoomInfoDTO {
 	@NoArgsConstructor
 	public static class RoomInfoPriceOnlyDTO {
 		private Integer price;
-		}	
+	}
 
 	// ds
 	@Data
@@ -100,11 +99,10 @@ public class RoomInfoDTO {
 		private Long roomSeq;
 	}
 
-	
-	//ds
+	// ds
 	@Data
 	@NoArgsConstructor
-	public static class RoomInfoRoomDetailListDTO{
+	public static class RoomInfoRoomDetailListDTO {
 		private long roomSeq;
 		private String name;
 		private String info;
@@ -114,6 +112,5 @@ public class RoomInfoDTO {
 		private Integer status;
 		private StudyroomDTO.StudyroomHostIdDTO studyroomDTO;
 	}
-
 
 }

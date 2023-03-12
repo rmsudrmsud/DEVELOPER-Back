@@ -9,7 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -37,12 +40,14 @@ import lombok.Setter;
 public class Users {
 	@Id
 	@Column(name = "user_id")
+	@Size(min = 6, max = 12, message = "아이디는 6자 이상 12자 이하로 입력해주세요.")
 	private String userId;
 
 	@Column(name = "role")
 	@ColumnDefault(value = "2")
 	private Integer role; // 1튜터 2튜티 3탈퇴 9관리
 
+	@Size(min = 6, max = 12, message = "비밀번호는 6자 이상 12자 이하로 입력해주세요.")
 	@NotNull
 	@Column(name = "pwd")
 	private String pwd;
@@ -56,11 +61,13 @@ public class Users {
 	private String name;
 
 	@NotNull
+	@Email(message = "올바른 형식의 이메일 주소를 입력해주세요.")
 	@Column(name = "email")
 	private String email;
 
 	@NotNull
 	@Column(name = "tel")
+	@Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
 	private String tel;
 
 	@NotNull
