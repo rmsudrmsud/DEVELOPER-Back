@@ -47,7 +47,7 @@ public class TutorController {
 	public ResponseEntity<?> save(TutorDTO.saveTutorDTO tDTO, HttpSession session, MultipartFile f)
 			throws AddException, FindException {
 		String logined = (String) session.getAttribute("logined");
-		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img"; // 각자 주소로!
+		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/tutor"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
 		if (f != null && f.getSize() > 0) {
