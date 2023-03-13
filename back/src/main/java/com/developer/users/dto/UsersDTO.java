@@ -164,4 +164,11 @@ public class UsersDTO {
 	public static class UserNickNameDTO {
 		private String nickname;
 	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UsersUserIdDTO {
+		private String userId;
+	}
 }

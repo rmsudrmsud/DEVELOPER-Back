@@ -128,10 +128,10 @@ public class StudyroomController {
 	public ResponseEntity<?> getAll(@PathVariable Long srSeq) throws FindException {
 		StudyroomDTO.StudyroomRoomInfoPageDTO dto = new StudyroomDTO.StudyroomRoomInfoPageDTO();
 
-		StudyroomDTO object = sService.getStudyroomDetail(srSeq);
+		StudyroomDTO.StudyroomAndFavStuyroomInfoDTO object = sService.getStudyroomDetail(srSeq);
 		List<RoomInfoDTO.RoomInfoRoomDetailListDTO> list1 = riService.selectAll(srSeq);
 		List<RoomReviewDTO.RoomReviewSelectAllDTO> list2 = rrservice.selectAll(srSeq);
-		dto.setStudyroomDTO(object);
+		dto.setStudyroomAndFavStuyroomInfoDTO(object);
 		dto.setRoominfoDTO(list1);
 		dto.setRoomReviewSelectAllDTO(list2);
 		return new ResponseEntity<>(dto, HttpStatus.OK);

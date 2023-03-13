@@ -82,13 +82,17 @@ public class FileDownloadController {
 	@GetMapping("lesson")
 	public ResponseEntity<?> downloadLesson(String imgPath, int type, String opt) throws FindException {
 
-		String saveDirectory = "C:\\dev\\lesson";
+//		String saveDirectory = "C:\\dev\\lesson";
+		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/lesson";
+		
 
 		String fileName = "";
 		if (type == 2) {
 			fileName = "t_";
 		}
+
 		fileName += imgPath;
+
 		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
 		File file = null;
 
@@ -123,6 +127,71 @@ public class FileDownloadController {
 
 			byte[] bArr = FileCopyUtils.copyToByteArray(file);
 			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			throw new FindException(e.getMessage());
+		}
+	}
+	
+	
+	/**
+	 * 튜터 다운로드
+	 * @author moonone
+	 * @param imgPath
+	 * @param type
+	 * @param opt
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping("tutor")
+	public ResponseEntity<?> downloadTutor(String imgPath, int type, String opt) throws FindException {
+		
+//		String saveDirectory = "C:\\dev\\lesson";
+		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/tutor";
+		
+		
+		String fileName = "";
+		if (type == 2) {
+			fileName = "t_";
+		}
+		fileName += imgPath; 
+		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
+		File file = null;
+		
+		for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
+			
+			String fn = f.getName();
+			//int lastIndex = fn.lastIndexOf(".");
+			//if (fn.substring(0, lastIndex).equals(fileName)) {
+			// int lastIndex = fn.lastIndexOf(".");
+			// if (fn.substring(0, lastIndex).equals(fileName)) {
+			if (fn.equals(fileName)) {
+				file = f;
+				fileName = f.getName();
+				break;
+			}
+		}
+		if (file == null) {
+			throw new FindException(fileName + "으로 된 파일이 없습니다");
+		}
+		
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			String contentType = Files.probeContentType(file.toPath()); // 파일의 형식
+			headers.add(HttpHeaders.CONTENT_TYPE, contentType);// 응답형식
+			headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length()); // 응답크기
+			
+			if ("attachment".equals(opt)) {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+			} else {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+			}
+			
+			byte[] bArr = FileCopyUtils.copyToByteArray(file);
+			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+			System.out.println(bArr);
 			return re;
 		} catch (Exception e) {
 			throw new FindException(e.getMessage());
