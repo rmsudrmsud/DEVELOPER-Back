@@ -18,6 +18,7 @@ import com.developer.admin.AdminDTO;
 import com.developer.exception.AddException;
 import com.developer.exception.FindException;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
+import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.dto.HostUserDTO;
 import com.developer.hostuser.entity.HostUser;
 import com.developer.hostuser.repository.HostUserRepository;
@@ -323,27 +324,40 @@ public class StudyroomService {
 	}
 
 	/**
-	 * 스터디카페 1개의 상세정보 출력.
+	 * 스터디카페 1개의 상세정보 + 해당 카페와 연관된 즐겨찾기 관련 정보 출력.
 	 * 
 	 * @author DS
 	 * @param srSeq
 	 * @return StudyroomDTO
 	 * @throws FindException
 	 */
-	public StudyroomDTO getStudyroomDetail(long srSeq) throws FindException {
-		Studyroom s = sRepository.getBySRSEQ(srSeq);
-		StudyroomDTO dto = new StudyroomDTO();
-		dto.setSrSeq(s.getSrSeq());
-		dto.setAddr(s.getAddr());
-		dto.setEndTime(s.getEndTime());
-		dto.setImgPath(s.getImgPath());
-		dto.setInfo(s.getInfo());
-		dto.setName(s.getName());
-		dto.setOc(s.getOc());
-		dto.setOpenTime(s.getOpenTime());
-		dto.setHostUser(s.getHostUser());
-		return dto;
+	public StudyroomDTO.StudyroomAndFavStuyroomInfoDTO getStudyroomDetail(Long srSeq) throws FindException {
+		StudyroomDTO.StudyroomAndFavStuyroomInfoDTO sDTO = new StudyroomDTO.StudyroomAndFavStuyroomInfoDTO();
+		
+		Optional<Studyroom> optS = sRepository.findById(srSeq);
 
+		Studyroom s=optS.get();
+		sDTO.setSrSeq(s.getSrSeq());
+		sDTO.setOpenTime(s.getOpenTime());
+		sDTO.setEndTime(s.getEndTime());
+		sDTO.setInfo(s.getInfo());
+		sDTO.setImgPath(s.getImgPath());
+		sDTO.setAddr(s.getAddr());
+		sDTO.setName(s.getName());
+		sDTO.setOc(s.getOc());
+		
+		List<FavoritesStudyroom>list = s.getFavoritesStudyroom();
+		List<FavoritesStudyroomDTO.favStudyroominfoDTO> dtoList = new ArrayList<>();
+
+		for(FavoritesStudyroom r: list) {
+			FavoritesStudyroomDTO.favStudyroominfoDTO fDTO = new FavoritesStudyroomDTO.favStudyroominfoDTO();
+			fDTO.setFavSeq(r.getFavSeq());
+			fDTO.setUserId(r.getUsers().getUserId());
+			dtoList.add(fDTO);
+		}
+		sDTO.setFavoritesStudyroomDTO(dtoList);
+		
+		return sDTO;
 	}
 
 	/**
