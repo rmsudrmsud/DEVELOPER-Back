@@ -5,6 +5,7 @@ import com.developer.studyroom.entity.Studyroom;
 import com.developer.users.dto.UsersDTO;
 import com.developer.users.entity.Users;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -46,5 +47,17 @@ public class FavoritesStudyroomDTO {
 		private Long favSeq;
 		private StudyroomDTO.StudyroomSrSeqDTO srseqDTO;
 	}
+	
+	//ds
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class favStudyroominfoDTO{
+		
+		private Long favSeq;
+		private String userId;
+
+	}
+	
 	
 }

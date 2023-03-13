@@ -1,7 +1,10 @@
 package com.developer.studyroom.dto;
 
+import java.util.Date;
 import java.util.List;
 
+import com.developer.appliedlesson.dto.AppliedLessonDTO;
+import com.developer.favoriteslesson.dto.FavoritesLessonDTO;
 import com.developer.favoritesstudyroom.dto.FavoritesStudyroomDTO;
 import com.developer.favoritesstudyroom.entity.FavoritesStudyroom;
 import com.developer.hostuser.dto.HostUserDTO;
@@ -9,6 +12,7 @@ import com.developer.hostuser.entity.HostUser;
 import com.developer.roominfo.dto.RoomInfoDTO;
 import com.developer.roominfo.entity.RoomInfo;
 import com.developer.roomreview.dto.RoomReviewDTO;
+import com.developer.tutor.dto.TutorDTO;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -148,7 +152,7 @@ public class StudyroomDTO {
 	public static class StudyroomRoomInfoPageDTO {
 		private List<RoomInfoDTO.RoomInfoRoomDetailListDTO> roominfoDTO;
 		private List<RoomReviewDTO.RoomReviewSelectAllDTO> roomReviewSelectAllDTO;
-		private StudyroomDTO studyroomDTO;
+		private StudyroomDTO.StudyroomAndFavStuyroomInfoDTO studyroomAndFavStuyroomInfoDTO;
 	}
 
 	// ds
@@ -165,6 +169,23 @@ public class StudyroomDTO {
 		private String openTime;
 		private String endTime;
 		private RoomInfoDTO.RoomInfoPriceOnlyDTO roomInfoPriceDTO;
+
+	}
+	//ds
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class StudyroomAndFavStuyroomInfoDTO{
+		private Long srSeq;
+		private String name;
+		private String addr;
+		private String info;
+		private String openTime;
+		private String endTime;
+		private String imgPath;
+		private Integer oc;
+		
+		private List<FavoritesStudyroomDTO.favStudyroominfoDTO> favoritesStudyroomDTO; // 원래 List<>
 
 	}
 }
