@@ -31,6 +31,8 @@ public interface HostUserRepository extends CrudRepository<HostUser, String> {
 			+ "FROM host_user " 
 			+ "WHERE ready = 0", nativeQuery = true)
 	public List<Object[]> selectAllUnapproveHost();
+
+
 	
 	//[SR] 호스트 비밀번호찾기용
     @Query(value="select * from host_user where email = :email",nativeQuery= true)
