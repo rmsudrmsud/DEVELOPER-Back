@@ -37,7 +37,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	@Query(nativeQuery = true,
 			value ="SELECT * FROM LESSON "
 					+ "    WHERE end_date >= SYSDATE "
-					+ "    AND pay_lesson != 2 "
+					+ "    AND pay_lesson between 0 and 1 "
 					+ "ORDER BY lesson_name ASC")
 	public List<Object[]> userSelectAllLesson();
 	
