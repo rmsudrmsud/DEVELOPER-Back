@@ -84,6 +84,7 @@ public class FileDownloadController {
 	@GetMapping("lesson")
 	public ResponseEntity<?> downloadLesson(String imgPath, int type, String opt) throws FindException {
 
+		
 		String saveDirectory = "C:\\dev\\lesson";
 
 		String fileName = "";
@@ -91,7 +92,7 @@ public class FileDownloadController {
 			fileName = "t_";
 		}
 		fileName += imgPath; 
-		fileName += imgPath;
+//		fileName += imgPath;
 		File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
 		File file = null;
 
@@ -125,6 +126,9 @@ public class FileDownloadController {
 				headers.add(HttpHeaders.CONTENT_DISPOSITION,
 						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
 			}
+			
+	        // 캐시 막는 옵션 추가
+	        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 
 			byte[] bArr = FileCopyUtils.copyToByteArray(file);
 			ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
