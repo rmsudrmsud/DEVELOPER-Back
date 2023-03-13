@@ -35,12 +35,12 @@ public class UsersController {
 	 * @return
 	 */
 	@GetMapping(value = "checklogined", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checklogined(HttpSession session) {
+	public int checklogined(HttpSession session) {
 		String logined = (String) session.getAttribute("logined");
-		if (logined != null) {
-			return new ResponseEntity<>(logined, HttpStatus.OK);
+		if(logined != null) {
+			return 1;
 		} else {
-			return new ResponseEntity<>("로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
+			return 0;
 		}
 	}
 

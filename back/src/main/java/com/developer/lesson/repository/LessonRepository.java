@@ -37,7 +37,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 	@Query(nativeQuery = true,
 			value ="SELECT * FROM LESSON "
 					+ "    WHERE end_date >= SYSDATE "
-					+ "    AND pay_lesson != 2 "
+					+ "    AND pay_lesson between 0 and 1 "
 					+ "ORDER BY lesson_name ASC")
 	public List<Object[]> userSelectAllLesson();
 	
@@ -173,12 +173,12 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 		
 		//[SR]메인페이지 - 신청종료일 임박순으로 list 출력
 		@Query(value = "SELECT *"
-				+ "FROM (SELECT lesson_seq, lesson_name, img_path, price"
-				+ "                FROM lesson"
-				+ "                WHERE pay_lesson != 2"
-				+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD')"
-				+ "                ORDER BY end_date ASC)"
-				+ "WHERE rownum BETWEEN 1 AND 6", nativeQuery = true)
+				+ "FROM (SELECT lesson_seq, lesson_name, img_path, price "
+				+ "                FROM lesson "
+				+ "                WHERE pay_lesson between 0 and 1 "
+				+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD') "
+				+ "                ORDER BY end_date ASC) "
+				+ "WHERE rownum BETWEEN 1 AND 6 ", nativeQuery = true)
 		public List<Object[]> selectAllBydateLesson();
 		
 		//[DS]

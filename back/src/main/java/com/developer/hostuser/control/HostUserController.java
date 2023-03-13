@@ -200,6 +200,7 @@ public class HostUserController {
 			Studyroom s = sService.detailStudyroom(srSeq);
 
 			String oldFileName = s.getImgPath();
+			System.out.println("옛파일명: " + oldFileName);
 			File oldFile = new File(saveDirFile, oldFileName);
 
 			if (oldFile.exists()) {
@@ -230,6 +231,7 @@ public class HostUserController {
 
 				// 기존 섬네일파일 삭제
 				String oldthumbFileName = "t_" + oldFileName;
+				System.out.println("옛섬네일파일명" + oldthumbFileName);
 				File oldthumbFile = new File(saveDirFile, oldthumbFileName);
 
 				if (oldthumbFile.exists()) {
@@ -484,13 +486,17 @@ public class HostUserController {
 	public ResponseEntity<?> ListReservation(HttpSession session) throws FindException {
 
 		String hostId = (String) session.getAttribute("hostLogined");
+		if(hostId == null) {
+			return new ResponseEntity<>("로그인하세요.", HttpStatus.BAD_REQUEST);
+		}
 		List<ReservationDTO.selectAllReservationDTO> list = rService.selectAllReservation(hostId);
-
-		if (hostId != null && list.isEmpty()) {
+		
+		if (list.isEmpty()) {
 			return new ResponseEntity<>("예약내역이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(list, HttpStatus.OK);
 		}
+//		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	/**
