@@ -48,6 +48,7 @@ import com.developer.roomreview.service.RoomReviewService;
 import com.developer.userreview.dto.UserReviewDTO;
 import com.developer.userreview.service.UserReviewService;
 import com.developer.users.dto.UsersDTO;
+import com.developer.users.entity.Users;
 import com.developer.users.service.UsersService;
 import com.developer.util.Attach;
 
@@ -380,11 +381,19 @@ public class MyPageController {
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "tutee/ongoing/{userId}")
-	public ResponseEntity<?> onGoinLesson(@PathVariable String userId) throws FindException {
-		List<LessonDTO.applyLessonBytutee> list = lService.onGoingLesson(userId);
+	@GetMapping(value = "tutee/ongoing", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> onGoinLesson(HttpSession session) throws FindException {
+		String logined = (String) session.getAttribute("logined");
+		
+		if(logined != null) {
+			
+		List<LessonDTO.applyLessonBytutee> list = lService.onGoingLesson(logined);
 		return new ResponseEntity<>(list, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("로그인하세요", HttpStatus.BAD_REQUEST);
+		}
 	}
+
 
 	/**
 	 * 수업에 참여할 튜티의 이전 수업 후기 목록
@@ -429,27 +438,17 @@ public class MyPageController {
 	 * @throws FindException
 	 * @throws AddException
 	 */
-	@PutMapping(value = "update/{userId}")
-	public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody UsersDTO uDTO)
+	@PutMapping(value = "userupdate")
+	public ResponseEntity<?> updateUser(
+//			@PathVariable String userId,
+			@RequestBody UsersDTO usersDTO, HttpSession session)
 			throws FindException, AddException {
-		uService.addUsers(uDTO);
+		
+		String userId = (String) session.getAttribute("logined");
+		uService.editUser(userId, usersDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-//	/**
-//	 * 사용자 정보 수정하기(변경 예정..)
-//	 * @author Jin
-//	 * @param userId
-//	 * @param uDTO
-//	 * @return
-//	 * @throws FindException
-//	 * @throws AddException
-//	 */
-//	@PutMapping(value = "update/{userId}")
-//	public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody Users u) throws FindException, AddException{
-//		uService.updateUser(u);
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
 
 	/**
 	 * 사용자 탈퇴하기
@@ -685,7 +684,7 @@ public class MyPageController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "tutor/completed/addreview/{applySeqRv}")
-	public ResponseEntity<?> addReview(@RequestBody UserReviewDTO.addReviewDTO addReviewDTO,
+	public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO,
 			@PathVariable Long applySeqRv) throws AddException {
 		urService.addUserReview(addReviewDTO, applySeqRv);
 		return new ResponseEntity<>(HttpStatus.OK);

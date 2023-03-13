@@ -74,6 +74,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and TO_CHAR(SYSDATE,'yyyymmdd')<l.start_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
@@ -85,18 +86,20 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and l.start_cdate<=TO_CHAR(SYSDATE,'yyyymmdd')"
 				+ " and TO_CHAR(SYSDATE,'yyyymmdd')<=l.end_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
 		public List<Object[]> getLessonByUser2(@Param("logined") String logined);
 		
-		//[JH]
+		//[GH]
 		@Query(value="	SELECT l.lesson_name, l.lesson_seq"
 				+ "	from LESSON l, TUTOR t, USERS u"
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and TO_CHAR(SYSDATE,'yyyymmdd')>l.end_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
@@ -173,12 +176,12 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 		
 		//[SR]메인페이지 - 신청종료일 임박순으로 list 출력
 		@Query(value = "SELECT *"
-				+ "FROM (SELECT lesson_seq, lesson_name, img_path, price"
-				+ "                FROM lesson"
-				+ "                WHERE pay_lesson != 2"
-				+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD')"
-				+ "                ORDER BY end_date ASC)"
-				+ "WHERE rownum BETWEEN 1 AND 6", nativeQuery = true)
+				+ "FROM (SELECT lesson_seq, lesson_name, img_path, price "
+				+ "                FROM lesson "
+				+ "                WHERE pay_lesson between 0 and 1 "
+				+ "                AND TO_DATE(end_date, 'YY-MM-DD') >= TO_DATE(sysdate, 'YY-MM-DD') "
+				+ "                ORDER BY end_date ASC) "
+				+ "WHERE rownum BETWEEN 1 AND 6 ", nativeQuery = true)
 		public List<Object[]> selectAllBydateLesson();
 		
 		//[DS]
