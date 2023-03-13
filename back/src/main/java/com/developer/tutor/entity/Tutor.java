@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.developer.lesson.entity.Lesson;
 import com.developer.orders.entity.Orders;
 import com.developer.users.entity.Users;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +44,8 @@ public class Tutor {
 	@Column(name = "apply_ok")
 	private Integer applyOk;
 
+	
+	
 	@MapsId("tutorId")
 	@OneToOne(optional = true, cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "tutor_id", nullable = true)
@@ -52,7 +53,6 @@ public class Tutor {
 
 	@OneToMany(mappedBy = "tutor")
 	private List<Lesson> lesson;
-	
 	
 	@OneToMany(mappedBy = "tutor")
 	private List<Orders> orders;

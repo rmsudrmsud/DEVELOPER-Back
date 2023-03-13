@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.developer.email.EmailService;
 import com.developer.exception.FindException;
@@ -29,10 +28,10 @@ public class TutorService {
 
 	private final TutorRepository tRepository;
 	private final UsersRepository uRepository;
-	private final EmailService emailService;
-
+	private final EmailService emailService;	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	ModelMapper modelMapper = new ModelMapper();
+
 
 	/**
 	 * 튜터 등록 및 수정

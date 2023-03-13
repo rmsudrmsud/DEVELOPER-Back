@@ -74,6 +74,9 @@ public class Studyroom {
 	@Column(name = "oc")
 	@ColumnDefault(value = "0") // 0: 오픈, 1: 마감
 	private Integer oc;
+	
+	
+	
 
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "studyroom")

@@ -49,34 +49,38 @@ public class ReservationService {
 	 */
 	public List<ReservationDTO.selectAllReservationDTO> selectAllReservation(String hostId) throws FindException {
 		List<Object[]> rList = rRepository.selectAllReservation(hostId);
-		System.err.println("값" + rList.size());
+
 		List<ReservationDTO.selectAllReservationDTO> rListDto = new ArrayList<>();
-		for (int i = 0; i < rList.size(); i++) {
-			ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
-			BigDecimal resSeq = (BigDecimal) rList.get(i)[0];
-			Long convertResSeq = resSeq.longValue();
-			rDto.setResSeq(convertResSeq);
-			rDto.setUserId((String) rList.get(i)[2]);
-			rDto.setHostId((String) rList.get(i)[4]);
+        System.out.println("사이즈:" + rList.size());
 
-			// logger.error("값"+rList.get(i)[5].getClass().getName());
-			rDto.setUsingDate((Date) rList.get(i)[5]);
-			rDto.setStartTime((String) rList.get(i)[6]);
-			rDto.setEndTime((String) rList.get(i)[7]);
-			RoomInfoDTO.selectAllReservationDTO roomDto = new RoomInfoDTO.selectAllReservationDTO();
-			roomDto.setName((String) rList.get(i)[1]);
+			for (int i = 0; i < rList.size(); i++) {
+				ReservationDTO.selectAllReservationDTO rDto = new ReservationDTO.selectAllReservationDTO();
+				BigDecimal resSeq = (BigDecimal) rList.get(i)[0];
+				Long convertResSeq = resSeq.longValue();
+				rDto.setResSeq(convertResSeq);
+				rDto.setUserId((String) rList.get(i)[2]);
+				rDto.setHostId((String) rList.get(i)[4]);
 
-			UsersDTO.selectAllReservationDTO uDto = new UsersDTO.selectAllReservationDTO();
-			uDto.setName((String) rList.get(i)[3]);
+				// logger.error("값"+rList.get(i)[5].getClass().getName());
+				rDto.setUsingDate((Date) rList.get(i)[5]);
+				rDto.setStartTime((String) rList.get(i)[6]);
+				rDto.setEndTime((String) rList.get(i)[7]);
+				RoomInfoDTO.selectAllReservationDTO roomDto = new RoomInfoDTO.selectAllReservationDTO();
+				roomDto.setName((String) rList.get(i)[1]);
 
-			rDto.setUsersDTO(uDto);
-			rDto.setRoomInfoDTO(roomDto);
+				UsersDTO.selectAllReservationDTO uDto = new UsersDTO.selectAllReservationDTO();
+				uDto.setName((String) rList.get(i)[3]);
 
-			rListDto.add(rDto);
+				rDto.setUsersDTO(uDto);
+				rDto.setRoomInfoDTO(roomDto);
 
+				rListDto.add(rDto);
+
+			}
+			System.out.println("dto사이즈 : " +rListDto.size());
+			return rListDto;
 		}
-		return rListDto;
-	}
+	
 
 	/**
 	 * 예약내역 1건을 출력한다.
@@ -160,8 +164,7 @@ public class ReservationService {
 		r.setEndTime(rvDTO.getEndTime());
 		rRepository.save(r);
 	}
-	
-	
+
 	/**
 	 * [호스트마이페이지] 호스트가 예약하는 기능(예약막기용)
 	 * 

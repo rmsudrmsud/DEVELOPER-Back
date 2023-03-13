@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class UsersController {
 
 	private final UsersService uService;
-	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
@@ -36,12 +35,12 @@ public class UsersController {
 	 * @return
 	 */
 	@GetMapping(value = "checklogined", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checklogined(HttpSession session) {
+	public int checklogined(HttpSession session) {
 		String logined = (String) session.getAttribute("logined");
-		if (logined != null) {
-			return new ResponseEntity<>(logined, HttpStatus.OK);
+		if(logined != null) {
+			return 1;
 		} else {
-			return new ResponseEntity<>("로그인이 안된 상태입니다", HttpStatus.INTERNAL_SERVER_ERROR);
+			return 0;
 		}
 	}
 
@@ -77,31 +76,32 @@ public class UsersController {
 		session.invalidate();
 		return "";
 	}
-	
 
 	/**
 	 * 아이디 찾기
+	 * 
 	 * @author choigeunhyeong
 	 * @param email
 	 * @return
 	 * @throws FindException
 	 */
-	@GetMapping(value = "findId",produces = MediaType.APPLICATION_JSON_VALUE )
-	public ResponseEntity<?> findId(String email) throws FindException{
-		UsersDTO.uDTO usersDTO= uService.findId(email);
+	@GetMapping(value = "findId", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findId(String email) throws FindException {
+		UsersDTO.uDTO usersDTO = uService.findId(email);
 		return new ResponseEntity<>(usersDTO, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * [USERS] 비밀번호 찾기(비밀번호변경) - 메일포함 
+	 * [USERS] 비밀번호 찾기(비밀번호변경) - 메일포함
+	 * 
 	 * @author SR
 	 * @param email
 	 * @param userId
 	 * @return 가입된 정보가 있다면 입력받은 id와 email이 서로 일치한지 여부를 리턴
 	 * @throws Exception
 	 */
-	@PostMapping(value="searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
-	public boolean userUpdatePwd(String email, String userId) throws Exception { 
+	@PostMapping(value = "searchpwd", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean userUpdatePwd(String email, String userId) throws Exception {
 		boolean check = uService.userPwdAndEmailCheck(email, userId);
 		return check;
 

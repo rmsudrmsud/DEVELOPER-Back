@@ -46,7 +46,7 @@ public class Users {
 	@Column(name = "role")
 	@ColumnDefault(value = "2")
 	private Integer role; // 1튜터 2튜티 3탈퇴 9관리
-	
+
 	@Size(min = 6, max = 12, message = "비밀번호는 6자 이상 12자 이하로 입력해주세요.")
 	@NotNull
 	@Column(name = "pwd")
