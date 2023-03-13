@@ -685,7 +685,7 @@ public class MyPageController {
 	 * @throws AddException
 	 */
 	@PostMapping(value = "tutor/completed/addreview/{applySeqRv}")
-	public ResponseEntity<?> addReview(@RequestBody UserReviewDTO.addReviewDTO addReviewDTO,
+	public ResponseEntity<?> addReview(UserReviewDTO.addReviewDTO addReviewDTO,
 			@PathVariable Long applySeqRv) throws AddException {
 		urService.addUserReview(addReviewDTO, applySeqRv);
 		return new ResponseEntity<>(HttpStatus.OK);

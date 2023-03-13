@@ -21,7 +21,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("download/*")
 public class FileDownloadController {
 
-	//근형
+		/**
+		 * 게시판 글 상세보기 사진
+		 * @author choigeunhyeong
+		 * @param imgPath
+		 * @param type
+		 * @param opt
+		 * @return
+		 * @throws FindException
+		 */
 		@GetMapping("board")
 		public ResponseEntity<?> download(String imgPath, int type, String opt) throws FindException {
 
@@ -71,6 +79,121 @@ public class FileDownloadController {
 			}
 		}
 	
+				/**
+				 * 튜터 마이페이지 수업사진
+				 * @author choigeunhyeong
+				 * @param imgPath
+				 * @param type
+				 * @param opt
+				 * @return
+				 * @throws FindException
+				 */
+				@GetMapping("mypage/complete")
+				public ResponseEntity<?> downloadCompleteLesson(String imgPath, int type, String opt) throws FindException {
+
+					String saveDirectory = "/Users/choigeunhyeong/Documents/attach";
+					
+					String fileName = "";
+					if (type == 2) {
+						fileName = "t_";
+					}
+					fileName += imgPath; 
+					File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
+					File file = null;
+
+					for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
+
+						String fn = f.getName();
+						
+						if (fn.equals(fileName)) {
+							file = f;
+							fileName = f.getName();
+							break;
+						}
+					}
+					if (file == null) {
+						throw new FindException(fileName + "으로 된 파일이 없습니다");
+					}
+					try {
+					    HttpHeaders headers = new HttpHeaders();
+					    String contentType = Files.probeContentType(file.toPath());
+					    headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+					    headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length());
+
+					    if ("attachment".equals(opt)) {
+					        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=UTF-8''"
+					                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
+					    } else {
+					        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename*=UTF-8''"
+					                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
+					    }
+
+					    byte[] bArr = FileCopyUtils.copyToByteArray(file);
+					    ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+					    System.out.println(bArr);
+					    return re;
+					} catch (Exception e) {
+					    throw new FindException(e.getMessage());
+					}
+				}
+	
+				/**
+				 * 관리자 스터디카페 상세보기 사진 
+				 * @author choigeunhyeong
+				 * @param imgPath
+				 * @param type
+				 * @param opt
+				 * @return
+				 * @throws FindException
+				 */
+				@GetMapping("admin/studyroom")
+				public ResponseEntity<?> downloadStudyroomImg(String imgPath, int type, String opt) throws FindException {
+
+					String saveDirectory = "/Users/choigeunhyeong/Documents/attach";
+					
+					String fileName = "";
+					if (type == 2) {
+						fileName = "t_";
+					}
+					fileName += imgPath; 
+					File dir = new File(saveDirectory); // 첨부파일이 있는 디렉토리
+					File file = null;
+
+					for (File f : dir.listFiles()) { // 디렉토리의 모든 파일들
+
+						String fn = f.getName();
+						
+						if (fn.equals(fileName)) {
+							file = f;
+							fileName = f.getName();
+							break;
+						}
+					}
+					if (file == null) {
+						throw new FindException(fileName + "으로 된 파일이 없습니다");
+					}
+					try {
+					    HttpHeaders headers = new HttpHeaders();
+					    String contentType = Files.probeContentType(file.toPath());
+					    headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+					    headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length());
+
+					    if ("attachment".equals(opt)) {
+					        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=UTF-8''"
+					                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
+					    } else {
+					        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename*=UTF-8''"
+					                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
+					    }
+
+					    byte[] bArr = FileCopyUtils.copyToByteArray(file);
+					    ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
+					    System.out.println(bArr);
+					    return re;
+					} catch (Exception e) {
+					    throw new FindException(e.getMessage());
+					}
+				}
 	/**
 	 * 수업 파일 다운로드
 	 * 

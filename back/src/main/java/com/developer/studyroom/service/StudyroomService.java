@@ -53,10 +53,10 @@ public class StudyroomService {
 			BigDecimal sr_seq = (BigDecimal) Slist.get(i)[0];
 			Long resultsr_seq = sr_seq.longValue();
 			srDTO.setSrSeq(resultsr_seq);
-			srDTO.setEndTime((String) Slist.get(i)[2]);
-			srDTO.setOpenTime((String) Slist.get(i)[7]);
-			srDTO.setName((String) Slist.get(i)[5]);
-			srDTO.setAddr((String) Slist.get(i)[1]);
+			srDTO.setEndTime((String) Slist.get(i)[5]);
+			srDTO.setOpenTime((String) Slist.get(i)[4]);
+			srDTO.setName((String) Slist.get(i)[1]);
+			srDTO.setAddr((String) Slist.get(i)[2]);
 			HostUserDTO.getAllHostUserDTO hDTO = new HostUserDTO.getAllHostUserDTO();
 			hDTO.setHostId((String) Slist.get(i)[8]);
 			srDTO.setHostUser(hDTO);
