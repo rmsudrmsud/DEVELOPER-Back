@@ -26,7 +26,7 @@ class HostUserRepositoryTest {
 	@DisplayName("hostUser insert() 테스트")
 	void testSave() {
 
-		for (int i = 10; i <= 20; i++) {
+		for (int i = 1; i <= 5; i++) {
 			HostUser h = new HostUser();
 			h.setHostId("아이디" + i);
 			h.setPwd("114");

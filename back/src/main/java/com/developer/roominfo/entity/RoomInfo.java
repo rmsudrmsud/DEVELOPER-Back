@@ -68,6 +68,9 @@ public class RoomInfo {
 	@Column(name = "status")
 	@ColumnDefault(value = "0") // 0: 활성화, 1: 비활성화(삭제)
 	private Integer status;
+	
+	
+	
 
 	@ManyToOne // (cascade= {CascadeType.MERGE})
 	@JoinColumn(name = "sr_seq", nullable = false)

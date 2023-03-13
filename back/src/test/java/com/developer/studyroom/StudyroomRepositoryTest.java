@@ -32,14 +32,14 @@ class StudyroomRepositoryTest {
 	@Test
 	@DisplayName("Studyroom insert() 테스트")
 	void testSave() {
-		Optional<HostUser>optH =hur.findById("아이디10");
+		Optional<HostUser>optH =hur.findById("아이디1");
 		assertTrue(optH.isPresent());
 		HostUser h = optH.get();
 		Studyroom s = new Studyroom();
-		s.setAddr("경기 수원시 영통구 권선로908번길 50");
+		s.setAddr("주소테스트");
 		s.setEndTime("10:00");
 		s.setOpenTime("01:00");
-		s.setName("독고스터디카페");
+		s.setName("스터디카페");
 		s.setImgPath("3.png");
 		s.setHostUser(h); //**필수설정!
 		srr.save(s);

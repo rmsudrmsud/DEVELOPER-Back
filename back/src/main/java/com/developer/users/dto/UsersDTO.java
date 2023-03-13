@@ -63,6 +63,7 @@ public class UsersDTO {
 	@NoArgsConstructor
 	public static class uNameDTO {
 		private String name;
+		private String tuteeId;
 	}
 
 	//[JW]
@@ -162,5 +163,12 @@ public class UsersDTO {
 	@NoArgsConstructor
 	public static class UserNickNameDTO {
 		private String nickname;
+	}
+	
+	//ds
+	@Data
+	@NoArgsConstructor
+	public static class UsersUserIdDTO {
+		private String userId;
 	}
 }

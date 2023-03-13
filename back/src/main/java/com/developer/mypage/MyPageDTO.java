@@ -22,6 +22,7 @@ public class MyPageDTO {
 		private List<LessonDTO.GetLessonByUser1> list;
 		private List<LessonDTO.GetLessonByUser2> list2;
 		private List<LessonDTO.GetLessonByUser3> list3;
+		private List<LessonDTO.UnpaidLessonByUser> list4;
 	}
 
 	// [JH] 튜터의 진행예정 수업 상세
@@ -52,7 +53,7 @@ public class MyPageDTO {
 		private List<LessonDTO.notYetLessonBytutee> notYetlist;
 	}
 
-	//ds
+	// ds
 	@Data
 	@NoArgsConstructor
 	public static class getRoomReviewList {
@@ -68,4 +69,16 @@ public class MyPageDTO {
 		List<LessonDTO.selectLessonDTO> selectLessonDTO;
 		List<UsersDTO.getCompletedClassDTO> CompletedlessonReviewDTO;
 	}
+
+	// [JW]
+	@Data
+	@NoArgsConstructor
+	public static class tuteeDashboardDTO {
+		List<LessonDTO.notYetLessonBytutee> applyWaitList;
+		List<LessonDTO.notYetLessonBytutee> rejectList;
+		List<LessonDTO.applyLessonBytutee> notYetList;
+		List<LessonDTO.applyLessonBytutee> proceedingList;
+		List<LessonDTO.applyLessonBytutee> lastList;
+	}
+
 }

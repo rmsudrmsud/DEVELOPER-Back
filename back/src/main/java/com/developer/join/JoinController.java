@@ -80,6 +80,7 @@ public class JoinController {
 	}
 
 	/**
+	 * 통합아이디 중복체크 (true중복, false사용가능) 
 	 * 사용자 아이디 중복체크(수정예정)
 	 * 
 	 * @author Jin
@@ -89,17 +90,64 @@ public class JoinController {
 	 * @throws FindException
 	 */
 	@GetMapping(value = "users/check/{userId}")
-	public boolean checkUser(@PathVariable String userId, HttpSession session) throws FindException {
-		UsersDTO.UsersDetailDTO usersDTO;
-		boolean flag = true;
-		usersDTO = uService.getUser(userId);
-		String check = usersDTO.getUserId();
-		if (check == null) {
-			flag = true;
-		} else if (check != null) {
-			flag = false;
+	public boolean checkUserId(@PathVariable String userId, HttpSession session) throws FindException {
+		boolean check = false;
+		boolean check1 = false;
+		check1 = uService.existsByUserId(userId);
+		System.out.println("check1결과는" + check1);
+		boolean check2 = false;
+		String hostId = userId;
+		check2 = hService.existsByHostId(hostId);
+		System.out.println("check2결과는" + check2);
+		if (check1 == check2) {
+			check = false;
+		} else {
+			check = true;
 		}
-		return flag;
+		return check;
+
+	}
+
+	/**
+	 * 사용자 이메일 중복체크 (true중복, false사용가능)
+	 * 
+	 * @author Jin
+	 * @param email
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "users/checkemail/{email}")
+	public ResponseEntity<?> checkEmail(@PathVariable String email, HttpSession session) throws FindException {
+		return ResponseEntity.ok(uService.existsByEmail(email));
+	}
+
+	/**
+	 * 호스트 이메일 중복체크 (true중복, false사용가능)
+	 * 
+	 * @author Jin
+	 * @param email
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "hostuser/checkemail/{email}")
+	public ResponseEntity<?> checkHostEmail(@PathVariable String email, HttpSession session) throws FindException {
+		return ResponseEntity.ok(hService.existsByHostEmail(email));
+	}
+
+	/**
+	 * 호스트 사업자 번호 중복체크(true중복, false 사용가능)
+	 * 
+	 * @author Jin
+	 * @param num
+	 * @param session
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping(value = "hostuser/checknum/{num}")
+	public ResponseEntity<?> checkHostNum(@PathVariable String num, HttpSession session) throws FindException {
+		return ResponseEntity.ok(hService.existsByNum(num));
 	}
 
 	/**
@@ -210,4 +258,5 @@ public class JoinController {
 			return map;
 		}
 	}
+
 }

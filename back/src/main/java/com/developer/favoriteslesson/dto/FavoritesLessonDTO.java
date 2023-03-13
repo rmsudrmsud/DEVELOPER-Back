@@ -1,6 +1,9 @@
 package com.developer.favoriteslesson.dto;
 
+import java.util.Date;
+
 import com.developer.lesson.dto.LessonDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +19,10 @@ public class FavoritesLessonDTO {
 		private Long favLesSeq;
 		private String tuteeId;
 		private String lessonName;
+		private int category;
+		private String location;
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+		private Date applyEndDate;
 	}
 
 	// [JW]

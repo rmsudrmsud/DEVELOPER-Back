@@ -29,13 +29,15 @@ public interface LessonReviewRepository extends CrudRepository<LessonReview, Lon
 	public Integer cntLReview(@Param("tutorId") String tutorId);
 	
 	//[JW]
-	@Query(value = "SELECT lr.review, lr.star, u.name "
-			+ "FROM lesson_review lr "
-			+ "LEFT OUTER JOIN applied_lesson al "
-			+ "ON lr.apply_seq = al.apply_seq "
-			+ "FULL OUTER JOIN users u "
-			+ "ON al.al_user_id = u.user_id "
-			+ "WHERE al.al_user_id = :tuteeId ",
+	@Query(value = "SELECT lr.review, lr.star, u.name, l.lesson_name\n"
+			+ "			FROM lesson_review lr \n"
+			+ "			LEFT OUTER JOIN applied_lesson al \n"
+			+ "			ON lr.apply_seq = al.apply_seq \n"
+			+ "            INNER JOIN lesson l\n"
+			+ "            ON al.al_lesson_seq = l.lesson_seq\n"
+			+ "			FULL OUTER JOIN users u \n"
+			+ "			ON al.al_user_id = u.user_id \n"
+			+ "			WHERE al.al_user_id = :tuteeId ",
 					nativeQuery = true)
 	public List<Object[]> listLRList(@Param("tuteeId") String tuteeId);
 	

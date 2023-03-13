@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,10 +37,12 @@ public class HostUser {
 
 	@Id
 	@Column(name = "host_id")
+	@Size(min = 6, max = 12, message = "아이디는 6자 이상 12자 이하로 입력해주세요.")
 	private String hostId;
 
 	@NotNull
 	@Column(name = "pwd")
+	@Size(min = 6, max = 12, message = "비밀번호는 6자 이상 12자 이하로 입력해주세요.")
 	private String pwd;
 
 	@NotNull
