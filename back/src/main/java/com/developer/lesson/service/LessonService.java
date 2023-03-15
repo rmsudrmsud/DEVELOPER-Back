@@ -330,7 +330,7 @@ public class LessonService {
 	}
 
 	/**
-	 * 수업 삭제(payLesson을 2로 변경)
+	 * 수업 삭제(payLesson을 3로 변경)
 	 * 
 	 * @author Jin
 	 * @param lessonSeq
@@ -341,7 +341,7 @@ public class LessonService {
 		Optional<Lesson> optLesson = lRepository.findById(lessonSeq);
 		if (optLesson.isPresent()) {
 			Lesson lessonEntity = optLesson.get();
-			lessonEntity.setPayLesson(2);
+			lessonEntity.setPayLesson(3);
 			lRepository.save(lessonEntity);
 		}
 	}

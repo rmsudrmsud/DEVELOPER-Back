@@ -69,9 +69,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 			+ "            SELECT  users.nickname, board.post_seq, board.category, board.title, board.content,"
 			+ "    board.img_path, board.c_date, board.recommend, board.cnt "
 			+ "            FROM users inner join board on users.user_id = board.user_id "
-			+ "            ORDER BY :orderby desc " + "      ) a) "
+			+ "            ORDER BY c_date desc " + "      ) a) "
 			+ "	WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
-	public List<Object[]> listBoard(@Param("orderby") String orderby, @Param("startRow") int startRow,
+	public List<Object[]> listBoard(@Param("startRow") int startRow,
 			@Param("endRow") int endRow);
 
 	/**
@@ -80,12 +80,22 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	 * @author choigeunhyeong
 	 * @return
 	 */
+	@Query(value = "SELECT * FROM ( SELECT rownum rn, a. * 	FROM (\n"
+			+ "			           SELECT  users.nickname, board.post_seq, board.category, board.title, board.content,\n"
+			+ "			    board.img_path, board.c_date, board.recommend, board.cnt \n"
+			+ "			            FROM users inner join board on users.user_id = board.user_id \n"
+			+ "			            ORDER BY cnt desc ) a) \n"
+			+ "				WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
+	public List<Object[]> getBoardByCnt( @Param("startRow") int startRow,
+			@Param("endRow") int endRow);
 
-	@Query(value = "select users.nickname, board.post_seq, board.category, board.title, board.content,"
-			+ "		board.img_path, board.c_date, board.recommend, board.cnt" + "		from users"
-			+ "		inner join board" + "		on users.user_id = board.user_id"
-			+ "		order by cnt desc", nativeQuery = true)
-	public List<Object[]> getBoardByCnt();
+//	@Query(value = "select users.nickname, board.post_seq, board.category, board.title, board.content,"
+//			+ "		board.img_path, board.c_date, board.recommend, board.cnt" + "		from users"
+//			+ "		inner join board" + "		on users.user_id = board.user_id"
+//			+ "		order by cnt desc", nativeQuery = true)
+//	public List<Object[]> getBoardByCnt( @Param("startRow") int startRow,
+//			@Param("endRow") int endRow);
+	
 
 	/**
 	 * 게시글목록 추천많은순 순으로 정렬해서 출력

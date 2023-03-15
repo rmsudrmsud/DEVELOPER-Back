@@ -50,10 +50,25 @@ public class UsersService {
 	 * @author Jin
 	 * @param users
 	 * @throws AddException
-	 */
-	public void updateUser(Users users) throws AddException {
-		uRepository.save(users);
+	 */		
+	public void editUser(String userId, UsersDTO usersDTO) throws FindException {
+	
+		Optional<Users> optUsers = uRepository.findById(userId);
+		if(optUsers.isPresent()) {
+			Users usersEntity = optUsers.get();
+			
+			usersEntity.setAddr(usersDTO.getAddr());
+			usersEntity.setTel(usersDTO.getTel());
+			usersEntity.setPwd(usersDTO.getPwd());
+			usersEntity.setNickname(usersDTO.getNickname());
+			usersEntity.setName(usersDTO.getName());
+			uRepository.save(usersEntity);
+			
+		} else {
+			throw new FindException("회원 정보 수정 맨");
+		}
 	}
+
 
 	/**
 	 * 사용자 상세정보 조회.
@@ -153,12 +168,13 @@ public class UsersService {
 	 * @throws FindException
 	 */
 	public void deleteUser(String userId) throws FindException {
-		UsersDTO.UsersDetailDTO usersDTO = this.getUser(userId);
-		usersDTO.setRole(3);
-		Users usersEntity = new Users();
-
-		modelMapper.map(usersDTO, usersEntity);
-		uRepository.save(usersEntity);
+		Optional<Users> optUsers = uRepository.findById(userId);
+		if(optUsers.isPresent()) {
+			Users usersEntity = optUsers.get();
+			usersEntity.setRole(3);
+			uRepository.save(usersEntity);
+		}
+	
 	}
 
 	/**

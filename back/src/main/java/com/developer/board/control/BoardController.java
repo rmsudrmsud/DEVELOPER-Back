@@ -132,9 +132,22 @@ public class BoardController {
 //		 return new ResponseEntity<>(bService.listBoard(currentPage),HttpStatus.OK);
 //	}
 	@GetMapping("/list")
-	public ResponseEntity<PageBean> list(String orderby, int currentPage) throws FindException {
+	public ResponseEntity<PageBean> list(int currentPage) throws FindException {
 
-		return new ResponseEntity<>(bService.listBoard(orderby, currentPage), HttpStatus.OK);
+		return new ResponseEntity<>(bService.listBoard(currentPage), HttpStatus.OK);
+	}
+	
+	/**
+	 * 커뮤니티 메인 글목록 (조회수)
+	 * 
+	 * @author choigeunhyeong
+	 * @return
+	 * @throws FindException
+	 */
+	@GetMapping("/listcnt")
+	public ResponseEntity<PageBean> listcnt(int currentPage) throws FindException {
+
+		return new ResponseEntity<>(bService.listBoardByCnt(currentPage), HttpStatus.OK);
 	}
 
 	/**
@@ -182,7 +195,6 @@ public class BoardController {
 
 			String oldFileName = b.get().getImgPath();
 			File oldFile = new File(saveDirFile, oldFileName);
-
 			if (oldFile.exists()) {
 				oldFile.delete();
 			}

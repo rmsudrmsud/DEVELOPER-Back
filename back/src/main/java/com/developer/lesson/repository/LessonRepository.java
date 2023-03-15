@@ -74,6 +74,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and TO_CHAR(SYSDATE,'yyyymmdd')<l.start_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
@@ -85,18 +86,20 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and l.start_cdate<=TO_CHAR(SYSDATE,'yyyymmdd')"
 				+ " and TO_CHAR(SYSDATE,'yyyymmdd')<=l.end_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
 		public List<Object[]> getLessonByUser2(@Param("logined") String logined);
 		
-		//[JH]
+		//[GH]
 		@Query(value="	SELECT l.lesson_name, l.lesson_seq"
 				+ "	from LESSON l, TUTOR t, USERS u"
 				+ "	where l.tutor_id = t.tutor_id"
 				+ "	and t.tutor_id = u.user_id"
 				+ "	and u.user_id = :logined"
+				+ " and l.pay_lesson between 0 and 1"
 				+ "	and TO_CHAR(SYSDATE,'yyyymmdd')>l.end_cdate"
 				+ "	order by l.lesson_seq desc",
 				nativeQuery = true)
