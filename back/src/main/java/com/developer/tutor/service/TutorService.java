@@ -9,11 +9,10 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.developer.email.EmailService;
 import com.developer.exception.FindException;
-import com.developer.exception.RemoveException;
 import com.developer.lesson.dto.LessonDTO;
 import com.developer.tutor.dto.TutorDTO;
 import com.developer.tutor.entity.Tutor;
@@ -26,13 +25,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TutorService {
-	@Autowired
-	private TutorRepository tRepository;
-	@Autowired
-	private UsersRepository uRepository;
 
-	private ModelMapper modelMapper;
+	private final TutorRepository tRepository;
+	private final UsersRepository uRepository;
+	private final EmailService emailService;	
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	ModelMapper modelMapper = new ModelMapper();
+
 
 	/**
 	 * 튜터 등록 및 수정
@@ -71,10 +70,10 @@ public class TutorService {
 	public List<TutorDTO.selectTutorDetailDTO> selectTutorDetail(String tutorId) throws FindException {
 		List<TutorDTO.selectTutorDetailDTO> tResult = new ArrayList<>();
 		TutorDTO.selectTutorDetailDTO tDTO = new TutorDTO.selectTutorDetailDTO();
-		
+
 		List<Object[]> list = tRepository.selectTutorDetail(tutorId);
 
-		if(list.size() == 0) {
+		if (list.size() == 0) {
 			Optional<Tutor> t = tRepository.findById(tutorId);
 			tDTO.setInfo(t.get().getInfo());
 			tDTO.setImgPath(t.get().getImgPath());
@@ -83,13 +82,13 @@ public class TutorService {
 			tDTO.setLesson(null);
 		} else {
 			Optional<Users> u = uRepository.findById(tutorId);
-			
+
 			List<LessonDTO.onlyLessonDTO> lResult = new ArrayList<>();
 			tDTO.setInfo((String) list.get(0)[12]);
 			tDTO.setImgPath((String) list.get(0)[13]);
 			tDTO.setStarAvg(((BigDecimal) list.get(0)[14]).doubleValue());
 			tDTO.setName(u.get().getName());
-			
+
 			for (int i = 0; i < list.size(); i++) {
 				LessonDTO.onlyLessonDTO lDTO = new LessonDTO.onlyLessonDTO();
 				lDTO.setLessonSeq(((BigDecimal) list.get(i)[0]).longValue());
@@ -105,7 +104,7 @@ public class TutorService {
 				lDTO.setEndDate(((Date) list.get(i)[10]));
 				lDTO.setLocation((String) list.get(i)[11]);
 				lDTO.setPayLesson(((BigDecimal) list.get(i)[16]).intValue());
-				
+
 				lResult.add(lDTO);
 			}
 			tDTO.setLesson(lResult);
@@ -115,20 +114,53 @@ public class TutorService {
 	}
 
 	/**
-	 * 튜터승인거절
+	 * 튜터로 승인한다.(승인메일 포함)
 	 * 
 	 * @author SR
 	 * @param userId
-	 * @throws RemoveException
+	 * @throws FindException, Exception 
 	 */
-	public void deleteTutor(String userId) throws RemoveException {
-		Optional<Tutor> optT = tRepository.findById(userId);
+	public void tutorApply(String tutorId) throws FindException, Exception {
+		Optional<Tutor> optT = tRepository.findById(tutorId);
 		if (optT.isPresent()) {
 			Tutor entityT = optT.get();
-			tRepository.delete(entityT);
+			emailService.tutorOk(entityT.getUsers().getEmail());
+			entityT.setApplyOk(1);
+			tRepository.save(entityT);
 		} else {
-			throw new RemoveException("해당 유저가 존재하지 않습니다.");
+			throw new FindException("해당 ID가 존재하지 않습니다.");
 		}
 	}
 
+	/**
+	 * 튜터승인거절(삭제 및 거절메일 포함)
+	 * 
+	 * @author SR
+	 * @param userId
+	 * @throws Exception
+	 */
+	public void deleteTutor(String userId) throws FindException, Exception {
+		Optional<Tutor> optT = tRepository.findById(userId);
+		if (optT.isPresent()) {
+			Tutor entityT = optT.get();
+			emailService.tutorReject(entityT.getUsers().getEmail());
+			tRepository.delete(entityT);
+		} else {
+			throw new FindException("해당 유저가 존재하지 않습니다.");
+		}
+	}
+	
+//	/**
+//	 * 튜터 조회
+//	 * @author Jin
+//	 * @param tutorId
+//	 * @return
+//	 * @throws FindException
+//	 */
+//	public TutorDTO.tutorDTO getTutor(String tutorId) throws FindException{
+//		Optional<Tutor> optT = tRepository.findById(tutorId);
+//		Tutor tutor = optT.get();
+//		TutorDTO.tutorDTO tutorDTO = modelMapper.map(tutor, TutorDTO.tutorDTO.class);
+//		return tutorDTO;
+//	}
 }

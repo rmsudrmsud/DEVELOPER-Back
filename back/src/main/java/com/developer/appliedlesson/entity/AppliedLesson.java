@@ -63,6 +63,8 @@ public class AppliedLesson {
 	@Column(name="tutee_id")
 	private String tuteeId;
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name="al_lesson_seq")
 	private Lesson lesson;

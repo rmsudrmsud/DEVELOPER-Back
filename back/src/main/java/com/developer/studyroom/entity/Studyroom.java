@@ -46,7 +46,7 @@ public class Studyroom {
 	@Column(name = "sr_seq")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SR_SEQ_GENERATOR" // 위의 sequence 이름
 	)
-	private long srSeq;
+	private Long srSeq;
 
 	@NotNull
 	@Column(name = "name")
@@ -74,6 +74,9 @@ public class Studyroom {
 	@Column(name = "oc")
 	@ColumnDefault(value = "0") // 0: 오픈, 1: 마감
 	private Integer oc;
+	
+	
+	
 
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "studyroom")

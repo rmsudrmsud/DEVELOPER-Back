@@ -1,7 +1,7 @@
 package com.developer.appliedlesson.repository;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.developer.appliedlesson.entity.AppliedLesson;
 
 public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Long> {
-	//단위테스트용
-	public Optional<AppliedLesson> findByApplySeq(Long applySeq);
 
 	/**
 	 * 미승인 튜티 리스트
@@ -18,7 +16,7 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
 	 * @param userId
 	 * @return
 	 */
-   @Query(value = " SELECT u.name"
+   @Query(value = " SELECT u.name, a.apply_seq"
    +" FROM USERS u, APPLIED_LESSON a, LESSON l"
    +" WHERE a.tutee_id = u.user_id"
    +" and a.apply_ok = 0"
@@ -33,7 +31,7 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
     * @param userId
     * @return
     */
-   @Query(value = " SELECT u.name"
+   @Query(value = " SELECT u.name, a.apply_seq"
    +" FROM USERS u, APPLIED_LESSON a, LESSON l"
    +" WHERE a.tutee_id = u.user_id"
    +" and a.apply_ok = 1"
@@ -43,28 +41,27 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
    public List<Object[]> getLessonApplyUser(@Param("lessonSeq") long lessonSeq);
    
 	
-	//근형 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록
-	@Query(value="SELECT u.name, l.lesson_name "
-			+ "FROM USERS u, APPLIED_LESSON a, LESSON l "
-			+ "WHERE a.al_tutee_id = u.user_id "
-			+ "and a.apply_ok = 1"
-			+ "and l.end_cdate < TO_CHAR(SYSDATE,'yyyy-mm-dd') "
-			+ "and l.lesson_seq = a.al_lesson_seq "
-			+ "and l.lesson_seq = :lesson_seq "
-			+ "order by u.name desc", nativeQuery=true)
-	public List<Object[]> selectClassAndTutee(@Param("lesson_seq") Long lessonSeq);
-	
-	//근형 진행완료된클래스 후기목록
-	@Query(value="SELECT u.name,  r.review, r.star\n"
-			+ "from LESSON l, TUTOR t, USERS u, LESSON_REVIEW r, APPLIED_LESSON a "
-			+ "where l.tutor_id = t.tutor_id "
-			+ "and l.lesson_seq = a.al_lesson_seq "
-			+ "and t.tutor_id = u.user_id "
-			+ "and r.apply_seq = a.apply_seq "
-			+ "and u.user_id = :userId "
-			+ "order by l.lesson_seq desc", nativeQuery= true)
-	public List<Object[]> selectCompletedClassList(@Param("userId") String userId);
 
+ //근형 진행완료된 클래스 페이지 클래스명, 수강했던 튜티목록(후가기없는사람)
+ 	@Query(value="SELECT u.name, l.lesson_name, al.apply_seq "
+ 			+ "FROM applied_lesson al "
+ 			+ "INNER JOIN lesson l ON al.al_lesson_seq = l.lesson_seq "
+ 			+ "INNER JOIN users u ON al.al_user_id = u.user_id "
+ 			+ "LEFT JOIN user_review ur ON al.apply_seq = ur.apply_seq_rv "
+ 			+ "WHERE ur.apply_seq_rv IS NULL and l.lesson_seq = :lesson_seq", nativeQuery=true)
+ 	public List<Object[]> noReviewTutee(@Param("lesson_seq") Long lessonSeq);
+
+ 	
+ 	//근형 진행완료된클래스 후기목록
+ 	@Query(value="SELECT r.review, r.star, u.nickname "
+ 			+ "FROM applied_Lesson a "
+ 			+ "INNER JOIN lesson_Review r "
+ 			+ "ON a.apply_seq = r.apply_seq "
+ 			+ "INNER JOIN users u "
+ 			+ "ON a.al_user_id = u.user_id "
+ 			+ "WHERE a.al_lesson_seq = :lesson_seq ", nativeQuery= true)
+ 	public List<Object[]> selectCompletedClassList(@Param("lesson_seq") Long lessonSeq);
+ 	
 	//[JW]
 	@Query(nativeQuery =  true,
 				value = "select * from applied_lesson al\n"
@@ -75,10 +72,10 @@ public interface AppliedLessonRepository extends JpaRepository<AppliedLesson, Lo
 
 	//[JW]	
 	@Query(nativeQuery =  true,
-			value = "select * from applied_lesson al\n"
+			value = "select al.apply_seq from applied_lesson al\n"
 					+ "WHERE al.al_lesson_seq = :lessonSeq "
-					+ "AND al.tutee_id = :tuteeId")
-	public AppliedLesson delAppliedTutee(@Param("tuteeId") String tuteeId, 
-																	@Param("lessonSeq") Long lessonSeq);
+					+ "AND al.al_user_id = :tuteeId")
+	public Long delAppliedTutee(@Param("tuteeId") String tuteeId, @Param("lessonSeq") Long lessonSeq);
 
 }
+
