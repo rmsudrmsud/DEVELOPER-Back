@@ -55,7 +55,7 @@ Kosta Final Project
 |OS|Mac OS|
 |IDE|Eclipse IDE 2022-12|
 |Framework|SpringBoot 2.7.8|
-|Database|Oracle 11g Express Edition|
+|Database|Oracle 11g Express Edition, Visual Studio code|
 |ORM|1차 : Mybatis, 2차 : Spring Data JPA|
 |협업 관리 툴|Github, Notion, Google Drive|
 
