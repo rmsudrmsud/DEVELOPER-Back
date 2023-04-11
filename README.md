@@ -87,19 +87,74 @@ Kosta Final Project
 ## 결과 페이지
 
 * 로그인
+<p align="center">
+<img width="600" alt="로그인" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/Login.png">
+</p>
+
 * ID 찾기
+<p align="center">
+<img width="600" alt="ID 찾기" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/FindId.png">
+</p>
+
 * Pwd 찾기
+<p align="center">
+<img width="600" alt="비밀번호 찾기" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/FindPwd.png">
+</p>
+
+<p align="center">
+<img width="600" alt="비밀번호 발송" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/FindPwd2.png">
+</p>
 
 * 커뮤니티
+
   + 전체 글 목록
+  <p align="center">
+<img width="600" alt="글 전체목록" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/BoardList.png">
+</p>
+
   + 게시글 검색
+  <p align="center">
+<img width="600" alt="글 검색" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/Search.png">
+</p>
+
   + 글 작성
+  <p align="center">
+<img width="600" alt="글 작성" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/AddBoard.png">
+</p>
+
   + 글 상세
+  <p align="center">
+<img width="600" alt="글 상세" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/DetailBoard.png">
+</p>
+
   + 글 수정
+  <p align="center">
+<img width="600" alt="글 수정" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/EditBoard1.png">
+</p>
+<p align="center">
+<img width="600" alt="글 수정2" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/EditBoard2.png">
+</p>
+
   + 글 삭제
+  <p align="center">
+<img width="600" alt="글 삭제" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/DeleteBoard.png">
+</p>
+
   + 댓글 작성
+  <p align="center">
+<img width="600" alt="댓글 작성" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/AddRep.png">
+</p>
+
   + 댓글 수정
+  <p align="center">
+<img width="600" alt="댓글 수정"src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/EditRep.png">
+</p>
+
   + 댓글 삭제
+  <p align="center">
+<img width="600" alt="댓글 삭제" src="https://github.com/rmsudrmsud/DEVELOPER-Back/blob/feature-gh/back/image/DeleteRep.png">
+</p>
+
 
 * 마이페이지
 
