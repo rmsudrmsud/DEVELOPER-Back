@@ -53,6 +53,8 @@ public class BoardRep {
 	@Column(name = "cdate")
 	@ColumnDefault(value = "SYSDATE")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	@JsonSerialize(using = LocalDateTimeSerializer.class)
+//	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private Date cDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)

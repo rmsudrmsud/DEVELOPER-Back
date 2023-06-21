@@ -51,6 +51,8 @@ public class ReservationDTO {
 	@NoArgsConstructor
 	public static class getReservationDTO {
 		private Long resSeq;
+		@Temporal(TemporalType.DATE)
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date usingDate;
 		private String startTime;
 		private String endTime;

@@ -15,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.developer.board.dto.BoardDTO;
+import com.developer.board.dto.PageBean;
 import com.developer.board.entity.Board;
 import com.developer.board.repository.BoardRepository;
+import com.developer.board.service.BoardService;
+import com.developer.exception.FindException;
 import com.developer.users.entity.Users;
 import com.developer.users.repository.UsersRepository;
 
@@ -28,7 +31,9 @@ class BoardRepositoryTest {
 	private BoardRepository br;
 	@Autowired
 	private UsersRepository ur;
-
+	
+	@Autowired
+	private BoardService bs;
 	@Test
 	@DisplayName("Board Save 테스트")
 	void testBoardSave() {
@@ -198,4 +203,10 @@ class BoardRepositoryTest {
 		Optional<Board> b = br.findById(1L);
 		br.updateCnt(1L);
 	}
+	@Test
+	void serviceBoard() throws FindException {
+		PageBean<BoardDTO> list = bs.listBoard(1);
+		logger.info("리스츠  -> "+list);
+	}
+	
 }

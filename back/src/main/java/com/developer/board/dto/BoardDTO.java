@@ -1,27 +1,31 @@
 package com.developer.board.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.domain.Page;
 
 import com.developer.boardrep.dto.BoardRepDTO;
 import com.developer.recommend.dto.RecommendDTO;
 import com.developer.users.dto.UsersDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @DynamicInsert
 @DynamicUpdate
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+@ToString
 public class BoardDTO {
 	// 근형
 	private Long postSeq;
@@ -29,15 +33,22 @@ public class BoardDTO {
 	private String title;
 	private String content;
 	private String imgPath;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Date cDate;
+	private LocalDateTime cDate;
 	private Integer recommend;
 	private Integer cnt;
 
 	private BoardRepDTO boardRepDTO;
 	private UsersDTO usersDTO;
 	private RecommendDTO recommendDTO;
-
+	private String dateFormat;
+	
+	public void setcDate(LocalDateTime LocalDateTime) {
+	      this.dateFormat = DateTimeFormat.timesAgo(LocalDateTime);
+	}
+	
 	@Data
 	@NoArgsConstructor
 	public static class BoardAllSelectDTO {
@@ -46,6 +57,8 @@ public class BoardDTO {
 		private String title;
 		private String content;
 		private String imgPath;
+//		@JsonSerialize(using = LocalDateTimeSerializer.class)
+//		@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		private Date cDate;
 		private Integer recommend;
@@ -71,9 +84,14 @@ public class BoardDTO {
 		private Integer recommend;
 		private Integer cnt;
 		private UsersDTO.selectAllBydateBoardDTO usersDTO;
+		
+		
 	}
+	
+
 
 	// 근형
+	//댓글 수정폼
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -100,8 +118,10 @@ public class BoardDTO {
 		private String content;
 		private String imgPath;
 		private UsersDTO.UsersNameDTO usersNameDTO;
+		@JsonSerialize(using = LocalDateTimeSerializer.class)
+		@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-		private Date cDate;
+		private LocalDateTime cDate;
 		private Integer recommend;
 		private Integer cnt;
 		private UsersDTO.selectAllBydateBoardDTO usersDTO;
@@ -115,8 +135,10 @@ public class BoardDTO {
 		private String content;
 		private String imgPath;
 		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+		@JsonSerialize(using = LocalDateTimeSerializer.class)
+		@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 //			@ColumnDefault(value = "SYSDATE")
-		private Date cDate;
+		private LocalDateTime cDate;
 	}
 
 //	@Data

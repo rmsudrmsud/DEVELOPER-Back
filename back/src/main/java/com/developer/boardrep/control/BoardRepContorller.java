@@ -46,6 +46,8 @@ public class BoardRepContorller {
 	public ResponseEntity<?> addBoardRep(@PathVariable Long postSeq, @RequestBody BoardRepDTO.saveBoardRepDTO boardRepDTO,
 			HttpSession session) throws AddException {
 		System.out.println("postSeq:" + postSeq);
+		System.out.println("boardRepDTO:" + boardRepDTO);
+		System.out.println("postSeq:" + postSeq);
 		String logined = (String) session.getAttribute("logined");
 		if (logined == null) { // 로그인 안한 경우
 			throw new AddException("로그인하세요");

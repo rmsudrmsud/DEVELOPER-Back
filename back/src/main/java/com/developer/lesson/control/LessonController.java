@@ -61,7 +61,7 @@ public class LessonController {
 			throws AddException, FindException {
 
 		String userId = (String) session.getAttribute("logined");
-		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/lesson"; // 각자 주소로!
+		String saveDirectory = "/Users/choigeunhyeong/Documents/attach"; // 각자 주소로!
 		File saveDirFile = new File(saveDirectory);
 		String fileName;
 		if (f != null && f.getSize() > 0) {

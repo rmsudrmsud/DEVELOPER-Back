@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 //package com.developer.lesson;
 //
 //<<<<<<< HEAD
@@ -212,7 +212,7 @@
 //	}
 //
 //}
-=======
+
 package com.developer.lesson;
 
 
@@ -260,4 +260,3 @@ public class LessonRepositoryTest {
 	}
 
 }
->>>>>>> 5099a307826135b0c822d9a20d496426f8ad754e

@@ -1,12 +1,12 @@
 package com.developer.board.service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.criteria.Expression;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -81,10 +81,12 @@ public class BoardService {
 			String title = (String) arr[4];
 			String content = (String) arr[5];
 			String imgPath = (String) arr[6];
-			Date cDate = (Date) arr[7];
+			LocalDateTime cDate = ((Timestamp) arr[7]).toLocalDateTime();
+			logger.error("날짜는:"+cDate);
 			BigDecimal recommend = (BigDecimal) arr[8];
 			BigDecimal cnt = (BigDecimal) arr[9];
-
+			
+			
 			UsersDTO users = new UsersDTO();
 			users.setNickname(nickName);
 			dto.setUsersDTO(users);
@@ -93,7 +95,7 @@ public class BoardService {
 			dto.setTitle(title);
 			dto.setContent(content);
 			dto.setImgPath(imgPath);
-			dto.setCDate(cDate);
+			dto.setcDate(cDate);
 			dto.setRecommend((int) (recommend.longValue()));
 			dto.setCnt((int) (cnt.longValue()));
 
@@ -147,42 +149,6 @@ public class BoardService {
 
 	}
 
-	
-//	public List<BoardDTO.getBoardByBoardTypeDTO> listBoardByCnt() throws FindException {
-//		List<Object[]> Blist = bRepository.getBoardByCnt();
-//		List<BoardDTO.getBoardByBoardTypeDTO> dtoList = new ArrayList<>();
-//		for (int i = 0; i < Blist.size(); i++) {
-//			BoardDTO.getBoardByBoardTypeDTO bDTO = new BoardDTO.getBoardByBoardTypeDTO();
-//			BigDecimal post_seq = (BigDecimal) Blist.get(i)[1];
-//			Long resultPost_seq = post_seq.longValue();
-//			bDTO.setPostSeq(resultPost_seq);
-//
-//			BigDecimal Category = (BigDecimal) Blist.get(i)[2];
-//			int resultCategory = Category.intValue();
-//			bDTO.setCategory(resultCategory);
-//
-//			bDTO.setTitle((String) Blist.get(i)[3]);
-//			bDTO.setContent((String) Blist.get(i)[4]);
-//			bDTO.setImgPath((String) Blist.get(i)[5]);
-//			bDTO.setCDate((Date) Blist.get(i)[6]);
-//
-//			BigDecimal Recommend = (BigDecimal) Blist.get(i)[7];
-//			int resultRec = Recommend.intValue();
-//			bDTO.setRecommend(resultRec);
-//
-//			BigDecimal Cnt = (BigDecimal) Blist.get(i)[8];
-//			int resultCnt = Cnt.intValue();
-//			bDTO.setCnt(resultCnt);
-//
-//			UsersDTO.UsersNameDTO uDTO = new UsersDTO.UsersNameDTO();
-//			uDTO.setNickname((String) Blist.get(i)[0]);
-//			bDTO.setUsersNameDTO(uDTO);
-//			dtoList.add(bDTO);
-//		}
-//		return dtoList;
-//
-//	}
-	
 	/**
 	 * 게시글 전체 목록(조회수순)
 	 * 
@@ -190,6 +156,7 @@ public class BoardService {
 	 * @return
 	 * @throws FindException
 	 */
+
 	public PageBean<BoardDTO> listBoardByCnt(int currentPage) throws FindException {
 		int startRow = (currentPage - 1) * PageBean.CNT_PER_PAGE + 1;
 		int endRow = currentPage * PageBean.CNT_PER_PAGE;
@@ -204,7 +171,7 @@ public class BoardService {
 			String title = (String) arr[4];
 			String content = (String) arr[5];
 			String imgPath = (String) arr[6];
-			Date cDate = (Date) arr[7];
+			LocalDateTime cDate = ((Timestamp) arr[7]).toLocalDateTime();
 			BigDecimal recommend = (BigDecimal) arr[8];
 			BigDecimal cnt = (BigDecimal) arr[9];
 
@@ -216,7 +183,7 @@ public class BoardService {
 			dto.setTitle(title);
 			dto.setContent(content);
 			dto.setImgPath(imgPath);
-			dto.setCDate(cDate);
+			dto.setcDate(cDate);
 			dto.setRecommend((int) (recommend.longValue()));
 			dto.setCnt((int) (cnt.longValue()));
 
@@ -253,6 +220,7 @@ public class BoardService {
 			bDTO.setTitle((String) Blist.get(i)[4]);
 			bDTO.setContent((String) Blist.get(i)[5]);
 			bDTO.setImgPath((String) Blist.get(i)[6]);
+//			LocalDateTime date = ((TimeStamp) Blist.get(i)[7])
 			bDTO.setCDate((Date) Blist.get(i)[7]);
 			BigDecimal Recommend = (BigDecimal) Blist.get(i)[8];
 			int resultRec = Recommend.intValue();
@@ -340,7 +308,10 @@ public class BoardService {
 			// logger.error("값:" + hostuserDTO.toString());
 			bEntity.setTitle(editBoardDTO.getTitle());
 			bEntity.setContent(editBoardDTO.getContent());
-			bEntity.setImgPath(editBoardDTO.getImgPath());
+			if(editBoardDTO.getImgPath() != null) {
+				bEntity.setImgPath(editBoardDTO.getImgPath());
+			}
+			bEntity.setCDate(LocalDateTime.now());
 			bRepository.save(bEntity);
 
 		} else {
@@ -405,7 +376,7 @@ public class BoardService {
 			String btitle = (String) arr[4];
 			String content = (String) arr[5];
 			String imgPath = (String) arr[6];
-			Date cDate = (Date) arr[7];
+			LocalDateTime cDate = ((Timestamp) arr[7]).toLocalDateTime();
 			BigDecimal recommend = (BigDecimal) arr[8];
 			BigDecimal cnt = (BigDecimal) arr[9];
 
@@ -417,7 +388,7 @@ public class BoardService {
 			dto.setTitle(btitle);
 			dto.setContent(content);
 			dto.setImgPath(imgPath);
-			dto.setCDate(cDate);
+			dto.setcDate(cDate);
 			dto.setRecommend((int) (recommend.longValue()));
 			dto.setCnt((int) (cnt.longValue()));
 

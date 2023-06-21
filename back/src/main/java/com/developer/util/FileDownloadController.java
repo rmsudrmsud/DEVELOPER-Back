@@ -63,12 +63,12 @@ public class FileDownloadController {
             headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length());
 
             if ("attachment".equals(opt)) {
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=UTF-8''"
-                        + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-            } else {
-                headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename*=UTF-8''"
-                        + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-            }
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+			} else {
+				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+			}
 
             byte[] bArr = FileCopyUtils.copyToByteArray(file);
             ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
@@ -121,12 +121,12 @@ public class FileDownloadController {
                     headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length());
 
                     if ("attachment".equals(opt)) {
-                        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=UTF-8''"
-                                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-                    } else {
-                        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename*=UTF-8''"
-                                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-                    }
+        				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+        						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+        			} else {
+        				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+        						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+        			}
 
                     byte[] bArr = FileCopyUtils.copyToByteArray(file);
                     ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
@@ -178,13 +178,14 @@ public class FileDownloadController {
                     headers.add(HttpHeaders.CONTENT_TYPE, contentType);
                     headers.add(HttpHeaders.CONTENT_LENGTH, "" + file.length());
 
+
                     if ("attachment".equals(opt)) {
-                        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename*=UTF-8''"
-                                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-                    } else {
-                        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline;filename*=UTF-8''"
-                                + URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20"));
-                    }
+        				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+        						"attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 다운로드
+        			} else {
+        				headers.add(HttpHeaders.CONTENT_DISPOSITION,
+        						"inline;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));// 바로응답
+        			}
 
                     byte[] bArr = FileCopyUtils.copyToByteArray(file);
                     ResponseEntity<?> re = new ResponseEntity<>(bArr, headers, HttpStatus.OK);
@@ -208,7 +209,7 @@ public class FileDownloadController {
 	public ResponseEntity<?> downloadLesson(String imgPath, int type, String opt) throws FindException {
 
 		
-		String saveDirectory = "C:\\dev\\lesson";
+		String saveDirectory = "/Users/choigeunhyeong/Documents/attach";
 //		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/lesson";
 		
 		String fileName = "";
@@ -275,7 +276,7 @@ public class FileDownloadController {
 	public ResponseEntity<?> downloadTutor(String imgPath, int type, String opt) throws FindException {
 		
 //		String saveDirectory = "C:\\dev\\lesson";
-		String saveDirectory = "/Users/moonone/Desktop/KOSTA/img/tutor";
+		String saveDirectory = "/Users/choigeunhyeong/Documents/attach";
 		
 		
 		String fileName = "";

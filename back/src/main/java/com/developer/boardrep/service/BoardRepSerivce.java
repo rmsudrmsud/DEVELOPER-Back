@@ -1,5 +1,6 @@
 package com.developer.boardrep.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class BoardRepSerivce {
 		writer.setUserId(logined);
 		boardRep.setContent(boardRepDTO.getContent());
 		boardRep.setUsers(writer);
+//		boardRep.setCDate(LocalDateTime.now());
 		BoardRepRepository.save(boardRep);
 	}
 
